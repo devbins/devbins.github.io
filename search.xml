@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Tmux]]></title>
+    <url>%2F2017%2F05%2F18%2FTmux%2F</url>
+    <content type="text"><![CDATA[做开发经常需要在各种环境中切来切去，回来的时候环境已经变了，Tmux 可以创建多个会话在不同环境中切换。 什么是Tmux来自 Tmux 自述 tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen. tmux may be detached from a screen and continue running in the background, then later reattached. 说人话Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏幕控制。Tmux 可以从屏幕分离并继续在后台运行，然后重新连接。 有什么用举个例子：你连上服务器后做了一会事情要回到本地做一些操作，通常做法是先断开服务器的连接，做完本地操作后再连上服务器继续操作。这样做太费事了。Tmux 就是解决这件事的，它可以让你不需要断开连接就可以在本地做你想做的，就算意外断开连接也能恢复。(当然关机就不行了，但是你可以通过写脚本来恢复) 怎么用名词解释Session：用来管理窗口的，一个 Session 可包含多个 Window。Window：当前正在操作的窗口，一个 window 可包含多个 pane。Pane：window 被分割后的小窗口。Prefix：前缀键CTRL+b，表示同时按下 CTRL 和 b。下文使用 Prefix 代替 CTRL+b 安装Macbrew install tmux Linux（Ubuntu）sudo apt install tmux 基本使用安装好 Tmux 后在终端中输入tmux就可以开始使用，默认会创建一个 Session。 可以使用tmux new -s name在创建 Session 的时候并命名,name就是该 Session 的名字 Session 相关 新建 SessionPrefix :new -s name 其中name是 Session 的名字，这条指令是在Tmux的环境中使用，和基本使用中的不一样。这条指令表示先按下Prefix（CTRL+b），松开之后再输入:new -s name。后面以此类推。 列出当前 SessionPrefix s,在终端环境中使用tmux ls查看 暂时离开 SessionPrefix d 接入之前的 Session tmux a -t name,只有一个 Session 的时候可以省略name（终端环境中） 重命名 SessionPrefix $ 关闭 Session Prefix :kill-session -t name Window 相关 新建 Window Prefix c 列出当前 Window Prefix w 重命名当前 Window Prefix , 关闭 Window Prefix &amp; 上一个 Window Prefix p 下一个 Window Prefix n Pane 相关 水平分割 Window Prefix &quot; 垂直分割 Window Prefix % 关闭 Pane Prefix x 把 Pane 最大化 / 最小化 Prefix z 把 Pane 移动到左边 Prefix { 把 Pane 移动到右边 Prefix } 切换到下一个 Pane Prefix o 参考Tmux - Linux从业者必备利器 优雅地使用命令行：Tmux 终端复用]]></content>
+      <categories>
+        <category>工具 效率</category>
+      </categories>
+      <tags>
+        <tag>工具 效率</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[在 Mac 终端中使用代理]]></title>
+    <url>%2F2017%2F03%2F09%2F%E5%9C%A8mac%E7%BB%88%E7%AB%AF%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%2F</url>
+    <content type="text"><![CDATA[作为一个程序员，天天和终端打交道。可是在 Mac 终端下使用 brew 安装软件却十分慢，即便你使用 ShadowSocks 配置了全局代理，却发现这么做依然没有效果，下载还是龟速。虽然可以通过配置国内的镜像来解决，但是后期下载还是很慢，效果就不好了。 简单使用在终端使用 ShadowSocks 十分简单，只需在终端中输入下列指令就可1export ALL_PROXY = socks5://127.0.0.1:1080 现在可以试试 brew 更新软件了，速度蹭蹭的往上涨 不想用代理了，输入下面指令即可1unset ALL_PROXY 优化每次想要使用代理的时候都要输入这么多记不住把下面的命令保存到 ~/.bash_profile 如果使用的是zsh则保存到 ~/.zshrc12alias socks5 = "export ALL_PROXY=socks5://127.0.0.1:1080"alias unsocks5 = "unset ALL_PROXY" 想要立即生效 source .zshrc 或者 source .bash_profile以后想要打开代理只需输 socks5关闭只需输 unsocks5]]></content>
+      <categories>
+        <category>Mac</category>
+      </categories>
+      <tags>
+        <tag>Proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Android 网络服务发现（NSD）]]></title>
+    <url>%2F2016%2F10%2F03%2FAndroid%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%2F</url>
+    <content type="text"><![CDATA[这些日子碰到这样一个需求，需要在局域网中发现我们创建的某个特定设备，并连上互相通信。本以为要去遍历整个局域网，后来查阅相关资料后发现 Android 为我们提供了网络服务发现（Network Service Discovery）简称 NSD，就是本文要讲的东西了。 NSD 有什么用用来扫描局域网中特定的服务，并与之通信。省去了自己去写发现协议。 NSD 怎么用创建我们需要提供的服务首先要创建一个 ServerSocket，用来等待别人的连接123456789101112/** *创建一个server来获取端口 */private void createServerSocket() &#123; if (mServerSocket != null) return; try &#123; mServerSocket = new ServerSocket(0);//设为0,会自动获取没有占用的端口 mPort = mServerSocket.getLocalPort(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125;&#125; 接下来就可以创建 NsdServiceInfo 了，NsdServiceInfo 是一个包含 Nsd 服务信息的类,看名字就知道了。12345678910/** *创建NsdServiceInfo */private void createNsdServiceInfo() &#123; if (mNsdServiceInfo != null) return; mNsdServiceInfo = new NsdServiceInfo(); mNsdServiceInfo.setServiceName(SERVICE_NAME);//设置服务的名字，被别的机器发现时显示的名字。 mNsdServiceInfo.setServiceType(SERVICE_TYPE); mNsdServiceInfo.setPort(mPort);&#125; 在服务端注册 NSD 服务12345678910111213141516171819202122232425private void register() &#123; mNsdManager = (NsdManager) getSystemService(NSD_SERVICE); mNsdManager.registerService(mNsdServiceInfo, NsdManager.PROTOCOL_DNS_SD,mRegistrationListener);&#125;private void createRegistration() &#123; mRegistrationListener = new NsdManager.RegistrationListener() &#123; @Override public void onRegistrationFailed(NsdServiceInfo nsdServiceInfo, int i)&#123; Toast.makeText(MainActivity.this, "onRegistrationFailed", Toast.LENGTH_SHORT).show(); &#125; @Override public void onUnregistrationFailed(NsdServiceInfo nsdServiceInfo, int i) &#123; Toast.makeText(MainActivity.this, "onUnregistrationFailed", Toast.LENGTH_SHORT).show(); &#125; @Override public void onServiceRegistered(NsdServiceInfo nsdServiceInfo) &#123; Toast.makeText(MainActivity.this, "onServiceRegistered", Toast.LENGTH_SHORT).show(); new Thread(MainActivity.this).start(); &#125; @Override public void onServiceUnregistered(NsdServiceInfo nsdServiceInfo) &#123; Toast.makeText(MainActivity.this, "onServiceUnregistered", Toast.LENGTH_SHORT).show(); &#125; &#125;;&#125; 在客户端发现12345678910111213141516171819202122232425262728293031nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);private void createDiscoverListener() &#123; mDiscoveryListener = new NsdManager.DiscoveryListener() &#123; @Override public void onStartDiscoveryFailed(String s, int i) &#123; Toast.makeText(MainActivity.this, "onStartDiscoveryFailed", Toast.LENGTH_SHORT).show(); &#125; @Override public void onStopDiscoveryFailed(String s, int i) &#123; Toast.makeText(MainActivity.this, "onStopDiscoveryFailed", Toast.LENGTH_SHORT).show(); &#125; @Override public void onDiscoveryStarted(String s) &#123; Toast.makeText(MainActivity.this, "onDiscoveryStarted", Toast.LENGTH_SHORT).show(); &#125; @Override public void onDiscoveryStopped(String s) &#123; Toast.makeText(MainActivity.this, "onDiscoveryStopped", Toast.LENGTH_SHORT).show(); &#125; @Override public void onServiceFound(NsdServiceInfo nsdServiceInfo) &#123; //这里的nsdServiceInfo只能获取到名字,ip和端口都不能获取到,要想获取到需要调用NsdManager.resolveService方法 datas.add(nsdServiceInfo); mHandler.sendEmptyMessage(0); &#125; @Override public void onServiceLost(NsdServiceInfo nsdServiceInfo) &#123; Toast.makeText(MainActivity.this, "onServiceLost", Toast.LENGTH_SHORT).show(); &#125; &#125;;&#125; 获取服务的详细信息1234567891011121314nsdManager.resolveService(nsdServiceInfo, mResolverListener);private void createResolverListener() &#123; mResolverListener = new NsdManager.ResolveListener() &#123; @Override public void onResolveFailed(NsdServiceInfo nsdServiceInfo, int i) &#123; Toast.makeText(MainActivity.this, "onResolveFailed", Toast.LENGTH_SHORT).show(); &#125; @Override public void onServiceResolved(NsdServiceInfo nsdServiceInfo) &#123; mNsdServiceInfo = nsdServiceInfo; new Thread(MainActivity.this).start(); &#125; &#125;;&#125; 连接1234mSocket = new Socket(mNsdServiceInfo.getHost().getHostAddress(), mNsdServiceInfo.getPort());bufferedWriter = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));bufferedWriter.write("我连上你了!" + "\n");bufferedWriter.flush(); 效果图 相关资料链接 demo地址 官网资料需自备梯子]]></content>
+      <categories>
+        <category>Android</category>
+      </categories>
+      <tags>
+        <tag>Network</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用 Hexo 搭建博客]]></title>
+    <url>%2F2016%2F10%2F01%2Fhexo%E5%8D%9A%E5%AE%A2%2F</url>
+    <content type="text"><![CDATA[安装 Hexo 前环境的搭建Node.js 的安装1brew install node ps：如果没有安装 brew 请移步 Homebrew 安装 Git，当然你还得有 GitHub 账号安装过 Xcode 的可以跳过这一步，Xcode 的自带 Git。没安装的可以安装 Xcode 也可以使用下面的命令安装1brew install git 安装 Hexo12//安装到全局npm install -g hexo-cli 初始化 Hexo初始化当前目录1hexo init "文件夹" //如果文件夹为空，则为当前目录(文件夹不要带引号) 安装依赖包12//进入到上一步初始化的文件夹下npm install 配置进入到初始化的目录，打开 _config.yml1234567title: xxx #博客名字description: xxx #博客描述，给搜索引擎看的author: xxx #博客作者deploy: type: git #填git，毕竟我们发布到github上 repo: xxx #https://github.com/xxxx/xxx.github.io.git,把xxx换成你博客的名字 branch: master #要发布的分支，还可以建立一个分支开管理源码，这样就和博客区分开了 写文章新建草稿1hexo n draft "文件名" //其中draft可以选择scaffolds下的名字,scaffolds下面存放的是模板 发布草稿1hexo publish draft 文件名 // 其中draft对应scaffolds文件夹下的文件名，文件名对应要发布的文件名,只有发布的才能在博客中看到 生成页面1hexo g //完整写法hexo generate 在本地启动服务器进行预览1hexo s //完整写法hexo server 在浏览器输入 http://localhost:4000 就可以预览页面 部署到服务器1234hexo d//可能碰到如下错误//ERROR Deployer not found: git 或者 ERROR Deployer //not found: github//解决方法： npm install hexo-deployer-git --save 更新更新 hexo1npm update -g hexo 更新主题12cd themes/你的主题git pull 更新插件1npm update 参考官网文档]]></content>
+      <categories>
+        <category>GitHub</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+</search>
