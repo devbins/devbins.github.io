@@ -23,6 +23,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[Docker 使用小记]]></title>
+    <url>%2F2017%2F04%2F22%2FDocker%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[Docker 简介Docker 是一个开源的应用容器引擎。可以看成是一个特殊的环境，隔离了宿主机（电脑）和容器。做开发的时候通常会碰到在自己的电脑上没问题，放到服务器或者别人的电脑上就出问题了，有了 Docker 这些问题迎刃而解。经常在 Linux 上做一些测试，做完测试就不用了。如果用虚拟机，不但占据者比较大的磁盘空间，而且运行启动耗时较长，性能不高。用 Docker 可以随时随地启动一个 Linux 的容器，用完就可以删除，下次要用在重新开启一个新的，速度非常快。 Docker 比虚拟机来的轻巧，开启和关闭非常迅速，占用的资源少。 Docker 安装（Ubuntu 16.04）安装之前卸载旧版本（如果有的话）1sudo apt-get remove docker docker-engine docker.io 使用阿里云提供的安装脚本（由于网络问题，你懂得）1curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh - Docker 需要安装在 64 位的 x86 平台或 ARM 平台上（如树莓派），内核版本不低于 3.10。 手动安装12345678910111213sudo apt-get updatesudo apt-get install apt-transport-https ca-certificates curl software-properties-commoncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -sudo add-apt-repository \ "deb [arch=amd64] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) \ stable"sudo apt-get updatesudo apt-get install docker-ce# 启动sudo systemctl start docker# 查看 docker 版本docker --version 小试牛刀，运行一个容器1docker run hello-world 建立 Docker 用户组为什么要建立 Docker 用户组 默认情况下，只有 root 用户和 docker 组的用户才可以访问 Docker。一般不会直接使用 root 用户操作，也避免每次输入命令都要加su. 建立 docker 组sudo groupadd docker 将当前用户加入 docker 组：sudo usermod -aG docker $USER Docker 名词解释镜像(Image)Docker 镜像可以理解为模板，就像面向对象里的class一样可以通过这个类创建出无数个对象（容器）。 容器(Container)Docker 容器就是通过镜像创建出来的运行实例，与面向对象里的对象类似。不过容器可以作为新的镜像用来创建新的容器。 仓库(Registry)Docker 仓库是一个镜像的集合，里面放了许多常用的镜像，不要我们自己去构建这些镜像。比如 Ubuntu、Tomcat等。一个仓库可能包含不同版本的镜像，在镜像仓库里不同的版本会被打上不同的标签。我们可以通过镜像名:标签来获取不版本的镜像。以 Ubuntu 为例，Ubuntu 16.04 的版本表示为ubuntu:16.04。如果没有写标签，表示使用最新的。即ubuntu:latest 使用镜像的管理 查看所有镜像 1docker images 获取镜像，Docker Registry 默认为 Docker Hub，镜像名由用户名/软件名组成，不写用户名默认为library，也就是官方镜像 1docker pull [Docker Registry]&lt;镜像&gt;:&lt;标签&gt; 删除镜像 1docker rmi &lt;镜像&gt; 容器的使用与管理 查看所有容器,包括没有在运行的 1docker ps -a 运行容器 1docker run ubuntu 运行交互式容器,i交互是操作，t终端。后面的bash表示用bash做为交互式终端的shell 1docker run -it ubuntu bash 运行完容器后删除,不保留运行的结果 1docker run -rm ubuntu 运行容器，并指定端口映射。p小写 1docker run -p 8080:8080 nginx 运行容器，随机映射端口。P大写 1docker run -P nginx 为容器起一个别名 1docker run --name alias nginx 后台运行容器。容器是否长久运行和-d无关，-d只是指定了运行在后台（background）。容器长久运行和run指定的命令有关。后台运行可以在本地和容器之间来回切换。 1docker run -d ubuntu 进入后台运行的容器 1docker attach ubuntu 停止容器 1docker stop ubuntu 删除容器 1docker rm ubuntu 参考Docker — 从入门到实践]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[在 Mac 终端中使用代理]]></title>
     <url>%2F2017%2F03%2F09%2F%E5%9C%A8mac%E7%BB%88%E7%AB%AF%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%2F</url>
     <content type="text"><![CDATA[作为一个程序员，天天和终端打交道。可是在 Mac 终端下使用 brew 安装软件却十分慢，即便你使用 ShadowSocks 配置了全局代理，却发现这么做依然没有效果，下载还是龟速。虽然可以通过配置国内的镜像来解决，但是后期下载还是很慢，效果就不好了。 简单使用在终端使用 ShadowSocks 十分简单，只需在终端中输入下列指令就可1export ALL_PROXY = socks5://127.0.0.1:1080 现在可以试试 brew 更新软件了，速度蹭蹭的往上涨 不想用代理了，输入下面指令即可1unset ALL_PROXY 优化每次想要使用代理的时候都要输入这么多记不住把下面的命令保存到 ~/.bash_profile 如果使用的是zsh则保存到 ~/.zshrc12alias socks5 = "export ALL_PROXY=socks5://127.0.0.1:1080"alias unsocks5 = "unset ALL_PROXY" 想要立即生效 source .zshrc 或者 source .bash_profile以后想要打开代理只需输 socks5关闭只需输 unsocks5]]></content>
