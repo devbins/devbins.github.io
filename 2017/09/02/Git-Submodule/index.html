@@ -15,17 +15,19 @@
 
 
 
-<meta name="description" content="做开发经常需要在各种环境中切来切去，回来的时候环境已经变了，Tmux 可以创建多个会话在不同环境中切换。  什么是Tmux来自 Tmux 自述  tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen.">
-<meta name="keywords" content="工具 效率">
+<meta name="description" content="开发中常常碰到在项目中需要使用另一个项目，这个项目不定期更新。而且我们想要保持对这个项目的更新，通常的做法是在项目中创建一个目录来单独存放这个项目，然后不定期更新这个项目。这样的做法确实可行，但是却不是最优雅的。今天要说的就是Git Submodule，这个工具可以将另一个项目克隆到当前项目，并作为当前项目的子目录，并且保持提交独立。">
+<meta name="keywords" content="Git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tmux">
-<meta property="og:url" content="http://github.com/binsheng/2017/06/18/Tmux/index.html">
+<meta property="og:title" content="使用 Git Submodule 管理多个仓库">
+<meta property="og:url" content="http://github.com/binsheng/2017/09/02/Git-Submodule/index.html">
 <meta property="og:site_name" content="猿始人">
-<meta property="og:description" content="做开发经常需要在各种环境中切来切去，回来的时候环境已经变了，Tmux 可以创建多个会话在不同环境中切换。  什么是Tmux来自 Tmux 自述  tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen.">
-<meta property="og:updated_time" content="2017-08-16T02:35:37.000Z">
+<meta property="og:description" content="开发中常常碰到在项目中需要使用另一个项目，这个项目不定期更新。而且我们想要保持对这个项目的更新，通常的做法是在项目中创建一个目录来单独存放这个项目，然后不定期更新这个项目。这样的做法确实可行，但是却不是最优雅的。今天要说的就是Git Submodule，这个工具可以将另一个项目克隆到当前项目，并作为当前项目的子目录，并且保持提交独立。">
+<meta property="og:image" content="http://github.com/images/git.jpeg">
+<meta property="og:updated_time" content="2017-09-02T12:40:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tmux">
-<meta name="twitter:description" content="做开发经常需要在各种环境中切来切去，回来的时候环境已经变了，Tmux 可以创建多个会话在不同环境中切换。  什么是Tmux来自 Tmux 自述  tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen.">
+<meta name="twitter:title" content="使用 Git Submodule 管理多个仓库">
+<meta name="twitter:description" content="开发中常常碰到在项目中需要使用另一个项目，这个项目不定期更新。而且我们想要保持对这个项目的更新，通常的做法是在项目中创建一个目录来单独存放这个项目，然后不定期更新这个项目。这样的做法确实可行，但是却不是最优雅的。今天要说的就是Git Submodule，这个工具可以将另一个项目克隆到当前项目，并作为当前项目的子目录，并且保持提交独立。">
+<meta name="twitter:image" content="http://github.com/images/git.jpeg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +59,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Tmux | 猿始人</title>
+<title>使用 Git Submodule 管理多个仓库 | 猿始人</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -259,11 +261,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Tmux" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Git-Submodule" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/06/18/Tmux/" class="article-date">
-      <time datetime="2017-06-18T01:41:18.000Z" itemprop="datePublished">2017-06-18</time>
+      <a href="/2017/09/02/Git-Submodule/" class="article-date">
+      <time datetime="2017-09-02T03:53:40.000Z" itemprop="datePublished">2017-09-02</time>
 </a>
 
 
@@ -278,7 +280,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Tmux
+      使用 Git Submodule 管理多个仓库
     </h1>
   
 
@@ -287,13 +289,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/工具-效率/">工具 效率</a>
+    <a class="article-category-link" href="/categories/Git/">Git</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具-效率/">工具 效率</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -303,48 +305,31 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <blockquote>
-<p>做开发经常需要在各种环境中切来切去，回来的时候环境已经变了，Tmux 可以创建多个会话在不同环境中切换。</p>
-</blockquote>
-<h1 id="什么是Tmux"><a href="#什么是Tmux" class="headerlink" title="什么是Tmux"></a>什么是Tmux</h1><p>来自 Tmux 自述</p>
+        <p><img src="/images/git.jpeg" alt="Git"></p>
 <blockquote>
-<p>tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen.  tmux may be detached from a screen and continue running in the background, then later reattached.</p>
+<p>开发中常常碰到在项目中需要使用另一个项目，这个项目不定期更新。而且我们想要保持对这个项目的更新，通常的做法是在项目中创建一个目录来单独存放这个项目，然后不定期更新这个项目。这样的做法确实可行，但是却不是最优雅的。今天要说的就是<code>Git Submodule</code>，这个工具可以将另一个项目克隆到当前项目，并作为当前项目的子目录，并且保持提交独立。</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="说人话"><a href="#说人话" class="headerlink" title="说人话"></a>说人话</h2><p>Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏幕控制。Tmux 可以从屏幕分离并继续在后台运行，然后重新连接。</p>
-<h1 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h1><p>举个例子：<br>你连上服务器后做了一会事情要回到本地做一些操作，通常做法是先断开服务器的连接，做完本地操作后再连上服务器继续操作。这样做太费事了。Tmux 就是解决这件事的，它可以让你不需要断开连接就可以在本地做你想做的，就算意外断开连接也能恢复。(当然关机就不行了，但是你可以通过写脚本来恢复)</p>
-<h1 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h1><h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><p>Session：用来管理窗口的，一个 Session 可包含多个 Window。<br>Window：当前正在操作的窗口，一个 window 可包含多个 pane。<br>Pane：window 被分割后的小窗口。<br>Prefix：前缀键<code>CTRL+b</code>，表示同时按下 <code>CTRL</code> 和 <code>b</code>。下文使用 <code>Prefix</code> 代替 <code>CTRL+b</code></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="Mac"><a href="#Mac" class="headerlink" title="Mac"></a>Mac</h3><p><code>brew install tmux</code></p>
-<h3 id="Linux（Ubuntu）"><a href="#Linux（Ubuntu）" class="headerlink" title="Linux（Ubuntu）"></a>Linux（Ubuntu）</h3><p><code>sudo apt install tmux</code></p>
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>安装好 Tmux 后在终端中输入<code>tmux</code>就可以开始使用，默认会创建一个 Session。</p>
-<p>可以使用<code>tmux new -s name</code>在创建 Session 的时候并命名,<code>name</code>就是该 Session 的名字</p>
-<h3 id="Session-相关"><a href="#Session-相关" class="headerlink" title="Session 相关"></a>Session 相关</h3><ul>
-<li>新建 Session<br><code>Prefix :new -s name</code> 其中<code>name</code>是 Session 的名字，这条指令是在<code>Tmux</code>的环境中使用，和基本使用中的不一样。这条指令表示先按下<code>Prefix（CTRL+b）</code>，松开之后再输入<code>:new -s name</code>。后面以此类推。</li>
-<li>列出当前 Session<code>Prefix s</code>,在终端环境中使用<code>tmux ls</code>查看</li>
-<li>暂时离开 Session<code>Prefix d</code></li>
-<li>接入之前的 Session <code>tmux a -t name</code>,只有一个 Session 的时候可以省略<code>name</code>（终端环境中）</li>
-<li>重命名 Session<code>Prefix $</code></li>
-<li>关闭 Session <code>Prefix :kill-session -t name</code></li>
-</ul>
-<h3 id="Window-相关"><a href="#Window-相关" class="headerlink" title="Window 相关"></a>Window 相关</h3><ul>
-<li>新建 Window <code>Prefix c</code></li>
-<li>列出当前 Window <code>Prefix w</code></li>
-<li>重命名当前 Window <code>Prefix ,</code></li>
-<li>关闭 Window <code>Prefix &amp;</code></li>
-<li>上一个 Window <code>Prefix p</code></li>
-<li>下一个 Window <code>Prefix n</code></li>
-</ul>
-<h3 id="Pane-相关"><a href="#Pane-相关" class="headerlink" title="Pane 相关"></a>Pane 相关</h3><ul>
-<li>水平分割 Window <code>Prefix &quot;</code></li>
-<li>垂直分割 Window <code>Prefix %</code></li>
-<li>关闭 Pane <code>Prefix x</code></li>
-<li>把 Pane 最大化 / 最小化 <code>Prefix z</code></li>
-<li>把 Pane 移动到左边 <code>Prefix {</code></li>
-<li>把 Pane 移动到右边 <code>Prefix }</code></li>
-<li>切换到下一个 Pane <code>Prefix o</code></li>
-</ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://cenalulu.github.io/linux/tmux/" target="_blank" rel="external">Tmux - Linux从业者必备利器</a></p>
-<p><a href="http://harttle.com/2015/11/06/tmux-startup.html" target="_blank" rel="external">优雅地使用命令行：Tmux 终端复用</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><code>Git Submodule</code>翻译过来就是子模块的意思，其作用就是在一个<code>Git</code>仓库中管理一个或多个项目中使用到的额外的仓库。</p>
+<h1 id="使用-Git-Submodule-添加子模块"><a href="#使用-Git-Submodule-添加子模块" class="headerlink" title="使用 Git Submodule 添加子模块"></a>使用 Git Submodule 添加子模块</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add [url] [path]//不加 path 会在当前目录下添加子模块</div></pre></td></tr></table></figure>
+<p>在使用 Git Submodule 之后，会在仓库下生成一个<code>.gitmodules</code>的文件。该文件保存了项目子模块的远程仓库的路径与本地目录的映射关系。</p>
+<h1 id="克隆含有子模块的项目"><a href="#克隆含有子模块的项目" class="headerlink" title="克隆含有子模块的项目"></a>克隆含有子模块的项目</h1><p>如果别人的项目中也包含了子模块，该怎么保持别人子模块也同步？<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone [url]</div><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
+<p>怎么这么多命令，有没有简单点，一步到位的？还真有。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone --recursive [url]</div></pre></td></tr></table></figure></p>
+<h1 id="拉取子模块上游更新"><a href="#拉取子模块上游更新" class="headerlink" title="拉取子模块上游更新"></a>拉取子模块上游更新</h1><p>子模块更新了，我们想保持代码是最新的。进入到子模块中，使用<code>git fetch</code>和<code>git merge</code>来更新子模块。就这样也好意思拿出来说？太 LOW 了，不能有点新花样吗？<br>这样每次都要进入子模块确实很麻烦，不过 git 提供了一个快速更新子模块的命令，可以不进入子模块就可以更新子模块。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule update --remote 仓库名//如果不写仓库名，默认会更新所有子模块。</div></pre></td></tr></table></figure></p>
+<h1 id="修改子模块的内容"><a href="#修改子模块的内容" class="headerlink" title="修改子模块的内容"></a>修改子模块的内容</h1><p><code>git submodule update</code>会更新子模块中的文件，但是会将子模块留在一个称作『游离的 HEAD』的状态。这意味着没有本地分支跟踪改动，所以所做的任何改动都不会被跟踪。<br>为了能够在子模块中修改内容，需要做两步操作</p>
+<ol>
+<li><p>进入子模块，检出一个分支</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout master</div></pre></td></tr></table></figure>
+</li>
+<li><p>合并上游分支来更新本地代码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule update --remote --merge</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>除了用<code>--merge</code>来合并代码，也可以使用<code>--rebase</code>来同步代码。<br>如果忘记使用<code>--merge</code>或者<code>--rebase</code>来合并代码，Git 会将子模块更新为远程仓库的状态，并重置为游离的<code>HEAD</code>状态。如果要合并修改过得代码，只需要再次检出你修改过的分支，并进行合并就可以了。</p>
+<h1 id="推送子模块的改动到远程仓库"><a href="#推送子模块的改动到远程仓库" class="headerlink" title="推送子模块的改动到远程仓库"></a>推送子模块的改动到远程仓库</h1><p>通常我们改动了子模块的内容，要让其他人员也能及时更新，我们需要把修改的内容推送到远程仓库。只需要在主仓库推送时添加<code>--recurse-submodules=check</code>参数，该命令会在推送的时候检查子模块的改动是否有更新到远程仓库，没有的话推送会失败。<br>完整命令如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push --recurse-submodules=check</div></pre></td></tr></table></figure></p>
+<p>除了检查子模块有没有推送到远程仓库外，还有另一种推送方法。就是在推送是添加<code>--recurse-submodules=on-demand</code>,该命令会尝试把没有推送到远程仓库的子模块推送到远程仓库。如果没有冲突则推送成功，如果有冲突需要解决冲突后才能推送成功。<br>完整命令如下<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push git push --recurse-submodules=on-demand</div></pre></td></tr></table></figure></p>
+<h1 id="多个子模块操作"><a href="#多个子模块操作" class="headerlink" title="多个子模块操作"></a>多个子模块操作</h1><p>有时候一个项目中可能包含多个子模块，但我只需要同步子模块的内容，如果每个都要操作一次，子模块少还好，但是多了操作就会花费很多时间，所以要学会偷懒，而 Git 有个<code>foreach</code>的子模块命令就可以在每一个子模块中运行形同的命令。<br>例如：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule foreach git checkout master</div></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control" target="_blank" rel="external">Pro Git</a></p>
 
       
     </div>
@@ -353,13 +338,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/06/18/Tmux/">Tmux</a></p>
+        <p><span>本文标题:</span><a href="/2017/09/02/Git-Submodule/">使用 Git Submodule 管理多个仓库</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">binsheng</a></p>
-        <p><span>发布时间:</span>2017-06-18, 09:41:18</p>
-        <p><span>最后更新:</span>2017-08-16, 10:35:37</p>
+        <p><span>发布时间:</span>2017-09-02, 11:53:40</p>
+        <p><span>最后更新:</span>2017-09-02, 20:40:16</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/06/18/Tmux/" title="Tmux">http://github.com/binsheng/2017/06/18/Tmux/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://github.com/binsheng/2017/06/18/Tmux/　　作者: binsheng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/02/Git-Submodule/" title="使用 Git Submodule 管理多个仓库">http://github.com/binsheng/2017/09/02/Git-Submodule/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://github.com/binsheng/2017/09/02/Git-Submodule/　　作者: binsheng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -371,16 +356,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/09/02/Git-Submodule/">
-                    使用 Git Submodule 管理多个仓库
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/05/22/树莓派入门/">
-                    树莓派入门
+                <a href="/2017/06/18/Tmux/">
+                    Tmux
                 </a>
             </div>
         
@@ -392,7 +371,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是Tmux"><span class="toc-number">1.</span> <span class="toc-text">什么是Tmux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#说人话"><span class="toc-number">1.1.</span> <span class="toc-text">说人话</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#有什么用"><span class="toc-number">2.</span> <span class="toc-text">有什么用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#怎么用"><span class="toc-number">3.</span> <span class="toc-text">怎么用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#名词解释"><span class="toc-number">3.1.</span> <span class="toc-text">名词解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">3.2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac"><span class="toc-number">3.2.1.</span> <span class="toc-text">Mac</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux（Ubuntu）"><span class="toc-number">3.2.2.</span> <span class="toc-text">Linux（Ubuntu）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本使用"><span class="toc-number">3.3.</span> <span class="toc-text">基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Session-相关"><span class="toc-number">3.3.1.</span> <span class="toc-text">Session 相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Window-相关"><span class="toc-number">3.3.2.</span> <span class="toc-text">Window 相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pane-相关"><span class="toc-number">3.3.3.</span> <span class="toc-text">Pane 相关</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用-Git-Submodule-添加子模块"><span class="toc-number">2.</span> <span class="toc-text">使用 Git Submodule 添加子模块</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#克隆含有子模块的项目"><span class="toc-number">3.</span> <span class="toc-text">克隆含有子模块的项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#拉取子模块上游更新"><span class="toc-number">4.</span> <span class="toc-text">拉取子模块上游更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#修改子模块的内容"><span class="toc-number">5.</span> <span class="toc-text">修改子模块的内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#推送子模块的改动到远程仓库"><span class="toc-number">6.</span> <span class="toc-text">推送子模块的改动到远程仓库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多个子模块操作"><span class="toc-number">7.</span> <span class="toc-text">多个子模块操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
         
     </div>
     <style>
@@ -428,7 +407,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Tmux　| 猿始人　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"使用 Git Submodule 管理多个仓库　| 猿始人　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -448,15 +427,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/09/02/Git-Submodule/" title="上一篇: 使用 Git Submodule 管理多个仓库">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/05/22/树莓派入门/" title="下一篇: 树莓派入门">
+            <a href="/2017/06/18/Tmux/" title="下一篇: Tmux">
                 <i class="fa fa-angle-right"></i>
             </a>
         
