@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://github.com/images/default-kenel.png">
 <meta property="og:image" content="http://github.com/images/desktop-kernel.png">
 <meta property="og:image" content="http://github.com/images/parallels-success.png">
-<meta property="og:updated_time" content="2017-09-19T13:26:11.000Z">
+<meta property="og:updated_time" content="2017-09-19T13:50:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="openSUSE 下安装 Parallels Tools">
 <meta name="twitter:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会">
@@ -332,7 +332,7 @@
 </ul>
 <p>于是我在开机的时候观察到<br><img src="/images/default-kenel.png" alt="deault-kernel"><br>openSUSE 默认的果然是 kernel-default 的内核。尝试一下 kernel-desktop 兴许会成功。<br>于是便尝试安装 kernel-desktop 的内核。</p>
 <h1 id="尝试解决"><a href="#尝试解决" class="headerlink" title="尝试解决"></a>尝试解决</h1><p>在默认的源里是没有 kernel-desktop 的安装包，还需要使用如下命令把他添加进去,并安装 kernel-desktop<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo zypper ar http://download.opensuse.org/repositories/home:/Ledest:/kernel:/lts/openSUSE_Leap_42.3/ kd</div><div class="line">sudo zypper refresh # 提示是否信任的时候选择 t 回车</div><div class="line">sudo zypper in kernel-desktop</div></pre></td></tr></table></figure></p>
-<p>安装之后重启系统<br><img src="/images/desktop-kernel.png" alt="desktop-kernel"><br>现在默认就是从 kernel-desktop 启动了。<br>启动之后尝试安装 Parallels Tools ，居然成功了。不过没有安装 dkms 它还是推荐安装一下，说明 dkms 不是必须的。之前的错误提示，成功的误导了我。我表示很无奈。<br><img src="/images/parallels-success.png" alt="success"><br>安装成功后，终于可以愉快的玩耍了。</p>
+<p>第一次安装 kernel-desktop 可能会提示失败，输入 r 重试一遍（也许多遍）就可成功。<br>安装之后重启系统<br><img src="/images/desktop-kernel.png" alt="desktop-kernel"><br>现在默认就是从 kernel-desktop 启动了。<br>启动之后尝试安装 Parallels Tools ，居然成功了。不过没有安装 dkms 它还是推荐安装一下，说明 dkms 不是必须的。之前的错误提示，成功的误导了我。我表示很无奈。<br><img src="/images/parallels-success.png" alt="success"><br>安装成功后，终于可以愉快的玩耍了。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
 <li>安装好系统后，先不要安装 Parallels Tools。 直接安装 kernel-desktop。</li>
 <li>安装好 kernel-desktop 后再安装 Parallels Tools。</li>
@@ -349,7 +349,7 @@
         <p><span>本文标题:</span><a href="/2017/09/18/openSUSE下安装Parallels-Tools/">openSUSE 下安装 Parallels Tools</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">binsheng</a></p>
         <p><span>发布时间:</span>2017-09-18, 19:42:23</p>
-        <p><span>最后更新:</span>2017-09-19, 21:26:11</p>
+        <p><span>最后更新:</span>2017-09-19, 21:50:02</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/09/18/openSUSE下安装Parallels-Tools/" title="openSUSE 下安装 Parallels Tools">http://github.com/binsheng/2017/09/18/openSUSE下安装Parallels-Tools/</a>
             <span class="copy-path" data-clipboard-text="原文: http://github.com/binsheng/2017/09/18/openSUSE下安装Parallels-Tools/　　作者: binsheng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
