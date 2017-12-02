@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://github.com/images/default-kenel.png">
 <meta property="og:image" content="http://github.com/images/desktop-kernel.png">
 <meta property="og:image" content="http://github.com/images/parallels-success.png">
-<meta property="og:updated_time" content="2017-09-21T13:39:12.000Z">
+<meta property="og:updated_time" content="2017-11-27T03:24:26.436Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="openSUSE 下安装 Parallels Tools">
 <meta name="twitter:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会">
@@ -414,7 +414,7 @@
 <p>输入密码等待程序启动，点击 next 等一小会,出现如下如所示，点击 next 安装。<br><img src="/images/parallel-install.png" alt="install"><br>等待一杯咖啡的时间，如果一杯喝完没有提示安装失败，就再喝一杯。两杯咖啡下肚，终于出现如下错误<br><img src="/images/parallels.png" alt="fail"><br>它告诉我安装失败了，去<code>/var/log/parallels-tools-install.log</code>下看更多的信息。直觉告诉我看了可能也没什么用。不过还是去看看。</p>
 <p>打开文件，映入眼帘，这么明显（此处略去后面的提示）<br><img src="/images/parallelslog.png" alt="log"><br>它告诉我<code>dkms</code>找不到，据我以前安装 Ubuntu 的经验很可能是这货的问题，于是安装<code>dkms</code>。</p>
 <h1 id="安装-dkms"><a href="#安装-dkms" class="headerlink" title="安装 dkms"></a>安装 dkms</h1><p>在终端中输入<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo zypper <span class="keyword">in</span> dkms</div></pre></td></tr></table></figure></p>
-<p>发现也是没有这个软件包，估计 Parallels Tools 也是调用这条命令安装的吧。</p>
+<p>提示找不到这个软件包，估计 Parallels Tools 也是调用这条命令安装的吧，所以安装失败。</p>
 <p>既然没有，我们只好从别的地方找一个，在<a href="https://software.opensuse.org/search" target="_blank" rel="external">官方软件包中</a>搜索 dkms ，还真找到了<br><img src="/images/dkms.png" alt="dkms"><br>点击一键安装，待安装好 dkms 之后，重新执行上一小节的操作。换来的还是一样的结果，安装失败。<br><img src="/images/parallels.png" alt="fail"><br>于是我决定重启系统再安装一次，结果还是一样，一点都不意外。心灰意冷的我不断在网上找相关的问题，一次一次的尝试，结果总是那么的相似，都没有找到解决方法。直到我在 <a href="https://github.com/yangyangwithgnu/the_new_world_linux#0.3.1">美丽新世界：linux 下的惬意生活</a>寻找答案的时候，偶然看了一下开机过程，发现了解决问题的契机。</p>
 <h1 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h1><p>在<a href="https://github.com/yangyangwithgnu/the_new_world_linux#0.3.1">美丽新世界：linux 下的惬意生活</a>这篇文章中说道 </p>
 <ul>
@@ -566,7 +566,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
