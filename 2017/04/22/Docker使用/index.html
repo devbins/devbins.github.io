@@ -97,7 +97,7 @@
 <meta property="og:description" content="Docker 简介Docker 是一个开源的应用容器引擎。可以看成是一个特殊的环境，隔离了宿主机（电脑）和容器。做开发的时候通常会碰到在自己的电脑上没问题，放到服务器或者别人的电脑上就出问题了，通常我们会认为是环境不一致导致的，调试起来非常耗时费力。有了 Docker 这些问题迎刃而解。经常在 Linux 上做测试的人员，做完测试就不用了。在过去我们会使用虚拟机，这样做不但占据者比较大的磁盘空间">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://github.com/images/docker.png">
-<meta property="og:updated_time" content="2017-11-11T12:33:34.741Z">
+<meta property="og:updated_time" content="2017-12-22T06:46:34.670Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 使用小记">
 <meta name="twitter:description" content="Docker 简介Docker 是一个开源的应用容器引擎。可以看成是一个特殊的环境，隔离了宿主机（电脑）和容器。做开发的时候通常会碰到在自己的电脑上没问题，放到服务器或者别人的电脑上就出问题了，通常我们会认为是环境不一致导致的，调试起来非常耗时费力。有了 Docker 这些问题迎刃而解。经常在 Linux 上做测试的人员，做完测试就不用了。在过去我们会使用虚拟机，这样做不但占据者比较大的磁盘空间">
@@ -409,7 +409,7 @@
 <h2 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h2><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install apt-transport-https ca-certificates curl software-properties-common</div><div class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</div><div class="line">sudo add-apt-repository \</div><div class="line">   <span class="string">"deb [arch=amd64] https://download.docker.com/linux/ubuntu \</span></div><div class="line"><span class="string">   <span class="variable">$(lsb_release -cs)</span> \</span></div><div class="line"><span class="string">   stable"</span></div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install docker-ce</div><div class="line"><span class="comment"># 启动</span></div><div class="line">sudo systemctl start docker</div><div class="line"><span class="comment"># 查看 docker 版本</span></div><div class="line">docker --version</div></pre></td></tr></table></figure>
 <h2 id="小试牛刀，运行一个容器"><a href="#小试牛刀，运行一个容器" class="headerlink" title="小试牛刀，运行一个容器"></a>小试牛刀，运行一个容器</h2><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run hello-world</div></pre></td></tr></table></figure>
 <h1 id="建立-Docker-用户组"><a href="#建立-Docker-用户组" class="headerlink" title="建立 Docker 用户组"></a>建立 Docker 用户组</h1><h2 id="为什么要建立-Docker-用户组"><a href="#为什么要建立-Docker-用户组" class="headerlink" title="为什么要建立 Docker 用户组"></a>为什么要建立 Docker 用户组</h2><blockquote>
-<p>默认情况下，只有 root 用户和 docker 组的用户才可以访问 Docker。一般不会直接使用 root 用户操作，也避免每次输入命令都要加<code>su</code>。</p>
+<p>默认情况下，只有 root 用户和 docker 组的用户才可以访问 Docker。在使用中一般不会直接使用 root 用户操作，也避免每次输入命令都要加<code>su</code>。</p>
 </blockquote>
 <ul>
 <li>建立 docker 组<br><code>sudo groupadd docker</code></li>
@@ -419,61 +419,51 @@
 <h2 id="容器-Container"><a href="#容器-Container" class="headerlink" title="容器(Container)"></a>容器(Container)</h2><p>Docker 容器就是通过镜像创建出来的运行实例，与面向对象里的<code>对象</code>类似。不过容器可以作为新的镜像用来创建新的容器。</p>
 <h2 id="仓库-Registry"><a href="#仓库-Registry" class="headerlink" title="仓库(Registry)"></a>仓库(Registry)</h2><p>Docker 仓库是一个镜像的集合，里面放了许多常用的镜像，不要我们自己去构建这些镜像。比如 Ubuntu、Tomcat等。一个仓库可能包含不同版本的镜像，在镜像仓库里不同的版本会被打上不同的标签。我们可以通过<code>镜像名:标签</code>来获取不版本的镜像。以 Ubuntu 为例，<code>Ubuntu 16.04</code> 的版本表示为<code>ubuntu:16.04</code>。如果没有写标签，表示使用最新的。即<code>ubuntu:latest</code></p>
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="镜像的管理"><a href="#镜像的管理" class="headerlink" title="镜像的管理"></a>镜像的管理</h2><ul>
-<li>查看所有镜像</li>
-</ul>
+<li><p>查看所有镜像</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker images</div></pre></td></tr></table></figure>
-<ul>
-<li>获取镜像，Docker Registry 默认为 Docker Hub，镜像名由<code>用户名/软件名组成</code>，不写用户名默认为<code>library</code>，也就是官方镜像</li>
-</ul>
+</li>
+<li><p>获取镜像，Docker Registry 默认为 Docker Hub，镜像名由<code>用户名/软件名组成</code>，不写用户名默认为<code>library</code>，也就是官方镜像</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker pull [Docker Registry]&lt;镜像&gt;:&lt;标签&gt;</div></pre></td></tr></table></figure>
-<ul>
-<li>删除镜像</li>
-</ul>
+</li>
+<li><p>删除镜像</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker rmi &lt;镜像&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
 <h2 id="容器的使用与管理"><a href="#容器的使用与管理" class="headerlink" title="容器的使用与管理"></a>容器的使用与管理</h2><ul>
-<li>查看所有容器,包括没有在运行的</li>
-</ul>
+<li><p>查看所有容器,包括没有在运行的</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker ps -a</div></pre></td></tr></table></figure>
-<ul>
-<li>运行容器</li>
-</ul>
+</li>
+<li><p>运行容器</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>运行交互式容器,<code>i</code>交互是操作，<code>t</code>终端。后面的<code>bash</code>表示用<code>bash</code>做为交互式终端的<code>shell</code></li>
-</ul>
+</li>
+<li><p>运行交互式容器,<code>i</code>交互是操作，<code>t</code>终端。后面的<code>bash</code>表示用<code>bash</code>做为交互式终端的<code>shell</code></p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it ubuntu bash</div></pre></td></tr></table></figure>
-<ul>
-<li>运行完容器后删除,不保留运行的结果</li>
-</ul>
+</li>
+<li><p>运行完容器后删除,不保留运行的结果</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -rm ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>运行容器，并指定端口映射。<code>p</code>小写</li>
-</ul>
+</li>
+<li><p>运行容器，并指定端口映射。<code>p</code>小写</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -p 8080:8080 nginx</div></pre></td></tr></table></figure>
-<ul>
-<li>运行容器，随机映射端口。<code>P</code>大写</li>
-</ul>
+</li>
+<li><p>运行容器，随机映射端口。<code>P</code>大写</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -P nginx</div></pre></td></tr></table></figure>
-<ul>
-<li>为容器起一个别名</li>
-</ul>
+</li>
+<li><p>为容器起一个别名</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run --name <span class="built_in">alias</span> nginx</div></pre></td></tr></table></figure>
-<ul>
-<li>后台运行容器。容器是否长久运行和<code>-d</code>无关，<code>-d</code>只是指定了运行在后台（background）。容器长久运行和<code>run</code>指定的命令有关。后台运行可以在本地和容器之间来回切换。</li>
-</ul>
+</li>
+<li><p>后台运行容器。容器是否长久运行和<code>-d</code>无关，<code>-d</code>只是指定了运行在后台（background）。容器长久运行和<code>run</code>指定的命令有关。后台运行可以在本地和容器之间来回切换。</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -d ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>进入后台运行的容器</li>
-</ul>
+</li>
+<li><p>进入后台运行的容器</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker attach ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>停止容器</li>
-</ul>
+</li>
+<li><p>停止容器</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker stop ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>删除容器</li>
-</ul>
+</li>
+<li><p>删除容器</p>
 <figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker rm ubuntu</div></pre></td></tr></table></figure>
+</li>
+</ul>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="external">Docker — 从入门到实践</a></p>
 
       
