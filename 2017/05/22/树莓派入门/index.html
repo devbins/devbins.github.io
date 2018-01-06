@@ -385,7 +385,7 @@
 <li>把 SD 卡连接电脑，SD 卡需要 FAT32 格式的</li>
 <li>再在终端中输入<code>diskutil list</code>查看一下多出来的就是我们的 SD 卡。例如 <code>/dev/disk2</code></li>
 <li>使用<code>diskutil unmountDisk /dev/disk&lt;disk# from diskutil&gt;</code>来卸载分区，其中<code>&lt;disk# from diskutil&gt;</code>是 SD 卡的分区，不是<code>disk2</code>之类的，而是类似<code>disk2s1</code>这样的。这个要根据自己电脑上的实际情况填写，不要照着抄。</li>
-<li>使用<code>sudo dd bs=1m if=~/Downloads/2017-04-10-raspbian-jessie.img of=/dev/disk2</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径，<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待。<blockquote>
+<li>使用<code>sudo dd bs=1m if=~/Downloads/2017-04-10-raspbian-jessie.img of=/dev/disk2 conv=sync</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径，<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待。<blockquote>
 <p>Windows 用户可以使用<a href="https://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener">Win32DiskImager</a>来制作安装盘。这个太简单就不说怎么搞了。</p>
 </blockquote>
 </li>
