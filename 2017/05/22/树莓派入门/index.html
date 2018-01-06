@@ -380,16 +380,13 @@
 <li>网线一根，用于设置 WiFi</li>
 </ol>
 <h1 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h1><p>在<a href="https://www.raspberrypi.org/downloads/" target="_blank" rel="noopener">镜像下载地址</a>中选择一个合适的镜像下载到本地，我选择的是 Raspbian。下载好后解压，会得到一个后缀为<code>.img</code>的文件。</p>
-<h1 id="制作系统（MacOS-环境下制作）"><a href="#制作系统（MacOS-环境下制作）" class="headerlink" title="制作系统（MacOS 环境下制作）"></a>制作系统（MacOS 环境下制作）</h1><ul>
-<li>在制作之前先看看有哪些磁盘,在终端中输入<code>diskutil list</code>,它会列出电脑上的所有磁盘。</li>
-<li>把 SD 卡连接电脑，SD 卡需要 FAT32 格式的</li>
-<li>再在终端中输入<code>diskutil list</code>查看一下多出来的就是我们的 SD 卡。例如 <code>/dev/disk2</code></li>
-<li>使用<code>diskutil unmountDisk /dev/disk&lt;disk# from diskutil&gt;</code>来卸载分区，其中<code>&lt;disk# from diskutil&gt;</code>是 SD 卡的分区，不是<code>disk2</code>之类的，而是类似<code>disk2s1</code>这样的。这个要根据自己电脑上的实际情况填写，不要照着抄。</li>
-<li>使用<code>sudo dd bs=1m if=~/Downloads/2017-04-10-raspbian-jessie.img of=/dev/disk2 conv=sync</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径，<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待。<blockquote>
+<h1 id="制作系统（MacOS-环境下制作）"><a href="#制作系统（MacOS-环境下制作）" class="headerlink" title="制作系统（MacOS 环境下制作）"></a>制作系统（MacOS 环境下制作）</h1><p>在制作之前先看看有哪些磁盘,在终端中输入<code>diskutil list</code>,它会列出电脑上的所有磁盘。</p>
+<p>把 SD 卡连接电脑，SD 卡需要 FAT32 格式的。可以使用<a href="https://www.sdcard.org/chs/downloads/formatter_4/index.html" target="_blank" rel="noopener">SD Memory Card formatter</a>来格式化，有 Windows 和 Mac 版的。<br>再在终端中输入<code>diskutil list</code>查看一下多出来的就是我们的 SD 卡。例如 <code>/dev/disk2</code></p>
+<p>使用<code>diskutil unmountDisk /dev/disk&lt;disk# from diskutil&gt;</code>来卸载分区，其中<code>&lt;disk# from diskutil&gt;</code>是 SD 卡的路径，例如<code>disk2</code>之类的。这个要根据自己电脑上的实际情况填写，不要照着抄。</p>
+<p>使用<code>sudo dd bs=1m if=~/Downloads/2017-11-29-raspbian-stretch-lite.img of=/dev/disk2 conv=sync</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径（刚刚下载解压出来的文件），<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待，我用了 43 分钟左右才好。</p>
+<blockquote>
 <p>Windows 用户可以使用<a href="https://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener">Win32DiskImager</a>来制作安装盘。这个太简单就不说怎么搞了。</p>
 </blockquote>
-</li>
-</ul>
 <h1 id="开机并使用-SSH-远程登录"><a href="#开机并使用-SSH-远程登录" class="headerlink" title="开机并使用 SSH 远程登录"></a>开机并使用 SSH 远程登录</h1><p>把 SD 卡装进树莓派、接上网线，并通电。<br>树莓派默认的账号是<code>pi</code>,密码是<code>raspberry</code>。<br>登录之前需要知道树莓派的 IP 地址，打开 Mac 终端使用<code>arp -a</code>来查看（一次可能查看不到，多试几次），如果你可以登录路由器后台,那就可以从路由器中查看树莓派的 IP。<br>获取到了<code>ip</code>就可以使用<code>ssh</code>来登录树莓派了。<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh pi@ip <span class="comment"># ip就是上一步获取到的</span></div></pre></td></tr></table></figure></p>
 <p>如果你直接这样连接恐怕是连不上的。最新的 Raspbian 镜像默认禁用了 SSH 服务。开启 SSH 很简单只要在 SD 卡的根目录建立一个<code>ssh</code>的文件夹就行了。<br>除了使用<code>arp -a</code>来查看<code>ip</code>的方式连接树莓派，还可以用一下方式来连接<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh pi@raspberrypi.local</div></pre></td></tr></table></figure></p>
 <p>在实际使用过程中，<code>arp -a</code>和<code>ssh pi@raspberrypi.local</code>都不是很好用，最方便的还是在路由器下查看 IP</p>
