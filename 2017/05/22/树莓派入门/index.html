@@ -79,17 +79,14 @@
 
 
 
-<meta name="description" content="关于 喜欢开源，爱自由，爱折腾 让繁琐重复的事自动化">
 <meta property="og:type" content="website">
-<meta property="og:title" content="About">
-<meta property="og:url" content="http://github.com/binsheng/about/index.html">
+<meta property="og:title" content="自定义">
+<meta property="og:url" content="http://github.com/binsheng/404.html">
 <meta property="og:site_name" content="自定义">
-<meta property="og:description" content="关于 喜欢开源，爱自由，爱折腾 让繁琐重复的事自动化">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-06-21T05:42:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="About">
-<meta name="twitter:description" content="关于 喜欢开源，爱自由，爱折腾 让繁琐重复的事自动化">
+<meta name="twitter:title" content="自定义">
 
 
 
@@ -121,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://github.com/binsheng/about/"/>
+  <link rel="canonical" href="http://github.com/binsheng/404.html"/>
 
 
 
@@ -386,7 +383,7 @@
 <h1 id="制作系统（MacOS-环境下制作）"><a href="#制作系统（MacOS-环境下制作）" class="headerlink" title="制作系统（MacOS 环境下制作）"></a>制作系统（MacOS 环境下制作）</h1><p>在制作之前先看看有哪些磁盘,在终端中输入<code>diskutil list</code>,它会列出电脑上的所有磁盘。</p>
 <p>把 SD 卡连接电脑，SD 卡需要 FAT32 格式的。可以使用<a href="https://www.sdcard.org/chs/downloads/formatter_4/index.html" target="_blank" rel="noopener">SD Memory Card formatter</a>来格式化，有 Windows 和 Mac 版的。<br>再在终端中输入<code>diskutil list</code>查看一下多出来的就是我们的 SD 卡。例如 <code>/dev/disk2</code><br><img src="/images/disk.png" alt="disk"></p>
 <p>使用<code>diskutil unmountDisk /dev/disk&lt;disk# from diskutil&gt;</code>来卸载分区，其中<code>&lt;disk# from diskutil&gt;</code>是 SD 卡的路径，例如<code>disk2</code>之类的。这个要根据自己电脑上的实际情况填写，不要照着抄。<br><img src="/images/unmount.png" alt="unmountDisk"></p>
-<p>使用<code>sudo dd bs=1m if=/Users/bin/Downloads/2017-11-29-raspbian-stretch-lite.img of=/dev/disk3 conv=sync</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径（刚刚下载解压出来的文件），<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待，我用了 15 分钟左右才好。<br><img src="/images/write.png" alt="writeimg"></p>
+<p>使用<code>sudo dd bs=1m if=~/Downloads/2017-11-29-raspbian-stretch-lite.img of=/dev/disk3 conv=sync</code>把镜像拷贝到 SD 卡。其中<code>if(input file)</code>后面接的是镜像的路径（刚刚下载解压出来的文件），<code>of(output file)</code>接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。<code>bs（block size）</code>后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待，我用了 15 分钟左右才好。<br><img src="/images/write.png" alt="writeimg"></p>
 <blockquote>
 <p>Windows 用户可以使用<a href="https://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener">Win32DiskImager</a>来制作安装盘。这个太简单就不说怎么搞了。</p>
 </blockquote>
