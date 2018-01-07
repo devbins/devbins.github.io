@@ -393,7 +393,11 @@
 <p>在实际使用过程中，<code>arp -a</code>和<code>ssh pi@raspberrypi.local</code>都不是很好用，最方便的还是在路由器下查看 IP</p>
 <h1 id="配置-WiFi"><a href="#配置-WiFi" class="headerlink" title="配置 WiFi"></a>配置 WiFi</h1><p>编辑<code>etc/wpa_supplicant/wpa_supplicant.conf</code>,在文件后面追加<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">network=&#123;</div><div class="line">ssid=<span class="string">"WIFINAME"</span> <span class="comment"># WIFI 的名字</span></div><div class="line">psk=<span class="string">"password"</span> <span class="comment"># WIFI 的密码</span></div><div class="line">key_mgmt=WPA-PSK <span class="comment"># 加密类型，照着写好了，一般不用改。如果想看的话，用手机连上该 WIFI 详细里面的安全性就指的是这个。</span></div><div class="line">priority=1 <span class="comment"># 连接的优先级，数值越大，优先级越高。</span></div><div class="line">&#125;`</div></pre></td></tr></table></figure></p>
 <p>写好保存，重启生效</p>
-<h1 id="配置国内镜像"><a href="#配置国内镜像" class="headerlink" title="配置国内镜像"></a>配置国内镜像</h1><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md" target="_blank" rel="noopener">installation guide</a></p>
+<h1 id="配置国内镜像"><a href="#配置国内镜像" class="headerlink" title="配置国内镜像"></a>配置国内镜像</h1><p>树莓派默认的镜像在国外，更新软件的时候经常要老半天，或者根本就更新不了。所以换成国内的节约时间，省事。<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo sed -i <span class="string">'s|//archive.raspberrypi.org|//mirrors.ustc.edu.cn/archive.raspberrypi.org|g'</span> /etc/apt/sources.list.d/raspi.list</div><div class="line">sudo sed -i <span class="string">'s|mirrordirector.raspbian.org|mirrors.ustc.edu.cn/raspbian|g'</span> /etc/apt/sources.list</div><div class="line">sudo sed -i <span class="string">'s|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g'</span> /etc/apt/sources.list</div></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md" target="_blank" rel="noopener">installation guide</a></li>
+<li><a href="http://mirrors.ustc.edu.cn/" target="_blank" rel="noopener">中国科学技术大学开源软件镜像</a></li>
+</ol>
 
       
     </div>
