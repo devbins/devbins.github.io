@@ -120,7 +120,7 @@
 
 
 
-  <title>Go入门 | 自定义</title>
+  <title>使用SSH免密登录多个服务器 | 自定义</title>
   
 
 
@@ -241,7 +241,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://github.com/binsheng/2016/08/12/Go入门/">
+    <link itemprop="mainEntityOfPage" href="http://github.com/binsheng/2017/12/18/使用SSH登录服务器/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="binsheng">
@@ -258,7 +258,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Go入门</h1>
+          <h1 class="post-title" itemprop="name headline">使用SSH免密登录多个服务器</h1>
         
 
         <div class="post-meta">
@@ -270,7 +270,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-12T17:50:36+08:00">2016-08-12</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T21:00:26+08:00">2017-12-18</time>
             
 
             
@@ -291,8 +291,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index">
-                    <span itemprop="name">Go</span>
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
                   </a>
                 </span>
 
@@ -328,64 +328,18 @@
       
 
       
-        <p><img src="/images/go.png" alt="Go"></p>
-<h1 id="Go语言简介"><a href="#Go语言简介" class="headerlink" title="Go语言简介"></a>Go语言简介</h1><p>Go 是一门开源，在语言层上支持并发，带垃圾回收的新型编译型语言。具有动态语言的开发效率，静态语言的安全性。Go 语言是 Google 开发的，Go 语言的主要作者都是牛逼到不行的人物。比如：</p>
-<ul>
-<li>肯·汤普逊(Ken Thompson):C 语言的设计者，Unix 操作系统的创建者，并于 1983 年获得图灵奖。</li>
-<li>罗布·派克:Unix 小组的成员，《Unix编程环境》作者之一。</li>
-<li>罗伯特·格里泽默(Robert Griesemer)参与 Java 的 HotSpot 编译器和 Chrome 浏览器的 JavaScript 引擎 V8 的制作。<br>有这么多牛逼哄哄的人物镇楼，Go 语言的表现注定不会平庸。<a id="more"></a>
-</li>
-</ul>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="Mac-下安装"><a href="#Mac-下安装" class="headerlink" title="Mac 下安装"></a>Mac 下安装</h2><ul>
-<li>使用<code>homebrew</code>安装，如果不知道<code>homebrew</code>是什么，请使用搜索解决。<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install go</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Linux（Ubuntu）下安装"><a href="#Linux（Ubuntu）下安装" class="headerlink" title="Linux（Ubuntu）下安装"></a>Linux（Ubuntu）下安装</h2><ol>
-<li>下载安装包<a href="https://golangtc.com/download" target="_blank" rel="noopener">下载地址</a><br>在下载地址中根据自己电脑的系统选择对应的下载</li>
-<li>解压下载的安装包到<code>/usr/local</code><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -C /usr/<span class="built_in">local</span>/ -xzf go<span class="variable">$VERSION</span>.<span class="variable">$OS</span>-<span class="variable">$ARCH</span>.tar.gz <span class="comment">#把`go$VERSION.$OS-$ARCH.tar.gz`换成你下载的文件名</span></div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>如果提示没有权限在最前面加上<code>sudo</code></p>
-<h1 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h1><ol>
-<li><p>编辑<code>vi ~/.bashrc</code>，如果没有自己手动创建。在文件的末尾加入下面的语句。</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 下面两句只需要选择一句配置，根据自己系统选择对应的食用</span></div><div class="line"><span class="built_in">export</span> GOROOT=/usr/<span class="built_in">local</span>/opt/go/libexec <span class="comment"># Mac 下使用`homebrew`安装的配置</span></div><div class="line"><span class="built_in">export</span> GOROOT=/usr/<span class="built_in">local</span>/go <span class="comment"># Linux 下的配置</span></div><div class="line"><span class="comment"># Go 命令</span></div><div class="line"><span class="built_in">export</span> GOBIN=<span class="variable">$GOROOT</span>/bin</div><div class="line"><span class="comment"># 加入到 PATH 中</span></div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$GOBIN</span> </div><div class="line"><span class="comment"># 可以根据自己喜好设置 GOPATH 的路径。</span></div><div class="line"><span class="built_in">export</span> GOPATH=/home/<span class="variable">$USER</span>/go</div></pre></td></tr></table></figure>
-<ul>
-<li><code>GOROOT</code>是<code>Go</code>语言的安装目录</li>
-<li><code>GOBIN</code>是<code>Go</code>语言二进制文件目录,把<code>GOBIN</code>加入到<code>PATH</code>中可以在终端中使用<code>TAB</code>补齐</li>
-<li><code>GOPATH</code>是<code>Go</code>语言的工作目录，也就是我们通常开发用到的目录.从 go 语言 1.8 开始，GOPATH 默认为<code>$HOME/go</code>。</li>
-</ul>
-</li>
-<li><p>使配置的环境变量立即生效</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">source</span> ~/.bashrc</div></pre></td></tr></table></figure>
-</li>
-<li><p>验证是否安装成功</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">go</span> version</div></pre></td></tr></table></figure>
-</li>
-<li><p>如果输出类似下面的内容则安装成功</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">go</span> version go1<span class="number">.8</span><span class="number">.3</span> darwin/amd64</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="GOPATH-结构"><a href="#GOPATH-结构" class="headerlink" title="GOPATH 结构"></a>GOPATH 结构</h1><ul>
-<li>GOPATH 是 Go 语言的工作目录，在 GOPATH 下有三个重要的子目录分别是<code>src</code>、<code>pkg</code>、<code>bin</code>。</li>
-<li><code>src</code>存放 Go 语言的源代码</li>
-<li><code>pkg</code>存放编译后生成的文件</li>
-<li><code>bin</code>存放编译后生成的可执行文件</li>
-</ul>
-<h1 id="安装-GoSublime-插件（默认安装好了-SublimeText3）"><a href="#安装-GoSublime-插件（默认安装好了-SublimeText3）" class="headerlink" title="安装 GoSublime 插件（默认安装好了 SublimeText3）"></a>安装 GoSublime 插件（默认安装好了 SublimeText3）</h1><p>GoSublime 是 Sublime Text 3 的一个插件，装上该插件可以有代码提示的功能。</p>
-<ol>
-<li><p>启用 package control,按下 <em>Ctrl + `</em> ,输入</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> urllib.request,os,hashlib; h = <span class="string">'df21e130d211cfc94d9b0905775a7c0f'</span> + <span class="string">'1e3d39e33b79698005270310898eea76'</span>; pf = <span class="string">'Package Control.sublime-package'</span>; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( <span class="string">'http://packagecontrol.io/'</span> + pf.replace(<span class="string">' '</span>, <span class="string">'%20'</span>)).read(); dh = hashlib.sha256(by).hexdigest(); print(<span class="string">'Error validating download (got %s instead of %s), please try manual install'</span> % (dh, h)) <span class="keyword">if</span> dh != h <span class="keyword">else</span> open(os.path.join( ipp, pf), <span class="string">'wb'</span> ).write(by)</div></pre></td></tr></table></figure>
-</li>
-<li><p>安装 GoSublime<br>在 sublime 中同时按住 <code>cmd + shift + p</code>,在弹出的框中输入<code>install package</code>,需要等待一会搜索包，搜索完毕后在输入框中输入 gosublime ，选中第一个，回车安装好了重启生效</p>
-</li>
-<li><p>配置 GoSublime<br>在菜单中选择 Preferences -&gt; package settings -&gt; GoSublime -&gt; Settings -&gt; Uesrs<br>在打开的文件中输入</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"env"</span>: &#123;</div><div class="line">        <span class="string">"GOPATH"</span>: <span class="string">"~/go"</span>,<span class="comment">//根据自己的路径修改</span></div><div class="line">        <span class="string">"GOROOT"</span>: <span class="string">"/usr/local/opt/go/libexec"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>运行<br>在 GOPATH 中新建一个 hello.go 文件，输入</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"><span class="keyword">import</span> (<span class="string">"fmt"</span>)</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">    fmt.Print(<span class="string">"hello go"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>在 sublime 中 按住<code>cmd+b</code>后输入 go run hello.go 就可以看都控制台打印了 hello go</p>
+        <blockquote>
+<p>常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。<br>有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？<br>其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="生成公私钥文件"><a href="#生成公私钥文件" class="headerlink" title="生成公私钥文件"></a>生成公私钥文件</h1><p>要不想每次都输入密码才登录服务器，那就得让程序来做，但是这样又不安全，所以我们先要加密。比较安全的就是 SSH，配合<code>rsa</code>算法来实现免密登录。</p>
+<p>先来生成加密的公私钥<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa</div></pre></td></tr></table></figure></p>
+<p>在输完命令之后一路回车，会在<code>~/.ssh</code>目录下生成<code>id_rsa</code>私钥和<code>id_rsa.pub</code>公钥。</p>
+<h1 id="把公钥拷贝到服务器"><a href="#把公钥拷贝到服务器" class="headerlink" title="把公钥拷贝到服务器"></a>把公钥拷贝到服务器</h1><p>上一步我们生成了公私钥文件，接下来就要把公钥放到服务器<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div><div class="line">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx <span class="comment"># -i 表示把指定的文件拷贝到服务器</span></div></pre></td></tr></table></figure></p>
+<p>输入这条命令，还需要验证一次登录密码，也是唯一的一次，之后就可以不用再输入密码了。</p>
+<h1 id="配置多账号"><a href="#配置多账号" class="headerlink" title="配置多账号"></a>配置多账号</h1><p>通过上面的步骤，已经可以在登录服务器时不用在输入密码了。但是每次还要输入用户名和<code>ip</code>，也是挺麻烦的。有办法可以不需要每次都输吗？答案是可以的，接下来的内容就是解决这个问题的。</p>
+<p>先在<code>~/.ssh</code>目录下创建一个<code>config</code>的文件，并根据自己的情况加入如下内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host A <span class="comment"># 别名</span></div><div class="line">    User usera <span class="comment"># 登录用户名 </span></div><div class="line">    Hostname 192.168.1.xxx <span class="comment"># 服务器 ip</span></div><div class="line">    IdentityFile ~/.ssh/id_rsa <span class="comment"># 私钥文件存放地址</span></div><div class="line">    Port 22 <span class="comment"># 端口号，默认22，没改可以不用写</span></div><div class="line">Host B</div><div class="line">    User userb</div><div class="line">    Hostname 192.168.1.xxx</div><div class="line">    IdentityFile ~/.ssh/id_rsab</div></pre></td></tr></table></figure></p>
+<p>做完了上面的如果我们要登录服务器<code>A</code>，就只需要输入<code>ssh A</code>就可以登录到服务器了。其中<code>A</code>是服务器<code>A</code>的别名。</p>
 
       
     </div>
@@ -406,7 +360,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://github.com/binsheng/2016/08/12/Go入门/" title="Go入门">http://github.com/binsheng/2016/08/12/Go入门/</a>
+    <a href="http://github.com/binsheng/2017/12/18/使用SSH登录服务器/" title="使用SSH免密登录多个服务器">http://github.com/binsheng/2017/12/18/使用SSH登录服务器/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -421,7 +375,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Go/" rel="tag"># Go</a>
+            <a href="/tags/SSH/" rel="tag"># SSH</a>
           
         </div>
       
@@ -434,8 +388,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/16/hexo博客/" rel="next" title="用 Hexo 搭建博客">
-                <i class="fa fa-chevron-left"></i> 用 Hexo 搭建博客
+              <a href="/2017/12/02/使用Git管理SVN项目/" rel="next" title="使用Git管理SVN项目">
+                <i class="fa fa-chevron-left"></i> 使用Git管理SVN项目
               </a>
             
           </div>
@@ -444,8 +398,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/03/Android网络服务发现/" rel="prev" title="Android 网络服务发现（NSD）">
-                Android 网络服务发现（NSD） <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/01/2017的我/" rel="prev" title="2017的我">
+                2017的我 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -582,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Go语言简介"><span class="nav-number">1.</span> <span class="nav-text">Go语言简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac-下安装"><span class="nav-number">2.1.</span> <span class="nav-text">Mac 下安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux（Ubuntu）下安装"><span class="nav-number">2.2.</span> <span class="nav-text">Linux（Ubuntu）下安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置环境变量"><span class="nav-number">3.</span> <span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GOPATH-结构"><span class="nav-number">4.</span> <span class="nav-text">GOPATH 结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装-GoSublime-插件（默认安装好了-SublimeText3）"><span class="nav-number">5.</span> <span class="nav-text">安装 GoSublime 插件（默认安装好了 SublimeText3）</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#生成公私钥文件"><span class="nav-number">1.</span> <span class="nav-text">生成公私钥文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#把公钥拷贝到服务器"><span class="nav-number">2.</span> <span class="nav-text">把公钥拷贝到服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置多账号"><span class="nav-number">3.</span> <span class="nav-text">配置多账号</span></a></li></ol></div>
             
 
           </div>
