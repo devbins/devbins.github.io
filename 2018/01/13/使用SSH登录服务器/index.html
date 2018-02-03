@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="自定义">
 <meta property="og:description" content="常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-13T07:47:25.380Z">
+<meta property="og:updated_time" content="2018-02-03T06:49:46.842Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用SSH免密登录多个服务器">
 <meta name="twitter:description" content="常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。">
@@ -378,6 +378,7 @@
 <p>在输完命令之后一路回车，会在<code>~/.ssh</code>目录下生成<code>id_rsa</code>私钥和<code>id_rsa.pub</code>公钥。</p>
 <h1 id="把公钥拷贝到服务器"><a href="#把公钥拷贝到服务器" class="headerlink" title="把公钥拷贝到服务器"></a>把公钥拷贝到服务器</h1><p>上一步我们生成了公私钥文件，接下来就要把公钥放到服务器<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div><div class="line">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx <span class="comment"># -i 表示把指定的文件拷贝到服务器</span></div></pre></td></tr></table></figure></p>
 <p>输入这条命令，还需要验证一次登录密码，也是唯一的一次，之后就可以不用再输入密码了。</p>
+<p>如果修改了 ssh 的默认端口可以在使用<code>-p</code>来设置端口号<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx -p port</div></pre></td></tr></table></figure></p>
 <h1 id="配置多账号"><a href="#配置多账号" class="headerlink" title="配置多账号"></a>配置多账号</h1><p>通过上面的步骤，已经可以在登录服务器时不用在输入密码了。但是每次还要输入用户名和<code>ip</code>，也是挺麻烦的。有办法可以不需要每次都输吗？答案是可以的，接下来的内容就是解决这个问题的。</p>
 <p>先在<code>~/.ssh</code>目录下创建一个<code>config</code>的文件，并根据自己的情况加入如下内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host A <span class="comment"># 别名</span></div><div class="line">    User usera <span class="comment"># 登录用户名 </span></div><div class="line">    Hostname 192.168.1.xxx <span class="comment"># 服务器 ip</span></div><div class="line">    IdentityFile ~/.ssh/id_rsa <span class="comment"># 私钥文件存放地址</span></div><div class="line">    Port 22 <span class="comment"># 端口号，默认22，没改可以不用写</span></div><div class="line">Host B</div><div class="line">    User userb</div><div class="line">    Hostname 192.168.1.xxx</div><div class="line">    IdentityFile ~/.ssh/id_rsab</div></pre></td></tr></table></figure></p>
 <p>做完了上面的如果我们要登录服务器<code>A</code>，就只需要输入<code>ssh A</code>就可以登录到服务器了。其中<code>A</code>是服务器<code>A</code>的别名。</p>
