@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Raspberry Pi Yeelight," />
+
+
+<meta name="description" content="先上图，不废话">
+<meta name="keywords" content="Raspberry Pi Yeelight">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Siri 帮我开灯">
+<meta property="og:url" content="http://github.com/binsheng/2018/01/07/Siri-帮我开灯/index.html">
+<meta property="og:site_name" content="自定义">
+<meta property="og:description" content="先上图，不废话">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://github.com/images/siri.gif">
+<meta property="og:image" content="http://github.com/images/yeelightdeviece.png">
+<meta property="og:image" content="http://github.com/images/yeelightmore.png">
+<meta property="og:image" content="http://github.com/images/yeelightlnc.png">
+<meta property="og:image" content="http://github.com/images/yeelightolnc.png">
+<meta property="og:image" content="http://github.com/images/homebridge.png">
+<meta property="og:image" content="http://github.com/images/adddevice.png">
+<meta property="og:image" content="http://github.com/images/scan.png">
+<meta property="og:image" content="http://github.com/images/pin.png">
+<meta property="og:image" content="http://github.com/images/addhomebridge.png">
+<meta property="og:image" content="http://github.com/images/sureadd.png">
+<meta property="og:image" content="http://github.com/images/confighomebridge.png">
+<meta property="og:image" content="http://github.com/images/addyeelight.png">
+<meta property="og:image" content="http://github.com/images/addcomplete.png">
+<meta property="og:updated_time" content="2018-02-28T00:47:25.503Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Siri 帮我开灯">
+<meta name="twitter:description" content="先上图，不废话">
+<meta name="twitter:image" content="http://github.com/images/siri.gif">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="自定义" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://github.com/binsheng/2018/01/07/Siri-帮我开灯/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Siri 帮我开灯 | 自定义</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">自定义</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://github.com/binsheng/2018/01/07/Siri-帮我开灯/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="binsheng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="自定义">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Siri 帮我开灯</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-07T14:13:55+08:00">2018-01-07</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/IOT/" itemprop="url" rel="index"><span itemprop="name">IOT</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/siri.gif" alt="screentshot"><br>先上图，不废话<br><a id="more"></a></p>
+<blockquote>
+<p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是苹果没有认证的设备，我们还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p>
+</blockquote>
+<h1 id="材料准备"><a href="#材料准备" class="headerlink" title="材料准备"></a>材料准备</h1><ol>
+<li>树莓派（我手上的是树莓派 3B）</li>
+<li>Yeelight 灯一个（我用的是 Yeelight 台灯）</li>
+<li>iPhone 或者 iPad 一个，要求 iOS10 以上（这里我使用 iPad）</li>
+</ol>
+<h1 id="Yeelight-设置局域网控制（极客模式）"><a href="#Yeelight-设置局域网控制（极客模式）" class="headerlink" title="Yeelight 设置局域网控制（极客模式）"></a>Yeelight 设置局域网控制（极客模式）</h1><blockquote>
+<p>先说一下 Yeelight 的极客模式，这里极客模式和局域网控制是一个东西，我刚买的时候还是极客模式，几个月之后极客模式变成了局域网控制。我特地去问了客服，这两个是一个东西，客服截图上显示的还是极客模式，而我这里显示的却是局域网控制。如果你手上也是显示的是局域网控制，不要奇怪，当成一样的就好了，不影响使用。</p>
+</blockquote>
+<p>我们先从灯的设置开始。先用手机下载一个 Yeelight 的 APP（应用商店里搜一下就有了），输入账号密码登录。登录之后需点击右上角的加号添加一台设备，选择你手上所使用的设备，我这里是台灯。下图是添加好的样子，添加过程中需要输入 WiFi 密码。<br><img src="/images/yeelightdeviece.png" width="300px" height="300px"><br>连接好之后，点击刚刚添加的台灯，进入控制页，选择右下角的三角形。<br><img src="/images/yeelightmore.png" width="300px" height="300px"><br>在弹出的页面中选择局域网控制（极客模式）<br><img src="/images/yeelightlnc.png" width="300px" height="300px"><br>把局域网控制的开关给打开<br><img src="/images/yeelightolnc.png" width="300px" height="300px"><br>Yeelight 台灯的设置就这些，没有了。</p>
+<h1 id="树莓派的配置"><a href="#树莓派的配置" class="headerlink" title="树莓派的配置"></a>树莓派的配置</h1><blockquote>
+<p>这里默认已经在树莓派上装好了系统，并且接上电源，连接了网络并且要和 Yeelight 灯在同一个局域网。没有的话参考<a href="https://binsheng.github.io/2017/05/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/#more" target="_blank" rel="noopener">树莓派入门</a>。不用树莓派用其它的也是可以的，需要根据自己的系统进行相应的调整。</p>
+</blockquote>
+<h2 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h2><p>首先打开终端，通过<code>ssh</code>连接上树莓派，我们的操作都是在命令行下进行。Windows 可以使用 Xshell、PuTTY 等工具。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh pi@192.168.1.x <span class="comment">#这里换成你自己的IP，回车后输入密码</span></div></pre></td></tr></table></figure></p>
+<p>接下来安装 Node.js<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -</div><div class="line">sudo apt-get install -y nodejs</div><div class="line">node -v <span class="comment"># 查看一下是否安装成功，成功会输出类似 v9.x.x</span></div></pre></td></tr></table></figure></p>
+<p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入<code>vi .npmrc</code><br>按下<code>i</code>后输入下面内容<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">registry = https://registry.npm.taobao.org</div></pre></td></tr></table></figure></p>
+<p>输好后按下<code>ESC（一般在 F1 旁边）</code>,输入<code>:</code>,接着按下<code>wq</code>回车。<br>不做这一步也是可以的，但是国内速度可能会稍慢。</p>
+<h2 id="安装-homebridge"><a href="#安装-homebridge" class="headerlink" title="安装 homebridge"></a>安装 homebridge</h2><p>装好了 Node.js 就可以安装 homebridge，homebridge 是一个把设备接入 HomeKit 的工具（类似桥梁的作用），没有它就不能使用没有经过苹果认证的设备。<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libavahi-compat-libdnssd-dev </div><div class="line">sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp</div></pre></td></tr></table></figure></p>
+<h2 id="安装-Yeelight-插件"><a href="#安装-Yeelight-插件" class="headerlink" title="安装 Yeelight 插件"></a>安装 Yeelight 插件</h2><p>装好了 homebridge 还需要装上插件才能使用对应的智能设备，这里我使用的 Yeelight 台灯，所以还要安装 homebridge-yeelight 这个插件。<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo npm install -g homebridge-yeelight</div></pre></td></tr></table></figure></p>
+<h2 id="插件配置"><a href="#插件配置" class="headerlink" title="插件配置"></a>插件配置</h2><p>插件装好了之后，我们需要配置一下让 homebridge 识别我们。<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.homebridge  <span class="comment"># 没有的话手动创建，使用 mkdir ~/.homebridge</span></div><div class="line">vi config.json</div></pre></td></tr></table></figure></p>
+<p>打开文件之后按下<code>i</code>键，复制下面的内容到里面。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"bridge"</span>: &#123;</div><div class="line">        <span class="attr">"name"</span>: <span class="string">"Homebridge"</span>,</div><div class="line">        <span class="attr">"username"</span>: <span class="string">"CC:22:3D:E3:CE:30"</span>,</div><div class="line">        <span class="attr">"port"</span>: <span class="number">51826</span>,</div><div class="line">        <span class="attr">"pin"</span>: <span class="string">"031-45-154"</span></div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="attr">"platforms"</span>: [</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"platform"</span> : <span class="string">"yeelight"</span>,</div><div class="line">            <span class="attr">"name"</span> : <span class="string">"yeelight"</span></div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>写好之后按下<code>ESC</code>，输入<code>:</code>后再输入<code>wq</code>回车，该操作会保存文件并退出<code>vi</code>回到终端。<br>解释一下上面 bridge 中的配置</p>
+<ul>
+<li>name 一个名称，在家庭 APP 上添加配件时显示，可以随意填写</li>
+<li>username 一个唯一标识符，类似 MAC 地址，可以随意填写，格式不能变</li>
+<li>port homebridge 的端口号，可以任意，但是需要没有被系统占用的</li>
+<li>pin 密码，验证的时候用，可以任意，但是必须是 8 位数字，格式如上</li>
+<li>platforms 里的东西是插件里规定的，就这么写吧，不用改。</li>
+</ul>
+<h2 id="启动-homebridge"><a href="#启动-homebridge" class="headerlink" title="启动 homebridge"></a>启动 homebridge</h2><p>在终端中输入下面命令，启动 homebridge<br><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">homebridge</div></pre></td></tr></table></figure></p>
+<p><img src="/images/homebridge.png" alt="homebridge"><br>会看到一个二维码和我们刚刚配置的 pin（图中红色方框中的），二维码暂时用不到，pin 会在接下来用到。到这里树莓派上的操作都完成了。</p>
+<h1 id="接入-HomeKit"><a href="#接入-HomeKit" class="headerlink" title="接入 HomeKit"></a>接入 HomeKit</h1><p>打开 iPad，进入家庭 APP，选择添加配件。<br><img src="/images/adddevice.png" width="300px" height="300px"><br>在弹出的窗口中扫描终端显示的 pin（就是刚刚运行 homebridge 的地方），这一步通常是不能正确识别的，别担心后面可以手动输入。<br><img src="/images/scan.png" width="300px" height="300px"><br>来到这里估计估计你已经没有识别出 pin，没关系，我们手动输入 pin。<br><img src="/images/pin.png" width="300px" height="300px"><br>输入正确的 pin 后，可以看到 Homebridge 显示在 iPad 上了，点击 Homebridge 添加。这里的 Homebridge 就是我们在配置文件里设置的<code>bridge.name</code>。<br><img src="/images/addhomebridge.png" width="300px" height="300px"><br>点击后会提示未认证配件，选择仍然添加。不添加怎么玩？<br><img src="/images/sureadd.png" width="300px" height="300px"><br>接下来的是一些设置，我们默认不动，选择下一步。<br><img src="/images/confighomebridge.png" width="300px" height="300px"><br>可以看到 Yeelight 灯出现了。在下图红框框中，我把名字改为台灯，这样方便 Siri 识别。改好之后点击右上角完成。<br><img src="/images/addyeelight.png" width="300px" height="300px"><br>回到家庭 APP 主页，台灯已经显示出来。到这里已经已经成功的把 Yeelight 台灯接入 HomeKit。<br><img src="/images/addcomplete.png" width="300px" height="300px"></p>
+<h1 id="开机自启动"><a href="#开机自启动" class="headerlink" title="开机自启动"></a>开机自启动</h1><p>照着上面的配置好了，也能够使用了。但是每次使用都要我手动运行<code>homebridge</code>太麻烦了，有没有开机自启动？有，接下来就来配置开机自启动。</p>
+<h2 id="先验证一下-homebridge-的路径"><a href="#先验证一下-homebridge-的路径" class="headerlink" title="先验证一下 homebridge 的路径"></a>先验证一下 homebridge 的路径</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">which</span> homebridge</div></pre></td></tr></table></figure>
+<p>如果输出不是<code>/usr/bin/homebridge</code>，那么你需要把下面拷贝第 13 行的<code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code>改为<code>cmd=&quot;DEBUG=* 刚刚输出的东西&quot;</code>。</p>
+<h2 id="制作启动脚本"><a href="#制作启动脚本" class="headerlink" title="制作启动脚本"></a>制作启动脚本</h2><figure class="highlight zsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/init.d/homebridge</div></pre></td></tr></table></figure>
+<p>按下键盘上<code>i</code>，把下面的内容拷贝进去<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="comment">### BEGIN INIT INFO</span></div><div class="line"><span class="comment"># Provides: homebridge</span></div><div class="line"><span class="comment"># Required-Start:    $network $remote_fs $syslog</span></div><div class="line"><span class="comment"># Required-Stop:     $remote_fs $syslog</span></div><div class="line"><span class="comment"># Default-Start:     2 3 4 5</span></div><div class="line"><span class="comment"># Default-Stop:      0 1 6</span></div><div class="line"><span class="comment"># Short-Description: Start daemon at boot time</span></div><div class="line"><span class="comment"># Description:       Enable service provided by daemon.</span></div><div class="line"><span class="comment">### END INIT INFO</span></div><div class="line"></div><div class="line">dir=<span class="string">"/home/pi"</span></div><div class="line">cmd=<span class="string">"DEBUG=* /usr/bin/homebridge"</span></div><div class="line">user=<span class="string">"pi"</span></div><div class="line"></div><div class="line">name=`basename <span class="variable">$0</span>`</div><div class="line">pid_file=<span class="string">"/var/run/<span class="variable">$name</span>.pid"</span></div><div class="line">stdout_log=<span class="string">"/var/log/<span class="variable">$name</span>.log"</span></div><div class="line">stderr_log=<span class="string">"/var/log/<span class="variable">$name</span>.err"</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">get_pid</span></span>() &#123;</div><div class="line">    cat <span class="string">"<span class="variable">$pid_file</span>"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">is_running</span></span>() &#123;</div><div class="line">    [ -f <span class="string">"<span class="variable">$pid_file</span>"</span> ] &amp;&amp; ps -p `get_pid` &gt; /dev/null 2&gt;&amp;1</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">    start)</div><div class="line">    <span class="keyword">if</span> is_running; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Already started"</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Starting <span class="variable">$name</span>"</span></div><div class="line">        <span class="built_in">cd</span> <span class="string">"<span class="variable">$dir</span>"</span></div><div class="line">        <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$user</span>"</span> ]; <span class="keyword">then</span></div><div class="line">            sudo <span class="variable">$cmd</span> &gt;&gt; <span class="string">"<span class="variable">$stdout_log</span>"</span> 2&gt;&gt; <span class="string">"<span class="variable">$stderr_log</span>"</span> &amp;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            sudo -u <span class="string">"<span class="variable">$user</span>"</span> <span class="variable">$cmd</span> &gt;&gt; <span class="string">"<span class="variable">$stdout_log</span>"</span> 2&gt;&gt; <span class="string">"<span class="variable">$stderr_log</span>"</span> &amp;</div><div class="line">        <span class="keyword">fi</span></div><div class="line">        <span class="built_in">echo</span> $! &gt; <span class="string">"<span class="variable">$pid_file</span>"</span></div><div class="line">        <span class="keyword">if</span> ! is_running; <span class="keyword">then</span></div><div class="line">            <span class="built_in">echo</span> <span class="string">"Unable to start, see <span class="variable">$stdout_log</span> and <span class="variable">$stderr_log</span>"</span></div><div class="line">            <span class="built_in">exit</span> 1</div><div class="line">        <span class="keyword">fi</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    ;;</div><div class="line">    stop)</div><div class="line">    <span class="keyword">if</span> is_running; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> -n <span class="string">"Stopping <span class="variable">$name</span>.."</span></div><div class="line">        <span class="built_in">kill</span> `get_pid`</div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> 1 2 3 4 5 6 7 8 9 10</div><div class="line">        <span class="comment"># for i in `seq 10`</span></div><div class="line">        <span class="keyword">do</span></div><div class="line">            <span class="keyword">if</span> ! is_running; <span class="keyword">then</span></div><div class="line">                <span class="built_in">break</span></div><div class="line">            <span class="keyword">fi</span></div><div class="line"></div><div class="line">            <span class="built_in">echo</span> -n <span class="string">"."</span></div><div class="line">            sleep 1</div><div class="line">        <span class="keyword">done</span></div><div class="line">        <span class="built_in">echo</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> is_running; <span class="keyword">then</span></div><div class="line">            <span class="built_in">echo</span> <span class="string">"Not stopped; may still be shutting down or shutdown may have failed"</span></div><div class="line">            <span class="built_in">exit</span> 1</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="built_in">echo</span> <span class="string">"Stopped"</span></div><div class="line">            <span class="keyword">if</span> [ -f <span class="string">"<span class="variable">$pid_file</span>"</span> ]; <span class="keyword">then</span></div><div class="line">                rm <span class="string">"<span class="variable">$pid_file</span>"</span></div><div class="line">            <span class="keyword">fi</span></div><div class="line">        <span class="keyword">fi</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Not running"</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    ;;</div><div class="line">    restart)</div><div class="line">    <span class="variable">$0</span> stop</div><div class="line">    <span class="keyword">if</span> is_running; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Unable to stop, will not attempt to start"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="variable">$0</span> start</div><div class="line">    ;;</div><div class="line">    status)</div><div class="line">    <span class="keyword">if</span> is_running; <span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Running"</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Stopped"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    ;;</div><div class="line">    *)</div><div class="line">    <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart|status&#125;"</span></div><div class="line">    <span class="built_in">exit</span> 1</div><div class="line">    ;;</div><div class="line"><span class="keyword">esac</span></div><div class="line"></div><div class="line"><span class="built_in">exit</span> 0</div></pre></td></tr></table></figure></p>
+<p>按下<code>ESC</code>,输入<code>:</code>后按下<code>wq</code>回车保存并退出编辑。</p>
+<h2 id="设置权限"><a href="#设置权限" class="headerlink" title="设置权限"></a>设置权限</h2><p>保存之后我们还要给执行的文件权限，不然开机之后还是没法自动启动的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo chmod 755 /etc/init.d/homebridge</div><div class="line">sudo update-rc.d homebridge defaults</div></pre></td></tr></table></figure></p>
+<p>重启之后 homebridge 就会自己运行。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="https://github.com/nfarina/homebridge">homebridge</a></li>
+<li><a href="https://github.com/vvpossible/homebridge_yeelight">homebridge_yeelight</a></li>
+<li><a href="http://lijiawei.cc/rpi-homekit-yeelight.html#%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90" target="_blank" rel="noopener">用树莓派实现 HomeKit 控制台灯</a></li>
+<li><a href="https://sspai.com/post/36617" target="_blank" rel="noopener">借助树莓派与 HomeBridge ，将 YeeLight 彩光灯接入 Apple HomeKit</a></li>
+<li><a href="https://sspai.com/post/38358" target="_blank" rel="noopener">从米家到 HomeKit，你只需要一个树莓派</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author: </strong>binsheng</li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://github.com/binsheng/2018/01/07/Siri-帮我开灯/" title="Siri 帮我开灯">http://github.com/binsheng/2018/01/07/Siri-帮我开灯/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Raspberry-Pi-Yeelight/" rel="tag"># Raspberry Pi Yeelight</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/01/2017的我/" rel="next" title="2017的我">
+                <i class="fa fa-chevron-left"></i> 2017的我
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/13/使用SSH登录服务器/" rel="prev" title="使用SSH免密登录多个服务器">
+                使用SSH免密登录多个服务器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">binsheng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#材料准备"><span class="nav-number">1.</span> <span class="nav-text">材料准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Yeelight-设置局域网控制（极客模式）"><span class="nav-number">2.</span> <span class="nav-text">Yeelight 设置局域网控制（极客模式）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树莓派的配置"><span class="nav-number">3.</span> <span class="nav-text">树莓派的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Node-js"><span class="nav-number">3.1.</span> <span class="nav-text">安装 Node.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-homebridge"><span class="nav-number">3.2.</span> <span class="nav-text">安装 homebridge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Yeelight-插件"><span class="nav-number">3.3.</span> <span class="nav-text">安装 Yeelight 插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件配置"><span class="nav-number">3.4.</span> <span class="nav-text">插件配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动-homebridge"><span class="nav-number">3.5.</span> <span class="nav-text">启动 homebridge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接入-HomeKit"><span class="nav-number">4.</span> <span class="nav-text">接入 HomeKit</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开机自启动"><span class="nav-number">5.</span> <span class="nav-text">开机自启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#先验证一下-homebridge-的路径"><span class="nav-number">5.1.</span> <span class="nav-text">先验证一下 homebridge 的路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#制作启动脚本"><span class="nav-number">5.2.</span> <span class="nav-text">制作启动脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置权限"><span class="nav-number">5.3.</span> <span class="nav-text">设置权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">binsheng</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.0.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
