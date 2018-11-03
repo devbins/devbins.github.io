@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。 材料准备 树莓派（我手上的是树莓派 3B） Yeelight 灯一个（我用的是 Yeelight 台灯） iPhone 或者 iPad 一个，要求 iOS10 以上（这里我使用 iPad） Yeelight 设置局域网控制（极客模">
+  
+  <meta property="og:title" content="Siri 帮我开灯" />
+<meta property="og:description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。 材料准备 树莓派（我手上的是树莓派 3B） Yeelight 灯一个（我用的是 Yeelight 台灯） iPhone 或者 iPad 一个，要求 iOS10 以上（这里我使用 iPad） Yeelight 设置局域网控制（极客模" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" /><meta property="article:published_time" content="2018-01-07T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-01-07T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       Siri 帮我开灯 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://example.com/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/">
+
+  
+  
+
+  
+  <link href="https://example.com/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://example.com/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://example.com/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://example.com/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://example.com/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://example.com">
+          
+        <img class="avatar" src="https://example.com/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://example.com">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://example.com/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://example.com">
+          
+            <img class="pull-right avatar avatar-md" src="https://example.com/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://example.com">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://example.com/categories/iot"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> IOT </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">Siri 帮我开灯</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jan 7, 2018</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>5 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://example.com/images/siri/siri.gif" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<blockquote>
+<p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p>
+</blockquote>
+
+<h2 id="材料准备">材料准备</h2>
+
+<ol>
+<li>树莓派（我手上的是树莓派 3B）</li>
+<li>Yeelight 灯一个（我用的是 Yeelight 台灯）</li>
+<li>iPhone 或者 iPad 一个，要求 iOS10 以上（这里我使用 iPad）</li>
+</ol>
+
+<h2 id="yeelight-设置局域网控制-极客模式">Yeelight 设置局域网控制（极客模式）</h2>
+
+<blockquote>
+<p>先说一下 Yeelight 的极客模式，这里极客模式和局域网控制是一个东西，我刚买的时候还是极客模式，几个月之后极客模式变成了局域网控制。我特地去问了客服，这两个是一个东西，客服截图上显示的还是极客模式，而我这里显示的却是局域网控制。如果你手上也是显示的是局域网控制，不要奇怪，当成一样的就好了，不影响使用。</p>
+</blockquote>
+
+<p>我们先从灯的设置开始。先用手机下载一个 Yeelight 的 APP（应用商店里搜一下就有了），输入账号密码登录。登录之后需点击右上角的加号添加一台设备，选择你手上所使用的设备，我这里是台灯。下图是添加好的样子，添加过程中需要输入 WiFi 密码。
+<img src="https://example.com/images/siri/yeelightdeviece.png" width="300px" />
+连接好之后，点击刚刚添加的台灯，进入控制页，选择右下角的三角形。
+<img src="https://example.com/images/siri/yeelightmore.png" width="300px"/>
+在弹出的页面中选择局域网控制（极客模式）
+<img src="https://example.com/images/siri/yeelightlnc.png" width="300px" />
+把局域网控制的开关给打开
+<img src="https://example.com/images/siri/yeelightolnc.png" width="300px" />
+Yeelight 台灯的设置就这些，没有了。</p>
+
+<h2 id="树莓派的配置">树莓派的配置</h2>
+
+<blockquote>
+<p>这里默认已经在树莓派上装好了系统，并且接上电源，连接了网络并且要和 Yeelight 灯在同一个局域网。没有的话参考<a href="https://binsheng.github.io/2017/05/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/#more">树莓派入门</a>。不用树莓派用其它的也是可以的，需要根据自己的系统进行相应的调整。</p>
+</blockquote>
+
+<h3 id="安装-node-dot-js">安装 Node.js</h3>
+
+<p>首先打开终端，通过 <code>ssh</code> 连接上树莓派，我们的操作都是在命令行下进行。Windows 可以使用 Xshell、PuTTY 等工具。</p>
+
+<pre><code class="language-sh">ssh pi@192.168.1.x #这里换成你自己的 IP，回车后输入密码
+</code></pre>
+
+<p>接下来安装 Node.js</p>
+
+<pre><code class="language-sh">curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node -v # 查看一下是否安装成功，成功会输出类似 v9.x.x
+</code></pre>
+
+<p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入 <code>vi .npmrc</code>
+按下 <code>i</code> 后输入下面内容</p>
+
+<pre><code class="language-sh">registry = https://registry.npm.taobao.org
+</code></pre>
+
+<p>输好后按下 <code>ESC（一般在 F1 旁边）</code> ,输入 <code>:</code> ,接着按下 <code>wq</code> 回车。</p>
+
+<p>不做这一步也是可以的，但是国内速度可能会稍慢。</p>
+
+<h3 id="安装-homebridge">安装 homebridge</h3>
+
+<p>装好了 Node.js 就可以安装 homebridge，homebridge 是一个把设备接入 HomeKit 的工具（类似桥梁的作用），没有它就不能使用没有经过苹果认证的设备。</p>
+
+<pre><code class="language-sh">sudo apt-get install libavahi-compat-libdnssd-dev
+sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
+</code></pre>
+
+<h3 id="安装-yeelight-插件">安装 Yeelight 插件</h3>
+
+<p>装好了 homebridge 还需要装上插件才能使用对应的智能设备，这里我使用的 Yeelight 台灯，所以还要安装 homebridge-yeelight 这个插件。</p>
+
+<pre><code class="language-sh">sudo npm install -g homebridge-yeelight
+</code></pre>
+
+<h3 id="插件配置">插件配置</h3>
+
+<p>插件装好了之后，我们需要配置一下让 homebridge 识别我们。</p>
+
+<pre><code class="language-sh">cd ~/.homebridge  # 没有的话手动创建，使用 mkdir ~/.homebridge
+vi config.json
+</code></pre>
+
+<p>打开文件之后按下 <code>i</code> 键，复制下面的内容到里面。</p>
+
+<pre><code class="language-json">{
+    &quot;bridge&quot;: {
+        &quot;name&quot;: &quot;Homebridge&quot;,
+        &quot;username&quot;: &quot;CC:22:3D:E3:CE:30&quot;,
+        &quot;port&quot;: 51826,
+        &quot;pin&quot;: &quot;031-45-154&quot;
+    },
+
+    &quot;platforms&quot;: [
+        {
+            &quot;platform&quot; : &quot;yeelight&quot;,
+            &quot;name&quot; : &quot;yeelight&quot;
+        }
+    ]
+}
+</code></pre>
+
+<p>写好之后按下 <code>ESC</code> ，输入 <code>:</code> 后再输入 <code>wq</code> 回车，该操作会保存文件并退出 <code>vi</code> 回到终端。
+解释一下上面 bridge 中的配置</p>
+
+<ul>
+<li>name 一个名称，在家庭 APP 上添加配件时显示，可以随意填写</li>
+<li>username 一个唯一标识符，类似 MAC 地址，可以随意填写，格式不能变</li>
+<li>port homebridge 的端口号，可以任意，但是需要没有被系统占用的</li>
+<li>pin 密码，验证的时候用，可以任意，但是必须是 8 位数字，格式如上</li>
+<li>platforms 里的东西是插件里规定的，就这么写吧，不用改。</li>
+</ul>
+
+<h3 id="启动-homebridge">启动 homebridge</h3>
+
+<p>在终端中输入下面命令，启动 homebridge</p>
+
+<pre><code class="language-sh">homebridge
+</code></pre>
+
+<p><img src="https://example.com/images/siri/homebridge.png" alt="" />
+会看到一个二维码和我们刚刚配置的 pin（图中红色方框中的），二维码暂时用不到，pin 会在接下来用到。到这里树莓派上的操作都完成了。</p>
+
+<h2 id="接入-homekit">接入 HomeKit</h2>
+
+<p>打开 iPad，进入家庭 APP，选择添加配件。
+<img src="https://example.com/images/siri/adddevice.png" width="300px" />
+在弹出的窗口中扫描终端显示的 pin（就是刚刚运行 homebridge 的地方），这一步通常是不能正确识别的，别担心后面可以手动输入。
+<img src="https://example.com/images/siri/scan.png" width="300px"/>
+来到这里估计估计你已经没有识别出 pin，没关系，我们手动输入 pin。
+<img src="https://example.com/images/siri/pin.png" width="300px" />
+输入正确的 pin 后，可以看到 Homebridge 显示在 iPad 上了，点击 Homebridge 添加。这里的 Homebridge 就是我们在配置文件里设置的 <code>bridge.name</code> 。
+<img src="https://example.com/images/siri/addhomebridge.png" width="300px"/>
+点击后会提示未认证配件，选择仍然添加。不添加怎么玩？
+<img src="https://example.com/images/siri/sureadd.png" width="300px"/>
+接下来的是一些设置，我们默认不动，选择下一步。
+<img src="https://example.com/images/siri/confighomebridge.png" width="300px"/>
+可以看到 Yeelight 灯出现了。在下图红框框中，我把名字改为台灯，这样方便 Siri 识别。改好之后点击右上角完成。
+<img src="https://example.com/images/siri/addyeelight.png" width="300px" />
+回到家庭 APP 主页，台灯已经显示出来。到这里已经已经成功的把 Yeelight 台灯接入 HomeKit。
+<img src="https://example.com/images/siri/addcomplete.png" width="300px" /></p>
+
+<h2 id="开机自启动">开机自启动</h2>
+
+<p>照着上面的配置好了，也能够使用了。但是每次使用都要我手动运行 <code>homebridge</code> 太麻烦了，有没有开机自启动？有，接下来就来配置开机自启动。</p>
+
+<h3 id="先验证一下-homebridge-的路径">先验证一下 <code>homebridge</code> 的路径</h3>
+
+<pre><code class="language-sh">which homebridge
+</code></pre>
+
+<p>如果输出不是 <code>/usr/bin/homebridge</code> ，那么你需要把下面拷贝第 13 行的 <code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code> 改为 <code>cmd =&quot;DEBUG=* 刚刚输出的东西&quot;</code> 。</p>
+
+<h3 id="制作启动脚本">制作启动脚本</h3>
+
+<pre><code class="language-sh">sudo vi /etc/init.d/homebridge
+</code></pre>
+
+<p>按下键盘上 <code>i</code> ，把下面的内容拷贝进去</p>
+
+<pre><code class="language-sh">#!/bin/sh
+### BEGIN INIT INFO
+# Provides: homebridge
+# Required-Start:    $network $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+dir=&quot;/home/pi&quot;
+cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;
+user=&quot;pi&quot;
+
+name=`basename $0`
+pid_file=&quot;/var/run/$name.pid&quot;
+stdout_log=&quot;/var/log/$name.log&quot;
+stderr_log=&quot;/var/log/$name.err&quot;
+
+get_pid() {
+    cat &quot;$pid_file&quot;
+}
+
+is_running() {
+    [ -f &quot;$pid_file&quot; ] &amp;&amp; ps -p `get_pid` &gt; /dev/null 2&gt;&amp;1
+}
+
+case &quot;$1&quot; in
+    start)
+    if is_running; then
+        echo &quot;Already started&quot;
+    else
+        echo &quot;Starting $name&quot;
+        cd &quot;$dir&quot;
+        if [ -z &quot;$user&quot; ]; then
+            sudo $cmd &gt;&gt; &quot;$stdout_log&quot; 2&gt;&gt; &quot;$stderr_log&quot; &amp;
+        else
+            sudo -u &quot;$user&quot; $cmd &gt;&gt; &quot;$stdout_log&quot; 2&gt;&gt; &quot;$stderr_log&quot; &amp;
+        fi
+        echo $! &gt; &quot;$pid_file&quot;
+        if ! is_running; then
+            echo &quot;Unable to start, see $stdout_log and $stderr_log&quot;
+            exit 1
+        fi
+    fi
+    ;;
+    stop)
+    if is_running; then
+        echo -n &quot;Stopping $name..&quot;
+        kill `get_pid`
+        for i in 1 2 3 4 5 6 7 8 9 10
+        # for i in `seq 10`
+        do
+            if ! is_running; then
+                break
+            fi
+
+            echo -n &quot;.&quot;
+            sleep 1
+        done
+        echo
+
+        if is_running; then
+            echo &quot;Not stopped; may still be shutting down or shutdown may have failed&quot;
+            exit 1
+        else
+            echo &quot;Stopped&quot;
+            if [ -f &quot;$pid_file&quot; ]; then
+                rm &quot;$pid_file&quot;
+            fi
+        fi
+    else
+        echo &quot;Not running&quot;
+    fi
+    ;;
+    restart)
+    $0 stop
+    if is_running; then
+        echo &quot;Unable to stop, will not attempt to start&quot;
+        exit 1
+    fi
+    $0 start
+    ;;
+    status)
+    if is_running; then
+        echo &quot;Running&quot;
+    else
+        echo &quot;Stopped&quot;
+        exit 1
+    fi
+    ;;
+    *)
+    echo &quot;Usage: $0 {start|stop|restart|status}&quot;
+    exit 1
+    ;;
+esac
+
+exit 0
+
+</code></pre>
+
+<p>按下 <code>ESC</code> ,输入 <code>:</code> 后按下 <code>wq</code> 回车保存并退出编辑。</p>
+
+<h3 id="设置权限">设置权限</h3>
+
+<p>保存之后我们还要给执行的文件权限，不然开机之后还是没法自动启动的。</p>
+
+<pre><code class="language-sh">sudo chmod 755 /etc/init.d/homebridge
+sudo update-rc.d homebridge defaults
+</code></pre>
+
+<p>重启之后 homebridge 就会自己运行。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://github.com/nfarina/homebridge">homebridge</a></li>
+<li><a href="https://github.com/vvpossible/homebridge%5Fyeelight">homebridge_yeelight</a></li>
+<li><a href="http://lijiawei.cc/rpi-homekit-yeelight.html#%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90">用树莓派实现 HomeKit 控制台灯</a></li>
+<li><a href="https://sspai.com/post/36617">借助树莓派与 HomeBridge，将 YeeLight 彩光灯接入 Apple HomeKit</a></li>
+<li><a href="https://sspai.com/post/38358">从米家到 HomeKit，你只需要一个树莓派</a></li>
+</ul>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://example.com/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://example.com/tags/raspberrypi" role="button">RaspberryPi </a></li>
+      
+    
+      <li><a href="https://example.com/tags/yeelight" role="button">Yeelight </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://example.com/post/2017%E7%9A%84%E6%88%91/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>2017 的我</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://example.com/post/%E4%BD%BF%E7%94%A8ssh%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>使用 SSH 登录服务器</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9d%90%e6%96%99%e5%87%86%e5%a4%87">
+												 材料准备
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#yeelight-%e8%ae%be%e7%bd%ae%e5%b1%80%e5%9f%9f%e7%bd%91%e6%8e%a7%e5%88%b6-%e6%9e%81%e5%ae%a2%e6%a8%a1%e5%bc%8f">
+												 Yeelight 设置局域网控制（极客模式）
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%9a%84%e9%85%8d%e7%bd%ae">
+												 树莓派的配置
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-node-dot-js">
+												 安装 Node.js
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-homebridge">
+												 安装 homebridge
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-yeelight-%e6%8f%92%e4%bb%b6">
+												 安装 Yeelight 插件
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae">
+												 插件配置
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%90%af%e5%8a%a8-homebridge">
+												 启动 homebridge
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8e%a5%e5%85%a5-homekit">
+												 接入 HomeKit
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%bc%80%e6%9c%ba%e8%87%aa%e5%90%af%e5%8a%a8">
+												 开机自启动
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%85%88%e9%aa%8c%e8%af%81%e4%b8%80%e4%b8%8b-homebridge-%e7%9a%84%e8%b7%af%e5%be%84">
+												 先验证一下 homebridge 的路径
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%b6%e4%bd%9c%e5%90%af%e5%8a%a8%e8%84%9a%e6%9c%ac">
+												 制作启动脚本
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae%e6%9d%83%e9%99%90">
+												 设置权限
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://example.com/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://example.com/js/main.js"></script>
+
+
+
+  
+  <script src="https://example.com/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://example.com/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://example.com/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

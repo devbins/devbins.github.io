@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。 Python 的安装 Python 的安装方式有很多，这里选择 Anaconda 安装， Anaconda 是一个用于科学计算的 Python 发行版，包含了众多流行的科学计算、数据分析的 Python 包。使用起来比较方便。 点击Anaconda3-5.2.0-Windows-x86_64.e">
+  
+  <meta property="og:title" content="使用 Appium 做测试" />
+<meta property="og:description" content="本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。 Python 的安装 Python 的安装方式有很多，这里选择 Anaconda 安装， Anaconda 是一个用于科学计算的 Python 发行版，包含了众多流行的科学计算、数据分析的 Python 包。使用起来比较方便。 点击Anaconda3-5.2.0-Windows-x86_64.e" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/post/appium/" /><meta property="article:published_time" content="2018-06-02T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-06-02T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       使用 Appium 做测试 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://example.com/post/appium/">
+
+  
+  
+
+  
+  <link href="https://example.com/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://example.com/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://example.com/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://example.com/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://example.com/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://example.com">
+          
+        <img class="avatar" src="https://example.com/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://example.com">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://example.com/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://example.com">
+          
+            <img class="pull-right avatar avatar-md" src="https://example.com/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://example.com">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://example.com/categories/%E6%B5%8B%E8%AF%95"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 测试 </a></li>
+      
+        <li><a href="https://example.com/categories/python"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Python </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">使用 Appium 做测试</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jun 2, 2018</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>3 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://example.com/images/appium/appium.png" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<blockquote>
+<p>本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。</p>
+</blockquote>
+
+<h2 id="python-的安装">Python 的安装</h2>
+
+<p>Python 的安装方式有很多，这里选择 <code>Anaconda</code> 安装， <code>Anaconda</code> 是一个用于科学计算的 Python 发行版，包含了众多流行的科学计算、数据分析的 Python 包。使用起来比较方便。
+点击<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.2.0-Windows-x86%5F64.exe">Anaconda3-5.2.0-Windows-x86_64.exe</a>下载，由于官网在国外下载速度非常慢，所以这里使用清华镜像来下载。
+下载好之后，一路点击下一步，稍等片刻完成安装。</p>
+
+<h2 id="java-的安装">Java 的安装</h2>
+
+<p>下载<a href="http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-windows-x64.exe?AuthParam=1527859736%5Fff9148e041d14d460c8ae4d7f5a7a311">JDK</a>，然后运行安装程序。
+选择安装的位置，这里需要注意一下，不要选择带有特殊字符（比如：空格之类的）和带有中文的路径，以免反生不明所以的错误。
+安装位置这里需要记一下，等下用来配置环境变量，如果你和图上选择的路径的不一样，在设置环境变量时请跟着修改。
+<img src="https://example.com/images/appium/java_path.png" alt="" /></p>
+
+<p>由于 <code>JDK</code> 中包含了 <code>JRE</code> 所以这里直接取消，不在进行安装，安装也是可以的。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/jre.png"/> 
+</figure>
+
+
+<h3 id="配置环境变量">配置环境变量</h3>
+
+<p>接下来进行 <code>Java</code> 的环境变量配置。在计算机中右键-&gt;属性</p>
+
+<figure>
+    <img src="https://example.com/images/appium/property.png"/> 
+</figure>
+
+
+<p>选择高级系统设置</p>
+
+<figure>
+    <img src="https://example.com/images/appium/setting.png"/> 
+</figure>
+
+
+<p>点击环境变量</p>
+
+<figure>
+    <img src="https://example.com/images/appium/env.png"/> 
+</figure>
+
+
+<p>点击新建</p>
+
+<figure>
+    <img src="https://example.com/images/appium/newenv.png"/> 
+</figure>
+
+
+<p>变量名输入（变量名要大写） <code>JAVA_HOME</code>,变量值输入刚才安装的路径，如果改过安装路径，请选择正确的安装路径。我这里是 <code>C:\Java</code> ，输入完后点击确定保存。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/java_home.png"/> 
+</figure>
+
+
+<p>和上一步一样，点击新建。设置变量名为 <code>Path</code> ,变量值为 <code>%JAVA_HOME%\bin</code> 。 其中 <code>%%</code> 的意思是引用变量的值，所以这里 <code>Path</code> 其实是 <code>C:\Java\bin</code></p>
+
+<figure>
+    <img src="https://example.com/images/appium/java.png"/> 
+</figure>
+
+
+<h2 id="android-环境搭建">Android 环境搭建</h2>
+
+<p>点击下载<a href="https://dl.google.com/dl/android/studio/install/3.1.2.0/android-studio-ide-173.4720617-windows.exe">AndroidStudio</a>，下载完成后运行安装程序。
+点击下一步，出现选择安装路径。和安装 <code>Java</code> 一样选择一个不带有特殊字符和中文的路径。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/androidstudio.png"/> 
+</figure>
+
+
+<p>选择自定义安装</p>
+
+<figure>
+    <img src="https://example.com/images/appium/custome.png"/> 
+</figure>
+
+
+<p>选择 <code>SDK</code> 安装路径，也是需要记住安装路径，用于配置环境变量。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/sdk.png"/> 
+</figure>
+
+
+<h3 id="配置环境变量-1">配置环境变量</h3>
+
+<p>配置 <code>ANDROID_HOME</code> ，和 <code>Java</code> 配置环境变量在同一个地方。不过这次的变量名是 <code>ANDROID_HOME</code> ，变量值是刚刚 <code>SDK</code> 的安装路径。
+右键计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;新建</p>
+
+<figure>
+    <img src="https://example.com/images/appium/android_home.png"/> 
+</figure>
+
+
+<p>除了配置 <code>ANDROID_HOME</code> 还需要把 <code>adb</code> 加入 <code>Path</code> 中，这样才能调试设备。</p>
+
+<p>在环境变量中选择 <code>Path</code> 点击编辑，加入 <code>;%ANDROID_HOME%\platform-tools</code> ，注意前面有一个 <code>;</code> 环境变量有多个可以使用 <code>;</code> 分隔。最后 <code>Path</code> 为 <code>%JAVA_HOME%\bin;%ANDROID_HOME%\platform-tools</code></p>
+
+<figure>
+    <img src="https://example.com/images/appium/add_path.png"/> 
+</figure>
+
+
+<h2 id="nodejs-的安装">Nodejs 的安装</h2>
+
+<p>点击<a href="http://cdn.npm.taobao.org/dist/node/v10.2.0/node-v10.2.0-x64.msi">Node</a>下载 Node.js，下载完成后运行安装，一直点击下一步。没了，就这么简单。
+Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这里使用淘宝镜像加速。</p>
+
+<pre><code class="language-sh">npm config set registry http://registry.cnpmjs.org
+</code></pre>
+
+<h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
+
+<p><code>appium-doctor</code> 是一个用来检查 <code>appium</code> 环境是否安装并配置好的工具，让我们来检测一下上面的步骤都成功了没有。
+点击屏幕左下角，在搜索框中输入 <code>cmd</code> 回车</p>
+
+<figure>
+    <img src="https://example.com/images/appium/cmd.png"/> 
+</figure>
+
+
+<p>在打开的窗口中输入 <code>npm install -g appium-doctor</code></p>
+
+<figure>
+    <img src="https://example.com/images/appium/install_appium_doctor.png"/> 
+</figure>
+
+
+<p>安装好之后，输入 <code>appium-doctor</code> 来查看环境是否配置成功。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/appium_doctor.png"/> 
+</figure>
+
+
+<h2 id="appium-安装">appium 安装</h2>
+
+<p>点击<a href="https://github.com/appium/appium-desktop/releases/download/v1.6.1/appium-desktop-setup-1.6.1.exe">Appium</a>下载，点击安装。没了。
+运行起来看看。</p>
+
+<figure>
+    <img src="https://example.com/images/appium/appium.png"/> 
+</figure>
+
+
+<h2 id="一个小例子">一个小例子</h2>
+
+<p>经过上面的环境搭建，终于可以测试了，下面使用 <code>Python</code> 来简单的测试计算器的加法。使用时请保证设备安装好了驱动，并能正确连接到电脑。
+在用 <code>Python</code> 测试时需要用到 <code>Appium-Python-Client</code> ，先来安装一下。
+打开终端
+<img src="https://example.com/images/appium/anaconda_prompt.png" alt="" />
+输入 <code>pip install Appium-Python-Client</code></p>
+
+<figure>
+    <img src="https://example.com/images/appium/appium_python_client.png"/> 
+</figure>
+
+
+<ul>
+<li>platformName 表示要进行测试的平台，分为 <code>Android</code> 和 <code>iOS</code></li>
+<li>deviceName 设备名称，在终端中使用 <code>adb devices</code> 来查看</li>
+<li>appPackage 测试应用的包名</li>
+<li>appActivity 测试应用的界面</li>
+<li>noReset 测试不清除应用数据</li>
+</ul>
+
+<pre><code class="language-python">import unittest
+from time import sleep
+from appium import webdriver
+
+class Calc(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        desired_caps['deviceName'] = 'Android Emulator'
+        desired_caps['appPackage'] = 'com.android.calculator2'
+        desired_caps['appActivity'] = '.Calculator'
+        desired_caps['noReset'] = True
+        self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub',desired_caps)
+
+
+    def test_calc(self):
+        self.driver.find_element_by_id('com.android.calculator2:id/digit_1').click()
+        sleep(1)
+        self.driver.find_element_by_id('com.android.calculator2:id/op_add').click()
+        sleep(1)
+        self.driver.find_element_by_id('com.android.calculator2:id/digit_2').click()
+        sleep(1)
+        self.driver.find_element_by_id('com.android.calculator2:id/eq').click()
+        sleep(1)
+
+
+    def tearDown(self):
+        self.driver.quit()
+
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(Calc)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+</code></pre>
+
+<p>看看效果，还不错</p>
+
+<figure>
+    <img src="https://example.com/images/appium/screenshot.gif"/> 
+</figure>
+
+
+<h2 id="踩过的坑">踩过的坑</h2>
+
+<h3 id="数据被清除">数据被清除</h3>
+
+<p>在使用 Appium 进行测试时，每次都会把要进行测试的软件对应的数据给清除掉。可怜我第一次使用微信进行测试，虽然测通了，但是我重新打开微信的时候，什么都没了。哭晕在厕所。
+解决这个问题很简单，只要配置一个参数即可</p>
+
+<pre><code class="language-python">desired_caps['noReset'] = True
+</code></pre>
+
+<h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
+
+<p>跟着官方的例子自己写了一个试试，但是发现还是太年轻，调了好久都没用，最后想起了 <code>Go</code> 语言里测试函数是要以 <code>test</code> 开头的，于是试了一下就通了。</p>
+
+<h2 id="下载链接">下载链接</h2>
+
+<ul>
+<li><a href="http://nodejs.cn/download/">Node</a></li>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">Python</a></li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java</a></li>
+<li><a href="https://github.com/appium/appium-desktop/releases/tag/v1.6.1">Appium</a></li>
+<li><a href="https://developer.android.google.cn/studio/#downloads">AndroidStudio</a></li>
+</ul>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://example.com/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://example.com/tags/appium" role="button">Appium </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://example.com/post/miwifipadavan/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>小米路由器刷 Padavan</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://example.com/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>单例模式的多种写法</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#python-%e7%9a%84%e5%ae%89%e8%a3%85">
+												 Python 的安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#java-%e7%9a%84%e5%ae%89%e8%a3%85">
+												 Java 的安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">
+												 配置环境变量
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#android-%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">
+												 Android 环境搭建
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f-1">
+												 配置环境变量
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#nodejs-%e7%9a%84%e5%ae%89%e8%a3%85">
+												 Nodejs 的安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#appium-doctor-%e7%9a%84%e5%ae%89%e8%a3%85">
+												 appium-doctor 的安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#appium-%e5%ae%89%e8%a3%85">
+												 appium 安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%80%e4%b8%aa%e5%b0%8f%e4%be%8b%e5%ad%90">
+												 一个小例子
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%b8%a9%e8%bf%87%e7%9a%84%e5%9d%91">
+												 踩过的坑
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%95%b0%e6%8d%ae%e8%a2%ab%e6%b8%85%e9%99%a4">
+												 数据被清除
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b5%8b%e8%af%95%e5%87%bd%e6%95%b0%e8%a6%81%e4%bb%a5-test-%e5%bc%80%e5%a4%b4">
+												 测试函数要以 test 开头
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%8b%e8%bd%bd%e9%93%be%e6%8e%a5">
+												 下载链接
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://example.com/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://example.com/js/main.js"></script>
+
+
+
+  
+  <script src="https://example.com/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://example.com/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://example.com/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

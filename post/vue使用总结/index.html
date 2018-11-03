@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="本文基于 Vue 2.0,聊一聊 Vue 的使用。 简单介绍 Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式框架。与其他重量级框架不同的是，Vue 采用自底向上增量开发的设计。Vue 的核心库只关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与单文件组件和 Vue 生态系统支持的库结合使用时，Vue 也完全能够为复杂的单页应用程序提供驱动。 我个人觉得有基础的人学习 Vue 上手是比较快的，使用也是简单，并">
+  
+  <meta property="og:title" content="Vue 使用总结" />
+<meta property="og:description" content="本文基于 Vue 2.0,聊一聊 Vue 的使用。 简单介绍 Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式框架。与其他重量级框架不同的是，Vue 采用自底向上增量开发的设计。Vue 的核心库只关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与单文件组件和 Vue 生态系统支持的库结合使用时，Vue 也完全能够为复杂的单页应用程序提供驱动。 我个人觉得有基础的人学习 Vue 上手是比较快的，使用也是简单，并" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/post/vue%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" /><meta property="article:published_time" content="2017-11-15T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2017-11-15T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       Vue 使用总结 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://example.com/post/vue%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">
+
+  
+  
+
+  
+  <link href="https://example.com/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://example.com/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://example.com/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://example.com/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://example.com/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://example.com">
+          
+        <img class="avatar" src="https://example.com/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://example.com">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://example.com/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://example.com">
+          
+            <img class="pull-right avatar avatar-md" src="https://example.com/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://example.com">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://example.com/categories/%E5%89%8D%E7%AB%AF"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 前端 </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">Vue 使用总结</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Nov 15, 2017</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>4 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://example.com/images/vue/vue.png" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<blockquote>
+<p>本文基于 Vue 2.0,聊一聊 Vue 的使用。</p>
+</blockquote>
+
+<h2 id="简单介绍">简单介绍</h2>
+
+<p>Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式框架。与其他重量级框架不同的是，Vue 采用自底向上增量开发的设计。Vue 的核心库只关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与单文件组件和 Vue 生态系统支持的库结合使用时，Vue 也完全能够为复杂的单页应用程序提供驱动。</p>
+
+<p>我个人觉得有基础的人学习 Vue 上手是比较快的，使用也是简单，并且还有完整的生态并且社区活跃，相信学习 Vue 会是一件有价值的事。</p>
+
+<h2 id="在项目中集成-vue">在项目中集成 Vue</h2>
+
+<p>简单的，写代码的方式简单点。我们从简单的开始，Vue 是一个 js 库，想要在项目中使用，需要在项目中引用 Vue，Vue 的引用和引用 JavaScript 库没有区别。</p>
+
+<pre><code class="language-js">&lt;script src=&quot;https://unpkg.com/vue&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>把 Vue 集成进项目后，实例化一个 Vue 对象来对接原生开发。Vue 对象是我们介入原生开的入口，通过这个入口就能使用 Vue 来开发。</p>
+
+<pre><code class="language-html">&lt;html&gt;
+    &lt;head&gt;
+         &lt;script src=&quot;https://unpkg.com/vue&quot;&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;app&quot;&gt;
+            {{message}}
+        &lt;/div&gt;
+    &lt;/body&gt;
+    &lt;script&gt;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                 message: 'Hello,Vue!'
+            }
+        })
+    &lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>在 <code>script</code> 标签里，我们创建了一个 Vue 对象。在 Vue 对象中有 <code>el</code> 字段,它代表我们创建的 Vue 对象要在哪个元素上进行操作，以后 Vue 所有的操作都会在该元素下，Vue 中的所有元素都是该元素的子元素。 <code>el</code> 可以通过 CSS 选择器来指定具体的元素。
+另外一个重要的字段就是 <code>data</code> ，Vue 是一个 MVVM 框架，没有数据和咸鱼有什么区别。在 <code>data</code> 中的数据就可以在 html 中访问，最简单就是使用 <code>{{ }}</code> 来访问。 <code>{{ }}</code> 是模板语法，会简单的显示文本内容，当 <code>data</code> 中的数据发生变化时， <code>{{ }}</code> 中的会自动更新。</p>
+
+<h2 id="模板指令">模板指令</h2>
+
+<p>在了解了怎么在项目中引入 Vue 之后，就来了解一下 Vue 的使用。</p>
+
+<h3 id="文本渲染">文本渲染</h3>
+
+<h4 id="普通文本渲染">普通文本渲染</h4>
+
+<p>给什么就显示什么。不会进行编译，原样输出。就算你给了一段 html 也只是原样输出而已。</p>
+
+<pre><code class="language-html">&lt;div&gt;
+    {{message}}
+&lt;/div&gt;
+</code></pre>
+
+<p>除了使用 <code>{{ }}</code> 来渲染文本，还可以使用 <code>v-text</code> 来更新内容。</p>
+
+<pre><code class="language-html">&lt;span v-text=&quot;message&quot;&gt;&lt;/span&gt;
+</code></pre>
+
+<p>使用 <code>v-text</code> 和使用 <code>{{ }}</code> 都是更新元素的 <code>textContent</code> ,不过要更新局部或者部分还是要使用 <code>{{ }}</code> 。</p>
+
+<h4 id="html-渲染">html 渲染</h4>
+
+<p>如果我们只是简单的想要渲染文本，使用 <code>{{ }}</code> 就够了。但是我们有可能会需要渲染 html，这时候就需要使用 <code>v-html</code> 来渲染包含 html 的内容。与 <code>v-text</code> 不通过的是 <code>v-html</code> 更新的是元素的 <code>innerHTML</code> ， <code>v-html</code> 会按照普通的 html 来进行插入，不会进行编译。</p>
+
+<pre><code class="language-html">&lt;div v-html=&quot;&lt;h1&gt;我是 h1 标签&quot;&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h4 id="条件渲染">条件渲染</h4>
+
+<p>Vue 提供了 <code>v-if</code> 来控制标签的渲染， <code>v-if</code> 会根据表达式的值来决定是否渲染。当表达式为不为 <code>true</code> 时可以使用 <code>v-else</code> 来渲染其他内容， <code>v-else</code> 不需要表达式，但是 <code>v-else</code> 前一兄弟必须要有 <code>v-if</code> 或者 <code>v-else-if</code> 。 <code>v-else-if</code> 和 <code>v-if</code> 一样也是用来判断条件的。</p>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;p v-if=&quot;isShow&quot;&gt;显示&lt;/p&gt;
+    &lt;p v-else&gt;不显示&lt;/p&gt;
+&lt;/div&gt;
+&lt;script&gt;
+     var app = new Vue({
+          el: '#app',
+          data: {
+              isShow: true
+          }
+     })
+&lt;/script&gt;
+</code></pre>
+
+<h4 id="循环">循环</h4>
+
+<p>循环在编程中是必不可少的，Vue 怎么能缺席呢。</p>
+
+<ul>
+<li><p>Vue 提供 <code>v-for</code> 指令来表示循环</p>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;ol&gt;
+        &lt;li v-for=&quot;item in items&quot;&gt;
+            {{item}}
+        &lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: ['Java','C/C++','JavaScript','Python','PHP','SQL']
+        }
+    })
+&lt;/script&gt;
+</code></pre></li>
+
+<li><p><code>v-for</code> 还提供了索引功能，所以上面的代码还可以修改成：</p>
+
+<pre><code class="language-html">&lt;li v-for=&quot;(item,index) in items&quot;&gt;
+    {{index + &quot;:&quot; + item}}
+&lt;/li&gt;
+</code></pre></li>
+
+<li><p><code>v-for</code> 不仅可以遍历数组，还可以遍历对象的每个属性</p>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;ol&gt;
+        &lt;li v-for=&quot;(value,key) in user&quot;&gt;
+            {{key + &quot;:&quot; + value}}
+        &lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            user: {
+                name: 'Vue',
+                version: '2.0'
+            }
+        }
+    })
+&lt;/script&gt;
+</code></pre></li>
+</ul>
+
+<h4 id="属性绑定">属性绑定</h4>
+
+<p>在 Vue 中，属性是不能使用 <code>{{ }}</code> 进行绑定的。所以 Vue 提供了 <code>v-bind</code> 来绑定属性。</p>
+
+<pre><code class="language-html">&lt;a v-bind:href=&quot;https://cn.vuejs.org&quot;&gt;&lt;/a&gt;
+</code></pre>
+
+<p>由于 <code>v-bind</code> 使用很频繁，所以 Vue 提供了 <code>v-bind</code> 的缩写，只需要属性前面加上 <code>:</code> 。如下所示</p>
+
+<pre><code class="language-html">&lt;a :href=&quot;https://cn.vuejs.org&quot;&gt;&lt;/a&gt;
+</code></pre>
+
+<h4 id="事件绑定">事件绑定</h4>
+
+<p>在 Vue 中使用 <code>v-on</code> 来进行事件绑定</p>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;{{message}}&lt;/p&gt;
+    &lt;button v-on:click=&quot;reverseMessage&quot;&gt;逆转文本&lt;/button&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello,Vue.js'
+        },
+        methods: {
+            reverseMessage: function(){
+                this.message = this.message.split('').reverse().join('')
+            }
+        }
+    })
+&lt;/script&gt;
+</code></pre>
+
+<p>和 <code>v-bind</code> 一样 <code>v-on</code> 也提供了缩写，可以使用 <code>@</code> 来代替 <code>v-on</code> 。如下所示</p>
+
+<pre><code class="language-html">&lt;button @click=&quot;reverseMessage&quot;&gt;逆转文本&lt;/button&gt;
+</code></pre>
+
+<h2 id="表单的双向绑定">表单的双向绑定</h2>
+
+<h3 id="文本">文本</h3>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;{{message}}&lt;/p&gt;
+    &lt;input v-model=&quot;message&quot;/&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue.js'
+        }
+    })
+&lt;/script&gt;
+</code></pre>
+
+<p>通过使用 <code>v-model</code> 就能对数据进行双向绑定了，当 <code>input</code> 标签里的内容被改变的时候，所绑定的 <code>message</code> 也会对应的改变。使用起来还是非常简单的。</p>
+
+<h3 id="多行文本">多行文本</h3>
+
+<pre><code class="language-html">&lt;textarea v-model=&quot;message&quot;&gt;
+&lt;/textarea&gt;
+</code></pre>
+
+<p>多行文本和单行的一样，没有太大的区别。</p>
+
+<h3 id="复选框">复选框</h3>
+
+<pre><code class="language-html">&lt;div id='app'&gt;
+  &lt;input type=&quot;checkbox&quot; id=&quot;jack&quot; value=&quot;Jack&quot; v-model=&quot;checkedNames&quot;&gt;
+  &lt;label for=&quot;jack&quot;&gt;Jack&lt;/label&gt;
+  &lt;input type=&quot;checkbox&quot; id=&quot;john&quot; value=&quot;John&quot; v-model=&quot;checkedNames&quot;&gt;
+  &lt;label for=&quot;john&quot;&gt;John&lt;/label&gt;
+  &lt;input type=&quot;checkbox&quot; id=&quot;mike&quot; value=&quot;Mike&quot; v-model=&quot;checkedNames&quot;&gt;
+  &lt;label for=&quot;mike&quot;&gt;Mike&lt;/label&gt;
+  &lt;br&gt;
+  &lt;span&gt;Checked names: {{ checkedNames }}&lt;/span&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    new Vue({
+      el: '#app',
+      data: {
+        checkedNames: []
+      }
+    })
+&lt;/script&gt;
+</code></pre>
+
+<h3 id="单选按钮">单选按钮</h3>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+    &lt;input type=&quot;radio&quot; value=&quot;Jack&quot; v-model=&quot;name&quot;/&gt;
+    &lt;label&gt;Jack&lt;/label&gt;
+    &lt;br/&gt;
+    &lt;input type=&quot;radio&quot; value=&quot;John&quot; v-model=&quot;name&quot;/&gt;
+    &lt;label&gt;John&lt;/label&gt;
+    &lt;br/&gt;
+    &lt;input type=&quot;radio&quot; value=&quot;Mike&quot; v-model=&quot;name&quot;/&gt;
+    &lt;label&gt;Mike&lt;/label&gt;
+    &lt;br&gt;
+    &lt;span&gt;选择了: {{ name }}&lt;/span&gt;
+&lt;/div&gt;
+&lt;script&gt;
+new Vue({
+    el: &quot;#app&quot;,
+    data: {
+      name: ''
+    }
+})
+&lt;/script&gt;
+</code></pre>
+
+<h3 id="选择列表">选择列表</h3>
+
+<pre><code class="language-html">&lt;div id=&quot;app&quot;&gt;
+  &lt;select v-model=&quot;selected&quot;&gt;
+    &lt;option disabled value=&quot;&quot;&gt;请选择&lt;/option&gt;
+    &lt;option&gt;A&lt;/option&gt;
+    &lt;option&gt;B&lt;/option&gt;
+    &lt;option&gt;C&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;span&gt;Selected: {{ selected }}&lt;/span&gt;
+&lt;/div&gt;
+&lt;script&gt;
+new Vue({
+    el: '#app',
+    data: {
+      selected: ''
+    }
+})
+&lt;/script&gt;
+</code></pre>
+
+<p><code>v-model</code> 除了上面的基本用法，还提供了修饰符的功能。</p>
+
+<h3 id="dot-lazy">.lazy</h3>
+
+<p><code>lazy</code> 会把原来的 <code>input</code> 事件改为 <code>change</code> 事件，只有当文本的内容发生了变化，才会同步数据。</p>
+
+<pre><code class="language-html">&lt;input v-model.lazy=&quot;message&quot;/&gt;
+</code></pre>
+
+<h3 id="dot-number">.number</h3>
+
+<p><code>number</code> 修饰符会将输入的自动转为 <code>Number</code> 类型。</p>
+
+<pre><code class="language-html">&lt;input v-model.number=&quot;message&quot; type=&quot;number&quot;/&gt;
+</code></pre>
+
+<h3 id="dot-trim">.trim</h3>
+
+<p><code>trim</code> 修饰符会自动过滤首尾的空格。</p>
+
+<pre><code class="language-html">&lt;input v-model.trim=&quot;message&quot;/&gt;
+</code></pre>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://cn.vuejs.org">Vue 官网</a></p>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://example.com/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://example.com/tags/vue" role="button">Vue </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://example.com/post/python%E4%B9%8Burllib/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>Python 之 urllib</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://example.com/post/%E4%BD%BF%E7%94%A8git%E7%AE%A1%E7%90%86svn%E9%A1%B9%E7%9B%AE/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>使用 Git 管理 SVN 项目</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%ae%80%e5%8d%95%e4%bb%8b%e7%bb%8d">
+												 简单介绍
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%9c%a8%e9%a1%b9%e7%9b%ae%e4%b8%ad%e9%9b%86%e6%88%90-vue">
+												 在项目中集成 Vue
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%a8%a1%e6%9d%bf%e6%8c%87%e4%bb%a4">
+												 模板指令
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e6%9c%ac%e6%b8%b2%e6%9f%93">
+												 文本渲染
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%99%ae%e9%80%9a%e6%96%87%e6%9c%ac%e6%b8%b2%e6%9f%93">
+												 普通文本渲染
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#html-%e6%b8%b2%e6%9f%93">
+												 html 渲染
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9d%a1%e4%bb%b6%e6%b8%b2%e6%9f%93">
+												 条件渲染
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%be%aa%e7%8e%af">
+												 循环
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%b1%9e%e6%80%a7%e7%bb%91%e5%ae%9a">
+												 属性绑定
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%ba%8b%e4%bb%b6%e7%bb%91%e5%ae%9a">
+												 事件绑定
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%a1%a8%e5%8d%95%e7%9a%84%e5%8f%8c%e5%90%91%e7%bb%91%e5%ae%9a">
+												 表单的双向绑定
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%87%e6%9c%ac">
+												 文本
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%a4%9a%e8%a1%8c%e6%96%87%e6%9c%ac">
+												 多行文本
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%a4%8d%e9%80%89%e6%a1%86">
+												 复选框
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8d%95%e9%80%89%e6%8c%89%e9%92%ae">
+												 单选按钮
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%80%89%e6%8b%a9%e5%88%97%e8%a1%a8">
+												 选择列表
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#dot-lazy">
+												 .lazy
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#dot-number">
+												 .number
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#dot-trim">
+												 .trim
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://example.com/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://example.com/js/main.js"></script>
+
+
+
+  
+  <script src="https://example.com/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://example.com/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://example.com/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

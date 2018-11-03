@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。 本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命">
+  
+  <meta property="og:title" content="Arch Linux 安装" />
+<meta property="og:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。 本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/post/archlinux/" /><meta property="article:published_time" content="2018-08-03T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-08-03T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       Arch Linux 安装 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://example.com/post/archlinux/">
+
+  
+  
+
+  
+  <link href="https://example.com/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://example.com/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://example.com/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://example.com/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://example.com/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://example.com">
+          
+        <img class="avatar" src="https://example.com/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://example.com">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://example.com/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://example.com">
+          
+            <img class="pull-right avatar avatar-md" src="https://example.com/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://example.com">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://example.com/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">Arch Linux 安装</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 3, 2018</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>4 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://example.com/images/arch/arch.png" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<p>今年开始我一直使用 <code>Manjaro</code> ，这是一个基于 <code>Arch</code> 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 <code>Linux</code> ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。</p>
+
+<p>本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 <code>Manjaro</code> 或者 <code>Ubuntu</code> 可能会适合你。</p>
+
+<p>本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。</p>
+
+<h2 id="下载镜像">下载镜像</h2>
+
+<p>在开始之前先要从<a href="https://www.archlinux.org/download/">Arch Linux</a> 下载镜像，以便我们制作装机 U 盘。</p>
+
+<h2 id="制作启动盘">制作启动盘</h2>
+
+<p>把 U 盘接入电脑，使用 <code>lsblk</code> 查找 U 盘</p>
+
+<pre><code class="language-sh">lsblk
+</code></pre>
+
+<p>U 盘的格式如 <code>/dev/sdb</code> 这样的，不要带上数字。</p>
+
+<p>找到之后使用 <code>dd</code> (Linux 下制作)来制作启动 U 盘， <code>if</code> 后面跟 <code>archlinux</code> 的镜像路径， <code>of</code> 跟 U 盘的路径，把 <code>sdx</code> 换成对应的设备，下同。</p>
+
+<pre><code class="language-sh">dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress &amp;&amp; sync
+</code></pre>
+
+<h2 id="联网">联网</h2>
+
+<p>重启电脑，选择从 U 盘启动。
+<img src="https://example.com/images/arch/arch.png" alt="" /></p>
+
+<p>启动之后先检查网络，Arch 安装需要使用到网络，没有网络是无法安装的。如果可以正常访问网络了，跳过到下一步。</p>
+
+<pre><code class="language-sh">ping www.baidu.com
+</code></pre>
+
+<h3 id="有线连接">有线连接</h3>
+
+<pre><code class="language-sh">dhcpcd
+</code></pre>
+
+<h3 id="wifi-连接">WiFi 连接</h3>
+
+<pre><code class="language-sh">wifi-menu
+</code></pre>
+
+<h2 id="更新系统时间">更新系统时间</h2>
+
+<p>先来更新一下时间，确保时间是准确的。</p>
+
+<pre><code class="language-sh">timedatectl set-ntp true
+</code></pre>
+
+<h2 id="分区">分区</h2>
+
+<p>装系统很重要的一步就是分区，使用 <code>fdisk</code> 来建立分区。</p>
+
+<pre><code class="language-sh">fdisk /dev/sdx
+</code></pre>
+
+<p>按 <code>n</code> 创建一个新分区， <code>p</code> 创建主分区。
+这里创建 4 个分区</p>
+
+<ul>
+<li>sdx1 100M /boot</li>
+<li>sdx2 2G swap</li>
+<li>sdx3 10G /</li>
+<li>sdx4 10G /home</li>
+</ul>
+
+<figure>
+    <img src="https://example.com/images/arch/fdiskl.jpg"/> 
+</figure>
+
+
+<h2 id="格式化分区">格式化分区</h2>
+
+<p>分区建立好之后，就是格式化分区了，不同的分区需要格式化为不同的格式。</p>
+
+<pre><code class="language-sh">mkfs.vfat -F32 /dev/sdx1
+mkswap /dev/sdx2
+mkfs.ext4 /dev/sdx3
+mkfs.ext4 /dev/sdx4
+</code></pre>
+
+<h2 id="挂载分区">挂载分区</h2>
+
+<p>分区格式化完成之后，把格式化好的分区挂载到 <code>/mnt</code> 下，我们的新系统会安装到这里。</p>
+
+<pre><code class="language-sh">mount /dev/sdx3 /mnt #先挂载根分区，不然后面的没法挂载，根分区是一切的开始。
+mkdir /mnt/boot
+mount /dev/sdx1 /mnt/boot
+mkidr /mnt/home
+mount /dev/sdx4 /mnt/home
+</code></pre>
+
+<p>swap 分区不需要挂载，但是要开启</p>
+
+<pre><code class="language-sh">swapon /dev/sdx2
+</code></pre>
+
+<h2 id="选择合适的软件源">选择合适的软件源</h2>
+
+<p>选择一个快速的软件源，可以节约下载的时间，没必要浪费时间在这里等待。更改软件源在 <code>/etc/pacman.d/mirrorlist</code> 你可以使用 vi 打开，找到</p>
+
+<pre><code class="language-sh">## China
+Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+</code></pre>
+
+<p>放到文件的最开头，并更新</p>
+
+<pre><code class="language-sh">pacman -Syy
+</code></pre>
+
+<h2 id="安装">安装</h2>
+
+<p>做了这么多，可以开始安装系统了，输入如下指令</p>
+
+<pre><code class="language-sh">pacstrap -i /mnt base base-devel vim
+</code></pre>
+
+<h2 id="生成文件系统信息">生成文件系统信息</h2>
+
+<pre><code class="language-sh">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre>
+
+<p>查看生成的 <code>fstab</code></p>
+
+<pre><code class="language-sh">cat /mnt/etc/fstab
+</code></pre>
+
+<h2 id="配置">配置</h2>
+
+<h3 id="进入到新系统">进入到新系统</h3>
+
+<p>系统装完了，我们需要对安装完的系统进行一些配置，不然安装完，很多东西没法用，而且也不太好用。要对配置安装完的系统，当然是要进入新系统中</p>
+
+<pre><code class="language-sh">arch-chroot /mnt
+</code></pre>
+
+<h3 id="设置时区">设置时区</h3>
+
+<p>这里没什么好说的，设置时区</p>
+
+<pre><code class="language-sh">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+hwclock --systohc
+</code></pre>
+
+<h3 id="本地化">本地化</h3>
+
+<p>编辑 <code>/etc/locale.gen</code> 把 <code>en_US.UTF-8 UTF-8</code> 与 <code>zh_CN.UTF-8 UTF-8</code> 注释去掉（移除行首的 #）</p>
+
+<pre><code class="language-sh">en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+</code></pre>
+
+<p>使用 <code>locale-gen</code> 生成 locale 信息</p>
+
+<p>设置系统语言
+编辑 <code>/etc/locale.conf</code> 文件，设置 <code>LANG</code></p>
+
+<pre><code class="language-sh">LANG=en_US.UTF-8
+</code></pre>
+
+<h3 id="主机名">主机名</h3>
+
+<p>编辑 <code>/etc/hostname</code> ,其中 <code>hostname</code> 随意，写什么无所谓。</p>
+
+<pre><code class="language-sh">hostname
+</code></pre>
+
+<p>添加到 <code>/etc/hosts</code> ,第三行的 <code>hostname</code> 改为上一步写的。</p>
+
+<pre><code class="language-sh">127.0.0.1	localhost
+::1	    	localhost
+127.0.1.1	hostname.localdomain	hostname
+</code></pre>
+
+<h3 id="配置网络">配置网络</h3>
+
+<p>这里要配置一下，不然系统装完了，重启发现没法上网就很尴尬</p>
+
+<pre><code class="language-sh"># 安装必要的软件包
+pacman -S wpa_supplicant dialog network-manager-applet networmanager
+systemctl enable dhcpcd.service
+systemctl enable NetworkManager
+</code></pre>
+
+<h3 id="设置-root-密码">设置 root 密码</h3>
+
+<p>更改 <code>root</code> 密码，有些操作需要在 <code>root</code> 下操作。</p>
+
+<pre><code class="language-sh">passwd
+</code></pre>
+
+<h3 id="创建用户">创建用户</h3>
+
+<p>为新系统创建一个用户， <code>root</code> 的权限太高了，建个普通用户在合适不过。</p>
+
+<pre><code class="language-sh">useradd -m -G wheel -s /bin/bash arch
+</code></pre>
+
+<p>为用户添加 <code>sudo</code> , 输入 <code>visudo</code></p>
+
+<pre><code class="language-sh">wheel ALL=(ALL) ALL # 找到这行，把行首的 #去掉
+</code></pre>
+
+<h3 id="配置-grub-进行开机引导">配置 GRUB 进行开机引导</h3>
+
+<p>配置开机引导，如果不做这一步，开机后没法进入系统。</p>
+
+<pre><code class="language-sh">pacman -S grub
+grub-install /dev/sdx
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+
+<h2 id="重启">重启</h2>
+
+<p>安装好了，重启看看效果。别忘了把 U 盘弹出。</p>
+
+<pre><code class="language-sh">exit
+umount -R /mnt
+reboot
+</code></pre>
+
+<h2 id="桌面">桌面</h2>
+
+<p>新系统是没有桌面环境的，有一个好看的桌面还是非常重要的。</p>
+
+<h3 id="装-x--x-是桌面环境的简称">装 X(X 是桌面环境的简称)</h3>
+
+<p>xorg 是 X11 的一个实现，是所有桌面环境的基础，没有这个就没有桌面可以看。</p>
+
+<pre><code class="language-sh">sudo pacman -S xorg
+</code></pre>
+
+<h3 id="显示管理器--display-manager">显示管理器(Display Manager)</h3>
+
+<p>装好了桌面环境后，我们还需要一个用来管理桌面的管理器，不然你需要手动启动它。</p>
+
+<pre><code class="language-sh">sudo pacman -S lightdm lightdm-gtk-greeter
+sudo systemctl enable lightdm # 开机自启动
+</code></pre>
+
+<p>装好了 <code>lightdm</code> 之后需要配置一下。编辑 <code>/etc/lightdm/lightdm.conf</code></p>
+
+<pre><code class="language-sh">[Seat:*]
+...
+greeter-session=lightdm-gtk-greeter # 如果你装了 deepin 可以改为 lightdm-deepin-greeter
+</code></pre>
+
+<p>有哪些 <code>greeter-session</code> 可以通过如下命令来查看。</p>
+
+<pre><code class="language-sh">ls -l /usr/share/xgreeters/
+</code></pre>
+
+<h3 id="deepin">deepin</h3>
+
+<p>deepin 是深度科技开发桌面系统，有着漂亮的界面，如果你需要使用 <code>QQ</code> ， <code>微信</code> 等软件，deepin 桌面是一个不错的选择。</p>
+
+<pre><code class="language-sh">sudo pacman -S deepin deepin-extra
+</code></pre>
+
+<figure>
+    <img src="https://example.com/images/arch/arch_deepin.jpg"/> 
+</figure>
+
+
+<h3 id="kde">kde</h3>
+
+<p>kde 是另外一个非常好看的桌面，不过 <code>QQ</code> 不能在其上运行， <code>微信</code> 部分功能不能正常使用，比如截图，发文件等。</p>
+
+<pre><code class="language-sh">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
+</code></pre>
+
+<figure>
+    <img src="https://example.com/images/arch/arch_kde.jpg"/> 
+</figure>
+
+
+<h3 id="安装显卡驱动">安装显卡驱动</h3>
+
+<p>显卡最好只安装集成显卡，不要使用独立显卡。</p>
+
+<h4 id="intel">Intel</h4>
+
+<pre><code class="language-sh">sudo pacman -S xf86-video-intel
+</code></pre>
+
+<h4 id="amd">AMD</h4>
+
+<pre><code class="language-sh">sudo pacman -S xf86-video-amdgpu
+</code></pre>
+
+<h4 id="ati">ATI</h4>
+
+<pre><code class="language-sh">sudo pacman -S xf86-video-ati
+</code></pre>
+
+<h4 id="nvidia">NVIDIA</h4>
+
+<pre><code class="language-sh">sudo pacman -S xf86-video-nv
+</code></pre>
+
+<h3 id="安装声卡驱动">安装声卡驱动</h3>
+
+<p>安装声卡，听听歌还是不错的。</p>
+
+<pre><code class="language-sh">pacman -S alsa-utils alsa-oss
+</code></pre>
+
+<p>执行 <code>alsamixer</code> 取消静音</p>
+
+<h3 id="字体">字体</h3>
+
+<p>中文字体按需选择。</p>
+
+<pre><code class="language-sh">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
+</code></pre>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Installation%5Fguide%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)">Installation guide (简体中文) - ArchWiki</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Locale%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)#.E8.AE.BE.E7.BD.AE%5Flocale">Locale (简体中文) - ArchWiki</a></li>
+</ul>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://example.com/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://example.com/tags/arch" role="button">Arch </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://example.com/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>单例模式的多种写法</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://example.com/post/archlinux%E5%AE%89%E8%A3%85uefi/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>ArchLinux 安装 UEFI &#43; GPT</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f">
+												 下载镜像
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%b6%e4%bd%9c%e5%90%af%e5%8a%a8%e7%9b%98">
+												 制作启动盘
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%81%94%e7%bd%91">
+												 联网
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9c%89%e7%ba%bf%e8%bf%9e%e6%8e%a5">
+												 有线连接
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#wifi-%e8%bf%9e%e6%8e%a5">
+												 WiFi 连接
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9b%b4%e6%96%b0%e7%b3%bb%e7%bb%9f%e6%97%b6%e9%97%b4">
+												 更新系统时间
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%86%e5%8c%ba">
+												 分区
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%a0%bc%e5%bc%8f%e5%8c%96%e5%88%86%e5%8c%ba">
+												 格式化分区
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8c%82%e8%bd%bd%e5%88%86%e5%8c%ba">
+												 挂载分区
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%80%89%e6%8b%a9%e5%90%88%e9%80%82%e7%9a%84%e8%bd%af%e4%bb%b6%e6%ba%90">
+												 选择合适的软件源
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
+												 安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%94%9f%e6%88%90%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e4%bf%a1%e6%81%af">
+												 生成文件系统信息
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae">
+												 配置
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9b%e5%85%a5%e5%88%b0%e6%96%b0%e7%b3%bb%e7%bb%9f">
+												 进入到新系统
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae%e6%97%b6%e5%8c%ba">
+												 设置时区
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9c%ac%e5%9c%b0%e5%8c%96">
+												 本地化
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%bb%e6%9c%ba%e5%90%8d">
+												 主机名
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%bd%91%e7%bb%9c">
+												 配置网络
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae-root-%e5%af%86%e7%a0%81">
+												 设置 root 密码
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7">
+												 创建用户
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae-grub-%e8%bf%9b%e8%a1%8c%e5%bc%80%e6%9c%ba%e5%bc%95%e5%af%bc">
+												 配置 GRUB 进行开机引导
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%87%8d%e5%90%af">
+												 重启
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%a1%8c%e9%9d%a2">
+												 桌面
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%a3%85-x--x-%e6%98%af%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e7%9a%84%e7%ae%80%e7%a7%b0">
+												 装 X(X 是桌面环境的简称)
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%98%be%e7%a4%ba%e7%ae%a1%e7%90%86%e5%99%a8--display-manager">
+												 显示管理器(Display Manager)
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#deepin">
+												 deepin
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#kde">
+												 kde
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85%e6%98%be%e5%8d%a1%e9%a9%b1%e5%8a%a8">
+												 安装显卡驱动
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#intel">
+												 Intel
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#amd">
+												 AMD
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#ati">
+												 ATI
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#nvidia">
+												 NVIDIA
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85%e5%a3%b0%e5%8d%a1%e9%a9%b1%e5%8a%a8">
+												 安装声卡驱动
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ad%97%e4%bd%93">
+												 字体
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://example.com/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://example.com/js/main.js"></script>
+
+
+
+  
+  <script src="https://example.com/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://example.com/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://example.com/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

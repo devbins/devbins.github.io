@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这">
+  
+  <meta property="og:title" content="单例模式的多种写法" />
+<meta property="og:description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/" /><meta property="article:published_time" content="2018-07-11T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-07-11T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       单例模式的多种写法 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://example.com/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/">
+
+  
+  
+
+  
+  <link href="https://example.com/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://example.com/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://example.com/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://example.com/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://example.com/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://example.com/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://example.com/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://example.com">
+          
+        <img class="avatar" src="https://example.com/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://example.com">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://example.com/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://example.com/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://example.com/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://example.com">
+          
+            <img class="pull-right avatar avatar-md" src="https://example.com/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://example.com">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://example.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 设计模式 </a></li>
+      
+        <li><a href="https://example.com/categories/java"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Java </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">单例模式的多种写法</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jul 11, 2018</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>3 minutes read</li>
+    
+  </ul>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<h2 id="单例模式介绍">单例模式介绍</h2>
+
+<p>单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。</p>
+
+<h2 id="单例模式实现原理">单例模式实现原理</h2>
+
+<p>单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 <code>new</code> 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 <code>new</code> 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这个只需要把构造方法私有化(private)，由于我们私有了构造方法，所以外部不能访问到，于是我们需要通过静态方法来提供这个实例。在多线程的情况下还要考虑单例的对象会被多次创建。</p>
+
+<h3 id="实现单例有以下几个关键点">实现单例有以下几个关键点：</h3>
+
+<ul>
+<li>私有化构造方法</li>
+<li>通过静态方法提供单例对象</li>
+<li>确保在多线程情况下，单例对象只有一个</li>
+</ul>
+
+<p>单例模式有许多不同的写法，每种写法各有特点，下面一一介绍。</p>
+
+<h2 id="饿汉式">饿汉式</h2>
+
+<p>饿汉式的单例模式在声明的时候就创建好了，用到的时候直接使用。构造函数被私有化了，确保了唯一性。要获得该实例只能通过 <code>getInstance</code> 。</p>
+
+<p>饿汉式的缺点是只要系统存在就会创建这个对象，但是系统有可能会用不到，就会造成资源浪费。</p>
+
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE = new Singleton();
+
+  private Singleton(){
+
+  }
+
+  public static Singleton getInstance(){
+    return INSTANCE;
+  }
+
+}
+</code></pre>
+
+<h2 id="懒汉式">懒汉式</h2>
+
+<p>饿汉式的单例模式如果用不到就会造成资源的浪费，有没有在用到时才去创建的写法。有，懒汉式。</p>
+
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE;
+
+  private Singleton(){
+
+  }
+
+  public static synchronized getInsance(){
+    if (null == INSTANCE) {
+      INSTANCE = new Singleton();
+    }
+    return INSTANCE;
+  }
+
+}
+</code></pre>
+
+<p>在懒汉式的 <code>getInstance</code> 上加了 <code>synchronized</code> 这个关键字，这样可以确保在多线程的情况下保证单例的唯一性。</p>
+
+<h2 id="双重锁形式的懒汉式">双重锁形式的懒汉式</h2>
+
+<p>懒汉式确保了在需要用到的才去实例化对象，避免了没有使用到而浪费资源的情况。但是为了确保在多线程的情况下单例唯一，在  <code>getInstance</code> 方法上加上了 <code>synchronized</code> ，这就带来了新的问题。即使 <code>INSTANCE</code> 已经被初始化了，调用 <code>getInstance</code> 还是会进行同步，这就导致了性能低下，虽然节约了资源，所以还可以进行优化。我们使用双重锁来去掉不必要的开销。</p>
+
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE;
+
+  private Singleton(){
+
+  }
+
+  public static getInstance(){
+    if (INSTANCE == null) {
+      synchronized(Singleton.class){
+        if (INSTANCE == null) {
+          INSTANCE = new Singleton();
+        }
+      }
+    }
+    return INSTANCE;
+  }
+
+}
+</code></pre>
+
+<p>双重锁形式的单例和懒汉式最大的区别就是在 <code>getInstance</code> 方法上， <code>getInstance</code> 进行了两次判空，第一次判空避免了不必要的同步，第二次判断是为了在 <code>null</code> 情况下创建实例。
+双重锁是不是没有缺点，当然不是，在 <code>JDK1.5</code> 之前这种方法并不能保证单例。第一次加载稍慢，在高并发环境下有很小的概率会失败。</p>
+
+<h2 id="静态内部类形式">静态内部类形式</h2>
+
+<pre><code class="language-java">public class Singleton {
+  private Singleton(){
+
+  }
+
+  public static Singleton getInstance(){
+    return SingletonHoler.INSTANCE;
+  }
+
+  private static class SingletonHoler{
+    private static final Singleton INSTANCE = new Singleton();
+  }
+}
+</code></pre>
+
+<p>第一次加载 <code>Singleton</code> 时，并不会初始化 <code>INSTANCE</code> ，只有当调用 <code>getInstance()</code> 才会初始化。调用 <code>getInstance()</code> Java 虚拟机会加载 <code>SingletonHoler</code> ，这种方式不仅能够保证线程安全，也可以保证单例的唯一性，也延迟了单例的实例化。</p>
+
+<h2 id="枚举单例">枚举单例</h2>
+
+<pre><code class="language-java">public enum Singleton{
+  INSTANCE;
+}
+</code></pre>
+
+<p>除了上面的几种写法，还可以通过枚举来实现单例。枚举的实例默认是线程安全的，还能保证唯一性。枚举的写法应该是所有写法中最简单的。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li>《Android 源码设计模式解析与实战》</li>
+</ul>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://example.com/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://example.com/tags/java" role="button">Java </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://example.com/post/appium/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>使用 Appium 做测试</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://example.com/post/archlinux/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>Arch Linux 安装</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e4%bb%8b%e7%bb%8d">
+												 单例模式介绍
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86">
+												 单例模式实现原理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%9e%e7%8e%b0%e5%8d%95%e4%be%8b%e6%9c%89%e4%bb%a5%e4%b8%8b%e5%87%a0%e4%b8%aa%e5%85%b3%e9%94%ae%e7%82%b9">
+												 实现单例有以下几个关键点：
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%a5%bf%e6%b1%89%e5%bc%8f">
+												 饿汉式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%87%92%e6%b1%89%e5%bc%8f">
+												 懒汉式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%8c%e9%87%8d%e9%94%81%e5%bd%a2%e5%bc%8f%e7%9a%84%e6%87%92%e6%b1%89%e5%bc%8f">
+												 双重锁形式的懒汉式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e5%bd%a2%e5%bc%8f">
+												 静态内部类形式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9e%9a%e4%b8%be%e5%8d%95%e4%be%8b">
+												 枚举单例
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://example.com/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://example.com/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://example.com/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://example.com/js/main.js"></script>
+
+
+
+  
+  <script src="https://example.com/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://example.com/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://example.com/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
