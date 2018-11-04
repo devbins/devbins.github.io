@@ -7,22 +7,22 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="自定义">
-  <meta name="description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这">
+  <meta name="description" content="作为一个程序员，天天和终端打交道。可是在 Mac 终端下使用 brew 安装软件却十分慢，即便你使用 ShadowSocks 配置了全局代理，却发现这么做依然没有效果，下载还是龟速。虽然可以通过配置国内的镜像来解决，但是后期下载还是很慢，效果就不好了。 简单使用 在终端使用 ShadowSocks 十分简单，只需在终端中输入下列指令就可 export ALL_PROXY = socks5://127.0.0.1:1080 现在可以试试 brew 更新软件了，速度蹭蹭的往上涨 不想用代理了，输入下面指令即可 unset ALL_PROXY 优化 每次想要使用代理的时候都要输入这么多记不住 把">
   
-  <meta property="og:title" content="单例模式的多种写法" />
-<meta property="og:description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这" />
+  <meta property="og:title" content="在 Mac 终端中使用代理" />
+<meta property="og:description" content="作为一个程序员，天天和终端打交道。可是在 Mac 终端下使用 brew 安装软件却十分慢，即便你使用 ShadowSocks 配置了全局代理，却发现这么做依然没有效果，下载还是龟速。虽然可以通过配置国内的镜像来解决，但是后期下载还是很慢，效果就不好了。 简单使用 在终端使用 ShadowSocks 十分简单，只需在终端中输入下列指令就可 export ALL_PROXY = socks5://127.0.0.1:1080 现在可以试试 brew 更新软件了，速度蹭蹭的往上涨 不想用代理了，输入下面指令即可 unset ALL_PROXY 优化 每次想要使用代理的时候都要输入这么多记不住 把" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/" /><meta property="article:published_time" content="2018-07-11T00:00:00&#43;08:00"/>
-<meta property="article:modified_time" content="2018-07-11T00:00:00&#43;08:00"/>
+<meta property="og:url" content="https://binsheng.github.io/post/mac%E7%BB%88%E7%AB%AF%E4%BB%A3%E7%90%86/" /><meta property="article:published_time" content="2017-03-09T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2017-03-09T00:00:00&#43;08:00"/>
 
 
   <title>
   
-       单例模式的多种写法 | 自定义 
+       在 Mac 终端中使用代理 | 自定义 
   
   </title>
 
-  <link rel="canonical" href="https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/">
+  <link rel="canonical" href="https://binsheng.github.io/post/mac%E7%BB%88%E7%AB%AF%E4%BB%A3%E7%90%86/">
 
   
   
@@ -297,24 +297,22 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://binsheng.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 设计模式 </a></li>
-      
-        <li><a href="https://binsheng.github.io/categories/java"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Java </a></li>
+        <li><a href="https://binsheng.github.io/categories/mac"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Mac </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">单例模式的多种写法</div>
+  <div class="px-4 post-heading">在 Mac 终端中使用代理</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>Jul 11, 2018</li>
+      <li>Mar 9, 2017</li>
     
 
     
       <li class="middot"></li>
-      <li>3 minutes read</li>
+      <li>One minute read</li>
     
   </ul>
   
@@ -326,128 +324,41 @@
           <div class="post-content markdown">
             
 
-<h2 id="单例模式介绍">单例模式介绍</h2>
+<blockquote>
+<p>作为一个程序员，天天和终端打交道。可是在 Mac 终端下使用 brew 安装软件却十分慢，即便你使用 ShadowSocks 配置了全局代理，却发现这么做依然没有效果，下载还是龟速。虽然可以通过配置国内的镜像来解决，但是后期下载还是很慢，效果就不好了。</p>
+</blockquote>
 
-<p>单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。</p>
+<!-- more -->
 
-<h2 id="单例模式实现原理">单例模式实现原理</h2>
+<h2 id="简单使用">简单使用</h2>
 
-<p>单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 <code>new</code> 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 <code>new</code> 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这个只需要把构造方法私有化(private)，由于我们私有了构造方法，所以外部不能访问到，于是我们需要通过静态方法来提供这个实例。在多线程的情况下还要考虑单例的对象会被多次创建。</p>
+<p>在终端使用 ShadowSocks 十分简单，只需在终端中输入下列指令就可</p>
 
-<h3 id="实现单例有以下几个关键点">实现单例有以下几个关键点：</h3>
-
-<ul>
-<li>私有化构造方法</li>
-<li>通过静态方法提供单例对象</li>
-<li>确保在多线程情况下，单例对象只有一个</li>
-</ul>
-
-<p>单例模式有许多不同的写法，每种写法各有特点，下面一一介绍。</p>
-
-<h2 id="饿汉式">饿汉式</h2>
-
-<p>饿汉式的单例模式在声明的时候就创建好了，用到的时候直接使用。构造函数被私有化了，确保了唯一性。要获得该实例只能通过 <code>getInstance</code> 。</p>
-
-<p>饿汉式的缺点是只要系统存在就会创建这个对象，但是系统有可能会用不到，就会造成资源浪费。</p>
-
-<pre><code class="language-java">class Singleton{
-  private static final Singleton INSTANCE = new Singleton();
-
-  private Singleton(){
-
-  }
-
-  public static Singleton getInstance(){
-    return INSTANCE;
-  }
-
-}
+<pre><code class="language-sh">export ALL_PROXY = socks5://127.0.0.1:1080
 </code></pre>
 
-<h2 id="懒汉式">懒汉式</h2>
+<p>现在可以试试 <code>brew</code> 更新软件了，速度蹭蹭的往上涨</p>
 
-<p>饿汉式的单例模式如果用不到就会造成资源的浪费，有没有在用到时才去创建的写法。有，懒汉式。</p>
+<p>不想用代理了，输入下面指令即可</p>
 
-<pre><code class="language-java">class Singleton{
-  private static final Singleton INSTANCE;
-
-  private Singleton(){
-
-  }
-
-  public static synchronized getInsance(){
-    if (null == INSTANCE) {
-      INSTANCE = new Singleton();
-    }
-    return INSTANCE;
-  }
-
-}
+<pre><code class="language-sh">unset ALL_PROXY
 </code></pre>
 
-<p>在懒汉式的 <code>getInstance</code> 上加了 <code>synchronized</code> 这个关键字，这样可以确保在多线程的情况下保证单例的唯一性。</p>
+<h2 id="优化">优化</h2>
 
-<h2 id="双重锁形式的懒汉式">双重锁形式的懒汉式</h2>
+<p>每次想要使用代理的时候都要输入这么多记不住</p>
 
-<p>懒汉式确保了在需要用到的才去实例化对象，避免了没有使用到而浪费资源的情况。但是为了确保在多线程的情况下单例唯一，在  <code>getInstance</code> 方法上加上了 <code>synchronized</code> ，这就带来了新的问题。即使 <code>INSTANCE</code> 已经被初始化了，调用 <code>getInstance</code> 还是会进行同步，这就导致了性能低下，虽然节约了资源，所以还可以进行优化。我们使用双重锁来去掉不必要的开销。</p>
+<p>把下面的命令保存到 <code>~/.bash_profile</code> 如果使用的是 zsh 则保存到 <code>~/.zshrc</code></p>
 
-<pre><code class="language-java">class Singleton{
-  private static final Singleton INSTANCE;
-
-  private Singleton(){
-
-  }
-
-  public static getInstance(){
-    if (INSTANCE == null) {
-      synchronized(Singleton.class){
-        if (INSTANCE == null) {
-          INSTANCE = new Singleton();
-        }
-      }
-    }
-    return INSTANCE;
-  }
-
-}
+<pre><code class="language-sh">alias socks5 = &quot;export ALL_PROXY=socks5://127.0.0.1:1080&quot;
+alias unsocks5 = &quot;unset ALL_PROXY&quot;
 </code></pre>
 
-<p>双重锁形式的单例和懒汉式最大的区别就是在 <code>getInstance</code> 方法上， <code>getInstance</code> 进行了两次判空，第一次判空避免了不必要的同步，第二次判断是为了在 <code>null</code> 情况下创建实例。
-双重锁是不是没有缺点，当然不是，在 <code>JDK1.5</code> 之前这种方法并不能保证单例。第一次加载稍慢，在高并发环境下有很小的概率会失败。</p>
+<p>想要立即生效 <code>source .zshrc</code> 或者 <code>source .bash_profile</code></p>
 
-<h2 id="静态内部类形式">静态内部类形式</h2>
+<p>以后想要打开代理只需输 <code>socks5</code></p>
 
-<pre><code class="language-java">public class Singleton {
-  private Singleton(){
-
-  }
-
-  public static Singleton getInstance(){
-    return SingletonHoler.INSTANCE;
-  }
-
-  private static class SingletonHoler{
-    private static final Singleton INSTANCE = new Singleton();
-  }
-}
-</code></pre>
-
-<p>第一次加载 <code>Singleton</code> 时，并不会初始化 <code>INSTANCE</code> ，只有当调用 <code>getInstance()</code> 才会初始化。调用 <code>getInstance()</code> Java 虚拟机会加载 <code>SingletonHoler</code> ，这种方式不仅能够保证线程安全，也可以保证单例的唯一性，也延迟了单例的实例化。</p>
-
-<h2 id="枚举单例">枚举单例</h2>
-
-<pre><code class="language-java">public enum Singleton{
-  INSTANCE;
-}
-</code></pre>
-
-<p>除了上面的几种写法，还可以通过枚举来实现单例。枚举的实例默认是线程安全的，还能保证唯一性。枚举的写法应该是所有写法中最简单的。</p>
-
-<h2 id="参考">参考</h2>
-
-<ul>
-<li>《Android 源码设计模式解析与实战》</li>
-</ul>
+<p>关闭只需输 <code>unsocks5</code></p>
 
           </div>
 
@@ -461,7 +372,7 @@
   <li class="pr-0"><a href="https://binsheng.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://binsheng.github.io/tags/java" role="button">Java </a></li>
+      <li><a href="https://binsheng.github.io/tags/proxy" role="button">Proxy </a></li>
       
     
   </div>
@@ -477,10 +388,10 @@
           <div class="row pt-3">
             <div class="col-md-6">
               
-                <a href=https://binsheng.github.io/post/appium/ class="post-meta">Previous
+                <a href=https://binsheng.github.io/post/nsd/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>使用 Appium 做测试</span>
+                    <span>Android 网络服务发现（NSD）</span>
                   </div>
                 </a>
               
@@ -488,10 +399,10 @@
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/ class="post-meta">Next
+                <a href=https://binsheng.github.io/post/docker%E4%BD%BF%E7%94%A8/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>单例模式的多种写法</span>
+                    <span>Docker 使用</span>
                   </div>
                 </a>
               
@@ -539,8 +450,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e4%bb%8b%e7%bb%8d">
-												 单例模式介绍
+						 					<a class="nav-link" href="#%e7%ae%80%e5%8d%95%e4%bd%bf%e7%94%a8">
+												 简单使用
 											</a>
 										</li>
 						 
@@ -561,166 +472,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86">
-												 单例模式实现原理
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%9e%e7%8e%b0%e5%8d%95%e4%be%8b%e6%9c%89%e4%bb%a5%e4%b8%8b%e5%87%a0%e4%b8%aa%e5%85%b3%e9%94%ae%e7%82%b9">
-												 实现单例有以下几个关键点：
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%a5%bf%e6%b1%89%e5%bc%8f">
-												 饿汉式
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%87%92%e6%b1%89%e5%bc%8f">
-												 懒汉式
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%8c%e9%87%8d%e9%94%81%e5%bd%a2%e5%bc%8f%e7%9a%84%e6%87%92%e6%b1%89%e5%bc%8f">
-												 双重锁形式的懒汉式
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e5%bd%a2%e5%bc%8f">
-												 静态内部类形式
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%9e%9a%e4%b8%be%e5%8d%95%e4%be%8b">
-												 枚举单例
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
+						 					<a class="nav-link" href="#%e4%bc%98%e5%8c%96">
+												 优化
 											</a>
 										</li>
 						 
@@ -744,23 +497,6 @@
     
 
     
-<div class="post-reward">
-    <input type="checkbox" name="reward" id="reward" hidden />
-    <label class="reward-button" for="reward">reward</label>
-    <div class="qr-code">
-        
-        
-        <label class="qr-code-image" for="reward">
-            <img class="image" src="https://binsheng.github.io/images/avatar.jpg">
-            <span>reward Wechat</span>
-        </label>
-        
-        <label class="qr-code-image" for="reward">
-            <img class="image" src="https://binsheng.github.io/images/avatar.jpg">
-            <span>reward Alipay</span>
-        </label>
-    </div>
-</div>
 
 
     

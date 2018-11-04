@@ -7,22 +7,22 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="自定义">
-  <meta name="description" content="树莓派简单介绍 Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是为学生计算机编程教育而设计，只有信用卡大小的卡片式电脑，其系统基于 Linux。 —— 来自百度百科的介绍 买来的树莓派是一块没有系统的开发板，到手的第一步就先要给树莓派安装系统，不然也没办法用。 安装系统前准备 树莓派一个（当然你要有电源适配器，没有的话移动电源也可以）。 SD 卡一张，树莓派使用 SD 卡作为容量，没有的 SD 卡是没法用的。 网线一">
+  <meta name="description" content="这些日子碰到这样一个需求，需要在局域网中发现我们创建的某个特定设备，并连上互相通信。本以为要去遍历整个局域网，后来查阅相关资料后发现 Android 为我们提供了网络服务发现（Network Service Discovery）简称 NSD，就是本文要讲的东西了。 NSD 有什么用 用来扫描局域网中特定的服务，并与之通信。省去了自己去写发现协议。 NSD 怎么用 创建服务 首先要创建一个 ServerSocket，用来等待别人的连接 /** *创建一个 server 来获取端">
   
-  <meta property="og:title" content="树莓派入门" />
-<meta property="og:description" content="树莓派简单介绍 Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是为学生计算机编程教育而设计，只有信用卡大小的卡片式电脑，其系统基于 Linux。 —— 来自百度百科的介绍 买来的树莓派是一块没有系统的开发板，到手的第一步就先要给树莓派安装系统，不然也没办法用。 安装系统前准备 树莓派一个（当然你要有电源适配器，没有的话移动电源也可以）。 SD 卡一张，树莓派使用 SD 卡作为容量，没有的 SD 卡是没法用的。 网线一" />
+  <meta property="og:title" content="Android 网络服务发现（NSD）" />
+<meta property="og:description" content="这些日子碰到这样一个需求，需要在局域网中发现我们创建的某个特定设备，并连上互相通信。本以为要去遍历整个局域网，后来查阅相关资料后发现 Android 为我们提供了网络服务发现（Network Service Discovery）简称 NSD，就是本文要讲的东西了。 NSD 有什么用 用来扫描局域网中特定的服务，并与之通信。省去了自己去写发现协议。 NSD 怎么用 创建服务 首先要创建一个 ServerSocket，用来等待别人的连接 /** *创建一个 server 来获取端" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://binsheng.github.io/post/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/" /><meta property="article:published_time" content="2017-05-22T00:00:00&#43;08:00"/>
-<meta property="article:modified_time" content="2017-05-22T00:00:00&#43;08:00"/>
+<meta property="og:url" content="https://binsheng.github.io/post/nsd/" /><meta property="article:published_time" content="2016-10-03T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2016-10-03T00:00:00&#43;08:00"/>
 
 
   <title>
   
-       树莓派入门 | 自定义 
+       Android 网络服务发现（NSD） | 自定义 
   
   </title>
 
-  <link rel="canonical" href="https://binsheng.github.io/post/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/">
+  <link rel="canonical" href="https://binsheng.github.io/post/nsd/">
 
   
   
@@ -297,28 +297,24 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://binsheng.github.io/categories/iot"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> IOT </a></li>
+        <li><a href="https://binsheng.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">树莓派入门</div>
+  <div class="px-4 post-heading">Android 网络服务发现（NSD）</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>May 22, 2017</li>
+      <li>Oct 3, 2016</li>
     
 
     
       <li class="middot"></li>
-      <li>3 minutes read</li>
+      <li>2 minutes read</li>
     
   </ul>
-  
-    <div class="view">
-      <img src="https://binsheng.github.io/images/pi/pi.jpg" />
-    </div>
   
 
 </div>
@@ -328,93 +324,147 @@
           <div class="post-content markdown">
             
 
-<h2 id="树莓派简单介绍">树莓派简单介绍</h2>
-
 <blockquote>
-<p>Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是为学生计算机编程教育而设计，只有信用卡大小的卡片式电脑，其系统基于 Linux。
-—— 来自百度百科的介绍</p>
+<p>这些日子碰到这样一个需求，需要在局域网中发现我们创建的某个特定设备，并连上互相通信。本以为要去遍历整个局域网，后来查阅相关资料后发现 Android 为我们提供了网络服务发现（Network Service Discovery）简称 NSD，就是本文要讲的东西了。</p>
 </blockquote>
 
-<p>买来的树莓派是一块没有系统的开发板，到手的第一步就先要给树莓派安装系统，不然也没办法用。</p>
+<h2 id="nsd-有什么用">NSD 有什么用</h2>
 
-<h2 id="安装系统前准备">安装系统前准备</h2>
+<p>用来扫描局域网中特定的服务，并与之通信。省去了自己去写发现协议。</p>
 
-<ol>
-<li>树莓派一个（当然你要有电源适配器，没有的话移动电源也可以）。</li>
-<li>SD 卡一张，树莓派使用 SD 卡作为容量，没有的 SD 卡是没法用的。</li>
-<li>网线一根，用于设置 WiFi。</li>
-</ol>
+<h2 id="nsd-怎么用">NSD 怎么用</h2>
 
-<h2 id="下载镜像">下载镜像</h2>
+<h3 id="创建服务">创建服务</h3>
 
-<p>在<a href="https://www.raspberrypi.org/downloads/">镜像下载地址</a>中选择一个合适的镜像下载到本地，我选择的是 Raspbian。下载好后解压，会得到一个后缀为 <code>.img</code> 的文件。</p>
+<p>首先要创建一个 ServerSocket，用来等待别人的连接</p>
 
-<h2 id="制作系统-macos-环境下制作">制作系统（MacOS 环境下制作）</h2>
-
-<p>在制作之前先看看有哪些磁盘,在终端中输入 <code>diskutil list</code>,它会列出电脑上的所有磁盘。</p>
-
-<p>把 SD 卡连接电脑，SD 卡需要 FAT32 格式的。可以使用<a href="https://www.sdcard.org/chs/downloads/formatter%5F4/index.html">SD Memory Card formatter</a>来格式化，有 Windows 和 Mac 版的。</p>
-
-<p>再在终端中输入 <code>diskutil list</code> 查看一下多出来的就是我们的 SD 卡。例如 <code>/dev/disk2</code>
-<img src="https://binsheng.github.io/images/pi/disk.png" alt="" /></p>
-
-<p>使用 <code>diskutil unmountDisk /dev/disk&lt;disk# from diskutil&gt;</code> 来卸载分区，其中 <code>&lt;disk# from diskutil&gt;</code> 是 SD 卡的路径，例如 <code>disk2</code> 之类的。这个要根据自己电脑上的实际情况填写，不要照着抄。
-<img src="https://binsheng.github.io/images/pi/unmount.png" alt="" /></p>
-
-<p>使用 <code>sudo dd bs=1m if=~/Downloads/2017-11-29-raspbian-stretch-lite.img of=/dev/disk3 conv=sync</code> 把镜像拷贝到 SD 卡。其中 <code>if(input file)</code> 后面接的是镜像的路径（刚刚下载解压出来的文件）， <code>of(output file)</code> 接的是 SD 卡的路径，要根据自己镜像和 SD 卡的位置填写。 <code>bs（block size）</code> 后面接的是块的大小，照着写不必理会。这个过程比较久，需要耐心等待，我用了 15 分钟左右才好。
-<img src="https://binsheng.github.io/images/pi/write.png" alt="" /></p>
-
-<blockquote>
-<p>Windows 用户可以使用<a href="https://sourceforge.net/projects/win32diskimager/">Win32DiskImager</a>来制作安装盘。这个太简单就不说怎么搞了。</p>
-</blockquote>
-
-<h2 id="开机并使用-ssh-远程登录">开机并使用 SSH 远程登录</h2>
-
-<p>把 SD 卡装进树莓派、接上网线，并通电。
-树莓派默认的账号是 <code>pi</code>,密码是 <code>raspberry</code> 。
-登录之前需要知道树莓派的 IP 地址，打开 Mac 终端使用 <code>arp -a</code> 来查看（一次可能查看不到，多试几次），如果你可以登录路由器后台,那就可以从路由器中查看树莓派的 IP。
-获取到了 <code>ip</code> 就可以使用 <code>ssh</code> 来登录树莓派了。</p>
-
-<pre><code class="language-sh">ssh pi@ip # ip 就是上一步获取到的
-</code></pre>
-
-<p>如果你直接这样连接恐怕是连不上的。最新的 Raspbian 镜像默认禁用了 SSH 服务。开启 SSH 很简单只要在 SD 卡的根目录建立一个`ssh`的文件夹就行了。
-<img src="https://binsheng.github.io/images/pi/raspssh.png" alt="" />
-除了使用 <code>arp -a</code> 来查看 <code>ip</code> 的方式连接树莓派，还可以用一下方式来连接</p>
-
-<pre><code class="language-sh">ssh pi@raspberrypi.local
-</code></pre>
-
-<p>在实际使用过程中， <code>arp -a</code> 和 <code>ssh pi@raspberrypi.local</code> 都不是很好用，最方便的还是在路由器下查看 IP</p>
-
-<h2 id="配置-wifi">配置 WIFI</h2>
-
-<p>编辑 <code>etc/wpa_supplicant/wpa_supplicant.conf</code> ,在文件后面追加</p>
-
-<pre><code class="language-sh">network={
-ssid=&quot;WIFINAME&quot; # WIFI 的名字
-psk=&quot;password&quot; # WIFI 的密码
-key_mgmt=WPA-PSK # 加密类型，照着写好了，一般不用改。如果想看的话，用手机连上该 WIFI 详细里面的安全性就指的是这个。
-priority=1 # 连接的优先级，数值越大，优先级越高。
+<pre><code class="language-java">/**
+ *创建一个 server 来获取端口
+ */
+private void createServerSocket() {
+  if (mServerSocket != null) return;
+  try {
+    mServerSocket = new ServerSocket(0);//设为 0,会自动获取没有占用的端口
+    mPort = mServerSocket.getLocalPort();
+  } catch (IOException e) {
+    e.printStackTrace();
+  }
 }
 </code></pre>
 
-<p>写好保存，重启生效</p>
+<h3 id="接下来就可以创建-nsdserviceinfo-了-nsdserviceinfo-是一个包含-nsd-服务信息的类-看名字就知道了">接下来就可以创建 NsdServiceInfo 了，NsdServiceInfo 是一个包含 Nsd 服务信息的类，看名字就知道了。</h3>
 
-<h2 id="配置国内镜像">配置国内镜像</h2>
-
-<p>树莓派默认的镜像在国外，更新软件的时候经常要老半天，或者根本就更新不了。所以换成国内的节约时间，省事。</p>
-
-<pre><code class="language-sh">sudo sed -i 's|//archive.raspberrypi.org|//mirrors.ustc.edu.cn/archive.raspberrypi.org|g' /etc/apt/sources.list.d/raspi.list
-sudo sed -i 's|mirrordirector.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sources.list
-sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sources.list
+<pre><code class="language-java">/**
+ *创建 NsdServiceInfo
+ */
+private void createNsdServiceInfo() {
+  if (mNsdServiceInfo != null) return;
+  mNsdServiceInfo = new NsdServiceInfo();
+  mNsdServiceInfo.setServiceName(SERVICE_NAME);//设置服务的名字，被别的机器发现时显示的名字。
+  mNsdServiceInfo.setServiceType(SERVICE_TYPE);
+  mNsdServiceInfo.setPort(mPort);
+}
 </code></pre>
 
-<h2 id="参考">参考</h2>
+<h3 id="注册-nsd-服务">注册 NSD 服务</h3>
+
+<pre><code class="language-java">private void register() {
+    mNsdManager = (NsdManager) getSystemService(NSD_SERVICE);
+    mNsdManager.registerService(mNsdServiceInfo, NsdManager.PROTOCOL_DNS_SD,mRegistrationListener);
+}
+private void createRegistration() {
+    mRegistrationListener = new NsdManager.RegistrationListener() {
+        @Override
+        public void onRegistrationFailed(NsdServiceInfo nsdServiceInfo, int i){
+            Toast.makeText(MainActivity.this, &quot;onRegistrationFailed&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onUnregistrationFailed(NsdServiceInfo nsdServiceInfo, int i) {
+            Toast.makeText(MainActivity.this, &quot;onUnregistrationFailed&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onServiceRegistered(NsdServiceInfo nsdServiceInfo) {
+            Toast.makeText(MainActivity.this, &quot;onServiceRegistered&quot;, Toast.LENGTH_SHORT).show();
+            new Thread(MainActivity.this).start();
+        }
+        @Override
+        public void onServiceUnregistered(NsdServiceInfo nsdServiceInfo) {
+            Toast.makeText(MainActivity.this, &quot;onServiceUnregistered&quot;, Toast.LENGTH_SHORT).show();
+        }
+    };
+}
+</code></pre>
+
+<h3 id="在客户端发现-nsd-服务">在客户端发现 NSD 服务</h3>
+
+<pre><code class="language-java">nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+private void createDiscoverListener() {
+    mDiscoveryListener = new NsdManager.DiscoveryListener() {
+        @Override
+        public void onStartDiscoveryFailed(String s, int i) {
+            Toast.makeText(MainActivity.this, &quot;onStartDiscoveryFailed&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onStopDiscoveryFailed(String s, int i) {
+            Toast.makeText(MainActivity.this, &quot;onStopDiscoveryFailed&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onDiscoveryStarted(String s) {
+            Toast.makeText(MainActivity.this, &quot;onDiscoveryStarted&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onDiscoveryStopped(String s) {
+            Toast.makeText(MainActivity.this, &quot;onDiscoveryStopped&quot;, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onServiceFound(NsdServiceInfo nsdServiceInfo) {
+            //这里的 nsdServiceInfo 只能获取到名字,ip 和端口都不能获取到,要想获取到需要调用 NsdManager.resolveService 方法
+            datas.add(nsdServiceInfo);
+            mHandler.sendEmptyMessage(0);
+        }
+        @Override
+        public void onServiceLost(NsdServiceInfo nsdServiceInfo) {
+            Toast.makeText(MainActivity.this, &quot;onServiceLost&quot;, Toast.LENGTH_SHORT).show();
+        }
+    };
+}
+</code></pre>
+
+<h3 id="获取服务的详细信息">获取服务的详细信息</h3>
+
+<pre><code class="language-java">nsdManager.resolveService(nsdServiceInfo, mResolverListener);
+private void createResolverListener() {
+  mResolverListener = new NsdManager.ResolveListener() {
+      @Override
+      public void onResolveFailed(NsdServiceInfo nsdServiceInfo, int i) {
+        Toast.makeText(MainActivity.this, &quot;onResolveFailed&quot;, Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void onServiceResolved(NsdServiceInfo nsdServiceInfo) {
+        mNsdServiceInfo = nsdServiceInfo;
+        new Thread(MainActivity.this).start();
+      }
+    };
+}
+</code></pre>
+
+<h3 id="连接">连接</h3>
+
+<pre><code class="language-java">mSocket = new Socket(mNsdServiceInfo.getHost().getHostAddress(), mNsdServiceInfo.getPort());
+bufferedWriter = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
+bufferedWriter.write(&quot;我连上你了!&quot; + &quot;\n&quot;);
+bufferedWriter.flush();
+</code></pre>
+
+<h2 id="效果图">效果图</h2>
+
+<p><a href="https://github.com/binsheng/NSD/raw/master/screenshot/demo.gif">NSD</a></p>
+
+<h2 id="相关资料链接">相关资料链接</h2>
 
 <ul>
-<li><a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md">installation guide</a></li>
-<li><a href="http://mirrors.ustc.edu.cn/">中国科学技术大学开源软件镜像</a></li>
+<li><a href="https://github.com/binsheng/NSD">demo 地址</a></li>
+<li><a href="https://developer.android.com/training/connect-devices-wirelessly/nsd.html">官网资料</a></li>
 </ul>
 
           </div>
@@ -429,13 +479,7 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
   <li class="pr-0"><a href="https://binsheng.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://binsheng.github.io/tags/raspberrypi" role="button">RaspberryPi </a></li>
-      
-    
-      <li><a href="https://binsheng.github.io/tags/pi" role="button">Pi </a></li>
-      
-    
-      <li><a href="https://binsheng.github.io/tags/yeelight" role="button">Yeelight </a></li>
+      <li><a href="https://binsheng.github.io/tags/network" role="button">Network </a></li>
       
     
   </div>
@@ -451,10 +495,10 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
           <div class="row pt-3">
             <div class="col-md-6">
               
-                <a href=https://binsheng.github.io/post/docker%E4%BD%BF%E7%94%A8/ class="post-meta">Previous
+                <a href=https://binsheng.github.io/post/go%E5%85%A5%E9%97%A8/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>Docker 使用</span>
+                    <span>Go 入门</span>
                   </div>
                 </a>
               
@@ -462,10 +506,10 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://binsheng.github.io/post/tmux/ class="post-meta">Next
+                <a href=https://binsheng.github.io/post/mac%E7%BB%88%E7%AB%AF%E4%BB%A3%E7%90%86/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>Tmux</span>
+                    <span>在 Mac 终端中使用代理</span>
                   </div>
                 </a>
               
@@ -513,8 +557,8 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%ae%80%e5%8d%95%e4%bb%8b%e7%bb%8d">
-												 树莓派简单介绍
+						 					<a class="nav-link" href="#nsd-%e6%9c%89%e4%bb%80%e4%b9%88%e7%94%a8">
+												 NSD 有什么用
 											</a>
 										</li>
 						 
@@ -535,8 +579,186 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85%e7%b3%bb%e7%bb%9f%e5%89%8d%e5%87%86%e5%a4%87">
-												 安装系统前准备
+						 					<a class="nav-link" href="#nsd-%e6%80%8e%e4%b9%88%e7%94%a8">
+												 NSD 怎么用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%9b%e5%bb%ba%e6%9c%8d%e5%8a%a1">
+												 创建服务
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8e%a5%e4%b8%8b%e6%9d%a5%e5%b0%b1%e5%8f%af%e4%bb%a5%e5%88%9b%e5%bb%ba-nsdserviceinfo-%e4%ba%86-nsdserviceinfo-%e6%98%af%e4%b8%80%e4%b8%aa%e5%8c%85%e5%90%ab-nsd-%e6%9c%8d%e5%8a%a1%e4%bf%a1%e6%81%af%e7%9a%84%e7%b1%bb-%e7%9c%8b%e5%90%8d%e5%ad%97%e5%b0%b1%e7%9f%a5%e9%81%93%e4%ba%86">
+												 接下来就可以创建 NsdServiceInfo 了，NsdServiceInfo 是一个包含 Nsd 服务信息的类，看名字就知道了。
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b3%a8%e5%86%8c-nsd-%e6%9c%8d%e5%8a%a1">
+												 注册 NSD 服务
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%9c%a8%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e7%8e%b0-nsd-%e6%9c%8d%e5%8a%a1">
+												 在客户端发现 NSD 服务
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%8e%b7%e5%8f%96%e6%9c%8d%e5%8a%a1%e7%9a%84%e8%af%a6%e7%bb%86%e4%bf%a1%e6%81%af">
+												 获取服务的详细信息
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%bf%9e%e6%8e%a5">
+												 连接
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%95%88%e6%9e%9c%e5%9b%be">
+												 效果图
 											</a>
 										</li>
 						 
@@ -557,118 +779,8 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f">
-												 下载镜像
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%b6%e4%bd%9c%e7%b3%bb%e7%bb%9f-macos-%e7%8e%af%e5%a2%83%e4%b8%8b%e5%88%b6%e4%bd%9c">
-												 制作系统（MacOS 环境下制作）
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%bc%80%e6%9c%ba%e5%b9%b6%e4%bd%bf%e7%94%a8-ssh-%e8%bf%9c%e7%a8%8b%e7%99%bb%e5%bd%95">
-												 开机并使用 SSH 远程登录
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae-wifi">
-												 配置 WIFI
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e5%9b%bd%e5%86%85%e9%95%9c%e5%83%8f">
-												 配置国内镜像
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
+						 					<a class="nav-link" href="#%e7%9b%b8%e5%85%b3%e8%b5%84%e6%96%99%e9%93%be%e6%8e%a5">
+												 相关资料链接
 											</a>
 										</li>
 						 
@@ -692,23 +804,6 @@ sudo sed -i 's|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g' /etc/apt/sou
     
 
     
-<div class="post-reward">
-    <input type="checkbox" name="reward" id="reward" hidden />
-    <label class="reward-button" for="reward">reward</label>
-    <div class="qr-code">
-        
-        
-        <label class="qr-code-image" for="reward">
-            <img class="image" src="https://binsheng.github.io/images/avatar.jpg">
-            <span>reward Wechat</span>
-        </label>
-        
-        <label class="qr-code-image" for="reward">
-            <img class="image" src="https://binsheng.github.io/images/avatar.jpg">
-            <span>reward Alipay</span>
-        </label>
-    </div>
-</div>
 
 
     
