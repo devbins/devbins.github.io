@@ -7,22 +7,22 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="自定义">
-  <meta name="description" content="常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。 有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？ 其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。 生成公私钥文件 要不想每次都输入密码才登录服务器，那就得让程序来做，但是这样又不安全，所以我们先要加密。比较安全的就是 SSH，配合 rsa 算法来">
+  <meta name="description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这">
   
-  <meta property="og:title" content="使用 SSH 登录服务器" />
-<meta property="og:description" content="常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。 有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？ 其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。 生成公私钥文件 要不想每次都输入密码才登录服务器，那就得让程序来做，但是这样又不安全，所以我们先要加密。比较安全的就是 SSH，配合 rsa 算法来" />
+  <meta property="og:title" content="单例模式的多种写法" />
+<meta property="og:description" content="单例模式介绍 单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。 单例模式实现原理 单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 new 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 new 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://binsheng.github.io/post/%E4%BD%BF%E7%94%A8ssh%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/" /><meta property="article:published_time" content="2018-01-13T11:30:51&#43;08:00"/>
-<meta property="article:modified_time" content="2018-01-13T11:30:51&#43;08:00"/>
+<meta property="og:url" content="https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" /><meta property="article:published_time" content="2018-07-11T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-07-11T00:00:00&#43;08:00"/>
 
 
   <title>
   
-       使用 SSH 登录服务器 | 自定义 
+       单例模式的多种写法 | 自定义 
   
   </title>
 
-  <link rel="canonical" href="https://binsheng.github.io/post/%E4%BD%BF%E7%94%A8ssh%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+  <link rel="canonical" href="https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
 
   
   
@@ -297,22 +297,24 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://binsheng.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
+        <li><a href="https://binsheng.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 设计模式 </a></li>
+      
+        <li><a href="https://binsheng.github.io/categories/java"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Java </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">使用 SSH 登录服务器</div>
+  <div class="px-4 post-heading">单例模式的多种写法</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>Jan 13, 2018</li>
+      <li>Jul 11, 2018</li>
     
 
     
       <li class="middot"></li>
-      <li>2 minutes read</li>
+      <li>3 minutes read</li>
     
   </ul>
   
@@ -324,54 +326,128 @@
           <div class="post-content markdown">
             
 
-<blockquote>
-<p>常常和服务器打交道的同志，最频繁的操作就是登陆服务器。每次登陆服务器都要输入密码特别的烦人。
-有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？
-其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。</p>
-</blockquote>
+<h2 id="单例模式介绍">单例模式介绍</h2>
 
-<h2 id="生成公私钥文件">生成公私钥文件</h2>
+<p>单例模式算是平常用的比较多的，而且也比较简单的模式之一。单例模式的作用就是保证在程序中只有一个实例存在。</p>
 
-<p>要不想每次都输入密码才登录服务器，那就得让程序来做，但是这样又不安全，所以我们先要加密。比较安全的就是 SSH，配合 <code>rsa</code> 算法来实现免密登录。
-先来生成加密的公私钥</p>
+<h2 id="单例模式实现原理">单例模式实现原理</h2>
 
-<pre><code class="language-sh">ssh-keygen -t ras
+<p>单例模式需要保证在系统中只有一个实例，单例的对象就不能被随便创建。通常我们实例化对象通过 <code>new</code> 关键字来创建对象，如果用这种方式任何人想要该对象都可以通过 <code>new</code> 来实例化，这就不能保证单例模式的唯一性了。所以我们要让别人不能实例化该对象，该对象只能由我们实例化并提供给外部。实现这个只需要把构造方法私有化(private)，由于我们私有了构造方法，所以外部不能访问到，于是我们需要通过静态方法来提供这个实例。在多线程的情况下还要考虑单例的对象会被多次创建。</p>
+
+<h3 id="实现单例有以下几个关键点">实现单例有以下几个关键点：</h3>
+
+<ul>
+<li>私有化构造方法</li>
+<li>通过静态方法提供单例对象</li>
+<li>确保在多线程情况下，单例对象只有一个</li>
+</ul>
+
+<p>单例模式有许多不同的写法，每种写法各有特点，下面一一介绍。</p>
+
+<h2 id="饿汉式">饿汉式</h2>
+
+<p>饿汉式的单例模式在声明的时候就创建好了，用到的时候直接使用。构造函数被私有化了，确保了唯一性。要获得该实例只能通过 <code>getInstance</code> 。</p>
+
+<p>饿汉式的缺点是只要系统存在就会创建这个对象，但是系统有可能会用不到，就会造成资源浪费。</p>
+
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE = new Singleton();
+
+  private Singleton(){
+
+  }
+
+  public static Singleton getInstance(){
+    return INSTANCE;
+  }
+
+}
 </code></pre>
 
-<p>在输完命令之后一路回车，会在 <code>~/.ssh</code> 目录下生成 <code>id_rsa</code> 私钥和 <code>id_rsa.pub</code> 公钥。</p>
+<h2 id="懒汉式">懒汉式</h2>
 
-<h2 id="把公钥拷贝到服务器">把公钥拷贝到服务器</h2>
+<p>饿汉式的单例模式如果用不到就会造成资源的浪费，有没有在用到时才去创建的写法。有，懒汉式。</p>
 
-<p>上一步我们生成了公私钥文件，接下来就要把公钥放到服务器</p>
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE;
 
-<pre><code class="language-sh">cd ~/.ssh
-ssh-copy-id -i id_rsa.pub user@192.168.1.xxx # -i 表示把指定的文件拷贝到服务器
+  private Singleton(){
+
+  }
+
+  public static synchronized getInsance(){
+    if (null == INSTANCE) {
+      INSTANCE = new Singleton();
+    }
+    return INSTANCE;
+  }
+
+}
 </code></pre>
 
-<p>输入这条命令，还需要验证一次登录密码，也是唯一的一次，之后就可以不用再输入密码了。
-如果修改了 ssh 的默认端口可以在使用 <code>-p</code> 来设置端口号</p>
+<p>在懒汉式的 <code>getInstance</code> 上加了 <code>synchronized</code> 这个关键字，这样可以确保在多线程的情况下保证单例的唯一性。</p>
 
-<pre><code class="language-sh">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx -p port
+<h2 id="双重锁形式的懒汉式">双重锁形式的懒汉式</h2>
+
+<p>懒汉式确保了在需要用到的才去实例化对象，避免了没有使用到而浪费资源的情况。但是为了确保在多线程的情况下单例唯一，在  <code>getInstance</code> 方法上加上了 <code>synchronized</code> ，这就带来了新的问题。即使 <code>INSTANCE</code> 已经被初始化了，调用 <code>getInstance</code> 还是会进行同步，这就导致了性能低下，虽然节约了资源，所以还可以进行优化。我们使用双重锁来去掉不必要的开销。</p>
+
+<pre><code class="language-java">class Singleton{
+  private static final Singleton INSTANCE;
+
+  private Singleton(){
+
+  }
+
+  public static getInstance(){
+    if (INSTANCE == null) {
+      synchronized(Singleton.class){
+        if (INSTANCE == null) {
+          INSTANCE = new Singleton();
+        }
+      }
+    }
+    return INSTANCE;
+  }
+
+}
 </code></pre>
 
-<h2 id="配置多账号">配置多账号</h2>
+<p>双重锁形式的单例和懒汉式最大的区别就是在 <code>getInstance</code> 方法上， <code>getInstance</code> 进行了两次判空，第一次判空避免了不必要的同步，第二次判断是为了在 <code>null</code> 情况下创建实例。
+双重锁是不是没有缺点，当然不是，在 <code>JDK1.5</code> 之前这种方法并不能保证单例。第一次加载稍慢，在高并发环境下有很小的概率会失败。</p>
 
-<p>通过上面的步骤，已经可以在登录服务器时不用在输入密码了。但是每次还要输入用户名和 <code>ip</code> ，也是挺麻烦的。有办法可以不需要每次都输吗？答案是可以的，接下来的内容就是解决这个问题的。</p>
+<h2 id="静态内部类形式">静态内部类形式</h2>
 
-<p>先在 <code>~/.ssh</code> 目录下创建一个 <code>config</code> 的文件，并根据自己的情况加入如下内容</p>
+<pre><code class="language-java">public class Singleton {
+  private Singleton(){
 
-<pre><code class="language-sh">Host A # 别名
-User usera # 登录用户名
-Hostname 192.168.1.xxx # 服务器 ip
-IdentityFile ~/.ssh/id_rsa # 私钥文件存放地址
-Port 22 # 端口号，默认 22，没改可以不用写
-Host B
-User userb
-Hostname 192.168.1.xxx
-IdentityFile ~/.ssh/id_rsab
+  }
+
+  public static Singleton getInstance(){
+    return SingletonHoler.INSTANCE;
+  }
+
+  private static class SingletonHoler{
+    private static final Singleton INSTANCE = new Singleton();
+  }
+}
 </code></pre>
 
-<p>做完了上面的如果我们要登录服务器 <code>A</code> ，就只需要输入 <code>ssh A</code> 就可以登录到服务器了。其中 <code>A</code> 是服务器 <code>A</code> 的别名。</p>
+<p>第一次加载 <code>Singleton</code> 时，并不会初始化 <code>INSTANCE</code> ，只有当调用 <code>getInstance()</code> 才会初始化。调用 <code>getInstance()</code> Java 虚拟机会加载 <code>SingletonHoler</code> ，这种方式不仅能够保证线程安全，也可以保证单例的唯一性，也延迟了单例的实例化。</p>
+
+<h2 id="枚举单例">枚举单例</h2>
+
+<pre><code class="language-java">public enum Singleton{
+  INSTANCE;
+}
+</code></pre>
+
+<p>除了上面的几种写法，还可以通过枚举来实现单例。枚举的实例默认是线程安全的，还能保证唯一性。枚举的写法应该是所有写法中最简单的。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li>《Android 源码设计模式解析与实战》</li>
+</ul>
 
           </div>
 
@@ -385,7 +461,7 @@ IdentityFile ~/.ssh/id_rsab
   <li class="pr-0"><a href="https://binsheng.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://binsheng.github.io/tags/ssh" role="button">SSH </a></li>
+      <li><a href="https://binsheng.github.io/tags/java" role="button">Java </a></li>
       
     
   </div>
@@ -401,10 +477,10 @@ IdentityFile ~/.ssh/id_rsab
           <div class="row pt-3">
             <div class="col-md-6">
               
-                <a href=https://binsheng.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/ class="post-meta">Previous
+                <a href=https://binsheng.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%845%E4%B8%AD%E5%86%99%E6%B3%95/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>Siri 帮我开灯</span>
+                    <span>单例模式的多种写法</span>
                   </div>
                 </a>
               
@@ -412,10 +488,10 @@ IdentityFile ~/.ssh/id_rsab
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://binsheng.github.io/post/ssh/ class="post-meta">Next
+                <a href=https://binsheng.github.io/post/archlinux/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>使用 SSH 登录服务器</span>
+                    <span>Arch Linux 安装</span>
                   </div>
                 </a>
               
@@ -463,8 +539,8 @@ IdentityFile ~/.ssh/id_rsab
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%94%9f%e6%88%90%e5%85%ac%e7%a7%81%e9%92%a5%e6%96%87%e4%bb%b6">
-												 生成公私钥文件
+						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e4%bb%8b%e7%bb%8d">
+												 单例模式介绍
 											</a>
 										</li>
 						 
@@ -485,8 +561,56 @@ IdentityFile ~/.ssh/id_rsab
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%8a%8a%e5%85%ac%e9%92%a5%e6%8b%b7%e8%b4%9d%e5%88%b0%e6%9c%8d%e5%8a%a1%e5%99%a8">
-												 把公钥拷贝到服务器
+						 					<a class="nav-link" href="#%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86">
+												 单例模式实现原理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%9e%e7%8e%b0%e5%8d%95%e4%be%8b%e6%9c%89%e4%bb%a5%e4%b8%8b%e5%87%a0%e4%b8%aa%e5%85%b3%e9%94%ae%e7%82%b9">
+												 实现单例有以下几个关键点：
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%a5%bf%e6%b1%89%e5%bc%8f">
+												 饿汉式
 											</a>
 										</li>
 						 
@@ -507,8 +631,96 @@ IdentityFile ~/.ssh/id_rsab
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e5%a4%9a%e8%b4%a6%e5%8f%b7">
-												 配置多账号
+						 					<a class="nav-link" href="#%e6%87%92%e6%b1%89%e5%bc%8f">
+												 懒汉式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%8c%e9%87%8d%e9%94%81%e5%bd%a2%e5%bc%8f%e7%9a%84%e6%87%92%e6%b1%89%e5%bc%8f">
+												 双重锁形式的懒汉式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e5%bd%a2%e5%bc%8f">
+												 静态内部类形式
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9e%9a%e4%b8%be%e5%8d%95%e4%be%8b">
+												 枚举单例
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
 											</a>
 										</li>
 						 
