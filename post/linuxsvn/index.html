@@ -7,32 +7,30 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="自定义">
-  <meta name="description" content="安装
-
-sudo apt install subversion
+  <meta name="description" content="
+在上一篇文章中讲到了在 Linux 下搭建 SVN 服务器，其实在工作中我们用的比较多的还是代码管理，这篇文章就来聊一聊在 Linux 下用 svn 管理代码。
 
 
 ">
   
-  <meta property="og:title" content="Linux 下 svn 服务搭建" />
-<meta property="og:description" content="安装
-
-sudo apt install subversion
+  <meta property="og:title" content="Linux 下 svn 使用" />
+<meta property="og:description" content="
+在上一篇文章中讲到了在 Linux 下搭建 SVN 服务器，其实在工作中我们用的比较多的还是代码管理，这篇文章就来聊一聊在 Linux 下用 svn 管理代码。
 
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://binsheng.github.io/post/svnserve/" /><meta property="article:published_time" content="2018-10-28T00:00:00&#43;08:00"/>
-<meta property="article:modified_time" content="2018-10-28T00:00:00&#43;08:00"/>
+<meta property="og:url" content="https://binsheng.github.io/post/linuxsvn/" /><meta property="article:published_time" content="2018-11-04T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-11-04T00:00:00&#43;08:00"/>
 
 
   <title>
   
-       Linux 下 svn 服务搭建 | 自定义 
+       Linux 下 svn 使用 | 自定义 
   
   </title>
 
-  <link rel="canonical" href="https://binsheng.github.io/post/svnserve/">
+  <link rel="canonical" href="https://binsheng.github.io/post/linuxsvn/">
 
   
   
@@ -313,11 +311,11 @@ sudo apt install subversion
     
   </ul>
 
-  <div class="px-4 post-heading">Linux 下 svn 服务搭建</div>
+  <div class="px-4 post-heading">Linux 下 svn 使用</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>Oct 28, 2018</li>
+      <li>Nov 4, 2018</li>
     
 
     
@@ -327,7 +325,7 @@ sudo apt install subversion
   </ul>
   
     <div class="view">
-      <img src="https://binsheng.github.io/images/img/slava.jpg" />
+      <img src="https://binsheng.github.io/images/" />
     </div>
   
 
@@ -336,147 +334,135 @@ sudo apt install subversion
 
 
           <div class="post-content markdown">
-            <h2 id="安装">安装</h2>
-
-<pre><code class="language-sh">sudo apt install subversion
-</code></pre>
+            <blockquote>
+<p>在上一篇文章中讲到了在 Linux 下搭建 SVN 服务器，其实在工作中我们用的比较多的还是代码管理，这篇文章就来聊一聊在 Linux 下用 svn 管理代码。</p>
+</blockquote>
 
 <p></p>
 
-<h2 id="创建仓库">创建仓库</h2>
+<h2 id="检出">检出</h2>
 
-<pre><code class="language-sh">sudo svnadmin create ~/svn/project
+<p>当我们接到一个开发项目的时候，第一步就是先从服务器把代码下载下来，svn 中通过 <code>checkout</code> 来把服务器的代码更新到本地。</p>
+
+<pre><code class="language-sh">svn checkout svn://127.0.0.1/project # checkout 可以用 co 代替
 </code></pre>
 
-<h2 id="配置">配置</h2>
+<h2 id="添加文件到版本控制">添加文件到版本控制</h2>
 
-<p>svn 的配置在仓库根目录下的 <code>conf</code> 文件夹中</p>
+<p>拿到代码后，我们在本地开发后，需要把新建的文件纳入到版本控制中，也就是把文件加入到 svn 的管理。</p>
 
-<pre><code class="language-shtotal">-rw-rw-r--. 1 cent cent 1.1K Oct 30 07:55 authz
--rw-rw-r--. 1 cent cent  309 Oct 30 07:55 passwd
--rw-rw-r--. 1 cent cent 3.1K Oct 30 07:55 svnserve.conf
+<pre><code class="language-sh">svn add index.html # 把文件添加到版本控制
+svn add public --non-recursive # 只把当前文件夹加入到版本控制，文件夹下的文件不会加入版本控制
+svn add * # 把所有文件加入到版本控制，如果文件夹已经在版本控制中了，那么文件夹里的内容将不会被加入版本控制。
+svn add * --force # 强制将所有文件加入版本控制，文件夹已经在版本控制下，文件夹里的内容会被加入版本控制。
 </code></pre>
 
-<h3 id="passwd">passwd</h3>
+<h2 id="提交修改到服务端">提交修改到服务端</h2>
 
-<p><code>passwd</code> 是配置用户名和密码的文件</p>
+<p>在项目的一个小功能开发完了，就可以把代码提交到服务器了。svn 只会把已经加入到版本控制中的文件提交到服务器，没有加入的不会被提交的服务器。</p>
 
-<p>增加用户在 <code>[users]</code> 下添加账号和密码，格式为 <code>账号=密码</code></p>
-
-<pre><code class="language-sh">[users]
-# harry = harryssecret
-# sally = sallyssecret
-test1 = test1 #增加一个账号为 test1 密码为 test1 的用户
-test2 = test2
+<pre><code class="language-sh">svn commit -m &quot;message&quot; # -m 表示写一段消息，表示这次提交做了什么
+svn commit -m &quot;message&quot; index.html # 只提交某个文件
 </code></pre>
 
-<h3 id="authz">authz</h3>
+<h2 id="更新工作副本">更新工作副本</h2>
 
-<p><code>authz</code> 是配置用户组及对应版本库的权限</p>
+<p>工作中除了自己会提交代码，你的同事也会提交代码，这样大家就要保持代码同步。</p>
 
-<p><code>[groups]</code> 配置用户组以及组员，组员之间用 <code>,</code> 隔开</p>
-
-<p>版本库通过 <code>[]</code> 表示， <code>[/]</code> 表示版本库的根目录， <code>[repository:/]</code> 表示名为 <code>repository</code> 的版本库， <code>[repository:/public]</code> 表示名为 <code>repository</code> 版本库下的 <code>public</code> 目录。</p>
-
-<p>用户组以 <code>@</code> 开头， <code>@dev</code> 表示 <code>dev</code> 用户组，不以 <code>@</code> 开头表示用户。后面接对应的权限， <code>r</code> 表示可读， <code>w</code> 表示可写，不填表示没有权限。</p>
-
-<pre><code class="language-sh">[groups]
-# harry_and_sally = harry,sally
-# harry_sally_and_joe = harry,sally,&amp;joe
-dev = test1,test2 # 增加一个 dev 的用户组，组员有 test1 和 test2
-
-# [/foo/bar]
-# harry = rw
-# &amp;joe = r
-# * =
-
-# [repository:/baz/fuz]
-# @harry_and_sally = rw
-# * = r
-
-[/] # 版本库的根目录
-@dev = rw # 用户组的权限
-
-[test:/] # 名为 test 的版本库
-test1 = rw  # 账号为 test1 对 test 版本库的权限
-
-[test:/public] # 名为 test 版本库下 public 目录的权限
-test2 = r # test2 对 版本库 test 下 public 目录的权限
-
+<pre><code class="language-sh">svn update # 普通更新，如果某个文件被指定到特殊版本，则这个文件不会被更新
+svn update * # 强制更新所有文件，不管文件处于哪个版本
+svn update -r 3 index.html # 更新 index.html 到指定的 3 版本，svn 每次提交都会增加一个版本。
 </code></pre>
 
-<h3 id="svnserve-dot-conf">svnserve.conf</h3>
+<h2 id="删除文件或目录">删除文件或目录</h2>
 
-<p><code>svnserve.conf</code> 是用来设置用户密码配置文件所在的路径，和用户权限配置文件所在的路径，主要有以下 4 个配置</p>
+<p>开发中有些文件不用了就需要把它删掉，以免占用空间。</p>
 
-<ol>
-<li><code>anon-access</code> 用来设置没有认证的用户所具有的权限，有三个取值 <code>none</code> 表示没有权限， <code>write</code> 表示可以往服务器提交数据， <code>read</code> 表示可以从服务器更新数据，但是不能提交。</li>
-<li><code>auth-access</code> 用来设置验证用户所具有的权限，和 <code>anon-access</code> 一样有三个表示权限的值，这里不再赘述。</li>
-<li><code>password-db</code> 用来指定用户名和密码所在的路径</li>
-<li><code>authz-db</code> 用来指定权限所在的路径</li>
-</ol>
-
-<pre><code class="language-sh">anon-access = none
-auth-access = write
-password-db = passwd
-authz-db = authz
+<pre><code class="language-sh">svn rm index.html # 可以添加删除信息，通过 -m &quot;message&quot;
 </code></pre>
 
-<h2 id="删除仓库">删除仓库</h2>
+<h2 id="比较文件">比较文件</h2>
 
-<pre><code class="language-sh">rm -rf ~/svn/project
+<p>写了一天代码，提交之前审查一下代码，看看哪里改了什么，就需要比较一下文件的变化，通过 <code>svn diff</code> 来查看。</p>
+
+<pre><code class="language-sh">svn diff index.html # 查看本地文件和最新版本的差异
+svn di index.html # diff 的缩写
+svn di -r n index.html #比较工作副本和版本 n 的差异
+svn di -r 1:3 index.html #比较版本 1 和版本 3 的差异
+svn di # 比较所有文件
 </code></pre>
 
-<h2 id="启动服务">启动服务</h2>
+<h2 id="工作副本还原">工作副本还原</h2>
 
-<pre><code class="language-sh">svnserve -d -r ~/svn/project
+<p>代码写到一半，经理告诉你这个需求不做了，就需要把写的给回退到之前的版本，通过 <code>svn revert</code> 来回退。</p>
+
+<pre><code class="language-sh">svn revert index.html # 取消 index.html 的更改
+svn revert * #还原当前目录的文件
+svn revert --recursive dir #批量还原，会还原子目录
 </code></pre>
 
-<p>svn 默认端口号是 3690，可以通过 <code>--listen-port xxx</code> 来指定特定的端口</p>
+<h2 id="冲突处理">冲突处理</h2>
 
-<p>-d 表示后台运行</p>
+<p>现在一个项目通常都有多个人一起开发，冲突基本上是难以避免的，这就需要我们能够在冲突发生时去解决它。</p>
 
-<p>-r 后面跟 svn 仓库的路径</p>
-
-<h2 id="多版本库管理">多版本库管理</h2>
-
-<p>在 svn 的管理中，可能会存在多个版本库的情况，这样就需要管理多个版本库。</p>
-
-<p>一般的做法是创建好了不同的版本库，分别启动一个 svnserve 去管理。这样做简单，但是第二个库开始就需要指定端口，默认的端口（3690）已经被第一个占用了。而且项目之间存放的路径可能不同，比较分散，这样管理起来就比较麻烦。</p>
-
-<pre><code class="language-sh">sudo svnadmin create ~/project1
-sudo svnadmin create ~/project2
-svnserve -d -r ~/project1
-svnserve -d -r ~/project2 --listen-port 3691
+<pre><code class="language-sh">svn resolve index.html # 处理 index.html 的冲突
+svn resolved index.html # 标记 index.html 的冲突已被处理
 </code></pre>
 
-<p>除了上面的做法，还有一种做法是把所有的仓库存放在同一个目录下，统一管理。这样就可以通过一个端口来管理所有的版本库了，不过需要注意的是这些仓库需要放在同一个目录下。</p>
+<h2 id="锁定与解锁">锁定与解锁</h2>
 
-<pre><code class="language-sh">sudo svnadmin create ~/svn/project1
-sudo svnadmin create ~/svn/project2
-svnserve -d -r ~/svn/
+<p>项目上某个文件你不想别人改动，就可以通过把这个文件给锁定，这样别人就没办法改了。不过这个功能不常用，也不建议用。如果你锁了某个文件，别人的工作就没法做了，可能就一直在这里等。不想被骂还是不要用这个功能。</p>
+
+<pre><code class="language-sh">svn lock index.html #如果锁定的用户有提交操作，会自动解锁。可以使用 svn ci --no-unlock -m &quot;message&quot; index.html 不会自动解锁
+svn unlock index.html
 </code></pre>
 
-<h2 id="版本库的备份">版本库的备份</h2>
+<h2 id="查看日志">查看日志</h2>
 
-<p>随着开发不断进行，版本库的版本号一直在增加，内容也在不断增多，占用的空间也越来越大，这时候我们可以通过备份来丢弃掉前面的一些版本，以此达到精简版本的目的。</p>
+<p>日志主要用来回顾之前做了什么。</p>
 
-<p>备份的指令是 <code>svnadmin dump 仓库的路径 -r 开始版本号:结束版本号 &gt; 保存的地址</code></p>
-
-<p>举个🌰</p>
-
-<pre><code class="language-sh">svnadmin dump ~/svn/project -r 3:10 &gt; ~/dump
+<pre><code class="language-sh">svn log index.html # 查看 index.html 的日志
+svn log # 查看所有日志
 </code></pre>
 
-<h2 id="版本库的导入">版本库的导入</h2>
+<h2 id="查看版本控制列表">查看版本控制列表</h2>
 
-<p>版本库备份之后，我们还要把它导入到一个新的仓库中使用。</p>
+<p>列出 svn 下的文件</p>
 
-<p>导入的指令是 <code>svnadmin load 仓库的地址 &lt; 精简之后的地址</code></p>
+<pre><code class="language-sh">svn ls
+svn ls --recursive # 列出所有文件
+svn ls -v # 列出详情，类似 ls -l
+</code></pre>
 
-<p>同样举个🌰</p>
+<h2 id="查看文件状态">查看文件状态</h2>
 
-<pre><code class="language-sh">svnadmin load ~/svn/project &lt; ~/dump
+<p>查看工作副本各文件的状态，通常在提交时检查一下那些文件没有加入版本控制，或者那些文件有变化。</p>
+
+<pre><code class="language-sh">svn status # 缩写为 svn st
+</code></pre>
+
+<ul>
+<li>？ 表示没有加入版本控制</li>
+<li>D 表示被标记从版本控制中删除</li>
+<li>M 表示被编辑过</li>
+<li>A 表示被加入到版本控制中</li>
+<li>R 表示文件被替换</li>
+<li>C 文件存在冲突</li>
+<li>！ 文件缺失</li>
+</ul>
+
+<h2 id="查看版本库信息">查看版本库信息</h2>
+
+<p>列出版本库的信息，包括地址，最新的版本号。</p>
+
+<pre><code class="language-sh">svn info
+</code></pre>
+
+<h2 id="svn-重定向">svn 重定向</h2>
+
+<p>svn 重定向可能会发生在项目交接或者部署到另一台服务器上，原来的地址变了，这是后不想重新检出一个新仓库，就可以通过重定向来解决这个问题。</p>
+
+<pre><code class="language-sh">svn switch --relocate svn://oldurl svn://newurl
 </code></pre>
           </div>
 
@@ -506,23 +492,16 @@ svnserve -d -r ~/svn/
           <div class="row pt-3">
             <div class="col-md-6">
               
-                <a href=https://binsheng.github.io/post/jenkins/ class="post-meta">Previous
+                <a href=https://binsheng.github.io/post/svnserve/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>在 Docker 中用 Jenkins 搭建 Android 自动化打包</span>
+                    <span>Linux 下 svn 服务搭建</span>
                   </div>
                 </a>
               
             </div>
             
             <div class="col-md-6 text-right" >
-              
-                <a href=https://binsheng.github.io/post/linuxsvn/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>Linux 下 svn 使用</span>
-                  </div>
-                </a>
               
             </div>
           </div>
@@ -568,8 +547,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
-												 安装
+						 					<a class="nav-link" href="#%e6%a3%80%e5%87%ba">
+												 检出
 											</a>
 										</li>
 						 
@@ -590,8 +569,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%9b%e5%bb%ba%e4%bb%93%e5%ba%93">
-												 创建仓库
+						 					<a class="nav-link" href="#%e6%b7%bb%e5%8a%a0%e6%96%87%e4%bb%b6%e5%88%b0%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6">
+												 添加文件到版本控制
 											</a>
 										</li>
 						 
@@ -612,108 +591,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae">
-												 配置
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#passwd">
-												 passwd
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#authz">
-												 authz
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#svnserve-dot-conf">
-												 svnserve.conf
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%a0%e9%99%a4%e4%bb%93%e5%ba%93">
-												 删除仓库
+						 					<a class="nav-link" href="#%e6%8f%90%e4%ba%a4%e4%bf%ae%e6%94%b9%e5%88%b0%e6%9c%8d%e5%8a%a1%e7%ab%af">
+												 提交修改到服务端
 											</a>
 										</li>
 						 
@@ -734,8 +613,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%90%af%e5%8a%a8%e6%9c%8d%e5%8a%a1">
-												 启动服务
+						 					<a class="nav-link" href="#%e6%9b%b4%e6%96%b0%e5%b7%a5%e4%bd%9c%e5%89%af%e6%9c%ac">
+												 更新工作副本
 											</a>
 										</li>
 						 
@@ -756,8 +635,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%a4%9a%e7%89%88%e6%9c%ac%e5%ba%93%e7%ae%a1%e7%90%86">
-												 多版本库管理
+						 					<a class="nav-link" href="#%e5%88%a0%e9%99%a4%e6%96%87%e4%bb%b6%e6%88%96%e7%9b%ae%e5%bd%95">
+												 删除文件或目录
 											</a>
 										</li>
 						 
@@ -778,8 +657,8 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e5%ba%93%e7%9a%84%e5%a4%87%e4%bb%bd">
-												 版本库的备份
+						 					<a class="nav-link" href="#%e6%af%94%e8%be%83%e6%96%87%e4%bb%b6">
+												 比较文件
 											</a>
 										</li>
 						 
@@ -800,8 +679,162 @@ svnserve -d -r ~/svn/
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e5%ba%93%e7%9a%84%e5%af%bc%e5%85%a5">
-												 版本库的导入
+						 					<a class="nav-link" href="#%e5%b7%a5%e4%bd%9c%e5%89%af%e6%9c%ac%e8%bf%98%e5%8e%9f">
+												 工作副本还原
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%b2%e7%aa%81%e5%a4%84%e7%90%86">
+												 冲突处理
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%94%81%e5%ae%9a%e4%b8%8e%e8%a7%a3%e9%94%81">
+												 锁定与解锁
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9f%a5%e7%9c%8b%e6%97%a5%e5%bf%97">
+												 查看日志
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9f%a5%e7%9c%8b%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6%e5%88%97%e8%a1%a8">
+												 查看版本控制列表
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9f%a5%e7%9c%8b%e6%96%87%e4%bb%b6%e7%8a%b6%e6%80%81">
+												 查看文件状态
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9f%a5%e7%9c%8b%e7%89%88%e6%9c%ac%e5%ba%93%e4%bf%a1%e6%81%af">
+												 查看版本库信息
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#svn-%e9%87%8d%e5%ae%9a%e5%90%91">
+												 svn 重定向
 											</a>
 										</li>
 						 
