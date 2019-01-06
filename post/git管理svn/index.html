@@ -389,16 +389,6 @@ git add README.md
 
 <p>这里需要注意一点，这里的提交是指提交到本地，没有更新到服务器，如果这时候磁盘损坏，你这次的更新是找不回来的。</p>
 
-<h3 id="向-svn-推送更新">向 <code>svn</code> 推送更新</h3>
-
-<p>工作中可能会有许多小伙伴一起维护一个项目，使用 <code>git</code> 我们可以先把变更提交到本地，然后把己修改的代码推送到 <code>svn</code> 服务器，这时候就要用到 <code>git svn dcommit</code> 来向 <code>svn</code> 提交代码。</p>
-
-<pre><code class="language-sh">git svn dcommit
-</code></pre>
-
-<p>这里需要注意一点， <code>git</code> 在往服务器推送之前，需要更新到上游最新提交，不然是无法合并的，而 <code>git svn</code> 只需要有冲突的时候才需要这样做。当有人更新了一个 <code>A</code> 的文件并推送到了服务器，这时候你更新了 <code>B</code> 文件，使用 <code>git svn dcommit</code> 是可以正常工作的。这和 <code>svn</code> 的做法是类似的，如果是 <code>git</code> 的话，你先要同步上游更新，然后才能向服务器推送更新。
-假如在 <code>git</code> 下使用 <code>commit</code> 向本地提交了多次，这时候使用 <code>git svn dcommit</code> 会把本地提交的多次更新，依次向 <code>svn</code> 服务器推送。也就说你使用 <code>git commit</code> 向本地提交了多次更新，在使用 <code>git svn dcommit</code> 之后 <code>svn</code> 里的 log 就会有多次更新。</p>
-
 <h3 id="从-svn-拉取更新">从 <code>svn</code> 拉取更新</h3>
 
 <p>工作中通常是几个小伙伴一起开发项目，除了自己会向 <code>svn</code> 服务器提交代码，别人也会向服务器提交代码，我们需要把别人向服务器提交的代码同步下来，以获取最新的代码。经常同步代码是一个很好的习惯，可以减少冲突。
@@ -416,6 +406,17 @@ git merge git-svn
 </code></pre>
 
 <p>使用 <code>git svn fetch</code> 来拉取 <code>svn</code> 上的内容到本地，它不会 <code>merge</code> 到当前分支，通常需要我们手动去合并。而使用 <code>git svn rebase</code> 不需要我们手动合并。</p>
+
+<h3 id="向-svn-推送更新">向 <code>svn</code> 推送更新</h3>
+
+<p>工作中可能会有许多小伙伴一起维护一个项目，使用 <code>git</code> 我们可以先把变更提交到本地，然后把己修改的代码推送到 <code>svn</code> 服务器，这时候就要用到 <code>git svn dcommit</code> 来向 <code>svn</code> 提交代码。</p>
+
+<pre><code class="language-sh">git svn dcommit
+</code></pre>
+
+<p>这里需要注意一点， <code>git</code> 在往服务器推送之前，需要更新到上游最新提交，不然是无法合并的，而 <code>git svn</code> 只需要有冲突的时候才需要这样做。当有人更新了一个 <code>A</code> 的文件并推送到了服务器，这时候你更新了 <code>B</code> 文件，使用 <code>git svn dcommit</code> 是可以正常工作的。这和 <code>svn</code> 的做法是类似的，如果是 <code>git</code> 的话，你先要同步上游更新，然后才能向服务器推送更新。</p>
+
+<p>假如在 <code>git</code> 下使用 <code>commit</code> 向本地提交了多次，这时候使用 <code>git svn dcommit</code> 会把本地提交的多次更新，依次向 <code>svn</code> 服务器推送。也就说你使用 <code>git commit</code> 向本地提交了多次更新，在使用 <code>git svn dcommit</code> 之后 <code>svn</code> 里的 log 就会有多次更新。</p>
 
 <h2 id="解决冲突问题">解决冲突问题</h2>
 
@@ -682,8 +683,8 @@ git merge git-svn
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%90%91-svn-%e6%8e%a8%e9%80%81%e6%9b%b4%e6%96%b0">
-												 向 svn 推送更新
+						 					<a class="nav-link" href="#%e4%bb%8e-svn-%e6%8b%89%e5%8f%96%e6%9b%b4%e6%96%b0">
+												 从 svn 拉取更新
 											</a>
 										</li>
 						 
@@ -708,8 +709,8 @@ git merge git-svn
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%bb%8e-svn-%e6%8b%89%e5%8f%96%e6%9b%b4%e6%96%b0">
-												 从 svn 拉取更新
+						 					<a class="nav-link" href="#%e5%90%91-svn-%e6%8e%a8%e9%80%81%e6%9b%b4%e6%96%b0">
+												 向 svn 推送更新
 											</a>
 										</li>
 						 
@@ -941,7 +942,7 @@ git merge git-svn
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2018 &copy; | Theme <a href='https://github.com/binsheng/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/binsheng' target="_blank">binsheng</a>  </span>
+      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/binsheng/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/binsheng' target="_blank">binsheng</a>  </span>
   </div>
   
 
