@@ -362,7 +362,7 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 到这里配置就差不多了，我们点击 copy 获取仓库的地址
 <img src="https://binsheng.github.io/images/nexus/nexus_addr.png" alt="" /></p>
 
-<h2 id="编写上传-grade">编写上传 grade</h2>
+<h2 id="编写上传-gradle">编写上传 gradle</h2>
 
 <p>在要上传的 module 的 <code>build.gradle</code> 下增加上传的脚本</p>
 
@@ -439,6 +439,87 @@ dependencies {
     ......
     implementation 'com.example:test:0.0.1'
 }
+</code></pre>
+
+<h2 id="创建仓库组">创建仓库组</h2>
+
+<p>完成了上面的步骤，你应该已经使用上了 <code>nexus3</code> ，但是在实际使用的时候碰到这样的情况：</p>
+
+<p>公司里面的私有仓库中包含多个 <code>library</code> , 如果我们要同时使用这这些 <code>library</code> 的话，需要在项目的 <code>build.gradle</code> 加入如下配置</p>
+
+<pre><code class="language-gradle">buildscript {
+
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'http://127.0.0.1:8081/repository/test1/'
+        }
+        maven {
+            url 'http://127.0.0.1:8081/repository/test2/'
+        }
+    }
+    ......
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'http://127.0.0.1:8081/repository/test1/'
+        }
+        maven {
+            url 'http://127.0.0.1:8081/repository/test2/'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+</code></pre>
+
+<p>从上可以看出每个仓库都要进行配置，少的话还能写一下，多的话得累死。</p>
+
+<p>上面的问题是有解决办法的，就是创建一个仓库组，把需要用的 <code>library</code> 都加进这个仓库中，这样里面的仓库都能用，只需要配置一次</p>
+
+<p>下面来操作一下</p>
+
+<p>在创建仓库的地方创建一个仓库组，所以这里选择 <code>maven2(hosted)</code>
+<img src="https://binsheng.github.io/images/nexus/nexus_group.png" alt="" />
+给仓库取个名字，这里是 <code>testgroup</code> ，然后在 <code>Member repositories&gt;Available</code> 中选择需要加入的 <code>library</code> ，选中的会在右边的 <code>Members</code> 中显示。选好之后点击 <code>Create repository</code> 。
+<img src="https://binsheng.github.io/images/nexus/nexus_add_group.png" alt="" /></p>
+
+<p>做好这些之后，你就可以在项目中配置一次，就可以使用里面包含的 <code>library</code></p>
+
+<pre><code class="language-gradle">buildscript {
+
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'http://127.0.0.1:8081/repository/testgroup/'
+        }
+    }
+    ......
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'http://127.0.0.1:8081/repository/testgroup/'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
 </code></pre>
           </div>
 
@@ -594,8 +675,8 @@ dependencies {
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%bc%96%e5%86%99%e4%b8%8a%e4%bc%a0-grade">
-												 编写上传 grade
+						 					<a class="nav-link" href="#%e7%bc%96%e5%86%99%e4%b8%8a%e4%bc%a0-gradle">
+												 编写上传 gradle
 											</a>
 										</li>
 						 
@@ -618,6 +699,28 @@ dependencies {
 										<li class="nav-item">
 						 					<a class="nav-link" href="#%e5%9c%a8%e9%a1%b9%e7%9b%ae%e4%b8%ad%e4%bd%bf%e7%94%a8">
 												 在项目中使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%9b%e5%bb%ba%e4%bb%93%e5%ba%93%e7%bb%84">
+												 创建仓库组
 											</a>
 										</li>
 						 
