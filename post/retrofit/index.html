@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="自定义">
+  <meta name="description" content="Photo by Kimon Maritz on Unsplash
+
+
+Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+
+本文基于 retrofit2.5.0 进行分析。
+">
+  
+  <meta property="og:title" content="Retrofit 源码解析" />
+<meta property="og:description" content="Photo by Kimon Maritz on Unsplash
+
+
+Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+
+本文基于 retrofit2.5.0 进行分析。
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://binsheng.github.io/post/retrofit/" />
+<meta property="article:published_time" content="2018-12-02T00:00:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-12-02T00:00:00&#43;08:00"/>
+
+
+  <title>
+  
+       Retrofit 源码解析 | 自定义 
+  
+  </title>
+
+  <link rel="canonical" href="https://binsheng.github.io/post/retrofit/">
+
+  
+  
+
+  
+  <link href="https://binsheng.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://binsheng.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://binsheng.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://binsheng.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://binsheng.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://binsheng.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://binsheng.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://binsheng.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://binsheng.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://binsheng.github.io">
+          
+        <img class="avatar" src="https://binsheng.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> 自定义</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://binsheng.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://binsheng.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://binsheng.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://binsheng.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://binsheng.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://binsheng.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://binsheng.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://binsheng.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>自定义</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://binsheng.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
+      
+        <li><a href="https://binsheng.github.io/categories/http"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> HTTP </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">Retrofit 源码解析</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Dec 2, 2018</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>5 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://binsheng.github.io/images/retrofit/retrofit.jpg" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <p>Photo by Kimon Maritz on Unsplash</p>
+
+<blockquote>
+<p>Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。</p>
+
+<p>本文基于 <code>retrofit2.5.0</code> 进行分析。</p>
+</blockquote>
+
+<h2 id="简单使用">简单使用</h2>
+
+<p>我们先从官方的例子中了解一下怎么使用，相信对于 Android 开发者来说，使用已经非常熟练了。</p>
+
+<pre><code class="language-java">public interface GitHubService {
+  @GET(&quot;users/{user}/repos&quot;)
+  Call&lt;List&lt;Repo&gt;&gt; listRepos(@Path(&quot;user&quot;) String user);
+}
+Retrofit retrofit = new Retrofit.Builder()
+    .baseUrl(&quot;https://api.github.com/&quot;)
+    .build();
+
+GitHubService service = retrofit.create(GitHubService.class);
+Call&lt;List&lt;Repo&gt;&gt; repos = service.listRepos(&quot;octocat&quot;);
+repos.execute();
+</code></pre>
+
+<p>例子中先创建了 API 接口，然后创建了 Retrofit 实例，接着调用 <code>retrofit.create</code> 创建了接口实现类，最后就是我们调用网络请求获取数据了。 <code>retrofit</code> 基本的用法就是这样。</p>
+
+<p>下面我们就来一步一步分析</p>
+
+<h2 id="retrofit-dot-build">Retrofit.build</h2>
+
+<p>创建 API 接口没什么好说的，我们从 <code>Retrofit.build</code> 开始分析</p>
+
+<pre><code class="language-java">public Retrofit build() {
+  if (baseUrl == null) {
+    throw new IllegalStateException(&quot;Base URL required.&quot;);
+  }
+
+  okhttp3.Call.Factory callFactory = this.callFactory;
+  if (callFactory == null) {
+    callFactory = new OkHttpClient();
+  }
+
+  Executor callbackExecutor = this.callbackExecutor;
+  if (callbackExecutor == null) {
+    callbackExecutor = platform.defaultCallbackExecutor();
+  }
+
+  // Make a defensive copy of the adapters and add the default Call adapter.
+  List&lt;CallAdapter.Factory&gt; callAdapterFactories = new ArrayList&lt;&gt;(this.callAdapterFactories);
+  callAdapterFactories.addAll(platform.defaultCallAdapterFactories(callbackExecutor));
+
+  // Make a defensive copy of the converters.
+  List&lt;Converter.Factory&gt; converterFactories = new ArrayList&lt;&gt;(
+      1 + this.converterFactories.size() + platform.defaultConverterFactoriesSize());
+
+  // Add the built-in converter factory first. This prevents overriding its behavior but also
+  // ensures correct behavior when using converters that consume all types.
+  converterFactories.add(new BuiltInConverters());
+  converterFactories.addAll(this.converterFactories);
+  converterFactories.addAll(platform.defaultConverterFactories());
+
+  return new Retrofit(callFactory, baseUrl, unmodifiableList(converterFactories),
+                      unmodifiableList(callAdapterFactories), callbackExecutor, validateEagerly);
+}
+</code></pre>
+
+<p>创建 <code>Retrofit</code> ，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
+
+<p>接下来设置 <code>callbackExecutor</code> ，这里调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ，这个 <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> ，也就是 <code>Callback</code> 默认是在主线程的。</p>
+
+<pre><code class="language-java">static class Android extends Platform {
+  @Override public Executor defaultCallbackExecutor() {
+    return new MainThreadExecutor();
+  }
+
+  @Override CallAdapter.Factory defaultCallAdapterFactory(@Nullable Executor callbackExecutor) {
+    if (callbackExecutor == null) throw new AssertionError();
+    return new ExecutorCallAdapterFactory(callbackExecutor);
+  }
+
+  static class MainThreadExecutor implements Executor {
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+    @Override public void execute(Runnable r) {
+      handler.post(r);
+    }
+  }
+}
+</code></pre>
+
+<p>这里也顺便可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。这里先留着，我们后面碰到在来分析 <code>ExecutorCallAdapterFactory</code> 。</p>
+
+<p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> ，或者 <code>RxJava</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
+
+<p>总结一下 <code>Retrofit#build</code> 干了什么</p>
+
+<ol>
+<li><code>callFactory</code> 没有设置默认为 <code>OkHttpClient</code></li>
+<li><code>callbackExecutor</code> Android 平台默认是 <code>MainThreadExecutor</code></li>
+<li><code>callAdapterFactories</code> Android 平台默认添加 <code>ExecutorCallAdapterFactory</code></li>
+<li><code>converterFactories</code> 默认添加 <code>BuiltInConverters</code></li>
+</ol>
+
+<h2 id="retrofit-dot-create">Retrofit.create</h2>
+
+<p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
+
+<pre><code class="language-java">public &lt;T&gt; T create(final Class&lt;T&gt; service) {
+    Utils.validateServiceInterface(service);
+    if (validateEagerly) {
+      eagerlyValidateMethods(service);
+    }
+    return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
+        new InvocationHandler() {
+          private final Platform platform = Platform.get();
+          private final Object[] emptyArgs = new Object[0];
+
+          @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
+              throws Throwable {
+            // If the method is a method from Object then defer to normal invocation.
+            if (method.getDeclaringClass() == Object.class) {
+              return method.invoke(this, args);
+            }
+            if (platform.isDefaultMethod(method)) {
+              return platform.invokeDefaultMethod(method, service, proxy, args);
+            }
+            return loadServiceMethod(method).invoke(args != null ? args : emptyArgs);
+          }
+        });
+}
+</code></pre>
+
+<p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，后面调用接口中的方法会执行 <code>invoke</code> ，如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最关键的是后面的 <code>loadServiceMethod(method)</code> 。</p>
+
+<h3 id="loadservicemethod">loadServiceMethod</h3>
+
+<pre><code class="language-java">ServiceMethod&lt;?&gt; loadServiceMethod(Method method) {
+  ServiceMethod&lt;?&gt; result = serviceMethodCache.get(method);
+  if (result != null) return result;
+
+  synchronized (serviceMethodCache) {
+    result = serviceMethodCache.get(method);
+    if (result == null) {
+      result = ServiceMethod.parseAnnotations(this, method);
+      serviceMethodCache.put(method, result);
+    }
+  }
+  return result;
+}
+</code></pre>
+
+<p><code>loadServiceMethod</code> 为了提高性能这里做了缓存，不然每次都要查找多费时间。在这个方法中 <code>ServiceMethod.parseAnnotations</code> 才是最有料的，一起来看一下。</p>
+
+<h3 id="parseannotations">parseAnnotations</h3>
+
+<pre><code class="language-java">static &lt;T&gt; ServiceMethod&lt;T&gt; parseAnnotations(Retrofit retrofit, Method method) {
+  RequestFactory requestFactory = RequestFactory.parseAnnotations(retrofit, method);
+
+  // 省略一些检查判断...
+
+  return HttpServiceMethod.parseAnnotations(retrofit, method, requestFactory);
+}
+</code></pre>
+
+<p>第一行代码调用了 <code>RequestFactory.parseAnnotations</code> ，从名字上看是通过注解的解析，成了 <code>RequestFactory</code> 。我们来简单看一下实现。</p>
+
+<pre><code class="language-java">static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
+  return new Builder(retrofit, method).build();
+}
+
+Builder(Retrofit retrofit, Method method) {
+  this.retrofit = retrofit;
+  this.method = method;
+  this.methodAnnotations = method.getAnnotations();
+  this.parameterTypes = method.getGenericParameterTypes();
+  this.parameterAnnotationsArray = method.getParameterAnnotations();
+}
+
+RequestFactory build() {
+  for (Annotation annotation : methodAnnotations) {
+    parseMethodAnnotation(annotation);
+  }
+
+  // ...
+
+  int parameterCount = parameterAnnotationsArray.length;
+  parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];
+  for (int p = 0; p &lt; parameterCount; p++) {
+    parameterHandlers[p] = parseParameter(p, parameterTypes[p], parameterAnnotationsArray[p]);
+  }
+
+  // ...
+
+  return new RequestFactory(this);
+}
+</code></pre>
+
+<p>不错所料 <code>parseAnnotations</code> 方法就是通过获取注解，来解析出请求参数，请求方法，请求数据，这里不是重点，不再赘述。</p>
+
+<p><code>loadServiceMethod</code> 不仅调用了 <code>RequestFactory.parseAnnotations</code> 最后还调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>ServiceMethod</code> 是怎么构建出来的。</p>
+
+<pre><code class="language-java">static &lt;ResponseT, ReturnT&gt; HttpServiceMethod&lt;ResponseT, ReturnT&gt; parseAnnotations(
+    Retrofit retrofit, Method method, RequestFactory requestFactory) {
+  CallAdapter&lt;ResponseT, ReturnT&gt; callAdapter = createCallAdapter(retrofit, method);
+  Type responseType = callAdapter.responseType();
+  Converter&lt;ResponseBody, ResponseT&gt; responseConverter =
+      createResponseConverter(retrofit, method, responseType);
+  okhttp3.Call.Factory callFactory = retrofit.callFactory;
+  return new HttpServiceMethod&lt;&gt;(requestFactory, callFactory, callAdapter, responseConverter);
+}
+</code></pre>
+
+<p><code>HttpServiceMethod.parseAnnotations</code> 把 <code>callAdapter</code> 、 <code>responseConverter</code> 、 <code>callFactory</code> 和 API 接口请求方法关联在一起，组装了 <code>serviceMethod</code> ，把网络请求、请求转换、响应转换都封装成了 <code>HttpServiceMethod</code></p>
+
+<p>接下里看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
+
+<h3 id="createcalladapter">createCallAdapter</h3>
+
+<pre><code class="language-java">private static &lt;ResponseT, ReturnT&gt; CallAdapter&lt;ResponseT, ReturnT&gt; createCallAdapter(
+    Retrofit retrofit, Method method) {
+  Type returnType = method.getGenericReturnType();
+  Annotation[] annotations = method.getAnnotations();
+  // 省略部分代码
+  return (CallAdapter&lt;ResponseT, ReturnT&gt;) retrofit.callAdapter(returnType, annotations);
+}
+
+// Retrofit#callAdapter
+public CallAdapter&lt;?, ?&gt; callAdapter(Type returnType, Annotation[] annotations) {
+  return nextCallAdapter(null, returnType, annotations);
+}
+
+// Retrofit#nextCallAdapter
+public CallAdapter&lt;?, ?&gt; nextCallAdapter(@Nullable CallAdapter.Factory skipPast, Type returnType,
+                                         Annotation[] annotations) {
+  // 省略部分代码
+  int start = callAdapterFactories.indexOf(skipPast) + 1;
+  for (int i = start, count = callAdapterFactories.size(); i &lt; count; i++) {
+    CallAdapter&lt;?, ?&gt; adapter = callAdapterFactories.get(i).get(returnType, annotations, this);
+    if (adapter != null) {
+      return adapter;
+    }
+  }
+}
+</code></pre>
+
+<p><code>createCallAdapter</code> 方法会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的转换器。</p>
+
+<p>还记得之前构建 <code>retrofit.build</code> 会给 <code>Android</code> 添加一个默认的 <code>defaultCallAdapterFactory</code> 也就是 <code>ExecutorCallAdapterFactory</code> ，现在来看看它里面到底有什么。</p>
+
+<h4 id="executorcalladapterfactory">ExecutorCallAdapterFactory</h4>
+
+<pre><code class="language-java">@Override public @Nullable CallAdapter&lt;?, ?&gt; get(
+    Type returnType, Annotation[] annotations, Retrofit retrofit) {
+  if (getRawType(returnType) != Call.class) {
+    return null;
+  }
+  final Type responseType = Utils.getCallResponseType(returnType);
+  return new CallAdapter&lt;Object, Call&lt;?&gt;&gt;() {
+    @Override public Type responseType() {
+      return responseType;
+    }
+
+    @Override public Call&lt;Object&gt; adapt(Call&lt;Object&gt; call) {
+      return new ExecutorCallbackCall&lt;&gt;(callbackExecutor, call);
+    }
+  };
+}
+</code></pre>
+
+<p><code>ExecutorCallAdapterFactory</code> 的 <code>get</code> 方法创建了一个 <code>CallAdapter</code> 并返回。到这里 <code>createCallAdapter</code> 就创建好了。</p>
+
+<h3 id="createresponseconverter">createResponseConverter</h3>
+
+<pre><code class="language-java">private static &lt;ResponseT&gt; Converter&lt;ResponseBody, ResponseT&gt; createResponseConverter(
+    Retrofit retrofit, Method method, Type responseType) {
+  Annotation[] annotations = method.getAnnotations();
+  try {
+    return retrofit.responseBodyConverter(responseType, annotations);
+  } catch (RuntimeException e) { // Wide exception range because factories are user code.
+    throw methodError(method, e, &quot;Unable to create converter for %s&quot;, responseType);
+  }
+}
+
+
+// Retrofit#responseBodyConverter
+public &lt;T&gt; Converter&lt;ResponseBody, T&gt; responseBodyConverter(Type type, Annotation[] annotations) {
+  return nextResponseBodyConverter(null, type, annotations);
+}
+
+
+// Retrofit#nextResponseBodyConverter
+public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
+    @Nullable Converter.Factory skipPast, Type type, Annotation[] annotations) {
+  checkNotNull(type, &quot;type == null&quot;);
+  checkNotNull(annotations, &quot;annotations == null&quot;);
+
+  int start = converterFactories.indexOf(skipPast) + 1;
+  for (int i = start, count = converterFactories.size(); i &lt; count; i++) {
+    Converter&lt;ResponseBody, ?&gt; converter =
+        converterFactories.get(i).responseBodyConverter(type, annotations, this);
+    if (converter != null) {
+      //noinspection unchecked
+      return (Converter&lt;ResponseBody, T&gt;) converter;
+    }
+  }
+  // ....
+}
+</code></pre>
+
+<p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
+<code>loadServiceMethod</code> 做的就是通过返回值和注解生成 <code>CallAdapter</code> 和 <code>ResponseConverter</code> ，最后构造 <code>HttpServiceMethod</code> 。</p>
+
+<h3 id="invoke">invoke</h3>
+
+<p>最后执行 <code>API</code> 的方法其实是调用了 <code>invoke</code> ， <code>invoke</code> 调用的是 <code>callAdapter.adapt</code> 返回了 <code>Retrofit.call</code> ，开发者根据需要选择同步或异步调用。</p>
+
+<pre><code class="language-java">// HttpServiceMethod
+@Override ReturnT invoke(Object[] args) {
+  return callAdapter.adapt(
+      new OkHttpCall&lt;&gt;(requestFactory, args, callFactory, responseConverter));
+}
+</code></pre>
+
+<p><code>Retrofit#create</code> 里做了这么几件事</p>
+
+<ol>
+<li>解析注解和返回值类型，生成 <code>requestFactory</code></li>
+<li>根据注解寻找合适的 <code>CallAdapter</code> 和 <code>ResponseConverter</code> 。构建 <code>ServiceMethod(HttpServiceMethod)</code> 。</li>
+<li>调用 <code>HttpServiceMethod#invoke</code> 通过 <code>callAdapter</code> 把 <code>callbackExecutor</code> 和 <code>Retrofit.Call</code> 结合在一起，这样就能把回调的结果发送到主线程(callbackExecutor 指定的线程) 。</li>
+</ol>
+
+<h2 id="执行请求">执行请求</h2>
+
+<p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>Call(okHttpCall)</code> ，这样我们就可以直接进行网络请求了。</p>
+
+<pre><code class="language-java">ExecutorCallbackCall(Executor callbackExecutor, Call&lt;T&gt; delegate) {
+  this.callbackExecutor = callbackExecutor;
+  this.delegate = delegate;
+}
+
+@Override public void enqueue(final Callback&lt;T&gt; callback) {
+  checkNotNull(callback, &quot;callback == null&quot;);
+
+  delegate.enqueue(new Callback&lt;T&gt;() {
+      @Override public void onResponse(Call&lt;T&gt; call, final Response&lt;T&gt; response) {
+        callbackExecutor.execute(new Runnable() {
+            @Override public void run() {
+              if (delegate.isCanceled()) {
+                // Emulate OkHttp's behavior of throwing/delivering an IOException on cancellation.
+                callback.onFailure(ExecutorCallbackCall.this, new IOException(&quot;Canceled&quot;));
+              } else {
+                callback.onResponse(ExecutorCallbackCall.this, response);
+              }
+            }
+          });
+      }
+
+      @Override public void onFailure(Call&lt;T&gt; call, final Throwable t) {
+        callbackExecutor.execute(new Runnable() {
+            @Override public void run() {
+              callback.onFailure(ExecutorCallbackCall.this, t);
+            }
+          });
+      }
+    });
+}
+
+@Override public Response&lt;T&gt; execute() throws IOException {
+  return delegate.execute();
+}
+</code></pre>
+
+<p><code>delegate</code> 是个 <code>Retrofit.Call</code> 调用 <code>invoke</code> 的时候会根据 <code>serviceMethod</code> 创建 <code>OkHttpCall</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
+
+<p>来看 <code>enqueue</code> 的 <code>onResponse</code> 中，最后的的结果会调用 <code>callbackExecutor.execute</code> ，之前我们分析在 <code>Android</code> 中 这个 <code>callbackExecutor</code> 是 <code>MainThreadExecutor</code> ，所以最后的结果是在主线程中被回调的。</p>
+
+<pre><code class="language-java">private okhttp3.Call createRawCall() throws IOException {
+  okhttp3.Call call = callFactory.newCall(requestFactory.create(args));
+  if (call == null) {
+    throw new NullPointerException(&quot;Call.Factory returned null.&quot;);
+  }
+  return call;
+}
+
+@Override public void enqueue(final Callback&lt;T&gt; callback) {
+
+  // ...
+
+  try {
+    call = rawCall = createRawCall();
+  } catch (Throwable t) {
+    throwIfFatal(t);
+        failure = creationFailure = t;
+  }
+
+  call.enqueue(new okhttp3.Callback() {
+      @Override public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse) {
+        Response&lt;T&gt; response;
+        try {
+          response = parseResponse(rawResponse);
+        } catch (Throwable e) {
+          throwIfFatal(e);
+          callFailure(e);
+          return;
+        }
+
+        try {
+          callback.onResponse(OkHttpCall.this, response);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+
+      @Override public void onFailure(okhttp3.Call call, IOException e) {
+        callFailure(e);
+      }
+
+      private void callFailure(Throwable e) {
+        try {
+          callback.onFailure(OkHttpCall.this, e);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+    });
+  }
+</code></pre>
+
+<p>在 <code>createRawCall</code> 中调用了 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 并用 <code>callFactory.newCall</code> 把 <code>Retrofit.Call</code> 转换为 <code>okhttp3.Call</code> 。</p>
+
+<p>剩下的网络请求就交给 <code>okhttp</code> 了。</p>
+
+<h2 id="响应请求">响应请求</h2>
+
+<p>上一节在请求成功后会调用 <code>parseResponse</code> ， <code>parseResponse</code> 会调用 <code>responseBodyConverter.convert</code> 把请求到数据转换成返回值类型</p>
+
+<pre><code class="language-java">Response&lt;T&gt; parseResponse(okhttp3.Response rawResponse) throws IOException {
+
+ // ...
+  try {
+    T body = responseConverter.convert(catchingBody);
+    return Response.success(body, rawResponse);
+  } catch (RuntimeException e) {
+    // If the underlying source threw an exception, propagate that rather than indicating it was
+    // a runtime exception.
+    catchingBody.throwIfCaught();
+    throw e;
+  }
+}
+</code></pre>
+
+<h2 id="总结">总结</h2>
+
+<ol>
+<li><code>Retrofit</code> 通过动态代理创建 API 的实现类。</li>
+<li>通过 <code>callAdapter</code> 进行请求的转换。</li>
+<li>通过 <code>responseConverter</code> 进行结果的转换。</li>
+<li>具体的网络请求交给 <code>callFactory</code> 。</li>
+<li>通过 <code>callbackExecutor</code> 把请求的结果往主线程切换。</li>
+<li>通过注解生成 <code>request</code></li>
+</ol>
+
+<p>总体上讲 <code>Retrofit</code> 实际是对网络框架的一层封装，让其更方便的处理 <code>RESTful</code> 风格的 API。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://www.jianshu.com/p/45cb536be2f4">Retrofit 分析-漂亮的解耦套路</a></p>
+
+<p><a href="http://static.blog.piasy.com/2016/06/25/Understand-Retrofit/">拆轮子系列：拆 Retrofit</a></p>
+
+<p><a href="https://yuqirong.me/2017/08/03/Retrofit%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">Retrofit 源码解析</a></p>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://binsheng.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://binsheng.github.io/tags/retrofit" role="button">Retrofit </a></li>
+      
+    
+      <li><a href="https://binsheng.github.io/tags/restful" role="button">RESTful </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>自定义</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://binsheng.github.io/post/retrofit/" title="Retrofit 源码解析">Retrofit 源码解析</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://binsheng.github.io/post/mu4e/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>在 emacs 中用 mu4e 来收邮件</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%ae%80%e5%8d%95%e4%bd%bf%e7%94%a8">
+												 简单使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#retrofit-dot-build">
+												 Retrofit.build
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#retrofit-dot-create">
+												 Retrofit.create
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#loadservicemethod">
+												 loadServiceMethod
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#parseannotations">
+												 parseAnnotations
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#createcalladapter">
+												 createCallAdapter
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#executorcalladapterfactory">
+												 ExecutorCallAdapterFactory
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#createresponseconverter">
+												 createResponseConverter
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#invoke">
+												 invoke
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%89%a7%e8%a1%8c%e8%af%b7%e6%b1%82">
+												 执行请求
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%93%8d%e5%ba%94%e8%af%b7%e6%b1%82">
+												 响应请求
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "binsheng.github.io",
+        owner: 'binsheng',
+        admin: ["binsheng"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/binsheng/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/binsheng' target="_blank">binsheng</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://binsheng.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://binsheng.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://binsheng.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://binsheng.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://binsheng.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
