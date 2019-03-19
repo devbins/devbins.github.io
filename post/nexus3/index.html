@@ -6,7 +6,7 @@
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="自定义">
+  <meta name="author" content="bingomacs">
   <meta name="description" content="
 在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
 
@@ -20,40 +20,40 @@
 使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://binsheng.github.io/post/nexus3/" />
+<meta property="og:url" content="https://bingomacs.github.io/post/nexus3/" />
 <meta property="article:published_time" content="2018-11-05T00:00:00&#43;08:00"/>
 <meta property="article:modified_time" content="2018-11-05T00:00:00&#43;08:00"/>
 
 
   <title>
   
-       在 Docker 中使用 nexus3 构建 Android 私有仓库 | 自定义 
+       在 Docker 中使用 nexus3 构建 Android 私有仓库 | bingomacs 
   
   </title>
 
-  <link rel="canonical" href="https://binsheng.github.io/post/nexus3/">
+  <link rel="canonical" href="https://bingomacs.github.io/post/nexus3/">
 
   
   
 
   
-  <link href="https://binsheng.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+  <link href="https://bingomacs.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
 
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://binsheng.github.io/css/font.css" rel="stylesheet"> 
+  <link href="https://bingomacs.github.io/css/font.css" rel="stylesheet"> 
     
   
-  <link href="https://binsheng.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://binsheng.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://binsheng.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://binsheng.github.io/css/main.css" rel="stylesheet">
+  <link href="https://bingomacs.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://bingomacs.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://bingomacs.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://bingomacs.github.io/css/main.css" rel="stylesheet">
 
 
   
   <link rel="shortcut icon"
   
-      href="https://binsheng.github.io/images/fav.jpg"
+      href="https://bingomacs.github.io/images/fav.jpg"
   
   >
 
@@ -72,13 +72,13 @@
 
   
     
-    <link rel="stylesheet" href="https://binsheng.github.io/js/vendors/katex/katex.min.css">
+    <link rel="stylesheet" href="https://bingomacs.github.io/js/vendors/katex/katex.min.css">
   
   
 
   
     
-    <link rel="stylesheet" href="https://binsheng.github.io/css/vendors/highlight/github-gist.css">
+    <link rel="stylesheet" href="https://bingomacs.github.io/css/vendors/highlight/github-gist.css">
   
 
 </head>
@@ -95,11 +95,11 @@
     <div class="container">
 
       
-      <a class="navbar-brand" href="https://binsheng.github.io">
+      <a class="navbar-brand" href="https://bingomacs.github.io">
           
-        <img class="avatar" src="https://binsheng.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        <img class="avatar" src="https://bingomacs.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
         
-        <strong> 自定义</strong>
+        <strong> bingomacs</strong>
       </a>
 
       
@@ -114,26 +114,26 @@
         
         <ul class="navbar-nav mr-auto ">
           <li class="nav-item ">
-            <a class="nav-link" href="https://binsheng.github.io">Home</a>
+            <a class="nav-link" href="https://bingomacs.github.io">Home</a>
           </li>
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://binsheng.github.io/post/" >归档  </a>
+              <a class="nav-link" href="https://bingomacs.github.io/post/" >归档  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://binsheng.github.io/categories/" >分类  </a>
+              <a class="nav-link" href="https://bingomacs.github.io/categories/" >分类  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://binsheng.github.io/tags/" >标签  </a>
+              <a class="nav-link" href="https://bingomacs.github.io/tags/" >标签  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://binsheng.github.io/about/" >关于  </a>
+              <a class="nav-link" href="https://bingomacs.github.io/about/" >关于  </a>
             </li>
           
           
@@ -166,7 +166,7 @@
 
         
         <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -187,7 +187,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -206,7 +206,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://binsheng.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -231,17 +231,17 @@
     <div class="row mx-0 headfont mt-3 pt-4">
       
       <div class="col-12 col-sm-5 align-middle">
-        <a href="https://binsheng.github.io">
+        <a href="https://bingomacs.github.io">
           
-            <img class="pull-right avatar avatar-md" src="https://binsheng.github.io/images/avatar.jpg" alt="" >
+            <img class="pull-right avatar avatar-md" src="https://bingomacs.github.io/images/avatar.jpg" alt="" >
           
         </a>
       </div>
       
       <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://binsheng.github.io">
+        <a href="https://bingomacs.github.io">
           <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>自定义</strong>
+            <strong>bingomacs</strong>
           </h1>
         </a>
         
@@ -249,7 +249,7 @@
              
         <div class="mt-2" style="font-size: 1rem; color: white;">
             
-              <a href="//github.com/binsheng" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+              <a href="//github.com/bingomacs" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
             
             
 
@@ -305,9 +305,9 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://binsheng.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
+        <li><a href="https://bingomacs.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
       
-        <li><a href="https://binsheng.github.io/categories/docker"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Docker </a></li>
+        <li><a href="https://bingomacs.github.io/categories/docker"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Docker </a></li>
       
     
     
@@ -327,7 +327,7 @@
   </ul>
   
     <div class="view">
-      <img src="https://binsheng.github.io/images/nexus/nexus.png" />
+      <img src="https://bingomacs.github.io/images/nexus/nexus.png" />
     </div>
   
 
@@ -355,13 +355,13 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 <p>nexus 搭建好了，需要等个一小会。启动好了后，点击右上角的登录，输入账号密码登录。默认账号是 <code>admin</code> 密码是 <code>admin123</code> 。</p>
 
 <p>接着跟着下图新建仓库
-<img src="https://binsheng.github.io/images/nexus/nexus_create.png" alt="" />
+<img src="https://bingomacs.github.io/images/nexus/nexus_create.png" alt="" />
 这里选择 maven2(hosted)
-<img src="https://binsheng.github.io/images/nexus/nexus_maven.png" alt="" />
+<img src="https://bingomacs.github.io/images/nexus/nexus_maven.png" alt="" />
 接下来配置仓库的信息，主要是填写仓库的名字和配置仓库可以被重新部署
-<img src="https://binsheng.github.io/images/nexus/nexus_config.png" alt="" />
+<img src="https://bingomacs.github.io/images/nexus/nexus_config.png" alt="" />
 到这里配置就差不多了，我们点击 copy 获取仓库的地址
-<img src="https://binsheng.github.io/images/nexus/nexus_addr.png" alt="" /></p>
+<img src="https://bingomacs.github.io/images/nexus/nexus_addr.png" alt="" /></p>
 
 <h2 id="编写上传-gradle">编写上传 gradle</h2>
 
@@ -394,7 +394,7 @@ android {
 </code></pre>
 
 <figure>
-    <img src="https://binsheng.github.io/images/nexus/nexus_upload.png"/> 
+    <img src="https://bingomacs.github.io/images/nexus/nexus_upload.png"/> 
 </figure>
 
 
@@ -489,9 +489,9 @@ task clean(type: Delete) {
 <p>下面来操作一下</p>
 
 <p>在创建仓库的地方创建一个仓库组，所以这里选择 <code>maven2(hosted)</code>
-<img src="https://binsheng.github.io/images/nexus/nexus_group.png" alt="" />
+<img src="https://bingomacs.github.io/images/nexus/nexus_group.png" alt="" />
 给仓库取个名字，这里是 <code>testgroup</code> ，然后在 <code>Member repositories&gt;Available</code> 中选择需要加入的 <code>library</code> ，选中的会在右边的 <code>Members</code> 中显示。选好之后点击 <code>Create repository</code> 。
-<img src="https://binsheng.github.io/images/nexus/nexus_add_group.png" alt="" /></p>
+<img src="https://bingomacs.github.io/images/nexus/nexus_add_group.png" alt="" /></p>
 
 <p>做好这些之后，你就可以在项目中配置一次，就可以使用里面包含的 <code>library</code></p>
 
@@ -531,10 +531,10 @@ task clean(type: Delete) {
               <div class="mb-5">
                 
 <div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://binsheng.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://binsheng.github.io/tags/nexus" role="button">nexus </a></li>
+      <li><a href="https://bingomacs.github.io/tags/nexus" role="button">nexus </a></li>
       
     
   </div>
@@ -554,10 +554,10 @@ task clean(type: Delete) {
           <div>
     <ul class="post-copyright">
         <li class="post-copyright-author">
-            <strong>本文作者： </strong>自定义</li>
+            <strong>本文作者： </strong>bingomacs</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
-            <a href="https://binsheng.github.io/post/nexus3/" title="在 Docker 中使用 nexus3 构建 Android 私有仓库">在 Docker 中使用 nexus3 构建 Android 私有仓库</a>
+            <a href="https://bingomacs.github.io/post/nexus3/" title="在 Docker 中使用 nexus3 构建 Android 私有仓库">在 Docker 中使用 nexus3 构建 Android 私有仓库</a>
         </li>
         <li class="post-copyright-license">
             <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -570,7 +570,7 @@ task clean(type: Delete) {
           <div class="row pt-3 np">
             <div class="col-md-6">
               
-                <a href=https://binsheng.github.io/post/linuxsvn/ class="post-meta">Previous
+                <a href=https://bingomacs.github.io/post/linuxsvn/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
                     <span>Linux 下 svn 使用</span>
@@ -581,7 +581,7 @@ task clean(type: Delete) {
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://binsheng.github.io/post/mu4e/ class="post-meta">Next
+                <a href=https://bingomacs.github.io/post/mu4e/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
                     <span>在 emacs 中用 mu4e 来收邮件</span>
@@ -752,9 +752,9 @@ task clean(type: Delete) {
     const gitalk = new Gitalk({
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "binsheng.github.io",
-        owner: 'binsheng',
-        admin: ["binsheng"],
+        repo: "bingomacs.github.io",
+        owner: 'bingomacs',
+        admin: ["bingomacs"],
         id: location.pathname, 
         distractionFreeMode:  false  
     })
@@ -778,7 +778,7 @@ task clean(type: Delete) {
   
   <div class="pb-2 mt-5 pt-5">
     
-      <a href="//github.com/binsheng " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+      <a href="//github.com/bingomacs " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
     
     
 
@@ -821,31 +821,31 @@ task clean(type: Delete) {
 
 
 
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
 
 
 
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
 
-<script type="text/javascript" src="https://binsheng.github.io/js/vendors/mdb/mdb.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/mdb/mdb.min.js"></script>
 
-<script type="text/javascript" src="https://binsheng.github.io/js/main.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/main.js"></script>
 
 
 
   
-  <script src="https://binsheng.github.io/js/vendors/highlight.pack.js"> </script>
+  <script src="https://bingomacs.github.io/js/vendors/highlight.pack.js"> </script>
   <script>hljs.initHighlightingOnLoad();</script>
 
 
 
 
  
-  <script src="https://binsheng.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://binsheng.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+  <script src="https://bingomacs.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://bingomacs.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
 
   <script>
       document.addEventListener("DOMContentLoaded", function () {
