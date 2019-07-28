@@ -17,8 +17,8 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://bingomacs.github.io/post/appium/" />
-<meta property="article:published_time" content="2018-06-02T00:00:00&#43;08:00"/>
-<meta property="article:modified_time" content="2018-06-02T00:00:00&#43;08:00"/>
+<meta property="article:published_time" content="2018-06-02T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-06-02T00:00:00+08:00" />
 
 
   <title>
@@ -503,43 +503,44 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <li>deviceName 设备名称，在终端中使用 <code>adb devices</code> 来查看</li>
 <li>appPackage 测试应用的包名</li>
 <li>appActivity 测试应用的界面</li>
-<li>noReset 测试不清除应用数据</li>
-</ul>
+
+<li><p>noReset 测试不清除应用数据</p>
 
 <pre><code class="language-python">import unittest
 from time import sleep
 from appium import webdriver
 
 class Calc(unittest.TestCase):
-    def setUp(self):
-        desired_caps = {}
-        desired_caps['platformName'] = 'Android'
-        desired_caps['deviceName'] = 'Android Emulator'
-        desired_caps['appPackage'] = 'com.android.calculator2'
-        desired_caps['appActivity'] = '.Calculator'
-        desired_caps['noReset'] = True
-        self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub',desired_caps)
+def setUp(self):
+    desired_caps = {}
+    desired_caps['platformName'] = 'Android'
+    desired_caps['deviceName'] = 'Android Emulator'
+    desired_caps['appPackage'] = 'com.android.calculator2'
+    desired_caps['appActivity'] = '.Calculator'
+    desired_caps['noReset'] = True
+    self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub',desired_caps)
 
 
-    def test_calc(self):
-        self.driver.find_element_by_id('com.android.calculator2:id/digit_1').click()
-        sleep(1)
-        self.driver.find_element_by_id('com.android.calculator2:id/op_add').click()
-        sleep(1)
-        self.driver.find_element_by_id('com.android.calculator2:id/digit_2').click()
-        sleep(1)
-        self.driver.find_element_by_id('com.android.calculator2:id/eq').click()
-        sleep(1)
+def test_calc(self):
+    self.driver.find_element_by_id('com.android.calculator2:id/digit_1').click()
+    sleep(1)
+    self.driver.find_element_by_id('com.android.calculator2:id/op_add').click()
+    sleep(1)
+    self.driver.find_element_by_id('com.android.calculator2:id/digit_2').click()
+    sleep(1)
+    self.driver.find_element_by_id('com.android.calculator2:id/eq').click()
+    sleep(1)
 
 
-    def tearDown(self):
-        self.driver.quit()
+def tearDown(self):
+    self.driver.quit()
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(Calc)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-</code></pre>
+suite = unittest.TestLoader().loadTestsFromTestCase(Calc)
+unittest.TextTestRunner(verbosity=2).run(suite)
+</code></pre></li>
+</ul>
 
 <p>看看效果，还不错</p>
 
