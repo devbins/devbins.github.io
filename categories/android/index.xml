@@ -17,7 +17,13 @@
       <pubDate>Sat, 27 Jul 2019 00:00:00 +0800</pubDate>
       
       <guid>https://bingomacs.github.io/post/rxlifecycle/</guid>
-      <description>Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&amp;lt;ActivityEvent&amp;gt; { private final BehaviorSubject&amp;lt;ActivityEvent&amp;gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&amp;lt;ActivityEvent&amp;gt; lifecycle() { return lifecycleSubject.hide();</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;Photo by Léonard Cotte on Unsplash&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;介绍&#34;&gt;介绍&lt;/h2&gt;
+
+&lt;p&gt;从名字中可以看出 &lt;code&gt;RxLifecycle&lt;/code&gt; 和生命周期有关。也的确如此， &lt;code&gt;RxLifecycle&lt;/code&gt; 通过监听生命周期的变化，来解决 &lt;code&gt;RxJava&lt;/code&gt; 内存泄漏的问题。&lt;/p&gt;</description>
     </item>
     
     <item>

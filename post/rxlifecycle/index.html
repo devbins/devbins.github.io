@@ -7,10 +7,22 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="bingomacs">
-  <meta name="description" content="Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; { private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&lt;ActivityEvent&gt; lifecycle() { return lifecycleSubject.hide();">
+  <meta name="description" content="
+Photo by Léonard Cotte on Unsplash
+
+
+介绍
+
+从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
   
   <meta property="og:title" content="RxLifecycle 原理解析" />
-<meta property="og:description" content="Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; { private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&lt;ActivityEvent&gt; lifecycle() { return lifecycleSubject.hide();" />
+<meta property="og:description" content="
+Photo by Léonard Cotte on Unsplash
+
+
+介绍
+
+从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://bingomacs.github.io/post/rxlifecycle/" />
 <meta property="article:published_time" content="2019-07-27T00:00:00+08:00" />
@@ -326,9 +338,7 @@
 
 
           <div class="post-content markdown">
-            
-
-<blockquote>
+            <blockquote>
 <p>Photo by Léonard Cotte on Unsplash</p>
 </blockquote>
 
@@ -633,7 +643,6 @@ public static &lt;T, R&gt; LifecycleTransformer&lt;T&gt; bind(@Nonnull final Obs
 <h2 id="参考">参考</h2>
 
 <p><a href="https://www.jianshu.com/p/8311410de676">解决 RxJava 内存泄漏（前篇）：RxLifecycle 详解及原理分析 - 简书</a></p>
-
           </div>
 
           
