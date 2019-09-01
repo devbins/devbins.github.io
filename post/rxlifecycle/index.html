@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="bingomacs">
+  <meta name="description" content="Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; { private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&lt;ActivityEvent&gt; lifecycle() { return lifecycleSubject.hide();">
+  
+  <meta property="og:title" content="RxLifecycle 原理解析" />
+<meta property="og:description" content="Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; { private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&lt;ActivityEvent&gt; lifecycle() { return lifecycleSubject.hide();" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://bingomacs.github.io/post/rxlifecycle/" />
+<meta property="article:published_time" content="2019-07-27T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-07-27T00:00:00+08:00" />
+
+
+  <title>
+  
+       RxLifecycle 原理解析 | bingomacs 
+  
+  </title>
+
+  <link rel="canonical" href="https://bingomacs.github.io/post/rxlifecycle/">
+
+  
+  
+
+  
+  <link href="https://bingomacs.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://bingomacs.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://bingomacs.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://bingomacs.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://bingomacs.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://bingomacs.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://bingomacs.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://bingomacs.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://bingomacs.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://bingomacs.github.io">
+          
+        <img class="avatar" src="https://bingomacs.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> bingomacs</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://bingomacs.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://bingomacs.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://bingomacs.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://bingomacs.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://bingomacs.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://bingomacs.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://bingomacs.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://bingomacs.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>bingomacs</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/bingomacs" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://bingomacs.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">RxLifecycle 原理解析</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jul 27, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>4 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://bingomacs.github.io/images/leonard.jpg" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            
+
+<blockquote>
+<p>Photo by Léonard Cotte on Unsplash</p>
+</blockquote>
+
+<h2 id="介绍">介绍</h2>
+
+<p>从名字中可以看出 <code>RxLifecycle</code> 和生命周期有关。也的确如此， <code>RxLifecycle</code> 通过监听生命周期的变化，来解决 <code>RxJava</code> 内存泄漏的问题。</p>
+
+<h2 id="添加依赖">添加依赖</h2>
+
+<pre><code class="language-gradle">implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
+
+// If you want to bind to Android-specific lifecycles
+implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2'
+
+// If you want pre-written Activities and Fragments you can subclass as providers
+implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'
+</code></pre>
+
+<h2 id="基本使用">基本使用</h2>
+
+<pre><code class="language-java">public class MyActivity extends RxAppCompatActivity{
+  @Override
+  public void onResume() {
+    super.onResume();
+    myObservable
+        .compose(bindUntilEvent(ActivityEvent.DESTROY))
+        .subscribe();
+  }
+}
+</code></pre>
+
+<p>或者</p>
+
+<pre><code class="language-java">public class MyActivity extends RxAppCompatActivity{
+  @Override
+  public void onResume() {
+    super.onResume();
+    myObservable
+        .compose(bindToLifecycle())
+        .subscribe();
+  }
+}
+</code></pre>
+
+<p>使用很简单，只要继承 <code>RxAppCompatActivity</code> 然后调用 <code>Observable.compose(bindToLifecycle())</code> 或者 <code>Observable.compose(bindUntilEvent(ActivityEvent.DESTROY))</code> 就行了。</p>
+
+<p>下面就从源码角度来看看 <code>RxLifecycle</code> 。</p>
+
+<h2 id="bindtolifecycle">bindToLifecycle</h2>
+
+<p>就从 <code>bindToLifecycle</code> 看起吧</p>
+
+<pre><code class="language-java">public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; {
+
+    private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create();
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final Observable&lt;ActivityEvent&gt; lifecycle() {
+        return lifecycleSubject.hide();
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final &lt;T&gt; LifecycleTransformer&lt;T&gt; bindUntilEvent(@NonNull ActivityEvent event) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    }
+
+    @Override
+    @NonNull
+    @CheckResult
+    public final &lt;T&gt; LifecycleTransformer&lt;T&gt; bindToLifecycle() {
+        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    @CallSuper
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lifecycleSubject.onNext(ActivityEvent.CREATE);
+    }
+
+    @Override
+    @CallSuper
+    protected void onStart() {
+        super.onStart();
+        lifecycleSubject.onNext(ActivityEvent.START);
+    }
+
+    @Override
+    @CallSuper
+    protected void onResume() {
+        super.onResume();
+        lifecycleSubject.onNext(ActivityEvent.RESUME);
+    }
+
+    @Override
+    @CallSuper
+    protected void onPause() {
+        lifecycleSubject.onNext(ActivityEvent.PAUSE);
+        super.onPause();
+    }
+
+    @Override
+    @CallSuper
+    protected void onStop() {
+        lifecycleSubject.onNext(ActivityEvent.STOP);
+        super.onStop();
+    }
+
+    @Override
+    @CallSuper
+    protected void onDestroy() {
+        lifecycleSubject.onNext(ActivityEvent.DESTROY);
+        super.onDestroy();
+    }
+}
+</code></pre>
+
+<p>在 <code>bindToLifecycle</code> 中只是调用了 <code>RxLifecycleAndroid.bindActivity(lifecycleSubject);</code> ，把 <code>lifecycleSubject</code> 当做参数传递进去，最后返回一个 <code>LifecycleTransformer</code> 。</p>
+
+<p>这个 <code>lifecycleSubject</code> 继承了 <code>Subject</code> ， <code>Subject</code> 继承了 <code>Observable</code> 并实现了 <code>Observer</code> ，也就是 <code>lifecycleSubject</code> 拥有发射事件的能力和接收事件的能力。 <code>lifecycleSubject</code> 会在 <code>Activity</code> 的生命周期发射对应的事件，这里大胆的猜测一下 <code>RxLifecycle</code> 会在 <code>Activity</code> 销毁的时候进行取消订阅的操作。</p>
+
+<p>接着来看 <code>RxLifecycleAndroid.bindActivity</code> 里做了什么</p>
+
+<pre><code class="language-java">// 1.
+public static &lt;T&gt; LifecycleTransformer&lt;T&gt; bindActivity(@NonNull final Observable&lt;ActivityEvent&gt; lifecycle) {
+  return bind(lifecycle, ACTIVITY_LIFECYCLE);
+}
+
+// 2.
+public static &lt;T, R&gt; LifecycleTransformer&lt;T&gt; bind(@Nonnull Observable&lt;R&gt; lifecycle,@Nonnull final Function&lt;R, R&gt; correspondingEvents) {
+        checkNotNull(lifecycle, &quot;lifecycle == null&quot;);
+        checkNotNull(correspondingEvents, &quot;correspondingEvents == null&quot;);
+        return bind(takeUntilCorrespondingEvent(lifecycle.share(), correspondingEvents));
+}
+
+// 3.
+public static &lt;T, R&gt; LifecycleTransformer&lt;T&gt; bind(@Nonnull final Observable&lt;R&gt; lifecycle) {
+  return new LifecycleTransformer&lt;&gt;(lifecycle);
+}
+
+private static &lt;R&gt; Observable&lt;Boolean&gt; takeUntilCorrespondingEvent(final Observable&lt;R&gt; lifecycle,final Function&lt;R, R&gt; correspondingEvents) {
+        return Observable.combineLatest(
+            lifecycle.take(1).map(correspondingEvents),
+            lifecycle.skip(1),
+            new BiFunction&lt;R, R, Boolean&gt;() {
+                @Override
+                public Boolean apply(R bindUntilEvent, R lifecycleEvent) throws Exception {
+                    return lifecycleEvent.equals(bindUntilEvent);
+                }
+            })
+            .onErrorReturn(Functions.RESUME_FUNCTION)
+            .filter(Functions.SHOULD_COMPLETE);
+}
+</code></pre>
+
+<p>在 2 中 <code>bind</code> 里调用了 <code>takeUntilCorrespondingEvent</code> ，它会根据 <code>lifecycle（其实就是 lifelifecycleSubject）</code> 发射的第一个值，也就是生命周期里的事件，从 <code>correspondingEvents</code> 取出对应要取消订阅的生命周期事件。这里的 <code>correspondingEvents</code> 就是 <code>ACTIVITY_LIFECYCLE</code> ，我们稍后再讲 <code>ACTIVITY_LIFECYCLE</code> 。接着 <code>lifecycle.skip(1)</code> 跳过了第一个，也就是第一个发射事件不能作为取消事件，如果第一个就取消了也没有什么意义。然后判断接下来的事件是不是和要取消订阅事件相等，相等才会发射事件，如果不是就不发射事件。这就起到一个过滤的作用，只会在特定的事件里去取消订阅。</p>
+
+<p>最后 3 里调用了 <code>bind(@Nonnull final Observable&lt;R&gt; lifecycle)</code> 构造了 <code>LifecycleTransformer</code> 。我们稍后看 <code>LifecycleTransformer</code> 先来从 <code>ACTIVITY_LIFECYCLE</code> 看看发射事件和取消订阅事件有什么规律。</p>
+
+<h2 id="activity-lifecycle">ACTIVITY_LIFECYCLE</h2>
+
+<pre><code class="language-java">private static final Function&lt;ActivityEvent, ActivityEvent&gt; ACTIVITY_LIFECYCLE =
+      new Function&lt;ActivityEvent, ActivityEvent&gt;() {
+              @Override
+              public ActivityEvent apply(ActivityEvent lastEvent) throws Exception {
+                  switch (lastEvent) {
+                      case CREATE:
+                          return ActivityEvent.DESTROY;
+                      case START:
+                          return ActivityEvent.STOP;
+                      case RESUME:
+                          return ActivityEvent.PAUSE;
+                      case PAUSE:
+                          return ActivityEvent.STOP;
+                      case STOP:
+                          return ActivityEvent.DESTROY;
+                      case DESTROY:
+                          throw new OutsideLifecycleException(&quot;Cannot bind to Activity lifecycle when outside of it.&quot;);
+                      default:
+                          throw new UnsupportedOperationException(&quot;Binding to &quot; + lastEvent + &quot; not yet implemented&quot;);
+                  }
+              }
+      };
+</code></pre>
+
+<p>根据上面可以发现如下规律</p>
+
+<table>
+<thead>
+<tr>
+<th>发射的事件</th>
+<th>对应的取消订阅的事件</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>CREATE</td>
+<td>DESTORY</td>
+</tr>
+
+<tr>
+<td>START</td>
+<td>STOP</td>
+</tr>
+
+<tr>
+<td>RESUME</td>
+<td>PAUSE</td>
+</tr>
+
+<tr>
+<td>PAUSE</td>
+<td>STOP</td>
+</tr>
+
+<tr>
+<td>STOP</td>
+<td>DESTORY</td>
+</tr>
+</tbody>
+</table>
+
+<p>在 <code>ACTIVITY_LIFECYCLE</code> 中发现并不是所有的事件都是在 <code>DESTORY</code> 进行取消订阅的。</p>
+
+<h2 id="lifecycletransformer">LifecycleTransformer</h2>
+
+<pre><code class="language-java">public final class LifecycleTransformer&lt;T&gt; implements ObservableTransformer&lt;T, T&gt;,
+                                           FlowableTransformer&lt;T, T&gt;,
+                                           SingleTransformer&lt;T, T&gt;,
+                                           MaybeTransformer&lt;T, T&gt;,
+                                           CompletableTransformer
+{
+  final Observable&lt;?&gt; observable;
+
+  LifecycleTransformer(Observable&lt;?&gt; observable) {
+    checkNotNull(observable, &quot;observable == null&quot;);
+    this.observable = observable;
+  }
+
+  @Override
+  public ObservableSource&lt;T&gt; apply(Observable&lt;T&gt; upstream) {
+    return upstream.takeUntil(observable);
+  }
+  ……
+}
+</code></pre>
+
+<p>之前提到在 <code>bindToLifecycle</code> 最后的返回值是 <code>LifecycleTransformer</code> ， <code>LifecycleTransformer</code> 实现了 <code>ObservableTransformer</code> 、 <code>FlowableTransformer</code> 、 <code>SingleTransformer</code> 、 <code>MaybeTransformer</code> 、 <code>CompletableTransformer</code> ，这些大同小异，我们就看最熟悉的 <code>ObservableTransformer</code> 中的 <code>apply</code> 方法。</p>
+
+<p><code>apply</code> 方法很简单就只调用了 <code>upstream.takeUntil(observable)</code> ， <code>takeUntil</code> 这个操作符会在 <code>observable</code> 发射了一项数据或者终止事件时，取消 <code>upstream</code> 的订阅，丢弃所有事件。 <code>upstream</code> 就是我们进行网络请求的 <code>Observable</code> 。</p>
+
+<p>所以到这里就可以很明白的知道 <code>RxLifecycle</code> 是在满足某个条件（这里就是生命周期中的某个环节）下，通过取消订阅来保证 <code>RxJava</code> 内存不会泄漏的。</p>
+
+<h2 id="binduntilevent">bindUntilEvent</h2>
+
+<pre><code class="language-java">public static &lt;T, R&gt; LifecycleTransformer&lt;T&gt; bindUntilEvent(@Nonnull final Observable&lt;R&gt; lifecycle,
+                                                            @Nonnull final R event) {
+    checkNotNull(lifecycle, &quot;lifecycle == null&quot;);
+    checkNotNull(event, &quot;event == null&quot;);
+    return bind(takeUntilEvent(lifecycle, event));
+}
+
+private static &lt;R&gt; Observable&lt;R&gt; takeUntilEvent(final Observable&lt;R&gt; lifecycle, final R event) {
+    return lifecycle.filter(new Predicate&lt;R&gt;() {
+        @Override
+        public boolean test(R lifecycleEvent) throws Exception {
+            return lifecycleEvent.equals(event);
+        }
+    });
+}
+
+/**
+ * Binds the given source to a lifecycle.
+ * &lt;p&gt;
+ * This helper automatically determines (based on the lifecycle sequence itself) when the source
+ * should stop emitting items. Note that for this method, it assumes &lt;em&gt;any&lt;/em&gt; event
+ * emitted by the given lifecycle indicates that the lifecycle is over.
+ *
+ * @param lifecycle the lifecycle sequence
+ * @return a reusable {@link LifecycleTransformer} that unsubscribes the source whenever the lifecycle emits
+ */
+@Nonnull
+@CheckReturnValue
+public static &lt;T, R&gt; LifecycleTransformer&lt;T&gt; bind(@Nonnull final Observable&lt;R&gt; lifecycle) {
+    return new LifecycleTransformer&lt;&gt;(lifecycle);
+}
+</code></pre>
+
+<p>经过上面的分析，这里就简单了。 <code>bindUntilEvent</code> 和 <code>bindToLifecycle</code> 不同的地方在于 <code>bindUntilEvent</code> 指定了要取消订阅的事件。这样就不用去查找第一个发射的事件对应的取消订阅的事件，而是直接把发射事件和指定的事件进行比对，如果是就取消订阅。</p>
+
+<h2 id="总结">总结</h2>
+
+<p><code>RxLifecycle</code> 创建了 <code>BehaviorSubject</code> 来发射对应的生命周期事件，通过 <code>compose</code> 把网络请求或者其他 <code>Observable</code> 关联在一起。 <code>BehaviorSubject</code> 在收到生命周期事件的时候会和对应取消订阅的事件进行比对，如果相等，则发射一个事件，这个事件用来告诉网络请求订阅需要被取消。取消订阅事件可以通过 <code>bindUntilEvent</code> 来指定。</p>
+
+<p>取消订阅的原理是通过 <code>takeUntil</code> 操作符，当 <code>BehaviorSubject</code> 发出一个事件或者终止事件时，取消网络请求的订阅，这样请求的数据就不会被处理，也就不会回到主线程进行相关操作了。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://www.jianshu.com/p/8311410de676">解决 RxJava 内存泄漏（前篇）：RxLifecycle 详解及原理分析 - 简书</a></p>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://bingomacs.github.io/tags/android" role="button">Android </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>bingomacs</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://bingomacs.github.io/post/rxlifecycle/" title="RxLifecycle 原理解析">RxLifecycle 原理解析</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://bingomacs.github.io/post/hugo/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>使用 hugo 搭建网站</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://bingomacs.github.io/post/dockerfile/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>Dockerfile</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bb%8b%e7%bb%8d">
+												 介绍
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b7%bb%e5%8a%a0%e4%be%9d%e8%b5%96">
+												 添加依赖
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8">
+												 基本使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#bindtolifecycle">
+												 bindToLifecycle
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#activity-lifecycle">
+												 ACTIVITY_LIFECYCLE
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#lifecycletransformer">
+												 LifecycleTransformer
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#binduntilevent">
+												 bindUntilEvent
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "bingomacs.github.io",
+        owner: 'bingomacs',
+        admin: ["bingomacs"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/bingomacs " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/binsheng/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/binsheng' target="_blank">binsheng</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://bingomacs.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://bingomacs.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://bingomacs.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://bingomacs.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>

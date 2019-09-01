@@ -397,6 +397,8 @@
 
   
 
+  
+
 
 
 
@@ -429,7 +431,7 @@
             
             <li class="py-1">
               <a href="https://bingomacs.github.io/categories/android">
-                <span>Android (3)</span>
+                <span>Android (4)</span>
               </a>
             </li>           
           
@@ -681,6 +683,8 @@
 
   
 
+  
+
 
 
 
@@ -722,6 +726,9 @@
             <li><a href="https://bingomacs.github.io/tags/2017" role="button"><span>2017 (1)</span></a></li>
           
         
+            <li><a href="https://bingomacs.github.io/tags/android" role="button"><span>android (1)</span></a></li>
+          
+        
             <li><a href="https://bingomacs.github.io/tags/appium" role="button"><span>appium (1)</span></a></li>
           
         
@@ -756,9 +763,6 @@
           
         
             <li><a href="https://bingomacs.github.io/tags/offlineimap" role="button"><span>offlineimap (1)</span></a></li>
-          
-        
-            <li><a href="https://bingomacs.github.io/tags/opensuse" role="button"><span>opensuse (1)</span></a></li>
           
         
       </div>
@@ -825,6 +829,65 @@
   <div class="tags-sm">
     
       <li><a href="https://bingomacs.github.io/tags/docker" role="button">Docker </a></li>
+      
+    
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+</div>
+
+                
+                    <div class="post-wrapper white-bg post-card">
+  
+  <a href="https://bingomacs.github.io/post/rxlifecycle/">
+    <div class="post-header text-center">
+      <div class="px-4 post-heading">RxLifecycle 原理解析</div>
+      <ul class="post-meta li-x mt-1">
+        
+          <li>Jul 27, 2019</li>
+        
+    
+        
+          <li class="middot"></li>
+          <li>4 minutes read</li>
+        
+      </ul>
+    </div>
+    
+    
+      <div class="view">
+        <img src="https://bingomacs.github.io/images/leonard.jpg" />
+      </div>
+    
+
+    
+      Photo by Léonard Cotte on Unsplash 介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。 添加依赖 implementation &#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39; // If you want to bind to Android-specific lifecycles implementation &#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39; // If you want pre-written Activities and Fragments you can subclass as providers implementation &#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39; 基本使用 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindUntilEvent(ActivityEvent.DESTROY)) .subscribe(); } } 或者 public class MyActivity extends RxAppCompatActivity{ @Override public void onResume() { super.onResume(); myObservable .compose(bindToLifecycle()) .subscribe(); } } 使用很简单，只要继承 RxAppCompatActivity 然后调用 Observable.compose(bindToLifecycle()) 或者 Observable.compose(bindUntilEvent(ActivityEvent.DESTROY)) 就行了。 下面就从源码角度来看看 RxLifecycle 。 bindToLifecycle 就从 bindToLifecycle 看起吧 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider&lt;ActivityEvent&gt; { private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create(); @Override @NonNull @CheckResult public final Observable&lt;ActivityEvent&gt; lifecycle() { return lifecycleSubject.hide();  ...  
+    
+  </a>
+
+  
+  
+  <div class="post-meta li-x mt-2 div-x">
+    <div>
+      
+        
+          <li><a href="https://bingomacs.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
+        
+      
+      
+    </div>
+   
+    <div>
+      
+        
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://bingomacs.github.io/tags/android" role="button">Android </a></li>
       
     
   </div>
@@ -1320,68 +1383,6 @@
 </div>
 
                 
-                    <div class="post-wrapper white-bg post-card">
-  
-  <a href="https://bingomacs.github.io/post/archlinux/">
-    <div class="post-header text-center">
-      <div class="px-4 post-heading">Arch Linux 安装</div>
-      <ul class="post-meta li-x mt-1">
-        
-          <li>Aug 3, 2018</li>
-        
-    
-        
-          <li class="middot"></li>
-          <li>4 minutes read</li>
-        
-      </ul>
-    </div>
-    
-    
-      <div class="view">
-        <img src="https://bingomacs.github.io/images/arch/arch.png" />
-      </div>
-    
-
-    
-      今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
-本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
-本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。
-  ...  
-    
-  </a>
-
-  
-  
-  <div class="post-meta li-x mt-2 div-x">
-    <div>
-      
-        
-          <li><a href="https://bingomacs.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
-        
-      
-      
-    </div>
-   
-    <div>
-      
-        
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://bingomacs.github.io/tags/arch" role="button">Arch </a></li>
-      
-    
-  </div>
-</div>
-      
-    </div>
-  </div>
-
-</div>
-
-                
                 <div class="pagination pagination-outline justify-content-end active-color">
                     
 
@@ -1430,12 +1431,23 @@
     <li class="page-item"><a class="page-link" href="https://bingomacs.github.io/page/3/">3</a></li>
     
     
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="https://bingomacs.github.io/page/4/">4</a></li>
+    
+    
     <li class="page-item">
     <a href="https://bingomacs.github.io/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
     </li>
     
     <li class="page-item">
-        <a href="https://bingomacs.github.io/page/3/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://bingomacs.github.io/page/4/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
     
 </ul>
