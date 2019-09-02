@@ -449,27 +449,27 @@ repos.execute();
 <p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
 
 <pre><code class="language-java">public &lt;T&gt; T create(final Class&lt;T&gt; service) {
-    Utils.validateServiceInterface(service);
-    if (validateEagerly) {
-      eagerlyValidateMethods(service);
-    }
-    return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
-        new InvocationHandler() {
-          private final Platform platform = Platform.get();
-          private final Object[] emptyArgs = new Object[0];
+  Utils.validateServiceInterface(service);
+  if (validateEagerly) {
+    eagerlyValidateMethods(service);
+  }
+  return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
+                                    new InvocationHandler() {
+                                      private final Platform platform = Platform.get();
+                                      private final Object[] emptyArgs = new Object[0];
 
-          @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
-              throws Throwable {
-            // If the method is a method from Object then defer to normal invocation.
-            if (method.getDeclaringClass() == Object.class) {
-              return method.invoke(this, args);
-            }
-            if (platform.isDefaultMethod(method)) {
-              return platform.invokeDefaultMethod(method, service, proxy, args);
-            }
-            return loadServiceMethod(method).invoke(args != null ? args : emptyArgs);
-          }
-        });
+                                      @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
+                                          throws Throwable {
+                                        // If the method is a method from Object then defer to normal invocation.
+                                        if (method.getDeclaringClass() == Object.class) {
+                                          return method.invoke(this, args);
+                                        }
+                                        if (platform.isDefaultMethod(method)) {
+                                          return platform.invokeDefaultMethod(method, service, proxy, args);
+                                        }
+                                        return loadServiceMethod(method).invoke(args != null ? args : emptyArgs);
+                                      }
+                                    });
 }
 </code></pre>
 
@@ -540,14 +540,12 @@ RequestFactory build() {
 
 <p>不出所料 <code>parseAnnotations</code> 方法就是通过获取注解，来解析出请求参数，请求方法，请求数据，这里不是重点，不再赘述。</p>
 
-<p><code>loadServiceMethod</code> 不仅调用了 <code>RequestFactory.parseAnnotations</code> 最后还调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>ServiceMethod</code> 是怎么构建出来的。</p>
+<p><code>loadServiceMethod</code> 不仅调用了 <code>RequestFactory.parseAnnotations</code> 最后还调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
 
-<pre><code class="language-java">static &lt;ResponseT, ReturnT&gt; HttpServiceMethod&lt;ResponseT, ReturnT&gt; parseAnnotations(
-    Retrofit retrofit, Method method, RequestFactory requestFactory) {
+<pre><code class="language-java">static &lt;ResponseT, ReturnT&gt; HttpServiceMethod&lt;ResponseT, ReturnT&gt; parseAnnotations(Retrofit retrofit, Method method, RequestFactory requestFactory) {
   CallAdapter&lt;ResponseT, ReturnT&gt; callAdapter = createCallAdapter(retrofit, method);
   Type responseType = callAdapter.responseType();
-  Converter&lt;ResponseBody, ResponseT&gt; responseConverter =
-      createResponseConverter(retrofit, method, responseType);
+  Converter&lt;ResponseBody, ResponseT&gt; responseConverter = createResponseConverter(retrofit, method, responseType);
   okhttp3.Call.Factory callFactory = retrofit.callFactory;
   return new HttpServiceMethod&lt;&gt;(requestFactory, callFactory, callAdapter, responseConverter);
 }
@@ -555,7 +553,7 @@ RequestFactory build() {
 
 <p><code>HttpServiceMethod.parseAnnotations</code> 把 <code>callAdapter</code> 、 <code>responseConverter</code> 、 <code>callFactory</code> 和 API 接口请求方法关联在一起，组装了 <code>serviceMethod</code> ，把网络请求、请求转换、响应转换都封装成了 <code>HttpServiceMethod</code></p>
 
-<p>接下里看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
+<p>接下来看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
 
 <h3 id="createcalladapter">createCallAdapter</h3>
 
@@ -733,7 +731,7 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
     call = rawCall = createRawCall();
   } catch (Throwable t) {
     throwIfFatal(t);
-        failure = creationFailure = t;
+    failure = creationFailure = t;
   }
 
   call.enqueue(new okhttp3.Callback() {
@@ -766,7 +764,7 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
         }
       }
     });
-  }
+}
 </code></pre>
 
 <p>在 <code>createRawCall</code> 中调用了 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 并用 <code>callFactory.newCall</code> 把 <code>Retrofit.Call</code> 转换为 <code>okhttp3.Call</code> 。</p>
@@ -779,7 +777,7 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
 
 <pre><code class="language-java">Response&lt;T&gt; parseResponse(okhttp3.Response rawResponse) throws IOException {
 
- // ...
+  // ...
   try {
     T body = responseConverter.convert(catchingBody);
     return Response.success(body, rawResponse);
