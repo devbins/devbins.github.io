@@ -12,40 +12,40 @@
   <meta property="og:title" content="在 Docker 中用 Jenkins 搭建 Android 自动化打包" />
 <meta property="og:description" content="Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用手动做这些操作。构建完成后可以帮你上传到第三方测试平台，或者做其他一些操作。例如：发送邮件通知测试人员可以开始测试了，邮件中包含下载地址，或者二维码。整个流程不需要手动管理，非常高效。 Docker 中的 Jenkins Jenkins 官方提供 docker 的镜像，我们可以直接使用。但如果要用来打包 Android 项目还需要把 Android SDK 装上，不然没法构建 Android 项目。 所以我们基于 Jenkins 镜像进行定制，把它改造成带有 Android SDK 的镜像。 命令行" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://bingomacs.github.io/post/jenkins/" />
+<meta property="og:url" content="https://devbins.github.io/post/jenkins/" />
 <meta property="article:published_time" content="2018-10-02T00:00:00+08:00" />
 <meta property="article:modified_time" content="2018-10-02T00:00:00+08:00" />
 
 
   <title>
   
-       在 Docker 中用 Jenkins 搭建 Android 自动化打包 | bingomacs 
+       在 Docker 中用 Jenkins 搭建 Android 自动化打包 | /dev/bin 
   
   </title>
 
-  <link rel="canonical" href="https://bingomacs.github.io/post/jenkins/">
+  <link rel="canonical" href="https://devbins.github.io/post/jenkins/">
 
   
   
 
   
-  <link href="https://bingomacs.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
 
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://bingomacs.github.io/css/font.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
     
   
-  <link href="https://bingomacs.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://bingomacs.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/main.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
 
 
   
   <link rel="shortcut icon"
   
-      href="https://bingomacs.github.io/images/fav.jpg"
+      href="https://devbins.github.io/images/fav.jpg"
   
   >
 
@@ -64,13 +64,13 @@
 
   
     
-    <link rel="stylesheet" href="https://bingomacs.github.io/js/vendors/katex/katex.min.css">
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
   
   
 
   
     
-    <link rel="stylesheet" href="https://bingomacs.github.io/css/vendors/highlight/github-gist.css">
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/github-gist.css">
   
 
 </head>
@@ -87,9 +87,9 @@
     <div class="container">
 
       
-      <a class="navbar-brand" href="https://bingomacs.github.io">
+      <a class="navbar-brand" href="https://devbins.github.io">
           
-        <img class="avatar" src="https://bingomacs.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
         
         <strong> bingomacs</strong>
       </a>
@@ -106,26 +106,26 @@
         
         <ul class="navbar-nav mr-auto ">
           <li class="nav-item ">
-            <a class="nav-link" href="https://bingomacs.github.io">Home</a>
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
           </li>
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/post/" >归档  </a>
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/categories/" >分类  </a>
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/tags/" >标签  </a>
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/about/" >关于  </a>
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
             </li>
           
           
@@ -158,7 +158,7 @@
 
         
         <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -179,7 +179,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -198,7 +198,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -223,17 +223,17 @@
     <div class="row mx-0 headfont mt-3 pt-4">
       
       <div class="col-12 col-sm-5 align-middle">
-        <a href="https://bingomacs.github.io">
+        <a href="https://devbins.github.io">
           
-            <img class="pull-right avatar avatar-md" src="https://bingomacs.github.io/images/avatar.jpg" alt="" >
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
           
         </a>
       </div>
       
       <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://bingomacs.github.io">
+        <a href="https://devbins.github.io">
           <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>bingomacs</strong>
+            <strong>/dev/bin</strong>
           </h1>
         </a>
         
@@ -313,7 +313,7 @@
   </ul>
   
     <div class="view">
-      <img src="https://bingomacs.github.io/images/jenkins/jenkins.png" />
+      <img src="https://devbins.github.io/images/jenkins/jenkins.png" />
     </div>
   
 
@@ -385,17 +385,17 @@ USER jenkins
 </code></pre>
 
 <p>运行起来之后会输出管理员密码，用来初始化安装。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_pwd.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_pwd.png" alt="" />
 在浏览器中输入 <code>127.0.0.1</code> 访问 <code>Jenkins</code> ，输入控制台打印的密码，点击 Continue。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_input_pwd.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_input_pwd.png" alt="" />
 接下来会让你选择安装默认的插件还是自定义安装，我们选择默认就可以了。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_plugin_default.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_plugin_default.png" alt="" />
 安装插件需要花一些时间，喝杯茶再回来。有些插件无法安装成功，我们可以以后再装，点击 Continue。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_plugin_install.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_plugin_install.png" alt="" />
 紧接着创建第一个管理员用户，输入相关信息后点击 <code>Save and Finish</code> 。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_add_user.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_add_user.png" alt="" />
 Jenkins 就可以用了，但是要想打包 <code>Android</code> 程序还要装一些插件。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_ready.png" alt="" /></p>
+<img src="https://devbins.github.io/images/jenkins/jenkins_ready.png" alt="" /></p>
 
 <h2 id="配置-android-环境">配置 Android 环境</h2>
 
@@ -404,12 +404,12 @@ Jenkins 就可以用了，但是要想打包 <code>Android</code> 程序还要�
 <h3 id="android-home">ANDROID_HOME</h3>
 
 <p>在 系统管理-&gt;系统设置，找到全局属性，把 <code>Environment variables</code> 给勾上，点击增加，键为 <code>ANDROID_HOME</code> ，值为 <code>/opt/android</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_android.png" alt="" /></p>
+<img src="https://devbins.github.io/images/jenkins/jenkins_android.png" alt="" /></p>
 
 <h3 id="gradle">Gradle</h3>
 
 <p>在 系统管理-&gt;Global Tool Configuration，找到 <code>Gradle</code> ，点击 <code>新增 Gradle</code> ，填入 <code>name</code> ，可以随便填，但是为了好记，还是写上版本号。这里 <code>Gradle</code> 的版本要根据自己项目使用的版本调整。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_gradle.png" alt="" /></p>
+<img src="https://devbins.github.io/images/jenkins/jenkins_gradle.png" alt="" /></p>
 
 <h3 id="jdk">JDK</h3>
 
@@ -462,36 +462,36 @@ gradle assembleWandoujiaRelease // 豌豆荚渠道包
 <p>做了这么多，是驴是马拿出来遛遛，看看可行不可行。</p>
 
 <p>回到首页，点击新建，取个名字，选择构建一个自由风格的软件项目
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_job.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_job.png" alt="" />
 在参数化构建中填入 <code>PRODUCT_FLAVORS</code> 和 <code>BUILD_TYPE</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_parameter.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_parameter.png" alt="" />
 配置源码地址，然后点击 <code>Add</code> 添加证书（账号密码）
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_git.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_git.png" alt="" />
 为了方便，这里直接使用账号密码的方式，填入 <code>Git</code> 的账号和密码
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_git_pwd.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_git_pwd.png" alt="" />
 在构建中点击增加构建步骤，选择 <code>Invoke Gradle Script</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_build.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_build.png" alt="" />
 配置打包命令，在 Tasks 中填入 <code>clean assemble${PRODUCT_FLAVORS}${BUILD_TYPE}</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_build_cmd.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_build_cmd.png" alt="" />
 配好之后点击保存。</p>
 
 <h2 id="构建">构建</h2>
 
 <p>进入建好的任务，点击 <code>Build with Parameters</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_build_with_parameter.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_build_with_parameter.png" alt="" />
 选择需要构建的 <code>PRODUCT_FLAVORS</code> 和 <code>BUILD_TYPE</code> 点击开始构建，等待一小会，项目就会构建成功。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_start_build.png" alt="" /></p>
+<img src="https://devbins.github.io/images/jenkins/jenkins_start_build.png" alt="" /></p>
 
 <h2 id="上传到蒲公英">上传到蒲公英</h2>
 
 <p>项目构建成功后，要先发布到蒲公英， <code>jenkins</code> 有个插件叫 <code>Upload to pgyer</code> ，在打包完成后，帮我们把 <code>apk</code> 上传到蒲公英。</p>
 
 <p>找到 系统管理-&gt;插件管理，在可选插件中找到 <code>Upload to pgyer</code> ，选择直接安装。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_upload.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_upload.png" alt="" />
 安装完成后回到刚刚新建的任务，在最后点击 <code>增加构建后操作步骤</code> ，选择 <code>Upload to pgyer with apiV1</code>
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_pyger.png" alt="" />
+<img src="https://devbins.github.io/images/jenkins/jenkins_pyger.png" alt="" />
 填入 <code>uKey</code> 、 <code>api_key</code> 、 <code>scandir</code> 、 <code>file widcard</code> 。其中 <code>uKey</code> 是 User Key， <code>api_key</code> 就是 API Key， <code>scandir</code> 是 apk 所在的目录， <code>file widcard</code> 是通配符，用来判断哪些文件要上传。
-<img src="https://bingomacs.github.io/images/jenkins/jenkins_pyger_key.png" alt="" /></p>
+<img src="https://devbins.github.io/images/jenkins/jenkins_pyger_key.png" alt="" /></p>
 
 <h2 id="更新">更新</h2>
 
@@ -558,7 +558,7 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
             <strong>本文作者： </strong>bingomacs</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
-            <a href="https://bingomacs.github.io/post/jenkins/" title="在 Docker 中用 Jenkins 搭建 Android 自动化打包">在 Docker 中用 Jenkins 搭建 Android 自动化打包</a>
+            <a href="https://devbins.github.io/post/jenkins/" title="在 Docker 中用 Jenkins 搭建 Android 自动化打包">在 Docker 中用 Jenkins 搭建 Android 自动化打包</a>
         </li>
         <li class="post-copyright-license">
             <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -571,7 +571,7 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
           <div class="row pt-3 np">
             <div class="col-md-6">
               
-                <a href=https://bingomacs.github.io/post/archlinux%E5%AE%89%E8%A3%85uefi/ class="post-meta">Previous
+                <a href=https://devbins.github.io/post/archlinux%E5%AE%89%E8%A3%85uefi/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
                     <span>ArchLinux 安装 UEFI &#43; GPT</span>
@@ -582,7 +582,7 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://bingomacs.github.io/post/svnserve/ class="post-meta">Next
+                <a href=https://devbins.github.io/post/svnserve/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
                     <span>Linux 下 svn 服务搭建</span>
@@ -1093,7 +1093,7 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
     const gitalk = new Gitalk({
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "bingomacs.github.io",
+        repo: "devbins.github.io",
         owner: 'bingomacs',
         admin: ["bingomacs"],
         id: location.pathname, 
@@ -1162,31 +1162,31 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
 
 
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
 
 
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/mdb/mdb.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/main.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
 
 
 
   
-  <script src="https://bingomacs.github.io/js/vendors/highlight.pack.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
   <script>hljs.initHighlightingOnLoad();</script>
 
 
 
 
  
-  <script src="https://bingomacs.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://bingomacs.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
 
   <script>
       document.addEventListener("DOMContentLoaded", function () {
