@@ -326,7 +326,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 
     
       <li class="middot"></li>
-      <li>5 minutes read</li>
+      <li>6 minutes read</li>
     
   </ul>
   
@@ -371,7 +371,7 @@ repos.execute();
 
 <h2 id="retrofit-dot-build">Retrofit.build</h2>
 
-<p>创建 API 接口没什么好说的，我们从 <code>Retrofit.build</code> 开始分析</p>
+<p><code>Retrofit</code> 使用建造者模式创建 API，我们从 <code>Retrofit.build</code> 开始分析</p>
 
 <pre><code class="language-java">public Retrofit build() {
   if (baseUrl == null) {
@@ -380,6 +380,7 @@ repos.execute();
 
   okhttp3.Call.Factory callFactory = this.callFactory;
   if (callFactory == null) {
+    // 设置 OkHttp
     callFactory = new OkHttpClient();
   }
 
@@ -405,7 +406,7 @@ repos.execute();
 
 <p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
 
-<p>接下来设置 <code>callbackExecutor</code> ，这里调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ，这个 <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> ，也就是 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
+<p>接下来设置 <code>callbackExecutor</code> ，如果没有设置则会调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ， <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> 。</p>
 
 <pre><code class="language-java">static class Android extends Platform {
   @Override public Executor defaultCallbackExecutor() {
@@ -427,7 +428,9 @@ repos.execute();
 }
 </code></pre>
 
-<p>这里也顺便可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。这里先留着，我们后面碰到在来分析 <code>ExecutorCallAdapterFactory</code> 。</p>
+<p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
+
+<p>这里也顺便可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。</p>
 
 <p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
 
@@ -435,9 +438,9 @@ repos.execute();
 
 <ol>
 <li><code>callFactory</code> 没有设置默认为 <code>OkHttpClient</code></li>
-<li><code>callbackExecutor</code> Android 平台默认是 <code>MainThreadExecutor</code></li>
-<li><code>callAdapterFactories</code> Android 平台默认添加 <code>ExecutorCallAdapterFactory</code></li>
-<li><code>converterFactories</code> 默认添加 <code>BuiltInConverters</code></li>
+<li><code>callbackExecutor</code> Android 平台默认是 <code>MainThreadExecutor</code> ，用来回调请求结果的。</li>
+<li><code>callAdapterFactories</code> Android 平台默认添加 <code>ExecutorCallAdapterFactory</code> ，用来把 <code>Retrofit.Call</code> 转换成其他的 <code>Call</code> 这里其实是 <code>OkHttpCall</code> 。这样 <code>Retrofit.Call</code> 就和别的 <code>Call</code> 高度解耦了。</li>
+<li><code>converterFactories</code> 默认添加 <code>BuiltInConverters</code> ，用来把请求结果转换成对应的 <code>JavaBean</code></li>
 </ol>
 
 <h2 id="retrofit-dot-create">Retrofit.create</h2>
@@ -468,9 +471,11 @@ repos.execute();
 }
 </code></pre>
 
-<p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，后面调用接口中的方法会执行 <code>invoke</code> ，并把方法和参数传递给 <code>invoke</code> 。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
+<p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，当我们调用接口中的方法会执行 <code>invoke</code> ，第一参数就是调用的对象，第二个参数就是调用对象的某个方法，第三个参数就是方法需要的参数。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
 
 <h3 id="loadservicemethod">loadServiceMethod</h3>
+
+<p>接下来我们来看最有料的 <code>loadServiceMethod</code></p>
 
 <pre><code class="language-java">ServiceMethod&lt;?&gt; loadServiceMethod(Method method) {
   ServiceMethod&lt;?&gt; result = serviceMethodCache.get(method);
@@ -487,7 +492,7 @@ repos.execute();
 }
 </code></pre>
 
-<p>在 <code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。</p>
+<p><code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。这样看来重点在 <code>parseAnnotations</code> 中，跟进去看看。</p>
 
 <h3 id="parseannotations">parseAnnotations</h3>
 
@@ -498,23 +503,40 @@ repos.execute();
 
   return HttpServiceMethod.parseAnnotations(retrofit, method, requestFactory);
 }
-// HttpServiceMethod#parseAnnotations
-static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
+</code></pre>
+
+<p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表达等信息，代码如下。</p>
+
+<pre><code class="language-java">static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
   return new Builder(retrofit, method).build();
 }
 
 Builder(Retrofit retrofit, Method method) {
   this.retrofit = retrofit;
   this.method = method;
+  // 获取方法上的注解
   this.methodAnnotations = method.getAnnotations();
+  // 获取参数类型
   this.parameterTypes = method.getGenericParameterTypes();
+  // 获取参数上的注解，一个参数可能有多个注解，所以是个二维数组
   this.parameterAnnotationsArray = method.getParameterAnnotations();
+}
+
+RequestFactory(Builder builder) {
+  method = builder.method;
+  baseUrl = builder.retrofit.baseUrl;
+  httpMethod = builder.httpMethod;
+  relativeUrl = builder.relativeUrl;
+  headers = builder.headers;
+  contentType = builder.contentType;
+  hasBody = builder.hasBody;
+  isFormEncoded = builder.isFormEncoded;
+  isMultipart = builder.isMultipart;
+  parameterHandlers = builder.parameterHandlers;
 }
 </code></pre>
 
-<p><code>parseAnnotations</code> 最后面调用 <code>HttpServiceMethod.parseAnnotations</code> 通过方法吗可以猜出这里通过获取方法上的注解，来解析出请求参数类型，参数注解，请求方法。具体怎么解析，感兴趣的可以自行查看相关代码。</p>
-
-<p><code>loadServiceMethod</code> 首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
+<p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
 
 <pre><code class="language-java">static &lt;ResponseT, ReturnT&gt; HttpServiceMethod&lt;ResponseT, ReturnT&gt; parseAnnotations(Retrofit retrofit, Method method, RequestFactory requestFactory) {
   CallAdapter&lt;ResponseT, ReturnT&gt; callAdapter = createCallAdapter(retrofit, method);
@@ -612,9 +634,7 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 }
 </code></pre>
 
-<p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。</p>
-
-<h4 id="executorcalladapterfactory">ExecutorCallAdapterFactory</h4>
+<p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
 
 <pre><code class="language-java">@Override public @Nullable CallAdapter&lt;?, ?&gt; get(
     Type returnType, Annotation[] annotations, Retrofit retrofit) {
@@ -642,12 +662,10 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 <li>根据动态代理为每个接口方法创建 <code>ServiceMethod</code></li>
 <li>在 <code>loadServiceMethod</code> 中根据注解和方法的返回值的类型，生成 <code>requestFactory</code></li>
 <li>在 <code>HttpServiceMethod.parseAnnotations</code> 中根据注解寻找合适的 <code>CallAdapter</code> 和 <code>ResponseConverter</code> 。构建 <code>ServiceMethod(HttpServiceMethod)</code> 。</li>
-<li>在 <code>HttpServiceMethod#invoke</code> 中调用 <code>callAdapter.adapt</code> 把 <code>Retrofit.Call</code> 适配成 <code>callFactory</code> 能调用的请求，也就是 <code>OkHttpCall</code> ，最后把请求的结果交给 <code>callbackExecutor</code> 。</li>
+<li>在 <code>HttpServiceMethod#invoke</code> 中调用 <code>callAdapter.adapt</code> 把 <code>Retrofit.Call</code> 适配成 <code>callFactory</code> 能调用的请求，也就是 <code>OkHttpCall</code> 。</li>
 </ol>
 
 <h2 id="执行请求">执行请求</h2>
-
-<p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>Call(okHttpCall)</code> ，这样我们就可以直接进行网络请求了。</p>
 
 <pre><code class="language-java">ExecutorCallbackCall(Executor callbackExecutor, Call&lt;T&gt; delegate) {
   this.callbackExecutor = callbackExecutor;
@@ -686,20 +704,15 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 }
 </code></pre>
 
-<p><code>delegate</code> 是个 <code>Retrofit.Call</code> 调用 <code>invoke</code> 的时候会根据 <code>serviceMethod</code> 创建 <code>OkHttpCall</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
+<p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>ExecutorCallbackCall</code> ，其中 <code>delegate</code> 是个 <code>OkHttpCall</code> 我们调用 <code>enqueue</code> 其实调用的是 <code>OkHttpCall</code> 的 <code>enqueue</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
 
 <p>来看 <code>enqueue</code> 的 <code>onResponse</code> 中，最后的的结果会调用 <code>callbackExecutor.execute</code> ，之前我们分析在 <code>Android</code> 中 这个 <code>callbackExecutor</code> 是 <code>MainThreadExecutor</code> ，所以最后的结果是在主线程中被回调的。</p>
 
-<pre><code class="language-java">private okhttp3.Call createRawCall() throws IOException {
-  okhttp3.Call call = callFactory.newCall(requestFactory.create(args));
-  if (call == null) {
-    throw new NullPointerException(&quot;Call.Factory returned null.&quot;);
-  }
-  return call;
-}
+<h3 id="okhttpcall">OkHttpCall</h3>
 
-@Override public void enqueue(final Callback&lt;T&gt; callback) {
+<p>接下来我们来看看 <code>OkHttpCall</code> 代码如下</p>
 
+<pre><code class="language-java">@Override public void enqueue(final Callback&lt;T&gt; callback) {
   // ...
 
   try {
@@ -740,13 +753,19 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
       }
     });
 }
+
+private okhttp3.Call createRawCall() throws IOException {
+  okhttp3.Call call = callFactory.newCall(requestFactory.create(args));
+  if (call == null) {
+    throw new NullPointerException(&quot;Call.Factory returned null.&quot;);
+  }
+  return call;
+}
 </code></pre>
 
-<p>在 <code>createRawCall</code> 中调用了 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 并用 <code>callFactory.newCall</code> 把 <code>Retrofit.Call</code> 转换为 <code>okhttp3.Call</code> 。</p>
+<p><code>enqueue</code> 中先调用了 <code>createRawCall</code> ，而 <code>createRawCall</code> 中调用了 <code>callFactory.newCall</code> ，所以最后是调用了 <code>OkHttpClient</code> 的 <code>newCall</code> 来创建 <code>OkHttp</code> 的 <code>Call</code> 。 而 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 。这样就把网络请求交给了 <code>OkHttp</code> 。</p>
 
-<p>剩下的网络请求就交给 <code>okhttp</code> 了。</p>
-
-<h2 id="响应请求">响应请求</h2>
+<h2 id="解析请求结果">解析请求结果</h2>
 
 <pre><code class="language-java">Response&lt;T&gt; parseResponse(okhttp3.Response rawResponse) throws IOException {
 
@@ -763,14 +782,14 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 }
 </code></pre>
 
-<p>上一节在请求成功后会调用 <code>parseResponse</code> ， <code>parseResponse</code> 会调用 <code>responseBodyConverter.convert</code> 把请求到数据转换成返回值类型。</p>
+<p>在 <code>OkHttpCall</code> 中请求成功后，会调用 <code>parseResponse</code> 来把服务返回的数据转换成对应的 <code>JavaBean</code> 。 而实际进行转换的是 <code>responseBodyConverter.convert</code> 。</p>
 
 <h2 id="总结">总结</h2>
 
 <ol>
 <li><code>Retrofit</code> 通过动态代理创建 API 的实现类。</li>
-<li>通过 <code>callAdapter</code> 进行请求的转换。</li>
-<li>通过 <code>responseConverter</code> 进行结果的转换。</li>
+<li>通过 <code>callAdapter</code> 进行请求的转换。把 <code>Retrofit.Call</code> 适配成 <code>OkHttpCall</code></li>
+<li>通过 <code>responseConverter</code> 进行请求结果的转换。</li>
 <li>具体的网络请求交给 <code>callFactory</code> 。</li>
 <li>通过 <code>callbackExecutor</code> 把请求的结果往主线程切换。</li>
 <li>通过注解生成 <code>request</code></li>
@@ -1093,36 +1112,6 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 								
 									<ul class="nav">
 								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#executorcalladapterfactory">
-												 ExecutorCallAdapterFactory
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
 								
 
 										<li class="nav-item">
@@ -1169,11 +1158,37 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nul
 								
 									<ul class="nav">
 								
+									<ul class="nav">
+								
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%93%8d%e5%ba%94%e8%af%b7%e6%b1%82">
-												 响应请求
+						 					<a class="nav-link" href="#okhttpcall">
+												 OkHttpCall
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%a7%a3%e6%9e%90%e8%af%b7%e6%b1%82%e7%bb%93%e6%9e%9c">
+												 解析请求结果
 											</a>
 										</li>
 						 
