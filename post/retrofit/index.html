@@ -6,7 +6,7 @@
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="bingomacs">
+  <meta name="author" content="/dev/bin">
   <meta name="description" content="Photo by Kimon Maritz on Unsplash
 
 
@@ -103,7 +103,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
           
         <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
         
-        <strong> bingomacs</strong>
+        <strong> /dev/bin</strong>
       </a>
 
       
@@ -388,16 +388,12 @@ repos.execute();
     callbackExecutor = platform.defaultCallbackExecutor();
   }
 
-  // Make a defensive copy of the adapters and add the default Call adapter.
   List&lt;CallAdapter.Factory&gt; callAdapterFactories = new ArrayList&lt;&gt;(this.callAdapterFactories);
   callAdapterFactories.addAll(platform.defaultCallAdapterFactories(callbackExecutor));
 
-  // Make a defensive copy of the converters.
   List&lt;Converter.Factory&gt; converterFactories = new ArrayList&lt;&gt;(
       1 + this.converterFactories.size() + platform.defaultConverterFactoriesSize());
 
-  // Add the built-in converter factory first. This prevents overriding its behavior but also
-  // ensures correct behavior when using converters that consume all types.
   converterFactories.add(new BuiltInConverters());
   converterFactories.addAll(this.converterFactories);
   converterFactories.addAll(platform.defaultConverterFactories());
@@ -407,9 +403,9 @@ repos.execute();
 }
 </code></pre>
 
-<p>创建 <code>Retrofit</code> ，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
+<p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
 
-<p>接下来设置 <code>callbackExecutor</code> ，这里调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ，这个 <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> ，也就是 <code>Callback</code> 默认是在主线程的。</p>
+<p>接下来设置 <code>callbackExecutor</code> ，这里调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ，这个 <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> ，也就是 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
 
 <pre><code class="language-java">static class Android extends Platform {
   @Override public Executor defaultCallbackExecutor() {
@@ -433,7 +429,7 @@ repos.execute();
 
 <p>这里也顺便可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。这里先留着，我们后面碰到在来分析 <code>ExecutorCallAdapterFactory</code> 。</p>
 
-<p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> ，或者 <code>RxJava</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
+<p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
 
 <p>总结一下 <code>Retrofit#build</code> 干了什么</p>
 
@@ -449,31 +445,30 @@ repos.execute();
 <p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
 
 <pre><code class="language-java">public &lt;T&gt; T create(final Class&lt;T&gt; service) {
-  Utils.validateServiceInterface(service);
-  if (validateEagerly) {
-    eagerlyValidateMethods(service);
-  }
-  return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
-                                    new InvocationHandler() {
-                                      private final Platform platform = Platform.get();
-                                      private final Object[] emptyArgs = new Object[0];
 
-                                      @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
-                                          throws Throwable {
-                                        // If the method is a method from Object then defer to normal invocation.
-                                        if (method.getDeclaringClass() == Object.class) {
-                                          return method.invoke(this, args);
-                                        }
-                                        if (platform.isDefaultMethod(method)) {
-                                          return platform.invokeDefaultMethod(method, service, proxy, args);
-                                        }
-                                        return loadServiceMethod(method).invoke(args != null ? args : emptyArgs);
-                                      }
-                                    });
+  ...
+
+  return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
+     new InvocationHandler() {
+       private final Platform platform = Platform.get();
+       private final Object[] emptyArgs = new Object[0];
+
+       @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
+           throws Throwable {
+         // If the method is a method from Object then defer to normal invocation.
+         if (method.getDeclaringClass() == Object.class) {
+           return method.invoke(this, args);
+         }
+         if (platform.isDefaultMethod(method)) {
+           return platform.invokeDefaultMethod(method, service, proxy, args);
+         }
+         return loadServiceMethod(method).invoke(args != null ? args : emptyArgs);
+       }
+     });
 }
 </code></pre>
 
-<p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，后面调用接口中的方法会执行 <code>invoke</code> ，如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最关键的是后面的 <code>loadServiceMethod(method)</code> 。</p>
+<p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，后面调用接口中的方法会执行 <code>invoke</code> ，并把方法和参数传递给 <code>invoke</code> 。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
 
 <h3 id="loadservicemethod">loadServiceMethod</h3>
 
@@ -492,7 +487,7 @@ repos.execute();
 }
 </code></pre>
 
-<p><code>loadServiceMethod</code> 为了提高性能这里做了缓存，不然每次都要查找多费时间。在这个方法中 <code>ServiceMethod.parseAnnotations</code> 才是最有料的，一起来看一下。</p>
+<p>在 <code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。</p>
 
 <h3 id="parseannotations">parseAnnotations</h3>
 
@@ -503,11 +498,8 @@ repos.execute();
 
   return HttpServiceMethod.parseAnnotations(retrofit, method, requestFactory);
 }
-</code></pre>
-
-<p>第一行代码调用了 <code>RequestFactory.parseAnnotations</code> ，从名字上看是通过注解的解析，生成了 <code>RequestFactory</code> 。我们来简单看一下实现。</p>
-
-<pre><code class="language-java">static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
+// HttpServiceMethod#parseAnnotations
+static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
   return new Builder(retrofit, method).build();
 }
 
@@ -518,47 +510,31 @@ Builder(Retrofit retrofit, Method method) {
   this.parameterTypes = method.getGenericParameterTypes();
   this.parameterAnnotationsArray = method.getParameterAnnotations();
 }
-
-RequestFactory build() {
-  for (Annotation annotation : methodAnnotations) {
-    parseMethodAnnotation(annotation);
-  }
-
-  // ...
-
-  int parameterCount = parameterAnnotationsArray.length;
-  parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];
-  for (int p = 0; p &lt; parameterCount; p++) {
-    parameterHandlers[p] = parseParameter(p, parameterTypes[p], parameterAnnotationsArray[p]);
-  }
-
-  // ...
-
-  return new RequestFactory(this);
-}
 </code></pre>
 
-<p>不出所料 <code>parseAnnotations</code> 方法就是通过获取注解，来解析出请求参数，请求方法，请求数据，这里不是重点，不再赘述。</p>
+<p><code>parseAnnotations</code> 最后面调用 <code>HttpServiceMethod.parseAnnotations</code> 通过方法吗可以猜出这里通过获取方法上的注解，来解析出请求参数类型，参数注解，请求方法。具体怎么解析，感兴趣的可以自行查看相关代码。</p>
 
-<p><code>loadServiceMethod</code> 不仅调用了 <code>RequestFactory.parseAnnotations</code> 最后还调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
+<p><code>loadServiceMethod</code> 首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
 
 <pre><code class="language-java">static &lt;ResponseT, ReturnT&gt; HttpServiceMethod&lt;ResponseT, ReturnT&gt; parseAnnotations(Retrofit retrofit, Method method, RequestFactory requestFactory) {
   CallAdapter&lt;ResponseT, ReturnT&gt; callAdapter = createCallAdapter(retrofit, method);
   Type responseType = callAdapter.responseType();
+
+  ...
+
   Converter&lt;ResponseBody, ResponseT&gt; responseConverter = createResponseConverter(retrofit, method, responseType);
   okhttp3.Call.Factory callFactory = retrofit.callFactory;
   return new HttpServiceMethod&lt;&gt;(requestFactory, callFactory, callAdapter, responseConverter);
 }
 </code></pre>
 
-<p><code>HttpServiceMethod.parseAnnotations</code> 把 <code>callAdapter</code> 、 <code>responseConverter</code> 、 <code>callFactory</code> 和 API 接口请求方法关联在一起，组装了 <code>serviceMethod</code> ，把网络请求、请求转换、响应转换都封装成了 <code>HttpServiceMethod</code></p>
+<p><code>HttpServiceMethod.parseAnnotations</code> 先调用了 <code>createCallAdapter</code> 找到对应的 <code>callAdapter</code> 并取出返回值的类型，然后调用 <code>createResponseConverter</code> 把返回值类型传递进去，找到对应的 <code>responseConverter</code> 、最后把它们和 <code>callFactory</code> 、 <code>requestFactory</code> 封装成 <code>serviceMethod</code> 。</p>
 
 <p>接下来看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
 
 <h3 id="createcalladapter">createCallAdapter</h3>
 
-<pre><code class="language-java">private static &lt;ResponseT, ReturnT&gt; CallAdapter&lt;ResponseT, ReturnT&gt; createCallAdapter(
-    Retrofit retrofit, Method method) {
+<pre><code class="language-java">private static &lt;ResponseT, ReturnT&gt; CallAdapter&lt;ResponseT, ReturnT&gt; createCallAdapter(Retrofit retrofit, Method method) {
   Type returnType = method.getGenericReturnType();
   Annotation[] annotations = method.getAnnotations();
   // 省略部分代码
@@ -584,9 +560,59 @@ public CallAdapter&lt;?, ?&gt; nextCallAdapter(@Nullable CallAdapter.Factory ski
 }
 </code></pre>
 
-<p><code>createCallAdapter</code> 方法会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的转换器。</p>
+<p><code>createCallAdapter</code> 方法调最后调用的是 <code>nextCallAdapter</code> ，它会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的适配器。</p>
 
-<p>还记得之前构建 <code>retrofit.build</code> 会给 <code>Android</code> 添加一个默认的 <code>defaultCallAdapterFactory</code> 也就是 <code>ExecutorCallAdapterFactory</code> ，现在来看看它里面到底有什么。</p>
+<h3 id="createresponseconverter">createResponseConverter</h3>
+
+<pre><code class="language-java">private static &lt;ResponseT&gt; Converter&lt;ResponseBody, ResponseT&gt; createResponseConverter(Retrofit retrofit, Method method, Type responseType) {
+  Annotation[] annotations = method.getAnnotations();
+  try {
+    return retrofit.responseBodyConverter(responseType, annotations);
+  } catch (RuntimeException e) { // Wide exception range because factories are user code.
+    throw methodError(method, e, &quot;Unable to create converter for %s&quot;, responseType);
+  }
+}
+
+
+// Retrofit#responseBodyConverter
+public &lt;T&gt; Converter&lt;ResponseBody, T&gt; responseBodyConverter(Type type, Annotation[] annotations) {
+  return nextResponseBodyConverter(null, type, annotations);
+}
+
+
+// Retrofit#nextResponseBodyConverter
+public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(@Nullable Converter.Factory skipPast, Type type, Annotation[] annotations) {
+
+  ...
+
+  int start = converterFactories.indexOf(skipPast) + 1;
+  for (int i = start, count = converterFactories.size(); i &lt; count; i++) {
+    Converter&lt;ResponseBody, ?&gt; converter =
+        converterFactories.get(i).responseBodyConverter(type, annotations, this);
+    if (converter != null) {
+      //noinspection unchecked
+      return (Converter&lt;ResponseBody, T&gt;) converter;
+    }
+  }
+  // ....
+}
+</code></pre>
+
+<p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
+<code>loadServiceMethod</code> 做的就是通过返回值和注解生成 <code>CallAdapter</code> 和 <code>ResponseConverter</code> ，最后构造 <code>HttpServiceMethod</code> 。</p>
+
+<h3 id="invoke">invoke</h3>
+
+<p><code>loadServiceMethod</code> 最后返回的是 <code>HttpServiceMethod</code> ，所以最后调用的 <code>invoke</code> ，是 <code>HttpServiceMethod</code> 的 <code>invoke</code> 。</p>
+
+<pre><code class="language-java">// HttpServiceMethod
+@Override ReturnT invoke(Object[] args) {
+  return callAdapter.adapt(
+      new OkHttpCall&lt;&gt;(requestFactory, args, callFactory, responseConverter));
+}
+</code></pre>
+
+<p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。</p>
 
 <h4 id="executorcalladapterfactory">ExecutorCallAdapterFactory</h4>
 
@@ -608,66 +634,15 @@ public CallAdapter&lt;?, ?&gt; nextCallAdapter(@Nullable CallAdapter.Factory ski
 }
 </code></pre>
 
-<p><code>ExecutorCallAdapterFactory</code> 的 <code>get</code> 方法创建了一个 <code>CallAdapter</code> 并返回。到这里 <code>createCallAdapter</code> 就创建好了。</p>
+<p>在 <code>adapt</code> 方法中返回了 <code>ExecutorCallbackCall</code> 所以调用接口的方法最后返回的是 <code>ExecutorCallbackCall</code> ，也就是我们调用 <code>Retrofit.create</code> 创建的服务，调用其中的方法，最后面其实调用 <code>ExecutorCallbackCall</code> 。 关于 <code>ExecutorCallbackCall</code> 我们后面还会碰到。</p>
 
-<h3 id="createresponseconverter">createResponseConverter</h3>
-
-<pre><code class="language-java">private static &lt;ResponseT&gt; Converter&lt;ResponseBody, ResponseT&gt; createResponseConverter(
-    Retrofit retrofit, Method method, Type responseType) {
-  Annotation[] annotations = method.getAnnotations();
-  try {
-    return retrofit.responseBodyConverter(responseType, annotations);
-  } catch (RuntimeException e) { // Wide exception range because factories are user code.
-    throw methodError(method, e, &quot;Unable to create converter for %s&quot;, responseType);
-  }
-}
-
-
-// Retrofit#responseBodyConverter
-public &lt;T&gt; Converter&lt;ResponseBody, T&gt; responseBodyConverter(Type type, Annotation[] annotations) {
-  return nextResponseBodyConverter(null, type, annotations);
-}
-
-
-// Retrofit#nextResponseBodyConverter
-public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
-    @Nullable Converter.Factory skipPast, Type type, Annotation[] annotations) {
-  checkNotNull(type, &quot;type == null&quot;);
-  checkNotNull(annotations, &quot;annotations == null&quot;);
-
-  int start = converterFactories.indexOf(skipPast) + 1;
-  for (int i = start, count = converterFactories.size(); i &lt; count; i++) {
-    Converter&lt;ResponseBody, ?&gt; converter =
-        converterFactories.get(i).responseBodyConverter(type, annotations, this);
-    if (converter != null) {
-      //noinspection unchecked
-      return (Converter&lt;ResponseBody, T&gt;) converter;
-    }
-  }
-  // ....
-}
-</code></pre>
-
-<p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
-<code>loadServiceMethod</code> 做的就是通过返回值和注解生成 <code>CallAdapter</code> 和 <code>ResponseConverter</code> ，最后构造 <code>HttpServiceMethod</code> 。</p>
-
-<h3 id="invoke">invoke</h3>
-
-<p>最后执行 <code>API</code> 的方法其实是调用了 <code>invoke</code> ， <code>invoke</code> 调用的是 <code>callAdapter.adapt</code> 返回了 <code>Retrofit.call</code> ，开发者根据需要选择同步或异步调用。</p>
-
-<pre><code class="language-java">// HttpServiceMethod
-@Override ReturnT invoke(Object[] args) {
-  return callAdapter.adapt(
-      new OkHttpCall&lt;&gt;(requestFactory, args, callFactory, responseConverter));
-}
-</code></pre>
-
-<p><code>Retrofit#create</code> 里做了这么几件事</p>
+<h3 id="小节一下-retrofit-create-里做了这么几件事">小节一下 <code>Retrofit#create</code> 里做了这么几件事</h3>
 
 <ol>
-<li>解析注解和返回值类型，生成 <code>requestFactory</code></li>
-<li>根据注解寻找合适的 <code>CallAdapter</code> 和 <code>ResponseConverter</code> 。构建 <code>ServiceMethod(HttpServiceMethod)</code> 。</li>
-<li>调用 <code>HttpServiceMethod#invoke</code> 通过 <code>callAdapter</code> 把 <code>callbackExecutor</code> 和 <code>Retrofit.Call</code> 结合在一起，这样就能把回调的结果发送到主线程(callbackExecutor 指定的线程) 。</li>
+<li>根据动态代理为每个接口方法创建 <code>ServiceMethod</code></li>
+<li>在 <code>loadServiceMethod</code> 中根据注解和方法的返回值的类型，生成 <code>requestFactory</code></li>
+<li>在 <code>HttpServiceMethod.parseAnnotations</code> 中根据注解寻找合适的 <code>CallAdapter</code> 和 <code>ResponseConverter</code> 。构建 <code>ServiceMethod(HttpServiceMethod)</code> 。</li>
+<li>在 <code>HttpServiceMethod#invoke</code> 中调用 <code>callAdapter.adapt</code> 把 <code>Retrofit.Call</code> 适配成 <code>callFactory</code> 能调用的请求，也就是 <code>OkHttpCall</code> ，最后把请求的结果交给 <code>callbackExecutor</code> 。</li>
 </ol>
 
 <h2 id="执行请求">执行请求</h2>
@@ -773,8 +748,6 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
 
 <h2 id="响应请求">响应请求</h2>
 
-<p>上一节在请求成功后会调用 <code>parseResponse</code> ， <code>parseResponse</code> 会调用 <code>responseBodyConverter.convert</code> 把请求到数据转换成返回值类型</p>
-
 <pre><code class="language-java">Response&lt;T&gt; parseResponse(okhttp3.Response rawResponse) throws IOException {
 
   // ...
@@ -789,6 +762,8 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
   }
 }
 </code></pre>
+
+<p>上一节在请求成功后会调用 <code>parseResponse</code> ， <code>parseResponse</code> 会调用 <code>responseBodyConverter.convert</code> 把请求到数据转换成返回值类型。</p>
 
 <h2 id="总结">总结</h2>
 
@@ -845,7 +820,7 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
           <div>
     <ul class="post-copyright">
         <li class="post-copyright-author">
-            <strong>本文作者： </strong>bingomacs</li>
+            <strong>本文作者： </strong>/dev/bin</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
             <a href="https://devbins.github.io/post/retrofit/" title="Retrofit 源码解析">Retrofit 源码解析</a>
@@ -1066,6 +1041,58 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
 								
 									<ul class="nav">
 								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#createresponseconverter">
+												 createResponseConverter
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#invoke">
+												 invoke
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
 									<ul class="nav">
 								
 								
@@ -1099,34 +1126,8 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#createresponseconverter">
-												 createResponseConverter
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#invoke">
-												 invoke
+						 					<a class="nav-link" href="#%e5%b0%8f%e8%8a%82%e4%b8%80%e4%b8%8b-retrofit-create-%e9%87%8c%e5%81%9a%e4%ba%86%e8%bf%99%e4%b9%88%e5%87%a0%e4%bb%b6%e4%ba%8b">
+												 小节一下 Retrofit#create 里做了这么几件事
 											</a>
 										</li>
 						 
@@ -1248,8 +1249,8 @@ public &lt;T&gt; Converter&lt;ResponseBody, T&gt; nextResponseBodyConverter(
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: "devbins.github.io",
-        owner: 'bingomacs',
-        admin: ["bingomacs"],
+        owner: 'devbins',
+        admin: ["devbins"],
         id: location.pathname, 
         distractionFreeMode:  false  
     })
