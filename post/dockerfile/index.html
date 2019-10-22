@@ -350,7 +350,7 @@
 
 <p><code>FROM</code> 指令的格式为： <code>FROM &lt;image&gt;:&lt;tag&gt;</code> tag 是可选项，可以不要</p>
 
-<pre><code class="language-text">FROM ubuntu
+<pre><code class="language-dockerfile">FROM ubuntu
 </code></pre>
 
 <p><code>FROM</code> 用来指定基础镜像，我们使用 Dockerfile 定制镜像，其实就是在一个基础镜像上进行操作。在 Dockerfile 中 <code>FROM</code> 是必需的指令，且一定是第一个指令。</p>
@@ -363,7 +363,7 @@
 
 <p><code>COPY</code> 指令的格式为： <code>COPY &lt;src&gt; &lt;dest&gt;</code></p>
 
-<pre><code class="language-text">COPY index.html /root/www/
+<pre><code class="language-dockerfile">COPY index.html /root/www/
 </code></pre>
 
 <p><code>COPY</code> 指令的作用是把主机的文件添加到镜像里，有一点需要注意的是 <code>COPY</code> 会对源文件的原数据进行保留。比如：读、写、执行权限。</p>
@@ -372,7 +372,7 @@
 
 <p><code>ADD</code> 指令的格式为： <code>ADD &lt;src&gt; &lt;dest&gt;</code></p>
 
-<pre><code class="language-text">ADD release.tar.gz /
+<pre><code class="language-dockerfile">ADD release.tar.gz /
 </code></pre>
 
 <p><code>ADD</code> 与 <code>COPY</code> 类似，也是把主机的文件添加到镜像里。不同的是 <code>ADD</code> 可以是个 <code>URL</code> ，如果源路径是个压缩文件并且不是 <code>URL</code> ，会自动解压到目标路径。官方更建议使用 <code>COPY</code> ，因为 <code>COPY</code> 的语义比较明确就是拷贝文件。</p>
@@ -393,7 +393,7 @@
 
 <p><code>CMD</code> 指令的格式为： <code>CMD &lt;command&gt;</code> 或者 <code>CMD [&quot;executable&quot;,&quot;param1&quot;,&quot;param2&quot;]</code> 或者 <code>CMD [&quot;param1&quot;,&quot;param2&quot;]</code></p>
 
-<pre><code class="language-text">CMD echo $PATH # CMD &lt;command&gt;格式
+<pre><code class="language-dockerfile">CMD echo $PATH # CMD &lt;command&gt;格式
 CMD [ &quot;sh&quot;, &quot;-c&quot;, &quot;echo $PATH&quot; ] # CMD[&quot;executable&quot;,&quot;param1&quot;,&quot;param2&quot;] 格式
 </code></pre>
 
@@ -405,7 +405,7 @@ CMD [ &quot;sh&quot;, &quot;-c&quot;, &quot;echo $PATH&quot; ] # CMD[&quot;execu
 
 <p><code>ENTRYPOINT</code> 指令的格式为： <code>ENTRYPOINT command</code> 或者 <code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></p>
 
-<pre><code class="language-text">ENTRYPOINT exec top -b # ENTRYPOINT command 格式
+<pre><code class="language-dockerfile">ENTRYPOINT exec top -b # ENTRYPOINT command 格式
 ENTRYPOINT [&quot;top&quot;, &quot;-b&quot;] # ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;] 格式
 </code></pre>
 
@@ -413,7 +413,7 @@ ENTRYPOINT [&quot;top&quot;, &quot;-b&quot;] # ENTRYPOINT [&quot;executable&quot
 
 <p>前面说到 <code>CMD [&quot;param1&quot;,&quot;param2&quot;]</code> 格式是给 <code>ENTRYPOINT</code> 提供默认参数用的。当 Dockerfile 指定了 <code>ENTRYPOINT</code> 和 <code>CMD</code> ，那么 <code>CMD</code> 就会作为参数传递给 <code>ENTRYPOINT</code> 。</p>
 
-<pre><code class="language-text">CMD [&quot;-l&quot;, &quot;-s&quot;]
+<pre><code class="language-dockerfile">CMD [&quot;-l&quot;, &quot;-s&quot;]
 ENTRYPOINT [&quot;/usr/bin/ls&quot;]
 </code></pre>
 
@@ -421,7 +421,7 @@ ENTRYPOINT [&quot;/usr/bin/ls&quot;]
 
 <p>这样做的好处是，在运行容器的时候可以把参数传递给 <code>ENTRYPOINT</code> 。举个例子</p>
 
-<pre><code class="language-text">...
+<pre><code class="language-dockerfile">...
 ENTRYPOINT [&quot;/usr/bin/ls&quot;]
 </code></pre>
 
@@ -431,7 +431,7 @@ ENTRYPOINT [&quot;/usr/bin/ls&quot;]
 
 <p><code>ENV</code> 指令的格式为： <code>ENV &lt;key&gt; &lt;value&gt;</code> 或者 <code>ENV &lt;key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value2&gt;=</code></p>
 
-<pre><code class="language-text">ENV VERSION 1.0 # ENV &lt;key&gt; &lt;value&gt; 格式
+<pre><code class="language-dockerfile">ENV VERSION 1.0 # ENV &lt;key&gt; &lt;value&gt; 格式
 ENV VERSION=1.0 DEBUG=on #ENV &lt;key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value2&gt; 格式
 </code></pre>
 
@@ -441,7 +441,7 @@ ENV VERSION=1.0 DEBUG=on #ENV &lt;key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value
 
 <p><code>VOLUME</code> 指令的格式为： <code>VOLUME &lt;path&gt;</code> 或者 <code>VOLUME [&quot;path1&quot;, &quot;path2&quot;]</code></p>
 
-<pre><code class="language-text">VOLUME /data # VOLUME &lt;path&gt; 格式
+<pre><code class="language-dockerfile">VOLUME /data # VOLUME &lt;path&gt; 格式
 VOLUME [&quot;/data1&quot;, &quot;/data2&quot;] #VOLUME [&quot;path1&quot;, &quot;path2&quot;] 格式
 </code></pre>
 
@@ -451,7 +451,7 @@ VOLUME [&quot;/data1&quot;, &quot;/data2&quot;] #VOLUME [&quot;path1&quot;, &quo
 
 <p><code>EXPOSE</code> 指令的格式为： <code>&lt;port&gt; [&lt;port&gt;...]</code></p>
 
-<pre><code class="language-text">EXPOSE 8080
+<pre><code class="language-dockerfile">EXPOSE 8080
 </code></pre>
 
 <p><code>EXPOSE</code> 只是声明容器使用的端口，并不会与宿主机进行端口映射。可以通过 <code>-p</code> 指令在启动容器的时候进行映射 <code>docker run -p 8080:8080 xxx</code> 。</p>
@@ -460,7 +460,7 @@ VOLUME [&quot;/data1&quot;, &quot;/data2&quot;] #VOLUME [&quot;path1&quot;, &quo
 
 <p><code>WORKDIR</code> 指令的格式为： <code>WORKDIR /path/to/workdir</code></p>
 
-<pre><code class="language-text">WORKDIR /www
+<pre><code class="language-dockerfile">WORKDIR /www
 </code></pre>
 
 <p><code>WORKDIR</code> 用来设置工作目录，相当于切换目录，也就相当于 <code>cd</code> 。在 Dockerfile 中不能使用 <code>cd</code> ，因为 <code>cd</code> 不在同一个环境中， <code>Linux</code> 中之所以能用是因为 <code>cd</code> 在同一个进程里。</p>
