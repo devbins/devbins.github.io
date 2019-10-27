@@ -384,12 +384,15 @@ repos.execute();
 
   Executor callbackExecutor = this.callbackExecutor;
   if (callbackExecutor == null) {
+    // 设置回调
     callbackExecutor = platform.defaultCallbackExecutor();
   }
 
   List&lt;CallAdapter.Factory&gt; callAdapterFactories = new ArrayList&lt;&gt;(this.callAdapterFactories);
+  // 添加适配器
   callAdapterFactories.addAll(platform.defaultCallAdapterFactories(callbackExecutor));
 
+  // 添加数据转换器
   List&lt;Converter.Factory&gt; converterFactories = new ArrayList&lt;&gt;(
       1 + this.converterFactories.size() + platform.defaultConverterFactoriesSize());
 
@@ -428,7 +431,7 @@ repos.execute();
 
 <p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
 
-<p>这里也顺便可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。</p>
+<p>可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。</p>
 
 <p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
 
@@ -456,7 +459,6 @@ repos.execute();
 
        @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
            throws Throwable {
-         // If the method is a method from Object then defer to normal invocation.
          if (method.getDeclaringClass() == Object.class) {
            return method.invoke(this, args);
          }
@@ -503,7 +505,7 @@ repos.execute();
 }
 </code></pre>
 
-<p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表达等信息，代码如下。</p>
+<p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
 
 <pre><code class="language-java">static RequestFactory parseAnnotations(Retrofit retrofit, Method method) {
   return new Builder(retrofit, method).build();
