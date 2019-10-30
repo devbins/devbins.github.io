@@ -6,46 +6,66 @@
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="bingomacs">
-  <meta name="description" content="简介">
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="
+Photo by Thomas Martinsen on Unsplash
+
+
+简介
+
+平时需要画 UML 图，用的比较多的就是 StarUML 、 Visio 、 Rational Rose 。其中 StarUML 是跨平台的免费软件，相比其他的收费软件是个不错的选择。
+
+今天要介绍的是PlantUML它是一个开源的用文字来描述的工具，简单来说就是用文字去写出各种 UML 图，而不是用鼠标去拖拽。上面介绍的工具都是通过鼠标去拖拽的方式去画出各种 UML 图。可能由于是个开发的缘故，天生就喜欢纯文本的东西，解析起来方便，占用内存小，改起来也方便，只要一个文本编辑器就可以改。当然我使用的原因是可以在 Emacs 中通过 Org Mode 结合 Org-Babel 使用，生成对应的 UML 图，所见即所得。
+
+这里有一个在线体验的网址，有兴趣可以点击链接，前去体验。">
   
-  <meta property="og:title" content="用PlantUml画uml" />
-<meta property="og:description" content="简介" />
+  <meta property="og:title" content="在emacs中用PlantUml画uml" />
+<meta property="og:description" content="
+Photo by Thomas Martinsen on Unsplash
+
+
+简介
+
+平时需要画 UML 图，用的比较多的就是 StarUML 、 Visio 、 Rational Rose 。其中 StarUML 是跨平台的免费软件，相比其他的收费软件是个不错的选择。
+
+今天要介绍的是PlantUML它是一个开源的用文字来描述的工具，简单来说就是用文字去写出各种 UML 图，而不是用鼠标去拖拽。上面介绍的工具都是通过鼠标去拖拽的方式去画出各种 UML 图。可能由于是个开发的缘故，天生就喜欢纯文本的东西，解析起来方便，占用内存小，改起来也方便，只要一个文本编辑器就可以改。当然我使用的原因是可以在 Emacs 中通过 Org Mode 结合 Org-Babel 使用，生成对应的 UML 图，所见即所得。
+
+这里有一个在线体验的网址，有兴趣可以点击链接，前去体验。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://bingomacs.github.io/post/plantuml/" />
+<meta property="og:url" content="https://devbins.github.io/post/plantuml/" />
 <meta property="article:published_time" content="2019-09-23T00:00:00+08:00" />
 <meta property="article:modified_time" content="2019-09-23T00:00:00+08:00" />
 
 
   <title>
   
-       用PlantUml画uml | bingomacs 
+       在emacs中用PlantUml画uml | dev.bins 
   
   </title>
 
-  <link rel="canonical" href="https://bingomacs.github.io/post/plantuml/">
+  <link rel="canonical" href="https://devbins.github.io/post/plantuml/">
 
   
   
 
   
-  <link href="https://bingomacs.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
 
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://bingomacs.github.io/css/font.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
     
   
-  <link href="https://bingomacs.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://bingomacs.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/main.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
 
 
   
   <link rel="shortcut icon"
   
-      href="https://bingomacs.github.io/images/fav.jpg"
+      href="https://devbins.github.io/images/fav.jpg"
   
   >
 
@@ -64,13 +84,13 @@
 
   
     
-    <link rel="stylesheet" href="https://bingomacs.github.io/js/vendors/katex/katex.min.css">
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
   
   
 
   
     
-    <link rel="stylesheet" href="https://bingomacs.github.io/css/vendors/highlight/github-gist.css">
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
   
 
 </head>
@@ -78,6 +98,8 @@
   <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
   
     
+
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
 
     
       
@@ -87,11 +109,11 @@
     <div class="container">
 
       
-      <a class="navbar-brand" href="https://bingomacs.github.io">
+      <a class="navbar-brand" href="https://devbins.github.io">
           
-        <img class="avatar" src="https://bingomacs.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
         
-        <strong> bingomacs</strong>
+        <strong> dev.bins</strong>
       </a>
 
       
@@ -106,26 +128,26 @@
         
         <ul class="navbar-nav mr-auto ">
           <li class="nav-item ">
-            <a class="nav-link" href="https://bingomacs.github.io">Home</a>
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
           </li>
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/post/" >归档  </a>
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/categories/" >分类  </a>
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/tags/" >标签  </a>
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
             </li>
           
              
             <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/about/" >关于  </a>
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
             </li>
           
           
@@ -158,7 +180,7 @@
 
         
         <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -179,7 +201,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -198,7 +220,7 @@
 
         
         <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
 
             
             <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -223,25 +245,23 @@
     <div class="row mx-0 headfont mt-3 pt-4">
       
       <div class="col-12 col-sm-5 align-middle">
-        <a href="https://bingomacs.github.io">
+        <a href="https://devbins.github.io">
           
-            <img class="pull-right avatar avatar-md" src="https://bingomacs.github.io/images/avatar.jpg" alt="" >
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
           
         </a>
       </div>
       
       <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://bingomacs.github.io">
+        <a href="https://devbins.github.io">
           <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>bingomacs</strong>
+            <strong>dev.bins</strong>
           </h1>
         </a>
         
 
              
         <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-              <a href="//github.com/bingomacs" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
             
             
 
@@ -297,13 +317,15 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://bingomacs.github.io/categories/uml"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> uml </a></li>
+        <li><a href="https://devbins.github.io/categories/uml"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> uml </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/emacs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> emacs </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">用PlantUml画uml</div>
+  <div class="px-4 post-heading">在emacs中用PlantUml画uml</div>
 
   <ul class="post-meta li-x mt-1">
     
@@ -312,12 +334,12 @@
 
     
       <li class="middot"></li>
-      <li>2 minutes read</li>
+      <li>5 minutes read</li>
     
   </ul>
   
     <div class="view">
-      <img src="https://bingomacs.github.io/images/" />
+      <img src="https://devbins.github.io/images/plantuml/plantuml.jpg" />
     </div>
   
 
@@ -326,9 +348,30 @@
 
 
           <div class="post-content markdown">
-            <h2 id="简介">简介</h2>
+            <blockquote>
+<p>Photo by Thomas Martinsen on Unsplash</p>
+</blockquote>
+
+<h2 id="简介">简介</h2>
+
+<p>平时需要画 <code>UML</code> 图，用的比较多的就是 <a href="http://staruml.io/">StarUML</a> 、 <code>Visio</code> 、 <code>Rational Rose</code> 。其中 <a href="http://staruml.io/">StarUML</a> 是跨平台的免费软件，相比其他的收费软件是个不错的选择。</p>
+
+<p>今天要介绍的是<a href="http://plantuml.com/zh/index">PlantUML</a>它是一个开源的用文字来描述的工具，简单来说就是用文字去写出各种 <code>UML</code> 图，而不是用鼠标去拖拽。上面介绍的工具都是通过鼠标去拖拽的方式去画出各种 <code>UML</code> 图。可能由于是个开发的缘故，天生就喜欢纯文本的东西，解析起来方便，占用内存小，改起来也方便，只要一个文本编辑器就可以改。当然我使用的原因是可以在 <code>Emacs</code> 中通过 <code>Org Mode</code> 结合 <code>Org-Babel</code> 使用，生成对应的 <code>UML</code> 图，所见即所得。</p>
+
+<p>这里有一个<a href="http://www.plantuml.com/plantuml/">在线体验</a>的网址，有兴趣可以点击链接，前去体验。</p>
+
+<h2 id="安装">安装</h2>
+
+<p>由于我用的 <code>Emacs</code> 是 <code>Spacemacs</code> 所以我只要在 <code>init.el</code> 中加入如下配置，并下载好<a href="http://plantuml.com/zh/download">PlantUML的jar包</a>放到家目录下，重启之后等待包安装好就可以用了。当然你还需要安装 <code>Java</code> 环境，毕竟这是个 <code>Java</code> 写的工具。</p>
+
+<pre><code class="language-emacs-lisp">(setq-default dotspacemacs-configuration-layers '((plantuml :variables org-plantuml-jar-path &quot;~/plantUml.jar&quot;)))
+</code></pre>
+
+<p>除了在 <code>Emacs</code> 中使用，也可以在其他文本编辑其中使用。比如： <code>Vim</code> 、 <code>VSCode</code> 、 <code>Sublime</code> 、 <code>Notepad++</code> 中使用。</p>
 
 <h2 id="类之间的关系">类之间的关系</h2>
+
+<p>我们先来看一下类之间的关系在 <code>PlantUML</code> 中是怎么画的</p>
 
 <table>
 <thead>
@@ -346,17 +389,17 @@
 
 <tr>
 <td>实现</td>
-<td>&lt;&vert;..</td>
+<td>&lt;&vert;. .</td>
 </tr>
 
 <tr>
 <td>依赖</td>
-<td>&lt;..</td>
+<td>&lt;. .</td>
 </tr>
 
 <tr>
 <td>关联</td>
-<td>&lt;&ndash;</td>
+<td>&lt;- -</td>
 </tr>
 
 <tr>
@@ -366,12 +409,23 @@
 
 <tr>
 <td>组合</td>
-<td>*&ndash;</td>
+<td>*- -</td>
 </tr>
 </tbody>
 </table>
 
-<p>这里顺便提一下，如果要给噶虚拟加上标识，可以在行尾加上 <code>:</code> 和标识</p>
+<p>我们就根据上表，来画一下类图。这里顺便提一下，如果要类之间的关系加上标识，可以在行尾加上 <code>:</code> 和标识。</p>
+
+<p>由于使用到了中文所以要加上 <code>-charset utf-8</code> 不然中文会出现乱码，我们给当前的代码块指定一个输出的文件，以便查看。</p>
+
+<p>所以 <code>Org-Babel</code> 要用如下格式，下文全部采用这种格式，就不在每个代码中列出了。</p>
+
+<pre><code class="language-sh">#+begin_src plantuml :file ./uml.jpg :cmdline -charset utf-8 :exports both
+这里填写PlantUML的相关语句
+#+end_src
+</code></pre>
+
+<p>来看一下类图之间的关系是怎么画的，写完之后使用快捷键 <code>C-c C-c</code> 来生成图片，如下图</p>
 
 <pre><code class="language-plantuml">@startuml
 Class1 &lt;|-- Class2 : 继承
@@ -384,11 +438,20 @@ Class1 *-- Class2 : 组合
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/uml.jpg"/> 
+    <img src="https://devbins.github.io/images/plantuml/uml.jpg"/> 
+</figure>
+
+
+<p>可以看到在 <code>PlantUML</code> 中使用 <code>@startuml</code> 开始， <code>@enduml</code> 结尾，中间就是各个关系之间表示了。</p>
+
+<figure>
+    <img src="https://devbins.github.io/images/plantuml/uml.jpg"/> 
 </figure>
 
 
 <h2 id="成员变量和方法">成员变量和方法</h2>
+
+<p>看完了类之间关系的画法，来看看成员变量是怎么画的</p>
 
 <h3 id="方法一">方法一</h3>
 
@@ -401,7 +464,7 @@ ArrayList : void size()
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/field.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/field.png"/> 
 </figure>
 
 
@@ -423,7 +486,7 @@ class Flight {
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/field2.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/field2.png"/> 
 </figure>
 
 
@@ -440,11 +503,13 @@ class Dummy {
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/field3.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/field3.png"/> 
 </figure>
 
 
 <h2 id="可见性">可见性</h2>
+
+<p>写 <code>Java</code> 的都知道， <code>Java</code> 有访问属性， <code>PlantUML</code> 也为我们提供了这个功能，来画出访问属性。下面这张表就展示了它们是怎么画的。</p>
 
 <table>
 <thead>
@@ -488,7 +553,7 @@ class Visible{
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/access.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/access.png"/> 
 </figure>
 
 
@@ -506,13 +571,13 @@ class Visible{
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/access1.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/access1.png"/> 
 </figure>
 
 
 <h2 id="抽象与静态的表示">抽象与静态的表示</h2>
 
-<p>通过 <code>{abstract}</code> 来修饰抽象方法或属性。通过 <code>{static}</code> 修饰静态方法或属性。</p>
+<p>除了可见性之外， <code>Java</code> 还有抽象类，静态方法。我们可以通过通过 <code>{abstract}</code> 来修饰抽象方法或属性。通过 <code>{static}</code> 修饰静态方法或属性。</p>
 
 <pre><code class="language-plantuml">@startuml
 class Dummy {
@@ -523,13 +588,13 @@ class Dummy {
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/abstract.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/abstract.png"/> 
 </figure>
 
 
 <h2 id="接口-注解-枚举的表示">接口、注解、枚举的表示</h2>
 
-<p>接口、注解、枚举分别用 <code>interface</code> 、 <code>annotation</code> 、 <code>enum</code> 表示</p>
+<p>除了类之外，还有接口、注解、枚举，它们分别用 <code>interface</code> 、 <code>annotation</code> 、 <code>enum</code> 表示</p>
 
 <pre><code class="language-plantuml">@startuml
 abstract class AbstractList
@@ -540,8 +605,8 @@ interface Collection
 List &lt;|-- AbstractList
 Collection &lt;|-- AbstractCollection
 
-Collection &lt;|- List
-AbstractCollection &lt;|- AbstractList
+Collection &lt;|-- List
+AbstractCollection &lt;|-- AbstractList
 AbstractList &lt;|-- ArrayList
 
 class ArrayList {
@@ -560,11 +625,13 @@ annotation SuppressWarnings
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/interface.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/interface.png"/> 
 </figure>
 
 
 <h2 id="包">包</h2>
+
+<p>包在 <code>Java</code> 中是一个重要的概念，我们不会把所有的类都放到一个包下面（简单的只有几个类除外），这就要求我们需要区分不同类来自哪个包。或者有一种情况是同名的类在不同的包中，有了包才能比较直观看出这个包有哪些类并且能够区分开。包在 <code>PlantUML</code> 中通过 <code>package</code> 关键字来标识。</p>
 
 <pre><code class="language-plantuml">@startuml
 package &quot;Classic Collections&quot; #DDDDDD {
@@ -579,11 +646,13 @@ package net.sourceforge.plantuml {
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/package.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/package.png"/> 
 </figure>
 
 
 <h2 id="改变箭头的方向">改变箭头的方向</h2>
+
+<p>使用文字来画 <code>UML</code> 图有一个很大的限制是不能直接拖拽它们之间的方向，这就需要提供摆放这些类位置的功能。 <code>PlantUML</code> 主要提供了如下两种方法。</p>
 
 <h3 id="方法一-1">方法一</h3>
 
@@ -596,11 +665,11 @@ Room *-- Chair
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/arrow1.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/arrow1.png"/> 
 </figure>
 
 
-<p>通过改变顺序来改变方向</p>
+<p>我们可以调换 <code>Romm</code> 和 <code>Student</code> 的顺序来达到摆放的目的。</p>
 
 <pre><code class="language-plantuml">@startuml
 Student -o Room
@@ -609,13 +678,13 @@ Chair --* Room
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/arrow2.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/arrow2.png"/> 
 </figure>
 
 
 <h3 id="方法二-1">方法二</h3>
 
-<p>使用箭头内部关键字来改变方向</p>
+<p>使用箭头内部关键字来改变方向，也就是上下左右了。</p>
 
 <pre><code class="language-plantuml">@startuml
 foo -left-&gt; dummyLeft
@@ -626,11 +695,13 @@ foo -down-&gt; dummyDown
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/arrow3.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/arrow3.png"/> 
 </figure>
 
 
 <h2 id="备注">备注</h2>
+
+<p>有时候我们想要对一个类或者其他东西加一些说明，备注一些信息，我们就会需要用到 <code>PlantUML</code> 的备注功能，下面介绍三种加备注的方法。</p>
 
 <h3 id="在类的末尾添加备注">在类的末尾添加备注</h3>
 
@@ -643,11 +714,13 @@ note left: 左边的备注
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/note1.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/note1.png"/> 
 </figure>
 
 
 <h3 id="为具体的类添加备注">为具体的类添加备注</h3>
+
+<p>当 <code>UML</code> 中的类有多个的时候，我们需要为某个具体的类添加备注，通过添加 <code>note left of xxx</code> 来在类的某个方向上添加备注。</p>
 
 <pre><code class="language-plantuml">@startuml
 class Object
@@ -661,7 +734,7 @@ note bottom of Object : Object 下边的备注
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/note2.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/note2.png"/> 
 </figure>
 
 
@@ -676,9 +749,13 @@ note &quot;浮动的备注&quot; as N1
 </code></pre>
 
 <figure>
-    <img src="https://bingomacs.github.io/images/plantuml/notefloat.png"/> 
+    <img src="https://devbins.github.io/images/plantuml/notefloat.png"/> 
 </figure>
 
+
+<h2 id="总结">总结</h2>
+
+<p><code>UML</code> 是一个工具，可以快速帮我们理清楚各个类之间的关系， <code>UML</code> 不止能画类图，还能画时序图、用例图、活动图，是一个非常方便的工具。本文所讲的 <code>PlantUML</code> 是一个用文本制作 <code>UML</code> 的程序，如果你喜欢纯文本不妨试试。</p>
 
 <h2 id="参考">参考</h2>
 
@@ -699,10 +776,13 @@ note &quot;浮动的备注&quot; as N1
               <div class="mb-5">
                 
 <div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://bingomacs.github.io/tags/uml" role="button">uml </a></li>
+      <li><a href="https://devbins.github.io/tags/uml" role="button">uml </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/emacs" role="button">emacs </a></li>
       
     
   </div>
@@ -722,10 +802,10 @@ note &quot;浮动的备注&quot; as N1
           <div>
     <ul class="post-copyright">
         <li class="post-copyright-author">
-            <strong>本文作者： </strong>bingomacs</li>
+            <strong>本文作者： </strong>dev.bins</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
-            <a href="https://bingomacs.github.io/post/plantuml/" title="用PlantUml画uml">用PlantUml画uml</a>
+            <a href="https://devbins.github.io/post/plantuml/" title="在emacs中用PlantUml画uml">在emacs中用PlantUml画uml</a>
         </li>
         <li class="post-copyright-license">
             <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -738,16 +818,23 @@ note &quot;浮动的备注&quot; as N1
           <div class="row pt-3 np">
             <div class="col-md-6">
               
-                <a href=https://bingomacs.github.io/post/%E6%8B%94%E6%99%BA%E9%BD%BF%E7%9A%84%E6%84%9F%E5%8F%97/ class="post-meta">Previous
+                <a href=https://devbins.github.io/post/tooth/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>拔智齿的经历</span>
+                    <span>拔智齿</span>
                   </div>
                 </a>
               
             </div>
             
             <div class="col-md-6 text-right" >
+              
+                <a href=https://devbins.github.io/post/parallel/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>Parallels tools 安装失败</span>
+                  </div>
+                </a>
               
             </div>
           </div>
@@ -795,6 +882,28 @@ note &quot;浮动的备注&quot; as N1
 										<li class="nav-item">
 						 					<a class="nav-link" href="#%e7%ae%80%e4%bb%8b">
 												 简介
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
+												 安装
 											</a>
 										</li>
 						 
@@ -1199,6 +1308,28 @@ note &quot;浮动的备注&quot; as N1
 								
 
 										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
 						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
 												 参考
 											</a>
@@ -1231,9 +1362,9 @@ note &quot;浮动的备注&quot; as N1
     const gitalk = new Gitalk({
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "bingomacs.github.io",
-        owner: 'bingomacs',
-        admin: ["bingomacs"],
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
         id: location.pathname, 
         distractionFreeMode:  false  
     })
@@ -1256,8 +1387,6 @@ note &quot;浮动的备注&quot; as N1
 
   
   <div class="pb-2 mt-5 pt-5">
-    
-      <a href="//github.com/bingomacs " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
     
     
 
@@ -1300,31 +1429,31 @@ note &quot;浮动的备注&quot; as N1
 
 
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
 
 
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/mdb/mdb.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
 
-<script type="text/javascript" src="https://bingomacs.github.io/js/main.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
 
 
 
   
-  <script src="https://bingomacs.github.io/js/vendors/highlight.pack.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
   <script>hljs.initHighlightingOnLoad();</script>
 
 
 
 
  
-  <script src="https://bingomacs.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://bingomacs.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
 
   <script>
       document.addEventListener("DOMContentLoaded", function () {
