@@ -329,141 +329,115 @@
             <blockquote>
 <p>这些日子碰到这样一个需求，需要在局域网中发现我们创建的某个特定设备，并连上互相通信。本以为要去遍历整个局域网，后来查阅相关资料后发现 Android 为我们提供了网络服务发现（Network Service Discovery）简称 NSD，就是本文要讲的东西了。</p>
 </blockquote>
-
 <h2 id="nsd-有什么用">NSD 有什么用</h2>
-
 <p>用来扫描局域网中特定的服务，并与之通信。省去了自己去写发现协议。</p>
-
 <h2 id="nsd-怎么用">NSD 怎么用</h2>
-
 <h3 id="创建服务">创建服务</h3>
-
 <p>首先要创建一个 ServerSocket，用来等待别人的连接</p>
-
-<pre><code class="language-java">/**
- *创建一个 server 来获取端口
- */
-private void createServerSocket() {
-  if (mServerSocket != null) return;
-  try {
-    mServerSocket = new ServerSocket(0);//设为 0,会自动获取没有占用的端口
-    mPort = mServerSocket.getLocalPort();
-  } catch (IOException e) {
-    e.printStackTrace();
-  }
-}
-</code></pre>
-
-<h3 id="接下来就可以创建-nsdserviceinfo-了-nsdserviceinfo-是一个包含-nsd-服务信息的类-看名字就知道了">接下来就可以创建 NsdServiceInfo 了，NsdServiceInfo 是一个包含 Nsd 服务信息的类，看名字就知道了。</h3>
-
-<pre><code class="language-java">/**
- *创建 NsdServiceInfo
- */
-private void createNsdServiceInfo() {
-  if (mNsdServiceInfo != null) return;
-  mNsdServiceInfo = new NsdServiceInfo();
-  mNsdServiceInfo.setServiceName(SERVICE_NAME);//设置服务的名字，被别的机器发现时显示的名字。
-  mNsdServiceInfo.setServiceType(SERVICE_TYPE);
-  mNsdServiceInfo.setPort(mPort);
-}
-</code></pre>
-
-<h3 id="注册-nsd-服务">注册 NSD 服务</h3>
-
-<pre><code class="language-java">private void register() {
-    mNsdManager = (NsdManager) getSystemService(NSD_SERVICE);
-    mNsdManager.registerService(mNsdServiceInfo, NsdManager.PROTOCOL_DNS_SD,mRegistrationListener);
-}
-private void createRegistration() {
-    mRegistrationListener = new NsdManager.RegistrationListener() {
-        @Override
-        public void onRegistrationFailed(NsdServiceInfo nsdServiceInfo, int i){
-            Toast.makeText(MainActivity.this, &quot;onRegistrationFailed&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onUnregistrationFailed(NsdServiceInfo nsdServiceInfo, int i) {
-            Toast.makeText(MainActivity.this, &quot;onUnregistrationFailed&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onServiceRegistered(NsdServiceInfo nsdServiceInfo) {
-            Toast.makeText(MainActivity.this, &quot;onServiceRegistered&quot;, Toast.LENGTH_SHORT).show();
-            new Thread(MainActivity.this).start();
-        }
-        @Override
-        public void onServiceUnregistered(NsdServiceInfo nsdServiceInfo) {
-            Toast.makeText(MainActivity.this, &quot;onServiceUnregistered&quot;, Toast.LENGTH_SHORT).show();
-        }
-    };
-}
-</code></pre>
-
-<h3 id="在客户端发现-nsd-服务">在客户端发现 NSD 服务</h3>
-
-<pre><code class="language-java">nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
-private void createDiscoverListener() {
-    mDiscoveryListener = new NsdManager.DiscoveryListener() {
-        @Override
-        public void onStartDiscoveryFailed(String s, int i) {
-            Toast.makeText(MainActivity.this, &quot;onStartDiscoveryFailed&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onStopDiscoveryFailed(String s, int i) {
-            Toast.makeText(MainActivity.this, &quot;onStopDiscoveryFailed&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onDiscoveryStarted(String s) {
-            Toast.makeText(MainActivity.this, &quot;onDiscoveryStarted&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onDiscoveryStopped(String s) {
-            Toast.makeText(MainActivity.this, &quot;onDiscoveryStopped&quot;, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onServiceFound(NsdServiceInfo nsdServiceInfo) {
-            //这里的 nsdServiceInfo 只能获取到名字,ip 和端口都不能获取到,要想获取到需要调用 NsdManager.resolveService 方法
-            datas.add(nsdServiceInfo);
-            mHandler.sendEmptyMessage(0);
-        }
-        @Override
-        public void onServiceLost(NsdServiceInfo nsdServiceInfo) {
-            Toast.makeText(MainActivity.this, &quot;onServiceLost&quot;, Toast.LENGTH_SHORT).show();
-        }
-    };
-}
-</code></pre>
-
-<h3 id="获取服务的详细信息">获取服务的详细信息</h3>
-
-<pre><code class="language-java">nsdManager.resolveService(nsdServiceInfo, mResolverListener);
-private void createResolverListener() {
-  mResolverListener = new NsdManager.ResolveListener() {
-      @Override
-      public void onResolveFailed(NsdServiceInfo nsdServiceInfo, int i) {
-        Toast.makeText(MainActivity.this, &quot;onResolveFailed&quot;, Toast.LENGTH_SHORT).show();
-      }
-      @Override
-      public void onServiceResolved(NsdServiceInfo nsdServiceInfo) {
-        mNsdServiceInfo = nsdServiceInfo;
-        new Thread(MainActivity.this).start();
-      }
-    };
-}
-</code></pre>
-
-<h3 id="连接">连接</h3>
-
-<pre><code class="language-java">mSocket = new Socket(mNsdServiceInfo.getHost().getHostAddress(), mNsdServiceInfo.getPort());
-bufferedWriter = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
-bufferedWriter.write(&quot;我连上你了!&quot; + &quot;\n&quot;);
-bufferedWriter.flush();
-</code></pre>
-
-<h2 id="效果图">效果图</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> *创建一个 server 来获取端口
+</span><span class="cm"> */</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createServerSocket</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">mServerSocket</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="n">mServerSocket</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ServerSocket</span><span class="o">(</span><span class="n">0</span><span class="o">)</span><span class="o">;</span><span class="c1">//设为 0,会自动获取没有占用的端口
+</span><span class="c1"></span>    <span class="n">mPort</span> <span class="o">=</span> <span class="n">mServerSocket</span><span class="o">.</span><span class="na">getLocalPort</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="接下来就可以创建-nsdserviceinfo-了-nsdserviceinfo-是一个包含-nsd-服务信息的类-看名字就知道了">接下来就可以创建 NsdServiceInfo 了，NsdServiceInfo 是一个包含 Nsd 服务信息的类，看名字就知道了。</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> *创建 NsdServiceInfo
+</span><span class="cm"> */</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createNsdServiceInfo</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">mNsdServiceInfo</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+  <span class="n">mNsdServiceInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NsdServiceInfo</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+  <span class="n">mNsdServiceInfo</span><span class="o">.</span><span class="na">setServiceName</span><span class="o">(</span><span class="n">SERVICE_NAME</span><span class="o">)</span><span class="o">;</span><span class="c1">//设置服务的名字，被别的机器发现时显示的名字。
+</span><span class="c1"></span>  <span class="n">mNsdServiceInfo</span><span class="o">.</span><span class="na">setServiceType</span><span class="o">(</span><span class="n">SERVICE_TYPE</span><span class="o">)</span><span class="o">;</span>
+  <span class="n">mNsdServiceInfo</span><span class="o">.</span><span class="na">setPort</span><span class="o">(</span><span class="n">mPort</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="注册-nsd-服务">注册 NSD 服务</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mNsdManager</span> <span class="o">=</span> <span class="o">(</span><span class="n">NsdManager</span><span class="o">)</span> <span class="n">getSystemService</span><span class="o">(</span><span class="n">NSD_SERVICE</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">mNsdManager</span><span class="o">.</span><span class="na">registerService</span><span class="o">(</span><span class="n">mNsdServiceInfo</span><span class="o">,</span> <span class="n">NsdManager</span><span class="o">.</span><span class="na">PROTOCOL_DNS_SD</span><span class="o">,</span><span class="n">mRegistrationListener</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createRegistration</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mRegistrationListener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NsdManager</span><span class="o">.</span><span class="na">RegistrationListener</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRegistrationFailed</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span><span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onRegistrationFailed&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUnregistrationFailed</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onUnregistrationFailed&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceRegistered</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onServiceRegistered&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">)</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceUnregistered</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onServiceUnregistered&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="在客户端发现-nsd-服务">在客户端发现 NSD 服务</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">nsdManager</span><span class="o">.</span><span class="na">discoverServices</span><span class="o">(</span><span class="n">SERVICE_TYPE</span><span class="o">,</span> <span class="n">NsdManager</span><span class="o">.</span><span class="na">PROTOCOL_DNS_SD</span><span class="o">,</span> <span class="n">mDiscoveryListener</span><span class="o">)</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createDiscoverListener</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mDiscoveryListener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NsdManager</span><span class="o">.</span><span class="na">DiscoveryListener</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartDiscoveryFailed</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onStartDiscoveryFailed&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStopDiscoveryFailed</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onStopDiscoveryFailed&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDiscoveryStarted</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onDiscoveryStarted&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDiscoveryStopped</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onDiscoveryStopped&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceFound</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//这里的 nsdServiceInfo 只能获取到名字,ip 和端口都不能获取到,要想获取到需要调用 NsdManager.resolveService 方法
+</span><span class="c1"></span>            <span class="n">datas</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">nsdServiceInfo</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">mHandler</span><span class="o">.</span><span class="na">sendEmptyMessage</span><span class="o">(</span><span class="n">0</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceLost</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onServiceLost&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="获取服务的详细信息">获取服务的详细信息</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">nsdManager</span><span class="o">.</span><span class="na">resolveService</span><span class="o">(</span><span class="n">nsdServiceInfo</span><span class="o">,</span> <span class="n">mResolverListener</span><span class="o">)</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">createResolverListener</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">mResolverListener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NsdManager</span><span class="o">.</span><span class="na">ResolveListener</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onResolveFailed</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="s">&#34;onResolveFailed&#34;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">)</span><span class="o">.</span><span class="na">show</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onServiceResolved</span><span class="o">(</span><span class="n">NsdServiceInfo</span> <span class="n">nsdServiceInfo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mNsdServiceInfo</span> <span class="o">=</span> <span class="n">nsdServiceInfo</span><span class="o">;</span>
+        <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">)</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+      <span class="o">}</span>
+    <span class="o">}</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="连接">连接</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">mSocket</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Socket</span><span class="o">(</span><span class="n">mNsdServiceInfo</span><span class="o">.</span><span class="na">getHost</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">getHostAddress</span><span class="o">(</span><span class="o">)</span><span class="o">,</span> <span class="n">mNsdServiceInfo</span><span class="o">.</span><span class="na">getPort</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+<span class="n">bufferedWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedWriter</span><span class="o">(</span><span class="k">new</span> <span class="n">OutputStreamWriter</span><span class="o">(</span><span class="n">mSocket</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+<span class="n">bufferedWriter</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&#34;我连上你了!&#34;</span> <span class="o">+</span> <span class="s">&#34;\n&#34;</span><span class="o">)</span><span class="o">;</span>
+<span class="n">bufferedWriter</span><span class="o">.</span><span class="na">flush</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+</code></pre></div><h2 id="效果图">效果图</h2>
 <p><a href="https://github.com/binsheng/NSD/raw/master/screenshot/demo.gif">NSD</a></p>
-
 <h2 id="相关资料链接">相关资料链接</h2>
-
 <ul>
 <li><a href="https://github.com/binsheng/NSD">demo 地址</a></li>
 <li><a href="https://developer.android.com/training/connect-devices-wirelessly/nsd.html">官网资料</a></li>
@@ -885,7 +859,7 @@ bufferedWriter.flush();
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

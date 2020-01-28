@@ -10,11 +10,8 @@
   <meta name="description" content="
 ReactNative 在本文使用 RN 代替，代码使用 ES6 语法
 
-
 开发环境搭建
-
 Node 的安装
-
 brew install node
 ">
   
@@ -22,11 +19,8 @@ brew install node
 <meta property="og:description" content="
 ReactNative 在本文使用 RN 代替，代码使用 ES6 语法
 
-
 开发环境搭建
-
 Node 的安装
-
 brew install node
 " />
 <meta property="og:type" content="article" />
@@ -349,340 +343,234 @@ brew install node
             <blockquote>
 <p>ReactNative 在本文使用 RN 代替，代码使用 ES6 语法</p>
 </blockquote>
-
 <h2 id="开发环境搭建">开发环境搭建</h2>
-
 <h3 id="node-的安装">Node 的安装</h3>
-
-<pre><code class="language-sh">brew install node
-</code></pre>
-
-<h3 id="rn-脚手架安装">RN 脚手架安装</h3>
-
-<pre><code class="language-sh">npm install -g create-react-native-app
-</code></pre>
-
-<h3 id="使用脚手架创建一个-rn-项目">使用脚手架创建一个 RN 项目</h3>
-
-<pre><code class="language-sh">create-react-native-app RNDemo
-cd RNDemo
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install node
+</code></pre></div><h3 id="rn-脚手架安装">RN 脚手架安装</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">npm install -g create-react-native-app
+</code></pre></div><h3 id="使用脚手架创建一个-rn-项目">使用脚手架创建一个 RN 项目</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create-react-native-app RNDemo
+<span class="nb">cd</span> RNDemo
 npm start
-</code></pre>
-
-<p>稍等片刻，成功启动之后会显示一张二维码，可以扫描这个二维码安装 App。当然也可以输入 <code>i</code> 启动 iOS 模拟器，或者 <code>a</code> 启动安卓模拟器。在模拟器中找到 <code>Expo</code> 这个 App，打开后可以看到如下界面，说明开发环境搭建成功了。
-<img src="https://devbins.github.io/images/rn/rn-start.png" width="300px" height="500px"></p>
-
+</code></pre></div><p>稍等片刻，成功启动之后会显示一张二维码，可以扫描这个二维码安装 App。当然也可以输入 <code>i</code> 启动 iOS 模拟器，或者 <code>a</code> 启动安卓模拟器。在模拟器中找到 <code>Expo</code> 这个 App，打开后可以看到如下界面，说明开发环境搭建成功了。
+<!-- raw HTML omitted --></p>
 <h3 id="直接运行并启动-android-模拟器">直接运行并启动 Android 模拟器</h3>
-
-<pre><code class="language-sh">npm run android
-</code></pre>
-
-<h3 id="直接运行并启动-ios-模拟器">直接运行并启动 iOS 模拟器</h3>
-
-<pre><code class="language-sh">npm run ios
-</code></pre>
-
-<h2 id="组件">组件</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">npm run android
+</code></pre></div><h3 id="直接运行并启动-ios-模拟器">直接运行并启动 iOS 模拟器</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">npm run ios
+</code></pre></div><h2 id="组件">组件</h2>
 <p>组件中有两个重要的字段分别是 props 和 state。props 用来和父组件之间通信，state 用来保存数据和状态。通常 props 和 state 发生变化时，会改变 UI。</p>
-
 <h3 id="props--属性">Props(属性)</h3>
-
 <p>props 在构造方法中初始化，props 不可以被自己更改。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">class</span> <span class="nx">Greeting</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="o">!</span><span class="o">&lt;</span><span class="err">/</span><span class="err">T</span><span class="err">e</span><span class="err">x</span><span class="err">t</span><span class="err">&gt;</span>
+    <span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-<pre><code class="language-js">class Greeting extends Component {
-  render() {
-    return (
-        &lt;Text&gt;Hello {this.props.name}!&lt;/Text&gt;
-    );
-  }
-}
-
-export default class LotsOfGreetings extends Component {
-  render() {
-    return (
-        &lt;View style={{alignItems: 'center'}}&gt;
-        &lt;Greeting name='Rexxar' /&gt; //传递 props
-        &lt;Greeting name='Jaina' /&gt;
-        &lt;Greeting name='Valeera' /&gt;
-        &lt;/View&gt;
-    );
-  }
-}
-</code></pre>
-
-<h3 id="state--状态">State(状态)</h3>
-
+<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">LotsOfGreetings</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="p">{</span><span class="nx">alignItems</span><span class="o">:</span> <span class="s1">&#39;center&#39;</span><span class="p">}</span><span class="p">}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Rexxar&#39;</span> <span class="o">/</span><span class="o">&gt;</span> <span class="c1">//传递 props
+</span><span class="c1"></span>        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Jaina&#39;</span> <span class="o">/</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Valeera&#39;</span> <span class="o">/</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="err">/</span><span class="err">V</span><span class="err">i</span><span class="err">e</span><span class="err">w</span><span class="err">&gt;</span>
+    <span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="state--状态">State(状态)</h3>
 <p>state 表示组件的状态，状态可以被自己改变，通常用来保存数据。state 在构造方法中初始化，使用 <code>setState</code> 来改变它的值，每次修改 state 会触发 <code>render</code> 来重新渲染界面。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">class</span> <span class="nx">Blink</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="nx">showText</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span><span class="p">;</span>
 
-<pre><code class="language-js">class Blink extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {showText: true};
+    <span class="c1">// Toggle the state every second
+</span><span class="c1"></span>    <span class="nx">setInterval</span><span class="p">(</span><span class="p">(</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(</span><span class="nx">previousState</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="nx">showText</span><span class="o">:</span> <span class="o">!</span><span class="nx">previousState</span><span class="p">.</span><span class="nx">showText</span> <span class="p">}</span><span class="p">;</span>
+      <span class="p">}</span><span class="p">)</span><span class="p">;</span>
+    <span class="p">}</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
 
-    // Toggle the state every second
-    setInterval(() =&gt; {
-      this.setState(previousState =&gt; {
-        return { showText: !previousState.showText };
-      });
-    }, 1000);
-  }
-
-  render() {
-    let display = this.state.showText ? this.props.text : ' ';
-    return (
-        &lt;Text&gt;{display}&lt;/Text&gt;
-    );
-  }
-}
-</code></pre>
-
-<h3 id="生命周期">生命周期</h3>
-
+  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">display</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">showText</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">text</span> <span class="o">:</span> <span class="s1">&#39; &#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">display</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/</span><span class="err">T</span><span class="err">e</span><span class="err">x</span><span class="err">t</span><span class="err">&gt;</span>
+    <span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="生命周期">生命周期</h3>
 <p>先看一下大神做的图
-<img src="https://devbins.github.io/images/rn/rnlifecycle.png" alt="" />
+<img src="https://devbins.github.io/images/rn/rnlifecycle.png" alt="">
 从上图看出整个组件的生命周期分为三个阶段</p>
-
 <h4 id="创建阶段">创建阶段</h4>
-
 <ul>
 <li>defaultProps</li>
 </ul>
-
 <p>defaultProps 会在所有方法之前初始化。如果父组件没有给 props 中的某个属性赋值，则使用这里的默认值。之后把值赋给 props ,所有的对象共享 defaultProps。</p>
-
 <ul>
 <li>constructor</li>
 </ul>
-
 <p>构造方法用于初始化 state</p>
-
 <ul>
 <li>componentWillMount</li>
 </ul>
-
 <p>在组件被挂载之前调用，在生命周期中只被调用一次。可以用于初始化网络数据。</p>
-
 <ul>
 <li>render</li>
 </ul>
-
 <p>渲染组件，必须要有的方法。只能返回一个直接子元素。</p>
-
 <ul>
 <li>componentDidMount</li>
 </ul>
-
 <p>在渲染后调用，表示组件已经加载完毕。</p>
-
 <h4 id="运行阶段">运行阶段</h4>
-
 <ul>
 <li>componentWillReceiveProps</li>
 </ul>
-
 <p>在组件收到新的 props 的时候调用，可以调用 setState 来更新 state，在这个方法里调用并不会触发 render。</p>
-
 <ul>
 <li>shouldComponentUpdate</li>
 </ul>
-
 <p>在收到 props 后会调用该方法，来判断是否需要重新渲染组件。返回 true 表示要重新渲染，false 不渲染。</p>
-
 <ul>
 <li>componentWillUpdate</li>
 </ul>
-
 <p>在重新渲染组件之前调用,在这个方法中不能调用 setState 来设置 state。</p>
-
 <ul>
 <li>componentDidUpdate</li>
 </ul>
-
 <p>在组件重新渲染完毕后调用,不应该在这个方法中调用 setState 来设置 state，否则可能导致循环调用。</p>
-
 <h4 id="销毁阶段">销毁阶段</h4>
-
 <ul>
 <li>componentWillUnmount</li>
 </ul>
-
 <p>组件从 DOM 中移除的时候调用，通常做一些清理工作。</p>
-
 <h2 id="布局">布局</h2>
-
 <p>在 React Native 中使用 Flexbox 来进行布局。Flexbox 是 W3C 在 2009 年推出的一种新的布局方案。没有 Flexbox 的时候布局写起来特别不舒服（个人觉得），比如：垂直居中。有了 Flexbox 之后再也不想使用过去的布局方式了。这里的 Flexbox 和 web 上的基本一致，有些许不同。比如： <code>flexDirection</code> 的默认值是 <code>column</code> 而不是 <code>row</code> 。布局中使用 <code>flexDirection</code> 、 <code>alignItems</code> 和 <code>justifyContent</code> 这三个的组合就能够正确的完成布局。</p>
-
 <h3 id="flex-direction">Flex Direction</h3>
-
 <p>flexDirection 表示布局的主轴，子元素会沿着主轴的方向排列。flexDirection 的方向有 <code>column</code> 和 <code>row</code> 表示竖直排列和水平排列。</p>
-
-<pre><code class="language-html">&lt;View style={{flex:1,flexDirection:'column'}}&gt;
-        &lt;View style={{width: 50, height: 50, backgroundColor: 'powderblue'}} /&gt;
-        &lt;View style={{width: 50, height: 50, backgroundColor: 'skyblue'}} /&gt;
-        &lt;View style={{width: 50, height: 50, backgroundColor: 'steelblue'}} /&gt;
-&lt;/View&gt;
-</code></pre>
-
-<h4 id="column">column</h4>
-
-<p><img src="https://devbins.github.io/images/rn/flexdirection-column.png" width="300px" height="500px"></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,flexDirection:&#39;column&#39;}}</span><span class="p"></span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+</code></pre></div><h4 id="column">column</h4>
+<!-- raw HTML omitted -->
 <h4 id="row">row</h4>
-
-<p><img src="https://devbins.github.io/images/rn/flexdirection.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h3 id="justify-content">Justify Content</h3>
-
 <p>justifyContent 决定者子元素在主轴上的排列方式。justifyContent 的值有 <code>flex-start</code> ,  <code>center</code> , <code>flex-end</code>, <code>space-around</code>, 和 <code>pace-between</code> 。</p>
-
-<pre><code class="language-html">&lt;View style={{flex:1,justifyContent:'flex-start'}}&gt;
-        &lt;View style={{ width:50,height:50,backgroundColor: 'powderblue'}} /&gt;
-        &lt;View style={{  width:50,height:50,backgroundColor: 'skyblue'}} /&gt;
-        &lt;View style={{  width:50,height:50,backgroundColor: 'steelblue'}} /&gt;
-&lt;/View&gt;
-</code></pre>
-
-<h4 id="flex-start-主轴开始对齐-也就是从主轴起点开始排列">flex-start 主轴开始对齐，也就是从主轴起点开始排列</h4>
-
-<p><img src="https://devbins.github.io/images/rn/justifycontent-fs.png" width="300px" height="500px"></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,justifyContent:&#39;flex-start&#39;}}</span><span class="p"></span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+</code></pre></div><h4 id="flex-start-主轴开始对齐-也就是从主轴起点开始排列">flex-start 主轴开始对齐，也就是从主轴起点开始排列</h4>
+<!-- raw HTML omitted -->
 <h4 id="flex-end-主轴结束方向对齐-也就内容与是主轴结束点对齐">flex-end 主轴结束方向对齐，也就内容与是主轴结束点对齐</h4>
-
-<p><img src="https://devbins.github.io/images/rn/justifycontent-fe.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="center-居中">center 居中</h4>
-
-<p><img src="https://devbins.github.io/images/rn/justifycontent-center.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="space-around-每个项目之间间隔相等">space-around 每个项目之间间隔相等</h4>
-
-<p><img src="https://devbins.github.io/images/rn/justifycontent-sa.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="space-between-每个项目之间的两边都相等">space-between 每个项目之间的两边都相等</h4>
-
-<p><img src="https://devbins.github.io/images/rn/justifycontent-sb.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h3 id="align-items">Align Items</h3>
-
 <p>alignItems 决定者子元素在次轴上的排列方式。alignItems 的值有 <code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>stretch</code> 。</p>
-
 <h4 id="flex-start-内容与次轴开始对齐">flex-start 内容与次轴开始对齐</h4>
-
-<p><img src="https://devbins.github.io/images/rn/alignitems-fs.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="flex-end-内容与次轴结束点对齐">flex-end 内容与次轴结束点对齐</h4>
-
-<p><img src="https://devbins.github.io/images/rn/alignitems-fe.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="center-内容居中">center 内容居中</h4>
-
-<p><img src="https://devbins.github.io/images/rn/alignitems-center.png" width="300px" height="500px"></p>
-
+<!-- raw HTML omitted -->
 <h4 id="stretch-在次轴方向上展开至填满次轴-子元素控件不能在次轴上设置大小-不让会没有效果">stretch 在次轴方向上展开至填满次轴，子元素控件不能在次轴上设置大小，不让会没有效果</h4>
-
-<pre><code class="language-html">&lt;View style={{flex:1,alignItems: 'stretch'}}&gt;
-        &lt;View style={{ height:50,backgroundColor: 'powderblue'}} /&gt;
-        &lt;View style={{ height:50,backgroundColor: 'skyblue'}} /&gt;
-        &lt;View style={{ height:50,backgroundColor: 'steelblue'}} /&gt;
-&lt;/View&gt;
-</code></pre>
-
-<p><img src="https://devbins.github.io/images/rn/alignitems-strecth.png" width="300px" height="500px"></p>
-
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,alignItems:</span> <span class="err">&#39;</span><span class="na">stretch</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span><span class="p"></span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+</code></pre></div><!-- raw HTML omitted -->
 <h2 id="网络">网络</h2>
-
 <h3 id="fetch">fetch</h3>
-
 <p>RN 提供了 <code>fetch</code> API 来进行网络请求，第二个参数可以指定 header 参数，和提交的数据。</p>
-
-<pre><code class="language-js">fetch('https://mywebsite.com/endpoint/', {
-  method: 'POST',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    firstParam: 'yourValue',
-    secondParam: 'yourOtherValue',
-  })
-})
-</code></pre>
-
-<p>fetch 返回的是一个 Promise，这样我们可以很方便的处理返回的数据</p>
-
-<pre><code class="language-js">function getMoviesFromApiAsync() {
-  return fetch('https://facebook.github.io/react-native/movies.json')
-    .then((response) =&gt; response.json())
-    .then((responseJson) =&gt; {
-      return responseJson.movies;
-    })
-    .catch((error) =&gt; {
-      console.error(error);
-    });
-  }
-</code></pre>
-
-<p>在 RN 中使用 ES7 标准的 <code>async/await</code> 语法也是可以的</p>
-
-<pre><code class="language-js">async function getMoviesFromApi() {
-  try {
-    let response = await fetch('https://facebook.github.io/react-native/movies.json');
-    let responseJson = await response.json();
-    return responseJson.movies;
-  } catch(error) {
-    console.error(error);
-  }
-}
-</code></pre>
-
-<h3 id="xmlhttprequest">XMLHttpRequest</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://mywebsite.com/endpoint/&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+  <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;Accept&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+  <span class="p">}</span><span class="p">,</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="p">{</span>
+    <span class="nx">firstParam</span><span class="o">:</span> <span class="s1">&#39;yourValue&#39;</span><span class="p">,</span>
+    <span class="nx">secondParam</span><span class="o">:</span> <span class="s1">&#39;yourOtherValue&#39;</span><span class="p">,</span>
+  <span class="p">}</span><span class="p">)</span>
+<span class="p">}</span><span class="p">)</span>
+</code></pre></div><p>fetch 返回的是一个 Promise，这样我们可以很方便的处理返回的数据</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">getMoviesFromApiAsync</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://facebook.github.io/react-native/movies.json&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="p">(</span><span class="nx">responseJson</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">responseJson</span><span class="p">.</span><span class="nx">movies</span><span class="p">;</span>
+    <span class="p">}</span><span class="p">)</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="p">;</span>
+    <span class="p">}</span><span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div><p>在 RN 中使用 ES7 标准的 <code>async/await</code> 语法也是可以的</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getMoviesFromApi</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://facebook.github.io/react-native/movies.json&#39;</span><span class="p">)</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">responseJson</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">responseJson</span><span class="p">.</span><span class="nx">movies</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="xmlhttprequest">XMLHttpRequest</h3>
 <p>除了 <code>fetchAPI</code> 外，RN 还内置了 XMLHttpRequest，也就是我们俗称 <code>ajax</code> 的东西。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">!==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
 
-<pre><code class="language-js">var request = new XMLHttpRequest();
-request.onreadystatechange = (e) =&gt; {
-  if (request.readyState !== 4) {
-    return;
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">)</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span><span class="p">;</span>
 
-  if (request.status === 200) {
-    console.log('success', request.responseText);
-  } else {
-    console.warn('error');
-  }
-};
-
-request.open('GET', 'https://mywebsite.com/endpoint/');
-request.send();
-</code></pre>
-
-<h3 id="websocket">WebSocket</h3>
-
+<span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://mywebsite.com/endpoint/&#39;</span><span class="p">)</span><span class="p">;</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+</code></pre></div><h3 id="websocket">WebSocket</h3>
 <p>RN 还提供了 WebSocket 的支持</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://host.com/path&#39;</span><span class="p">)</span><span class="p">;</span>
 
-<pre><code class="language-js">var ws = new WebSocket('ws://host.com/path');
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="p">(</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// connection opened
+</span><span class="c1"></span>  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">)</span><span class="p">;</span> <span class="c1">// send a message
+</span><span class="c1"></span><span class="p">}</span><span class="p">;</span>
 
-ws.onopen = () =&gt; {
-  // connection opened
-  ws.send('something'); // send a message
-};
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// a message was received
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span><span class="p">;</span>
 
-ws.onmessage = (e) =&gt; {
-  // a message was received
-  console.log(e.data);
-};
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// an error occurred
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span><span class="p">;</span>
 
-ws.onerror = (e) =&gt; {
-  // an error occurred
-  console.log(e.message);
-};
-
-ws.onclose = (e) =&gt; {
-  // connection closed
-  console.log(e.code, e.reason);
-};
-</code></pre>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// connection closed
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">code</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">reason</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span><span class="p">;</span>
+</code></pre></div>
           </div>
 
           
@@ -1728,7 +1616,7 @@ ws.onclose = (e) =&gt; {
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

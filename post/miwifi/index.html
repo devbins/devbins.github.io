@@ -9,7 +9,6 @@
   <meta name="author" content="dev.bins">
   <meta name="description" content="
 我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
-
 开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。
 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。
 ">
@@ -17,7 +16,6 @@
   <meta property="og:title" content="小米路由器刷 openwrt" />
 <meta property="og:description" content="
 我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
-
 开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。
 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。
 " />
@@ -334,78 +332,57 @@
           <div class="post-content markdown">
             <blockquote>
 <p>我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。</p>
-
 <p>开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。
 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。</p>
 </blockquote>
-
 <h2 id="开发前准备">开发前准备</h2>
-
 <ul>
 <li>U 盘一个，格式为 FAT 或 FAT32</li>
 <li>小米路由器 mini 一台</li>
 <li>电脑一台（以 Mac 为例）</li>
 <li>手机的取卡针一根，其它可以按下 reset 的尖锐物都可以，比如牙签。</li>
 </ul>
-
 <h2 id="刷开发版">刷开发版</h2>
-
 <p>先查看一下路由器系统的版本是不是开发板，如果是开发版的可以跳过这一步，到下一节。
 为什么要刷开发版？
 因为只有开发版才支持 ssh。只有开启了 ssh 才能有权限刷其它系统。
 首先下载<a href="http://www1.miwifi.com/miwifi%5Fdownload.html">开发板 ROM</a>，把下载好的 miwifi_r1cmxxx.bin 重命名为 miwifi.bin，并放到 U 盘根目录下。
 断开小米路由器的电源，把 U 盘插进 USB 接口，用取卡针按下 reset 按钮，直到指示灯变为黄色闪烁后可松开。
 等待片刻（5~10 分钟），刷机成功后会自动重启，进入正常状态，指示灯会由黄变蓝。失败指示灯变为红色，请重试。</p>
-
 <h2 id="开启-ssh">开启 ssh</h2>
-
 <p>经过上面的步骤，此时路由器的系统已经是开发版了。接下来就需要开启 ssh，所以要先下载<a href="http://d.miwifi.com/rom/ssh">开启 ssh 工具</a>。在下载页面还会包含路由器的 root 密码，记下后面要用到。下载好后，把下载的文件重命名为 miwifi_ssh.bin，并放到 U 盘的根目录。别忘了还要删除刚才的 miwifi.bin。
 此时，断开小米路由器的电源，把 U 盘插进路由器的 USB 接口，用取卡针按下 reset 按钮，直到指示灯变为黄色闪烁后松开。
 等待一会儿，指示灯变蓝后说明开启 ssh 成功。如果变成红色说明失败，可以重复上述步骤。
 操作步骤和刷开发版类似。</p>
-
 <h2 id="刷入-openwrt">刷入 openwrt</h2>
-
 <p>来到这里说明你刷入了开发版，并开启了 ssh，如果没有请重复上面的操作，不然后面没法进行下去。要想刷入 openwrt，依然是先下载<a href="http://downloads.openwrt.org.cn/PandoraBox/Xiaomi-Mini-R1CM/stable/">openwrt</a>固件。
 下载好后，我们要把下载好的上传到小米路由器上。打开终端输入</p>
-
-<pre><code class="language-bash">scp PandoraBox.bin root@192.168.31.1:/tmp/
-</code></pre>
-
-<p>这样就把固件上传到/tmp 目录下了，接下来登录路由器，准备开刷。</p>
-
-<pre><code class="language-bash">ssh root@192.168.31.1 #回车之后输入密码，密码就是在上一步，开启 ssh 那里让记住的密码
-cd /tmp
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">scp PandoraBox.bin root@192.168.31.1:/tmp/
+</code></pre></div><p>这样就把固件上传到/tmp 目录下了，接下来登录路由器，准备开刷。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.31.1 <span class="c1">#回车之后输入密码，密码就是在上一步，开启 ssh 那里让记住的密码</span>
+<span class="nb">cd</span> /tmp
 mtd -r write xxx.bin OS1
-</code></pre>
-
-<p>注意 <code>OS1</code> 是大写的，第一次试的时候写成小写的没有成功，换成大写的就好了。
+</code></pre></div><p>注意 <code>OS1</code> 是大写的，第一次试的时候写成小写的没有成功，换成大写的就好了。
 另外如果 <code>OS1</code> 不成功换成 <code>firmware</code> 试试。</p>
-
 <h2 id="opkg">opkg</h2>
-
 <p>openwrt 刷入成功之后我们还要进行配置，不然可玩性就少了。openwrt 其实就相当于一台小型 Linux，所以配置一下软件仓库还是有必要的。
 openwrt 默认用户名是 root，密码是 admin。管理的地址是 192.168.1.1，不再是 31.1 了。</p>
-
-<pre><code class="language-bash">ssh root@192.168.1.1 #回车后输入密码
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.1.1 <span class="c1">#回车后输入密码</span>
 mv /ect/opkg.conf /etc/opkg.conf.bak
 vi /etc/opkg.conf
-</code></pre>
-
-<p>把下面的内容拷贝进去</p>
-
-<pre><code class="language-bash">dest root /
+</code></pre></div><p>把下面的内容拷贝进去</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">dest root /
 dest ram /tmp
 lists_dir ext /etc/opkg-lists
 option overlay_root /overlay
-# notice
+<span class="c1"># notice</span>
 dest usb /mnt/sdb1/opkg
 
-arch all 100
-arch ramips_24kec 200
-arch ramips 300
-arch mips 400
-arch unkown 500
+arch all <span class="m">100</span>
+arch ramips_24kec <span class="m">200</span>
+arch ramips <span class="m">300</span>
+arch mips <span class="m">400</span>
+arch unkown <span class="m">500</span>
 
 src/gz barrier_breaker_base http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/base
 src/gz barrier_breaker_luci http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/luci
@@ -416,24 +393,17 @@ src/gz barrier_breaker_routing http://downloads.openwrt.org/barrier_breaker/14.0
 src/gz barrier_breaker_telephony http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/telephony
 src/gz openwrt_dist http://openwrt-dist.thankgfw.ml/releases/ramips/packages
 src/gz openwrt_dist_luci http://openwrt-dist.thankgfw.ml/releases/luci/packages
-</code></pre>
-
-<p>配置完了更新一下仓库。顺便了解一下 opkg 的使用</p>
-
-<pre><code class="language-bash"># 更新列表
+</code></pre></div><p>配置完了更新一下仓库。顺便了解一下 opkg 的使用</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 更新列表</span>
 opkg update
-# 安装软件
+<span class="c1"># 安装软件</span>
 opkg install wget
-# 删除软件
+<span class="c1"># 删除软件</span>
 opkg remove wget
-# 搜索
+<span class="c1"># 搜索</span>
 opkg search wget
-</code></pre>
-
-<p>用于在国内，访问速度会很慢。</p>
-
+</code></pre></div><p>用于在国内，访问速度会很慢。</p>
 <h2 id="参考">参考</h2>
-
 <p><a href="https://my.oschina.net/u/260165/blog/1603702">小米 mini 路由器刷 openwrt</a>
 <a href="https://blog.phpgao.com/xiaomi%5Frouter%5Fopkg.html">opkg</a></p>
           </div>
@@ -747,7 +717,7 @@ opkg search wget
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

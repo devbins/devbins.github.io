@@ -333,122 +333,65 @@ Git 中有一个神奇的功能，他可以让你用 Git 来管理 SVN。两个�
             <blockquote>
 <p>Git 中有一个神奇的功能，他可以让你用 Git 来管理 SVN。两个之间互不冲突，对于喜欢使用 Git 的同志，这是一个非常不错的选择。自从有了它妈妈再也不用担心 SVN 不好用了。</p>
 </blockquote>
-
 <h2 id="缘起">缘起</h2>
-
 <p>公司的项目是使用 <code>svn</code> 来管理的，而我更偏向使用 <code>git</code> ，但是公司使用的是 <code>svn</code> 我也没办法。
 最开始在 macOS 上使用命令行来操作 <code>svn</code> ，但是好久没用了，命令也基本都忘了。找了半天也没有满意的客户端软件，直到别人推荐 <code>Cornerstone</code> ，用了一段时间还不错。但是后面用着还是发现了许多问题，用着不舒服。也就是这个不舒服，让我想换回命令行使用，于是我在<a href="https://kapeli.com/dash">Dash</a>中输入 <code>svn</code> 查找相关命令，却搜索出了 <code>git svn</code> 这个东西。最开始我以为这是一个把 <code>svn</code> 项目转为 <code>git</code> 的工具，于是看了一下说明，如获至宝。原来这货可以可以作为 <code>svn</code> 的客户端工具，并且可以向 <code>svn</code> 提交代码，这比转换的功能牛逼多了。真是好激动！！！</p>
-
 <h2 id="主要功能">主要功能</h2>
-
 <h3 id="把-svn-项目以-git-方式-clone-到本地">把 <code>svn</code> 项目以 <code>git</code> 方式 <code>clone</code> 到本地</h3>
-
 <p>首先要有 <code>svn</code> 的仓库，没有的话就搭建一个（不然怎么玩）。</p>
-
-<pre><code class="language-sh">git svn clone svn://127.0.0.1 test -T trunk -b branches -t tags
-</code></pre>
-
-<p>如果你在 <code>Linux</code> 下输入这条命令，会报以下错误，在 <code>macOS</code> 上面没碰到</p>
-
-<pre><code class="language-sh">$ git svn
-git: 'svn' is not a git command. See 'git --help'.
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn clone svn://127.0.0.1 <span class="nb">test</span> -T trunk -b branches -t tags
+</code></pre></div><p>如果你在 <code>Linux</code> 下输入这条命令，会报以下错误，在 <code>macOS</code> 上面没碰到</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ git svn
+git: <span class="s1">&#39;svn&#39;</span> is not a git command. See <span class="s1">&#39;git --help&#39;</span>.
 
 The most similar commands are
 fsck
 mv
 show
-</code></pre>
-
-<p>一开始我以为我安装的版本太旧了不支持 <code>git svn</code> ，于是升级到最新。升级之后我再次尝试，得到的结果还是一样，历史总是惊人的相似。
+</code></pre></div><p>一开始我以为我安装的版本太旧了不支持 <code>git svn</code> ，于是升级到最新。升级之后我再次尝试，得到的结果还是一样，历史总是惊人的相似。
 开始查资料，这次比较幸运，一查就中。提示中说了 <code>git svn</code> 不是 <code>git</code> 的命令，给了几个相似的命令也不是。解决方法就是安装 <code>git svn</code> 。</p>
-
-<pre><code class="language-sh">sudo apt install git-svn
-</code></pre>
-
-<p>再次执行 <code>clone</code> 输入账号和密码就可以正常使用了， <code>svn</code> 上的东西就会被 <code>clone</code> 到本地的 <code>test</code> 目录下。这时候就可以把 <code>git</code> 当成 <code>svn</code> 客户端来使用。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install git-svn
+</code></pre></div><p>再次执行 <code>clone</code> 输入账号和密码就可以正常使用了， <code>svn</code> 上的东西就会被 <code>clone</code> 到本地的 <code>test</code> 目录下。这时候就可以把 <code>git</code> 当成 <code>svn</code> 客户端来使用。</p>
 <p>其实 <code>git svn clone</code> 是 <code>git svn init</code> 和 <code>git svn fetch</code> 两个命令的组合。
 <code>-T trunk -b branches -t tags</code> 其中 <code>-T</code> 、 <code>-b</code> 、 <code>-t</code> 分别对应 <code>svn</code> 中的主干、分支、和标签名称。这些通常是标准的（没有修改过），由于使用很频繁，这整句可以使用 <code>-s</code> 来代替。</p>
-
-<pre><code class="language-sh">git svn clone svn://127.0.0.1 test -s
-</code></pre>
-
-<h3 id="把文件加入版本控制">把文件加入版本控制</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn clone svn://127.0.0.1 <span class="nb">test</span> -s
+</code></pre></div><h3 id="把文件加入版本控制">把文件加入版本控制</h3>
 <p>在 <code>clone</code> 了 <code>svn</code> 的项目之后，就可以使用 <code>git</code> 命令来管理 <code>svn</code> 项目。</p>
-
-<pre><code class="language-sh">touch README.md
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">touch README.md
 git add README.md
-</code></pre>
-
-<h3 id="提交代码">提交代码</h3>
-
+</code></pre></div><h3 id="提交代码">提交代码</h3>
 <p><code>git</code> 是一个分布式版本控制系统，这和 <code>svn</code> 是不一样的。 <code>svn</code> 在没有网络的情况下是没法提交代码的，而使用了 <code>git svn</code> 后就可以享受到分布式版本控制的好处，可以在本地进行提交变更。向本地提交变更和 <code>git</code> 原来的使用方式一样，使用 <code>git commit</code> 就行了。</p>
-
-<pre><code class="language-sh">git commit -m &quot;add README.md&quot;
-</code></pre>
-
-<p>这里需要注意一点，这里的提交是指提交到本地，没有更新到服务器，如果这时候磁盘损坏，你这次的更新是找不回来的。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;add README.md&#34;</span>
+</code></pre></div><p>这里需要注意一点，这里的提交是指提交到本地，没有更新到服务器，如果这时候磁盘损坏，你这次的更新是找不回来的。</p>
 <h3 id="从-svn-拉取更新">从 <code>svn</code> 拉取更新</h3>
-
 <p>工作中通常是几个小伙伴一起开发项目，除了自己会向 <code>svn</code> 服务器提交代码，别人也会向服务器提交代码，我们需要把别人向服务器提交的代码同步下来，以获取最新的代码。经常同步代码是一个很好的习惯，可以减少冲突。
 从服务器拉取最新的更新使用 <code>git svn rebase</code> ,它会拉取服务器上最新的改变，在此基础上 <code>rebase(衍合)</code> 你的修改。</p>
-
-<pre><code class="language-sh">git svn rebase
-</code></pre>
-
-<p><code>git svn rebase</code> 虽好用，但是还不能适应所有场景。比如：你本地更改了某个文件，没有提交这个更新，此时你想从 <code>svn</code> 上更新，这时候使用 <code>git svn rebase</code> 是不行的。因为 <code>git svn rebase</code> 需要保证工作目录是干净的,你改动了就已经不干净了。所以在拉取更新之前最好做一次临时提交（commit）或者暂存（stash），不然引起冲突时命令会停止。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn rebase
+</code></pre></div><p><code>git svn rebase</code> 虽好用，但是还不能适应所有场景。比如：你本地更改了某个文件，没有提交这个更新，此时你想从 <code>svn</code> 上更新，这时候使用 <code>git svn rebase</code> 是不行的。因为 <code>git svn rebase</code> 需要保证工作目录是干净的,你改动了就已经不干净了。所以在拉取更新之前最好做一次临时提交（commit）或者暂存（stash），不然引起冲突时命令会停止。</p>
 <p>除了使用 <code>git svn rebase</code> 来同步上游更新外还可以手动从上游更新到本地</p>
-
-<pre><code class="language-sh">git svn fetch
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn fetch
 git merge git-svn
-</code></pre>
-
-<p>使用 <code>git svn fetch</code> 来拉取 <code>svn</code> 上的内容到本地，它不会 <code>merge</code> 到当前分支，通常需要我们手动去合并。而使用 <code>git svn rebase</code> 不需要我们手动合并。</p>
-
+</code></pre></div><p>使用 <code>git svn fetch</code> 来拉取 <code>svn</code> 上的内容到本地，它不会 <code>merge</code> 到当前分支，通常需要我们手动去合并。而使用 <code>git svn rebase</code> 不需要我们手动合并。</p>
 <h3 id="向-svn-推送更新">向 <code>svn</code> 推送更新</h3>
-
 <p>工作中可能会有许多小伙伴一起维护一个项目，使用 <code>git</code> 我们可以先把变更提交到本地，然后把己修改的代码推送到 <code>svn</code> 服务器，这时候就要用到 <code>git svn dcommit</code> 来向 <code>svn</code> 提交代码。</p>
-
-<pre><code class="language-sh">git svn dcommit
-</code></pre>
-
-<p>这里需要注意一点， <code>git</code> 在往服务器推送之前，需要更新到上游最新提交，不然是无法合并的，而 <code>git svn</code> 只需要有冲突的时候才需要这样做。当有人更新了一个 <code>A</code> 的文件并推送到了服务器，这时候你更新了 <code>B</code> 文件，使用 <code>git svn dcommit</code> 是可以正常工作的。这和 <code>svn</code> 的做法是类似的，如果是 <code>git</code> 的话，你先要同步上游更新，然后才能向服务器推送更新。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn dcommit
+</code></pre></div><p>这里需要注意一点， <code>git</code> 在往服务器推送之前，需要更新到上游最新提交，不然是无法合并的，而 <code>git svn</code> 只需要有冲突的时候才需要这样做。当有人更新了一个 <code>A</code> 的文件并推送到了服务器，这时候你更新了 <code>B</code> 文件，使用 <code>git svn dcommit</code> 是可以正常工作的。这和 <code>svn</code> 的做法是类似的，如果是 <code>git</code> 的话，你先要同步上游更新，然后才能向服务器推送更新。</p>
 <p>假如在 <code>git</code> 下使用 <code>commit</code> 向本地提交了多次，这时候使用 <code>git svn dcommit</code> 会把本地提交的多次更新，依次向 <code>svn</code> 服务器推送。也就说你使用 <code>git commit</code> 向本地提交了多次更新，在使用 <code>git svn dcommit</code> 之后 <code>svn</code> 里的 log 就会有多次更新。</p>
-
 <h2 id="解决冲突问题">解决冲突问题</h2>
-
 <p>在多个人协同工作的过程中难免会碰到冲突，无法自动合并，这时候就需要我们手动解决。在 <code>git</code> 中解决 <code>svn</code> 的冲突和解决 <code>git</code> 中一样，没有多大的区别。我们把 <code>svn</code> 当成 <code>git</code> 用就好了，一般冲突会发生在 <code>rebase</code> 上。我们手动修改冲突的文件后用 <code>git add .</code> 然后 <code>git rebase --continue</code> 就可以解决。</p>
-
 <h2 id="其它一些功能">其它一些功能</h2>
-
 <h3 id="ignore">ignore</h3>
-
 <p>项目中有些文件我们不想加入到版本控制系统中，比如：在 macOS 下面的文件系统、项目中编译生成的文件、IDE 的配置。这些每个人的都不一样，纳入到版本控制中会污染整个项目，别人更新了你的配置还会对别人造成不必要的麻烦。所以这些文件是不应该被加入到版本控制中的，如果我们手动去管理，这会变得非常麻烦，管理这些需要花太多精力，一个好的工程师应不应该话太多时间在这上面。
 幸好 <code>svn</code> 和 <code>git</code> 都提供了 <code>ignore</code> 来把一些不需要加入版本控制的文件给管理起来。在使用中 <code>git</code> 的 <code>ignore</code> 会比 <code>svn</code> 的好用， <code>git</code> 只需要在 <code>.gitignore</code> 中写一些规则就可以了， <code>svn</code> 就麻烦了许多。
 使用 <code>git</code> 管理 <code>svn</code> 的 <code>ignore</code> 也是很简单的。</p>
-
-<pre><code class="language-sh">git svn create-ignore
-</code></pre>
-
-<p>它会自动创建 <code>.gitignore</code> 文件，并把 <code>svn</code> 中的 <code>ignore</code> 拷贝到 <code>git</code> 中。</p>
-
-<pre><code class="language-sh">git svn show-ignore &gt; .git/info/exclude
-</code></pre>
-
-<h3 id="log">log</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn create-ignore
+</code></pre></div><p>它会自动创建 <code>.gitignore</code> 文件，并把 <code>svn</code> 中的 <code>ignore</code> 拷贝到 <code>git</code> 中。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git svn show-ignore &gt; .git/info/exclude
+</code></pre></div><h3 id="log">log</h3>
 <p>在 <code>git</code> 中我们查看 log，可以使用 <code>git log</code> 来查看。对于熟悉 <code>svn</code> 的同学可能习惯了 <code>svn</code> 的显示风格，可以使用 <code>git svn log</code> 显示 <code>svn</code> 风格的 log。在 <code>svn</code> 中查看 log 是需要连上网络不能离线的，但是用 <code>git svn log</code> 是可以在没有网络的情况下查看 log 的，这一点似乎增强了 <code>svn</code> 的功能。</p>
-
 <h3 id="svn-服务器信息">svn 服务器信息</h3>
-
 <p><code>svn</code> 提供了 <code>svn info</code> 来查看服务器信息，用 <code>git</code> 管理之后可以使用 <code>git svn info</code> 来查看。</p>
-
 <h2 id="参考">参考</h2>
-
 <p><a href="https://git-scm.com/book/en/v2/Git-and-Other-Systems-Git-as-a-Client">Git</a></p>
           </div>
 
@@ -941,7 +884,7 @@ git merge git-svn
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

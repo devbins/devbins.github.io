@@ -331,60 +331,37 @@
             <blockquote>
 <p>做开发经常需要在各种环境中切来切去，回来的时候环境已经变了。Tmux 可以创建多个会话在不同环境中切换，回来的时候还是那个她，熟悉的味道。</p>
 </blockquote>
-
 <h2 id="什么是-tmux">什么是 Tmux</h2>
-
 <p>Tmux 的自述</p>
-
 <blockquote>
 <p>tmux is a terminal multiplexer: it enables a number of terminals to be created, accessed, and controlled from a single screen.  tmux may be detached from a screen and continue running in the background, then later reattached.</p>
 </blockquote>
-
 <p>说人话
 Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏幕控制。Tmux 可以从屏幕分离并继续在后台运行，然后重新连接。</p>
-
 <h2 id="tmux-有什么用">Tmux 有什么用</h2>
-
 <p>举个例子：
 你连上服务器后做了一会事情要回到本地做一些操作，通常做法是先断开服务器的连接，做完本地操作后再连上服务器继续操作。这样做太费事了。Tmux 就是解决这件事的，它可以让你不需要断开连接就可以在本地做你想做的，就算意外断开连接也能恢复。(当然关机就不行了，但是你可以通过写脚本来恢复)</p>
-
 <h2 id="怎么用">怎么用</h2>
-
 <h3 id="名字解释">名字解释</h3>
-
 <ul>
 <li>Session：用来管理窗口的，一个 Session 可以包含多个 Window。</li>
 <li>Window：当前正在操作的窗口，一个 Window 可以包含多个 Pane。</li>
 <li>Pane：Window 被分割后的小窗口。</li>
 <li>Prefix：前缀键 <code>CTRL+b</code> ，表示同时按下 <code>CTRL</code> 和 <code>b</code> 。下文使用 <code>Prefix</code> 代替 <code>CTRL+b</code></li>
 </ul>
-
 <h2 id="安装">安装</h2>
-
 <h3 id="mac">Mac</h3>
-
-<pre><code class="language-sh">brew install tmux
-</code></pre>
-
-<h3 id="linux--ubuntu">Linux(Ubuntu)</h3>
-
-<pre><code class="language-sh">sudo apt install tmux
-</code></pre>
-
-<h2 id="基本使用">基本使用</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install tmux
+</code></pre></div><h3 id="linux--ubuntu">Linux(Ubuntu)</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install tmux
+</code></pre></div><h2 id="基本使用">基本使用</h2>
 <p>安装好 Tmux 后在终端中输入 <code>tmux</code> 就可以开始使用，默认会创建一个 Session。</p>
-
 <p>可以使用 <code>tmux new -s name</code> 在创建 Session 的时候并命名, <code>name</code> 就是该 Session 的名字</p>
-
 <h3 id="session-相关">Session 相关</h3>
-
 <ul>
 <li>新建 Session</li>
 </ul>
-
 <p><code>Prefix :new -s name</code> 其中 <code>name</code> 是 Session 的名字，这条指令是在 <code>Tmux</code> 的环境中使用，和基本使用中的不一样。这条指令表示先按下 <code>Prefix（CTRL+b）</code> ，松开之后再输入 <code>:new -s name</code> 。后面以此类推。</p>
-
 <ul>
 <li>列出当前 Session <code>Prefix s</code>,在终端环境中使用 <code>tmux ls</code> 查看</li>
 <li>暂时离开 Session <code>Prefix d</code></li>
@@ -392,9 +369,7 @@ Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏
 <li>重命名 Session <code>Prefix $</code></li>
 <li>关闭 Session <code>Prefix :kill-session -t name</code></li>
 </ul>
-
 <h3 id="window-相关">Window 相关</h3>
-
 <ul>
 <li>新建 Window <code>Prefix c</code></li>
 <li>列出当前 Window <code>Prefix w</code></li>
@@ -403,9 +378,7 @@ Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏
 <li>上一个 Window <code>Prefix p</code></li>
 <li>下一个 Window <code>Prefix n</code></li>
 </ul>
-
 <h3 id="pane-相关">Pane 相关</h3>
-
 <ul>
 <li>水平分割 Window <code>Prefix &quot;</code></li>
 <li>垂直分割 Window <code>Prefix %</code></li>
@@ -415,15 +388,11 @@ Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏
 <li>把 Pane 移动到右边 <code>Prefix }</code></li>
 <li>切换到下一个 Pane <code>Prefix o</code></li>
 </ul>
-
 <h2 id="tips">Tips</h2>
-
 <ul>
 <li>显示时间 <code>Prefix t</code></li>
 </ul>
-
 <h2 id="参考">参考</h2>
-
 <ul>
 <li><a href="http://cenalulu.github.io/linux/tmux/">Tmux - Linux 从业者必备利器</a></li>
 <li><a href="http://harttle.com/2015/11/06/tmux-startup.html">优雅地使用命令行：Tmux 终端复用</a></li>
@@ -911,7 +880,7 @@ Tmux 是终端复用器，它使多个终端被创建，访问，并从单一屏
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

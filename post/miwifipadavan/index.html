@@ -333,40 +333,28 @@
             <blockquote>
 <p>半个月前，我把小米路由器刷成了 openwrt，使用之后发现很难受。很多软件没办法直接下载，更新源也更了半天更不下来。里面的功能配置起来有些复杂不能开箱即用，用来折腾倒是不错，但是一款路由器是可是互联网的通道，随便瞎搞没了网络，就不好玩了。在折腾的过程中发现了 Padavan。刷上用了一段时间还不错，记录一下。</p>
 </blockquote>
-
 <h2 id="备份重要信息">备份重要信息</h2>
-
 <p>在刷之前，请确保已经是开发版固件，如果不是请刷到开发版，并开启 SSH。如何操作参考前面的文章<a href="https://binsheng.gitee.io/me/post/miwifi/">小米路由器刷 openwrt</a>。</p>
-
 <p>在刷 <code>padavan</code> 之前为了保险起见,先进行备份。</p>
-
-<pre><code class="language-bash">ssh root@192.168.31.1 #需要输入密码，密码就是开启 SSH 时获得的。
-</code></pre>
-
-<p>输入密码登陆路由器，进行备份。备份的指令在下面。备份完后记得把 <code>/tmp/</code> 下的备份文件拷贝到电脑上或者其他地方。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.31.1 <span class="c1">#需要输入密码，密码就是开启 SSH 时获得的。</span>
+</code></pre></div><p>输入密码登陆路由器，进行备份。备份的指令在下面。备份完后记得把 <code>/tmp/</code> 下的备份文件拷贝到电脑上或者其他地方。</p>
 <h3 id="备份-sn">备份 SN</h3>
-
-<pre><code class="language-bash">cd /tmp
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /tmp
 mkdir rom
-dd if=/dev/mtd0 of=/tmp/rom/ALL.bin
-dd if=/dev/mtd1 of=/tmp/rom/Bootloader.bin
-dd if=/dev/mtd2 of=/tmp/rom/Config.bin
-dd if=/dev/mtd3 of=/tmp/rom/Factory.bin
-dd if=/dev/mtd4 of=/tmp/rom/OS1.bin
-dd if=/dev/mtd5 of=/tmp/rom/rootfs.bin
-dd if=/dev/mtd6 of=/tmp/rom/OS2.bin
-dd if=/dev/mtd7 of=/tmp/rom/overlay.bin
-dd if=/dev/mtd8 of=/tmp/rom/crash.bin
-dd if=/dev/mtd9 of=/tmp/rom/reserved.bin
-dd if=/dev/mtd10 of=/tmp/rom/Bdata.bin
-</code></pre>
-
-<h3 id="恢复-sn">恢复 SN</h3>
-
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd0 <span class="nv">of</span><span class="o">=</span>/tmp/rom/ALL.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd1 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bootloader.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd2 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Config.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd3 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Factory.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd4 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS1.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd5 <span class="nv">of</span><span class="o">=</span>/tmp/rom/rootfs.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd6 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS2.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd7 <span class="nv">of</span><span class="o">=</span>/tmp/rom/overlay.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd8 <span class="nv">of</span><span class="o">=</span>/tmp/rom/crash.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd9 <span class="nv">of</span><span class="o">=</span>/tmp/rom/reserved.bin
+dd <span class="k">if</span><span class="o">=</span>/dev/mtd10 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bdata.bin
+</code></pre></div><h3 id="恢复-sn">恢复 SN</h3>
 <p>暂时用不到，如果出问题了会用到，做个记录。</p>
-
-<pre><code class="language-bash">mtd write /tmp/rom/Bootloader.bin Bootloader
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">mtd write /tmp/rom/Bootloader.bin Bootloader
 mtd write /tmp/rom/Config.bin Config
 mtd write /tmp/rom/Factory.bin Factory
 mtd write /tmp/rom/OS1.bin OS1
@@ -376,61 +364,41 @@ mtd write /tmp/rom/overlay.bin overlay
 mtd write /tmp/rom/crash.bin crash
 mtd write /tmp/rom/reserved.bin reserved
 mtd write /tmp/rom/Bdata.bin Bdata
-</code></pre>
-
-<h2 id="刷入不死-uboot">刷入不死 uboot</h2>
-
+</code></pre></div><h2 id="刷入不死-uboot">刷入不死 uboot</h2>
 <p>在<a href="https://breed.hackpascal.net/">不死 uboot 下载列表</a>中找到 <code>breed-mt7620-xiaomi-mini.bin</code> ，并下载。
 把下载的文件拷贝到路由器中。</p>
-
-<pre><code class="language-sh">scp breed-mt7620-xiaomi-mini.bin root@192.168.31.1:/tmp/
-</code></pre>
-
-<p>登录路由器开始刷 uboot</p>
-
-<pre><code class="language-sh">ssh root@192.168.31.1
-cd /tmp/
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">scp breed-mt7620-xiaomi-mini.bin root@192.168.31.1:/tmp/
+</code></pre></div><p>登录路由器开始刷 uboot</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh root@192.168.31.1
+<span class="nb">cd</span> /tmp/
 mtd -r write breed-mt7620-xiaomi-mini.bin Bootloader
-</code></pre>
-
-<p>刷入成功后会重启，如果没有,那就手动重启。重启之后先断开电源，把电脑通过网线连上路由器（此时 WiFi 不能用），使用取卡针按住 <code>reset</code> 直到指示灯变为黄色闪烁后可松开。
+</code></pre></div><p>刷入成功后会重启，如果没有,那就手动重启。重启之后先断开电源，把电脑通过网线连上路由器（此时 WiFi 不能用），使用取卡针按住 <code>reset</code> 直到指示灯变为黄色闪烁后可松开。
 在电脑的浏览器中输入 <code>192.168.1.1</code> ，进入 Breed 控制台。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/padavan/breed.png"/> 
 </figure>
 
-
 <h2 id="刷入-padavan">刷入 Padavan</h2>
-
 <p>到<a href="http://opt.cn2qq.com/padavan/">padavan</a>找到 <code>RT-AC54U-GPIO-30-xiaomimini-128M_3.4.3.9-099.trx</code> 下载下来。
 回到上一步不死 uboot 的控制台，找到固件更新页。
 选择常规固件，勾选固件选项，并点击右边的选择文件，把刚刚下载的文件选中。点击下方的上传按钮。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/padavan/select_firmware.png"/> 
 </figure>
 
-
 <p>文件上传成功后，点击更新按钮进行固件更新。等待更新完成。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/padavan/update_firmware.png"/> 
 </figure>
 
-
 <p>出现如下界面，说明刷机成功。
-<img src="https://devbins.github.io/images/padavan/firmware_update_finish.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/padavan/firmware_update_finish.png" alt=""></p>
 <h2 id="路由器后台以及-wifi-密码">路由器后台以及 WiFi 密码</h2>
-
 <ul>
 <li>路由器默认的名字是 <code>PDCN</code> 和 <code>PDCN_5G</code> ，密码是 <code>1234567890</code></li>
 <li>登录路由器管理后台的地址是 <code>192.168.123.1</code> 账号是 <code>admin</code> 密码是 <code>admin</code></li>
 </ul>
-
 <h2 id="参考">参考</h2>
-
 <p><a href="https://www.jianshu.com/p/267d109dbe89">小米路由器 mini 刷 Padavan 详细教程</a></p>
           </div>
 
@@ -773,7 +741,7 @@ mtd -r write breed-mt7620-xiaomi-mini.bin Bootloader
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

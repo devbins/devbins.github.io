@@ -10,26 +10,18 @@
   <meta name="description" content="
 Photo by zhang Mickey on Unsplash
 
-
 缘由
-
 最近做实验，需要一个新的 Linux 环境来折腾，于是就去下载了最新版的 Manjaro 。
-
 按照常规安装好虚拟机之后，我还会安装 Parallels tools 来更好的体验 Linux 。 Parallels tools 可以方便的在宿主机和虚拟机之间拷贝文件和共享文件，当然还有最重要的就是显示效果会好上一大截，鼠标移动不会卡顿，窗口的缩放可以自适应等，所以没有理由不装。
-
 在安装的过程中碰到了安装失败的情况，下面记录一下解决的过程。">
   
   <meta property="og:title" content="Parallels tools 安装失败" />
 <meta property="og:description" content="
 Photo by zhang Mickey on Unsplash
 
-
 缘由
-
 最近做实验，需要一个新的 Linux 环境来折腾，于是就去下载了最新版的 Manjaro 。
-
 按照常规安装好虚拟机之后，我还会安装 Parallels tools 来更好的体验 Linux 。 Parallels tools 可以方便的在宿主机和虚拟机之间拷贝文件和共享文件，当然还有最重要的就是显示效果会好上一大截，鼠标移动不会卡顿，窗口的缩放可以自适应等，所以没有理由不装。
-
 在安装的过程中碰到了安装失败的情况，下面记录一下解决的过程。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devbins.github.io/post/parallel/" />
@@ -349,50 +341,32 @@ Photo by zhang Mickey on Unsplash
             <blockquote>
 <p>Photo by zhang Mickey on Unsplash</p>
 </blockquote>
-
 <h2 id="缘由">缘由</h2>
-
 <p>最近做实验，需要一个新的 <code>Linux</code> 环境来折腾，于是就去下载了最新版的 <code>Manjaro</code> 。</p>
-
 <p>按照常规安装好虚拟机之后，我还会安装 <code>Parallels tools</code> 来更好的体验 <code>Linux</code> 。 <code>Parallels tools</code> 可以方便的在宿主机和虚拟机之间拷贝文件和共享文件，当然还有最重要的就是显示效果会好上一大截，鼠标移动不会卡顿，窗口的缩放可以自适应等，所以没有理由不装。</p>
-
 <p>在安装的过程中碰到了安装失败的情况，下面记录一下解决的过程。</p>
-
 <h2 id="错误">错误</h2>
-
-<pre><code class="language-sh">make[3]: *** [scripts/Makefile.build:281: /usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/super.o] Error 1
-make[2]: *** [Makefile:1626: _module_/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs] Error 2
-make[1]: *** [/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/Makefile.v26:13: all] Error 2
-make: *** [Makefile.kmods:52: compile] Error 2
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make<span class="o">[</span>3<span class="o">]</span>: *** <span class="o">[</span>scripts/Makefile.build:281: /usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/super.o<span class="o">]</span> Error <span class="m">1</span>
+make<span class="o">[</span>2<span class="o">]</span>: *** <span class="o">[</span>Makefile:1626: _module_/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs<span class="o">]</span> Error <span class="m">2</span>
+make<span class="o">[</span>1<span class="o">]</span>: *** <span class="o">[</span>/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/Makefile.v26:13: all<span class="o">]</span> Error <span class="m">2</span>
+make: *** <span class="o">[</span>Makefile.kmods:52: compile<span class="o">]</span> Error <span class="m">2</span>
 Error: could not build kernel modules
 Error during report about failed installation of parallels tools.
 Error: failed to install Parallels Guest Tools!
-</code></pre>
-
-<p>从提示中得到的消息是不能构建内核模块，于是我猜测是内核版本比较新，所以构建失败了。我打开之前装好了 <code>Parallels Desktop tools</code> 的虚拟机，查看一下内核，发现旧的内核版本为 <code>Linux 4.19.79-1</code> 而我最新下载的内核是 <code>Linux 5.3.6-1</code> 。抱着试一试的心理，发现有效，记录一下。</p>
-
+</code></pre></div><p>从提示中得到的消息是不能构建内核模块，于是我猜测是内核版本比较新，所以构建失败了。我打开之前装好了 <code>Parallels Desktop tools</code> 的虚拟机，查看一下内核，发现旧的内核版本为 <code>Linux 4.19.79-1</code> 而我最新下载的内核是 <code>Linux 5.3.6-1</code> 。抱着试一试的心理，发现有效，记录一下。</p>
 <h2 id="安装低版本内核">安装低版本内核</h2>
-
 <p>首先打开系统设置，找到内核，查看正在运行的内核版本，如果你的内核只有一个 <code>5.x</code> 的话，安装失败可能就是这个原因。</p>
-
 <p>这时候选择一个较低版本的内核，我这里选择的是 <code>Linux 4.19.72_rt25-1</code> 点击安装，等待一会安装完毕。选择内核建议选择有长期支持的。
-<img src="https://devbins.github.io/images/parallels/new_kernel.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/parallels/new_kernel.png" alt=""></p>
 <h2 id="选择新安装的内核">选择新安装的内核</h2>
-
 <p>安装好新内核后重启系统，按住上下键，出现如下页面，选择 <code>Advanced options for Manjaro Linux</code> 回车
-<img src="https://devbins.github.io/images/parallels/switch_kernel.png" alt="" />
+<img src="https://devbins.github.io/images/parallels/switch_kernel.png" alt="">
 然后选择我们刚才新安装的内核启动，启动之后重新安装 <code>Parallels tools</code> 。
-<img src="https://devbins.github.io/images/parallels/boot_kernel.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/parallels/boot_kernel.png" alt=""></p>
 <h2 id="总结">总结</h2>
-
 <p>想起最开始安装 <code>Parallels tools</code> 的时候各种报错，摸不着头脑，用搜索引擎各种查资料，有时候能成功，有时候搞半天头不行，纯粹碰运气。当时在 <code>Ubuntu</code> 下，就连 <code>Parallels tools</code> 在哪个地方都找不到。</p>
-
 <p>后来折腾各种发行版，在 <code>open SUSE</code> 上又折腾老半天，才意外在某篇文章中发现一点端倪，侥幸解决了。</p>
-
 <p>最后现在出现问题，不靠搜索引擎，看错误日志就能猜出个大概，挺开心的。</p>
-
 <p>作为一个开发，经常在各种环境中切换，其实很花时间，有时候不知道这样折腾值不值得，但是折腾成功后的又那么舒畅。花费在这上面的时间虽然很多，但是也学到了不少经验和知识。搞开发的都有一个瞎折腾的心。🙂</p>
           </div>
 
@@ -670,7 +644,7 @@ Error: failed to install Parallels Guest Tools!
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

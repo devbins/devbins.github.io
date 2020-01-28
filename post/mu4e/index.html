@@ -9,22 +9,16 @@
   <meta name="author" content="dev.bins">
   <meta name="description" content="Photo by Joanna Kosinska on Unsplash
 
-
 使用 emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 emacs。其中乐趣（痛苦）只有折腾过才能体会。
-
 最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 emacs 来收发邮件岂不是很有趣。
-
 在 emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。
 ">
   
   <meta property="og:title" content="在 emacs 中用 mu4e 来收邮件" />
 <meta property="og:description" content="Photo by Joanna Kosinska on Unsplash
 
-
 使用 emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 emacs。其中乐趣（痛苦）只有折腾过才能体会。
-
 最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 emacs 来收发邮件岂不是很有趣。
-
 在 emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。
 " />
 <meta property="og:type" content="article" />
@@ -345,226 +339,180 @@
 
           <div class="post-content markdown">
             <p>Photo by Joanna Kosinska on Unsplash</p>
-
 <blockquote>
 <p>使用 emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 emacs。其中乐趣（痛苦）只有折腾过才能体会。</p>
-
 <p>最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 emacs 来收发邮件岂不是很有趣。</p>
-
 <p>在 emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。</p>
 </blockquote>
-
 <p>在 emacs 中使用邮件我们需要借助其它工具来把邮件下载下来， <code>offlineimap</code> 是一个比较方便获取邮件的工具，通过 <code>offlineimap</code> 把邮件下载到本地，再通过 <code>mu</code> 来对下载好的文件进行索引管理，不过 <code>mu</code> 是个命令行工具管理起来多有不便，所以我们最后借助 <code>emacs</code> 来管理前两者，这样就能够管理邮件了。</p>
-
 <h2 id="offlineimap">offlineimap</h2>
-
 <p><code>offlineimap</code> 用来下载邮件的工具，先来安装。</p>
-
 <h3 id="安装">安装</h3>
-
-<pre><code class="language-sh">sudo pacman -S offlineimap # Arch
-brew install offlineimap # Mac
-</code></pre>
-
-<h3 id="配置">配置</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S offlineimap <span class="c1"># Arch</span>
+brew install offlineimap <span class="c1"># Mac</span>
+</code></pre></div><h3 id="配置">配置</h3>
 <p><code>offlineimap</code> 安装好之后我们需要配置邮箱账号信息，这样 <code>offlineimap</code> 才知道我们要从哪里下载邮件，下载哪个账号的邮件。</p>
-
 <p>配置文件在 <code>~/.offlineimaprc</code> ，不过通常这个文件是不存在的，需要手动创建。 <code>offlineimap</code> 支持多账号配置，这里使用 <code>126</code> 邮箱。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>general<span class="o">]</span>
+<span class="nv">accounts</span> <span class="o">=</span> <span class="m">126</span>
+<span class="nv">pythonfile</span> <span class="o">=</span> ~/.offlineimap.py
+<span class="nv">fsync</span> <span class="o">=</span> False
 
-<pre><code class="language-sh">[general]
-accounts = 126
-pythonfile = ~/.offlineimap.py
-fsync = False
+<span class="o">[</span>Account 126<span class="o">]</span>
+<span class="nv">localrepository</span> <span class="o">=</span> 126-Local
+<span class="nv">remoterepository</span> <span class="o">=</span> 126-Remote
 
-[Account 126]
-localrepository = 126-Local
-remoterepository = 126-Remote
+<span class="o">[</span>Repository 126-Local<span class="o">]</span>
+<span class="nb">type</span> <span class="o">=</span> Maildir
+<span class="nv">localfolders</span> <span class="o">=</span> ~/mails/ <span class="c1"># 邮件保存的路径</span>
+<span class="nv">nametrans</span> <span class="o">=</span> lambda foldername: foldername.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
 
-[Repository 126-Local]
-type = Maildir
-localfolders = ~/mails/ # 邮件保存的路径
-nametrans = lambda foldername: foldername.decode('imap4-utf-7').encode('utf-8')
+<span class="o">[</span>Repository 126-Remote<span class="o">]</span>
+<span class="nv">sslcacertfile</span><span class="o">=</span>/etc/ssl/certs/ca-certificates.crt
+<span class="nv">maxconnections</span> <span class="o">=</span> <span class="m">2</span>
+<span class="nb">type</span> <span class="o">=</span> IMAP
+<span class="nv">auth</span> <span class="o">=</span> on
+<span class="nv">ssl</span> <span class="o">=</span> yes
+<span class="nv">remotehost</span> <span class="o">=</span> imap.126.com
+<span class="nv">remoteuser</span> <span class="o">=</span> 填写邮箱地址
+<span class="nv">remoteport</span> <span class="o">=</span> <span class="m">993</span>
 
-[Repository 126-Remote]
-sslcacertfile=/etc/ssl/certs/ca-certificates.crt
-maxconnections = 2
-type = IMAP
-auth = on
-ssl = yes
-remotehost = imap.126.com
-remoteuser = 填写邮箱地址
-remoteport = 993
+<span class="nv">remotepass</span> <span class="o">=</span> 填写密码，不是登录密码，而是授权码
+<span class="nv">nametrans</span> <span class="o">=</span> lambda folder: folder.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
 
-remotepass = 填写密码，不是登录密码，而是授权码
-nametrans = lambda folder: folder.decode('imap4-utf-7').encode('utf-8')
+<span class="nv">folderfilter</span> <span class="o">=</span> lambda folder: folder in <span class="o">[</span><span class="s1">&#39;INBOX&#39;</span><span class="o">]</span>
+<span class="nv">keepalive</span> <span class="o">=</span> <span class="m">60</span>
+<span class="nv">holdconnectionopen</span> <span class="o">=</span> yes
+</code></pre></div><p>其中 <code>offlineimap.py</code> 的作用是为了让中文正常显示而做转码用的，不然目录你会看到乱码。把下面的代码拷贝到 <code>~/.offlineimap.py</code> ，不需要改动。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env python2</span>
 
-folderfilter = lambda folder: folder in ['INBOX']
-keepalive = 60
-holdconnectionopen = yes
-</code></pre>
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<p>其中 <code>offlineimap.py</code> 的作用是为了让中文正常显示而做转码用的，不然目录你会看到乱码。把下面的代码拷贝到 <code>~/.offlineimap.py</code> ，不需要改动。</p>
-
-<pre><code class="language-python">#!/usr/bin/env python2
-
-import binascii
-import codecs
-import sys
-
-reload(sys)
-sys.setdefaultencoding(&quot;utf-8&quot;)
+<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">utf-8</span><span class="s2">&#34;</span><span class="p">)</span>
 
 
-def modified_base64(s):
-    s = s.encode('utf-16be')
-    return binascii.b2a_base64(s).rstrip('\n=').replace('/', ',')
+<span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">utf-16be</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">/</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">,</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-def doB64(_in, r):
-    if _in:
-        r.append('&amp;%s-' % modified_base64(''.join(_in)))
-        del _in[:]
+<span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_in</span><span class="p">:</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="si">%s</span><span class="s1">-</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">_in</span><span class="p">[</span><span class="p">:</span><span class="p">]</span>
 
 
-def encoder(s):
-    r = []
-    _in = []
-    for c in s:
-        ordC = ord(c)
-        if 0x20 &lt;= ordC &lt;= 0x25 or 0x27 &lt;= ordC &lt;= 0x7e:
-            doB64(_in, r)
-            r.append(c)
-        elif c == '&amp;':
-            doB64(_in, r)
-            r.append('&amp;-')
-        else:
-            _in.append(c)
-    doB64(_in, r)
-    return (str(''.join(r)), len(s))
+<span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+    <span class="n">_in</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">ordC</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">ordC</span> <span class="o">&lt;</span><span class="o">=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">ordC</span> <span class="o">&lt;</span><span class="o">=</span> <span class="mh">0x7e</span><span class="p">:</span>
+            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;-</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">)</span>
 
 
-# decoding
+<span class="c1"># decoding</span>
 
 
-def modified_unbase64(s):
-    b = binascii.a2b_base64(s.replace(',', '/') + '===')
-    return unicode(b, 'utf-16be')
+<span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">,</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">/</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">===</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">utf-16be</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-def decoder(s):
-    r = []
-    decode = []
-    for c in s:
-        if c == '&amp;' and not decode:
-            decode.append('&amp;')
-        elif c == '-' and decode:
-            if len(decode) == 1:
-                r.append('&amp;')
-            else:
-                r.append(modified_unbase64(''.join(decode[1:])))
-            decode = []
-        elif decode:
-            decode.append(c)
-        else:
-            r.append(c)
-    if decode:
-        r.append(modified_unbase64(''.join(decode[1:])))
-    bin_str = ''.join(r)
-    return (bin_str, len(s))
+<span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+    <span class="n">decode</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
+            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">-</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decode</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
+            <span class="n">decode</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">decode</span><span class="p">:</span>
+            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
+    <span class="n">bin_str</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">)</span>
 
 
-class StreamReader(codecs.StreamReader):
-    def decode(self, s, errors='strict'):
-        return decoder(s)
+<span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">)</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">strict</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
-class StreamWriter(codecs.StreamWriter):
-    def decode(self, s, errors='strict'):
-        return encoder(s)
+<span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">)</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">strict</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
-def imap4_utf_7(name):
-    if name == 'imap4-utf-7':
-        return (encoder, decoder, StreamReader, StreamWriter)
+<span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">imap4-utf-7</span><span class="s1">&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">StreamReader</span><span class="p">,</span> <span class="n">StreamWriter</span><span class="p">)</span>
 
 
-codecs.register(imap4_utf_7)
-</code></pre>
-
-<p>配置好了 <code>offlineimap</code> 就可以把邮件从服务器下载下来了，通过如下命令。</p>
-
-<pre><code class="language-sh">offlineimap
-</code></pre>
-
-<p>在 Mac 中配置 ssl 需要额外安装一下 <code>openssl</code> 并且通过软连接放到正确的位置</p>
-
-<pre><code class="language-sh">brew install openssl
+<span class="n">codecs</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">imap4_utf_7</span><span class="p">)</span>
+</code></pre></div><p>配置好了 <code>offlineimap</code> 就可以把邮件从服务器下载下来了，通过如下命令。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">offlineimap
+</code></pre></div><p>在 Mac 中配置 ssl 需要额外安装一下 <code>openssl</code> 并且通过软连接放到正确的位置</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install openssl
 sudo ln -s /usr/local/etc/openssl/cert.pem /etc/ssl/certs/ca-certificates.crt
-</code></pre>
-
-<h2 id="mu">mu</h2>
-
-<h3 id="安装-1">安装</h3>
-
+</code></pre></div><h2 id="mu">mu</h2>
+<h3 id="安装">安装</h3>
 <p>mu 是用来管理下载好的邮件，同样需要先安装。</p>
-
-<pre><code class="language-sh">sudo pacman -S mu # Arch
-brew install mu --with-emacs # Mac
-</code></pre>
-
-<h3 id="建立索引">建立索引</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S mu <span class="c1"># Arch</span>
+brew install mu --with-emacs <span class="c1"># Mac</span>
+</code></pre></div><h3 id="建立索引">建立索引</h3>
 <p>安装好之后使用 <code>mu</code> 对已经下载好的进行首次索引。</p>
-
-<pre><code class="language-sh">mu index --rebuild --maildir=~/mails # 目录要根据自己目录修改
-</code></pre>
-
-<h2 id="emacs-配置">emacs 配置</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mu index --rebuild --maildir<span class="o">=</span>~/mails <span class="c1"># 目录要根据自己目录修改</span>
+</code></pre></div><h2 id="emacs-配置">emacs 配置</h2>
 <h3 id="启用-mu4e-layer">启用 mu4e layer</h3>
-
 <p>在 <code>spacemacs</code> 中启用 <code>mu4e</code> layer</p>
-
-<pre><code class="language-lisp">(mu4e :variables mu4e-installation-path &quot;/usr/share/emacs/site-lisp&quot;
-      mu4e-enable-mode-line t
-      mu4e-enable-async-operations t
-      mu4e-enable-notifications t)
-</code></pre>
-
-<h3 id="配置-mu4e">配置 mu4e</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">mu4e</span> <span class="ss">:variables</span> <span class="nv">mu4e-installation-path</span> <span class="s">&#34;/usr/share/emacs/site-lisp&#34;</span>
+      <span class="nv">mu4e-enable-mode-line</span> <span class="no">t</span>
+      <span class="nv">mu4e-enable-async-operations</span> <span class="no">t</span>
+      <span class="nv">mu4e-enable-notifications</span> <span class="no">t</span><span class="p">)</span>
+</code></pre></div><h3 id="配置-mu4e">配置 mu4e</h3>
 <p>在 <code>user-config</code> 中增加 <code>mu4e</code> 配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">with-eval-after-load</span> <span class="ss">&#39;mu4e-alert</span>
+  <span class="c1">;; Enable Desktop notifications</span>
+  <span class="p">(</span><span class="nv">mu4e-alert-set-default-style</span> <span class="ss">&#39;notifier</span><span class="p">)</span><span class="p">)</span> <span class="c1">; For linux</span>
 
-<pre><code class="language-lisp">(with-eval-after-load 'mu4e-alert
-  ;; Enable Desktop notifications
-  (mu4e-alert-set-default-style 'notifier)) ; For linux
-
-;;; Set up some common mu4e variables
-(setq mu4e-maildir &quot;~/mails&quot;
-      mu4e-trash-folder &quot;/已删除&quot;
-      mu4e-refile-folder &quot;/Archive&quot;
-      mu4e-sent-folder &quot;/已发送&quot;
-      mu4e-drafts-folder &quot;/草稿箱&quot;
-      ;; sync email from imap server
-      mu4e-get-mail-command &quot;offlineimap&quot;
-      mu4e-update-interval 300
-      mu4e-compose-signature-auto-include nil
-      mu4e-view-show-images t
-      mu4e-view-show-addresses t)
-</code></pre>
-
-<h2 id="使用">使用</h2>
-
+<span class="c1">;;; Set up some common mu4e variables</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">mu4e-maildir</span> <span class="s">&#34;~/mails&#34;</span>
+      <span class="nv">mu4e-trash-folder</span> <span class="s">&#34;/已删除&#34;</span>
+      <span class="nv">mu4e-refile-folder</span> <span class="s">&#34;/Archive&#34;</span>
+      <span class="nv">mu4e-sent-folder</span> <span class="s">&#34;/已发送&#34;</span>
+      <span class="nv">mu4e-drafts-folder</span> <span class="s">&#34;/草稿箱&#34;</span>
+      <span class="c1">;; sync email from imap server</span>
+      <span class="nv">mu4e-get-mail-command</span> <span class="s">&#34;offlineimap&#34;</span>
+      <span class="nv">mu4e-update-interval</span> <span class="mi">300</span>
+      <span class="nv">mu4e-compose-signature-auto-include</span> <span class="no">nil</span>
+      <span class="nv">mu4e-view-show-images</span> <span class="no">t</span>
+      <span class="nv">mu4e-view-show-addresses</span> <span class="no">t</span><span class="p">)</span>
+</code></pre></div><h2 id="使用">使用</h2>
 <h3 id="打开-mu4e-使用快捷键-spc-a-m">打开 mu4e 使用快捷键 <code>SPC a M</code></h3>
-
 <figure>
     <img src="https://devbins.github.io/images/mu4e/mu4e.png"/> 
 </figure>
 
-
 <h3 id="其它快捷键">其它快捷键</h3>
-
 <table>
 <thead>
 <tr>
@@ -572,27 +520,22 @@ brew install mu --with-emacs # Mac
 <th>快捷键</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>打开未读邮件</td>
 <td>bu</td>
 </tr>
-
 <tr>
 <td>打开所有邮件</td>
 <td>bi</td>
 </tr>
-
 <tr>
 <td>搜索邮件</td>
 <td>s</td>
 </tr>
 </tbody>
 </table>
-
 <h2 id="参考">参考</h2>
-
 <ul>
 <li><a href="https://lengyueyang.github.io/Life/use-Mu4e-to-manage-email.html">Use Mu4e to manage email 用 mu4e 管理邮件</a></li>
 <li><a href="https://emacs.lujianmei.com/init-daily-using/init-mu4e#mu-4-e">Mu4e 邮件管理</a></li>
@@ -812,7 +755,7 @@ brew install mu --with-emacs # Mac
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-1">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
 												 安装
 											</a>
 										</li>
@@ -1095,7 +1038,7 @@ brew install mu --with-emacs # Mac
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

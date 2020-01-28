@@ -9,14 +9,12 @@
   <meta name="author" content="dev.bins">
   <meta name="description" content="
 在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-
 使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
 ">
   
   <meta property="og:title" content="在 Docker 中使用 nexus3 构建 Android 私有仓库" />
 <meta property="og:description" content="
 在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-
 使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
 " />
 <meta property="og:type" content="article" />
@@ -338,190 +336,159 @@
           <div class="post-content markdown">
             <blockquote>
 <p>在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。</p>
-
 <p>使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。</p>
 </blockquote>
-
 <h2 id="安装">安装</h2>
-
 <p>安装这里说多了都是累，最开始我创建好了目录没有改变目录权限，后面运行一直都是失败的。但如果不挂载目录就可以正常运行。找了好久才找到原因，还一直误以为是挂载的不对。</p>
-
-<pre><code class="language-sh">mkdir ~/nexus-data &amp;&amp; sudo chown -R 200 ~/nexus-data # Mac 和 Windows 中不需要修改权限，只需要创建目录就好
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir ~/nexus-data <span class="o">&amp;&amp;</span> sudo chown -R <span class="m">200</span> ~/nexus-data <span class="c1"># Mac 和 Windows 中不需要修改权限，只需要创建目录就好</span>
 docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/nexus3
-</code></pre>
-
-<h2 id="创建一个仓库">创建一个仓库</h2>
-
+</code></pre></div><h2 id="创建一个仓库">创建一个仓库</h2>
 <p>nexus 搭建好了，需要等个一小会。启动好了后，点击右上角的登录，输入账号密码登录。默认账号是 <code>admin</code> 密码是 <code>admin123</code> 。</p>
-
 <p>接着跟着下图新建仓库
-<img src="https://devbins.github.io/images/nexus/nexus_create.png" alt="" />
+<img src="https://devbins.github.io/images/nexus/nexus_create.png" alt="">
 这里选择 maven2(hosted)
-<img src="https://devbins.github.io/images/nexus/nexus_maven.png" alt="" />
+<img src="https://devbins.github.io/images/nexus/nexus_maven.png" alt="">
 接下来配置仓库的信息，主要是填写仓库的名字和配置仓库可以被重新部署
-<img src="https://devbins.github.io/images/nexus/nexus_config.png" alt="" />
+<img src="https://devbins.github.io/images/nexus/nexus_config.png" alt="">
 到这里配置就差不多了，我们点击 copy 获取仓库的地址
-<img src="https://devbins.github.io/images/nexus/nexus_addr.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/nexus/nexus_addr.png" alt=""></p>
 <h2 id="编写上传-gradle">编写上传 gradle</h2>
-
 <p>在要上传的 module 的 <code>build.gradle</code> 下增加上传的脚本</p>
+<div class="highlight"><pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.library&#39;</span>
+<span class="c1">// 要使用 maven 插件
+</span><span class="c1"></span><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;maven&#39;</span>
 
-<pre><code class="language-gradle">apply plugin: 'com.android.library'
-// 要使用 maven 插件
-apply plugin: 'maven'
+<span class="n">android</span> <span class="o">{</span>
 
-android {
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
 
-    ......
+    <span class="n">uploadArchives</span> <span class="o">{</span>
+        <span class="n">repositories</span><span class="o">.</span><span class="na">mavenDeployer</span> <span class="o">{</span>
+            <span class="c1">// 这里填写刚才 copy 的地址
+</span><span class="c1"></span>            <span class="n">repository</span><span class="o">(</span><span class="nl">url:</span> <span class="s2">&#34;http://127.0.0.1:8081/repository/test/&#34;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 填写仓库的用户名和密码，这里为了简单直接使用默认的，线上还是建议新建一个用户
+</span><span class="c1"></span>                <span class="n">authentication</span><span class="o">(</span><span class="nl">userName:</span> <span class="s2">&#34;admin&#34;</span><span class="o">,</span> <span class="nl">password:</span> <span class="s2">&#34;admin123&#34;</span><span class="o">)</span>
+            <span class="o">}</span>
 
-    uploadArchives {
-        repositories.mavenDeployer {
-            // 这里填写刚才 copy 的地址
-            repository(url: &quot;http://127.0.0.1:8081/repository/test/&quot;) {
-                // 填写仓库的用户名和密码，这里为了简单直接使用默认的，线上还是建议新建一个用户
-                authentication(userName: &quot;admin&quot;, password: &quot;admin123&quot;)
-            }
+            <span class="n">pom</span><span class="o">.</span><span class="na">version</span> <span class="o">=</span> <span class="s2">&#34;0.0.1&#34;</span>
+            <span class="n">pom</span><span class="o">.</span><span class="na">artifactId</span> <span class="o">=</span> <span class="s2">&#34;test&#34;</span>
+            <span class="n">pom</span><span class="o">.</span><span class="na">groupId</span> <span class="o">=</span> <span class="s2">&#34;com.example&#34;</span>
 
-            pom.version = &quot;0.0.1&quot;
-            pom.artifactId = &quot;test&quot;
-            pom.groupId = &quot;com.example&quot;
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-        }
-    }
-
-}
-</code></pre>
-
-<figure>
+<span class="o">}</span>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/nexus/nexus_upload.png"/> 
 </figure>
 
-
 <h2 id="在项目中使用">在项目中使用</h2>
-
 <p>在 Android 项目的 <code>build.gradle</code> 中配置仓库的地址</p>
+<div class="highlight"><pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
 
-<pre><code class="language-gradle">buildscript {
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
 
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/test/'
-        }
-    }
-    ......
-}
+<span class="n">allprojects</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/test/'
-        }
-    }
-}
+<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+<span class="o">}</span>
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+</code></pre></div><p>在 module 下的 <code>build.gradle</code> 添加依赖</p>
+<div class="highlight"><pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.application&#39;</span>
 
-</code></pre>
+<span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
 
-<p>在 module 下的 <code>build.gradle</code> 添加依赖</p>
-
-<pre><code class="language-gradle">apply plugin: 'com.android.application'
-
-......
-
-dependencies {
-    ......
-    implementation 'com.example:test:0.0.1'
-}
-</code></pre>
-
-<h2 id="创建仓库组">创建仓库组</h2>
-
+<span class="n">dependencies</span> <span class="o">{</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="n">implementation</span> <span class="s1">&#39;com.example:test:0.0.1&#39;</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="创建仓库组">创建仓库组</h2>
 <p>完成了上面的步骤，你应该已经使用上了 <code>nexus3</code> ，但是在实际使用的时候碰到这样的情况：</p>
-
 <p>公司里面的私有仓库中包含多个 <code>library</code> , 如果我们要同时使用这这些 <code>library</code> 的话，需要在项目的 <code>build.gradle</code> 加入如下配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
 
-<pre><code class="language-gradle">buildscript {
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
+        <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
 
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/test1/'
-        }
-        maven {
-            url 'http://127.0.0.1:8081/repository/test2/'
-        }
-    }
-    ......
-}
+<span class="n">allprojects</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
+        <span class="o">}</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/test1/'
-        }
-        maven {
-            url 'http://127.0.0.1:8081/repository/test2/'
-        }
-    }
-}
+<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+<span class="o">}</span>
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-</code></pre>
-
-<p>从上可以看出每个仓库都要进行配置，少的话还能写一下，多的话得累死。</p>
-
+</code></pre></div><p>从上可以看出每个仓库都要进行配置，少的话还能写一下，多的话得累死。</p>
 <p>上面的问题是有解决办法的，就是创建一个仓库组，把需要用的 <code>library</code> 都加进这个仓库中，这样里面的仓库都能用，只需要配置一次</p>
-
 <p>下面来操作一下</p>
-
 <p>在创建仓库的地方创建一个仓库组，所以这里选择 <code>maven2(hosted)</code>
-<img src="https://devbins.github.io/images/nexus/nexus_group.png" alt="" />
+<img src="https://devbins.github.io/images/nexus/nexus_group.png" alt="">
 给仓库取个名字，这里是 <code>testgroup</code> ，然后在 <code>Member repositories&gt;Available</code> 中选择需要加入的 <code>library</code> ，选中的会在右边的 <code>Members</code> 中显示。选好之后点击 <code>Create repository</code> 。
-<img src="https://devbins.github.io/images/nexus/nexus_add_group.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/nexus/nexus_add_group.png" alt=""></p>
 <p>做好这些之后，你就可以在项目中配置一次，就可以使用里面包含的 <code>library</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
 
-<pre><code class="language-gradle">buildscript {
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
 
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/testgroup/'
-        }
-    }
-    ......
-}
+<span class="n">allprojects</span> <span class="o">{</span>
+    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="n">google</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">jcenter</span><span class="o">(</span><span class="o">)</span>
+        <span class="n">maven</span> <span class="o">{</span>
+            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url 'http://127.0.0.1:8081/repository/testgroup/'
-        }
-    }
-}
+<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+<span class="o">}</span>
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-</code></pre>
+</code></pre></div>
           </div>
 
           
@@ -805,7 +772,7 @@ task clean(type: Delete) {
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

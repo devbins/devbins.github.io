@@ -335,236 +335,172 @@
             <blockquote>
 <p>本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。</p>
 </blockquote>
-
 <h2 id="python-的安装">Python 的安装</h2>
-
 <p>Python 的安装方式有很多，这里选择 <code>Anaconda</code> 安装， <code>Anaconda</code> 是一个用于科学计算的 Python 发行版，包含了众多流行的科学计算、数据分析的 Python 包。使用起来比较方便。
 点击<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-5.2.0-Windows-x86%5F64.exe">Anaconda3-5.2.0-Windows-x86_64.exe</a>下载，由于官网在国外下载速度非常慢，所以这里使用清华镜像来下载。
 下载好之后，一路点击下一步，稍等片刻完成安装。</p>
-
 <h2 id="java-的安装">Java 的安装</h2>
-
 <p>下载<a href="http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-windows-x64.exe?AuthParam=1527859736%5Fff9148e041d14d460c8ae4d7f5a7a311">JDK</a>，然后运行安装程序。
 选择安装的位置，这里需要注意一下，不要选择带有特殊字符（比如：空格之类的）和带有中文的路径，以免反生不明所以的错误。
 安装位置这里需要记一下，等下用来配置环境变量，如果你和图上选择的路径的不一样，在设置环境变量时请跟着修改。
-<img src="https://devbins.github.io/images/appium/java_path.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/appium/java_path.png" alt=""></p>
 <p>由于 <code>JDK</code> 中包含了 <code>JRE</code> 所以这里直接取消，不在进行安装，安装也是可以的。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/jre.png"/> 
 </figure>
 
-
 <h3 id="配置环境变量">配置环境变量</h3>
-
 <p>接下来进行 <code>Java</code> 的环境变量配置。在计算机中右键-&gt;属性</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/property.png"/> 
 </figure>
 
-
 <p>选择高级系统设置</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/setting.png"/> 
 </figure>
 
-
 <p>点击环境变量</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/env.png"/> 
 </figure>
 
-
 <p>点击新建</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/newenv.png"/> 
 </figure>
 
-
 <p>变量名输入（变量名要大写） <code>JAVA_HOME</code>,变量值输入刚才安装的路径，如果改过安装路径，请选择正确的安装路径。我这里是 <code>C:\Java</code> ，输入完后点击确定保存。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/java_home.png"/> 
 </figure>
 
-
 <p>和上一步一样，点击新建。设置变量名为 <code>Path</code> ,变量值为 <code>%JAVA_HOME%\bin</code> 。 其中 <code>%%</code> 的意思是引用变量的值，所以这里 <code>Path</code> 其实是 <code>C:\Java\bin</code></p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/java.png"/> 
 </figure>
 
-
 <h2 id="android-环境搭建">Android 环境搭建</h2>
-
 <p>点击下载<a href="https://dl.google.com/dl/android/studio/install/3.1.2.0/android-studio-ide-173.4720617-windows.exe">AndroidStudio</a>，下载完成后运行安装程序。
 点击下一步，出现选择安装路径。和安装 <code>Java</code> 一样选择一个不带有特殊字符和中文的路径。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/androidstudio.png"/> 
 </figure>
 
-
 <p>选择自定义安装</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/custome.png"/> 
 </figure>
 
-
 <p>选择 <code>SDK</code> 安装路径，也是需要记住安装路径，用于配置环境变量。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/sdk.png"/> 
 </figure>
 
-
-<h3 id="配置环境变量-1">配置环境变量</h3>
-
+<h3 id="配置环境变量">配置环境变量</h3>
 <p>配置 <code>ANDROID_HOME</code> ，和 <code>Java</code> 配置环境变量在同一个地方。不过这次的变量名是 <code>ANDROID_HOME</code> ，变量值是刚刚 <code>SDK</code> 的安装路径。
 右键计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;新建</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/android_home.png"/> 
 </figure>
 
-
 <p>除了配置 <code>ANDROID_HOME</code> 还需要把 <code>adb</code> 加入 <code>Path</code> 中，这样才能调试设备。</p>
-
 <p>在环境变量中选择 <code>Path</code> 点击编辑，加入 <code>;%ANDROID_HOME%\platform-tools</code> ，注意前面有一个 <code>;</code> 环境变量有多个可以使用 <code>;</code> 分隔。最后 <code>Path</code> 为 <code>%JAVA_HOME%\bin;%ANDROID_HOME%\platform-tools</code></p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/add_path.png"/> 
 </figure>
 
-
 <h2 id="nodejs-的安装">Nodejs 的安装</h2>
-
 <p>点击<a href="http://cdn.npm.taobao.org/dist/node/v10.2.0/node-v10.2.0-x64.msi">Node</a>下载 Node.js，下载完成后运行安装，一直点击下一步。没了，就这么简单。
 Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这里使用淘宝镜像加速。</p>
-
-<pre><code class="language-sh">npm config set registry http://registry.cnpmjs.org
-</code></pre>
-
-<h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">npm config <span class="nb">set</span> registry http://registry.cnpmjs.org
+</code></pre></div><h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
 <p><code>appium-doctor</code> 是一个用来检查 <code>appium</code> 环境是否安装并配置好的工具，让我们来检测一下上面的步骤都成功了没有。
 点击屏幕左下角，在搜索框中输入 <code>cmd</code> 回车</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/cmd.png"/> 
 </figure>
 
-
 <p>在打开的窗口中输入 <code>npm install -g appium-doctor</code></p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/install_appium_doctor.png"/> 
 </figure>
 
-
 <p>安装好之后，输入 <code>appium-doctor</code> 来查看环境是否配置成功。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/appium_doctor.png"/> 
 </figure>
 
-
 <h2 id="appium-安装">appium 安装</h2>
-
 <p>点击<a href="https://github.com/appium/appium-desktop/releases/download/v1.6.1/appium-desktop-setup-1.6.1.exe">Appium</a>下载，点击安装。没了。
 运行起来看看。</p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/appium.png"/> 
 </figure>
 
-
 <h2 id="一个小例子">一个小例子</h2>
-
 <p>经过上面的环境搭建，终于可以测试了，下面使用 <code>Python</code> 来简单的测试计算器的加法。使用时请保证设备安装好了驱动，并能正确连接到电脑。
 在用 <code>Python</code> 测试时需要用到 <code>Appium-Python-Client</code> ，先来安装一下。
 打开终端
-<img src="https://devbins.github.io/images/appium/anaconda_prompt.png" alt="" />
+<img src="https://devbins.github.io/images/appium/anaconda_prompt.png" alt="">
 输入 <code>pip install Appium-Python-Client</code></p>
-
 <figure>
     <img src="https://devbins.github.io/images/appium/appium_python_client.png"/> 
 </figure>
-
 
 <ul>
 <li>platformName 表示要进行测试的平台，分为 <code>Android</code> 和 <code>iOS</code></li>
 <li>deviceName 设备名称，在终端中使用 <code>adb devices</code> 来查看</li>
 <li>appPackage 测试应用的包名</li>
 <li>appActivity 测试应用的界面</li>
-
-<li><p>noReset 测试不清除应用数据</p>
-
-<pre><code class="language-python">import unittest
-from time import sleep
-from appium import webdriver
-
-class Calc(unittest.TestCase):
-def setUp(self):
-    desired_caps = {}
-    desired_caps['platformName'] = 'Android'
-    desired_caps['deviceName'] = 'Android Emulator'
-    desired_caps['appPackage'] = 'com.android.calculator2'
-    desired_caps['appActivity'] = '.Calculator'
-    desired_caps['noReset'] = True
-    self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub',desired_caps)
-
-
-def test_calc(self):
-    self.driver.find_element_by_id('com.android.calculator2:id/digit_1').click()
-    sleep(1)
-    self.driver.find_element_by_id('com.android.calculator2:id/op_add').click()
-    sleep(1)
-    self.driver.find_element_by_id('com.android.calculator2:id/digit_2').click()
-    sleep(1)
-    self.driver.find_element_by_id('com.android.calculator2:id/eq').click()
-    sleep(1)
-
-
-def tearDown(self):
-    self.driver.quit()
-
-
-if __name__ == '__main__':
-suite = unittest.TestLoader().loadTestsFromTestCase(Calc)
-unittest.TextTestRunner(verbosity=2).run(suite)
-</code></pre></li>
+<li>noReset 测试不清除应用数据</li>
 </ul>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">appium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 
-<p>看看效果，还不错</p>
+<span class="k">class</span> <span class="nc">Calc</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">)</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="n">desired_caps</span> <span class="o">=</span> <span class="p">{</span><span class="p">}</span>
+        <span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">platformName</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">Android</span><span class="s1">&#39;</span>
+        <span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">deviceName</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">Android Emulator</span><span class="s1">&#39;</span>
+        <span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">appPackage</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">com.android.calculator2</span><span class="s1">&#39;</span>
+        <span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">appActivity</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">.Calculator</span><span class="s1">&#39;</span>
+        <span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">noReset</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Remote</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">http://127.0.0.1:4723/wd/hub</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">desired_caps</span><span class="p">)</span>
 
+
+    <span class="k">def</span> <span class="nf">test_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">com.android.calculator2:id/digit_1</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">com.android.calculator2:id/op_add</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">com.android.calculator2:id/digit_2</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">com.android.calculator2:id/eq</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">quit</span><span class="p">(</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">__main__</span><span class="s1">&#39;</span><span class="p">:</span>
+    <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">loadTestsFromTestCase</span><span class="p">(</span><span class="n">Calc</span><span class="p">)</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
+</code></pre></div><p>看看效果，还不错</p>
 <figure>
     <img src="https://devbins.github.io/images/appium/screenshot.gif"/> 
 </figure>
 
-
 <h2 id="踩过的坑">踩过的坑</h2>
-
 <h3 id="数据被清除">数据被清除</h3>
-
 <p>在使用 Appium 进行测试时，每次都会把要进行测试的软件对应的数据给清除掉。可怜我第一次使用微信进行测试，虽然测通了，但是我重新打开微信的时候，什么都没了。哭晕在厕所。
 解决这个问题很简单，只要配置一个参数即可</p>
-
-<pre><code class="language-python">desired_caps['noReset'] = True
-</code></pre>
-
-<h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">desired_caps</span><span class="p">[</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">noReset</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+</code></pre></div><h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
 <p>跟着官方的例子自己写了一个试试，但是发现还是太年轻，调了好久都没用，最后想起了 <code>Go</code> 语言里测试函数是要以 <code>test</code> 开头的，于是试了一下就通了。</p>
-
 <h2 id="下载链接">下载链接</h2>
-
 <ul>
 <li><a href="http://nodejs.cn/download/">Node</a></li>
 <li><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">Python</a></li>
@@ -776,7 +712,7 @@ unittest.TextTestRunner(verbosity=2).run(suite)
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f-1">
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">
 												 配置环境变量
 											</a>
 										</li>
@@ -1047,7 +983,7 @@ unittest.TextTestRunner(verbosity=2).run(suite)
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

@@ -8,27 +8,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
   <meta name="description" content="Go 语言简介
-
 Go 是一门开源，在语言层上支持并发，带垃圾回收的新型编译型语言。具有动态语言的开发效率，静态语言的安全性。Go 语言是 Google 开发的，Go 语言的主要作者都是牛逼到不行的人物。比如：
-
 
 肯·汤普逊(Ken Thompson):C 语言的设计者，Unix 操作系统的创建者，并于 1983 年获得图灵奖。
 罗布·派克:Unix 小组的成员，《Unix 编程环境》作者之一。
 罗伯特·格里泽默(Robert Griesemer)参与 Java 的 HotSpot 编译器和 Chrome 浏览器的 JavaScript 引擎 V8 的制作。
-
 
 有这么多牛逼哄哄的人物镇楼，Go 语言的表现注定不会平庸。">
   
   <meta property="og:title" content="Go 入门" />
 <meta property="og:description" content="Go 语言简介
-
 Go 是一门开源，在语言层上支持并发，带垃圾回收的新型编译型语言。具有动态语言的开发效率，静态语言的安全性。Go 语言是 Google 开发的，Go 语言的主要作者都是牛逼到不行的人物。比如：
-
 
 肯·汤普逊(Ken Thompson):C 语言的设计者，Unix 操作系统的创建者，并于 1983 年获得图灵奖。
 罗布·派克:Unix 小组的成员，《Unix 编程环境》作者之一。
 罗伯特·格里泽默(Robert Griesemer)参与 Java 的 HotSpot 编译器和 Chrome 浏览器的 JavaScript 引擎 V8 的制作。
-
 
 有这么多牛逼哄哄的人物镇楼，Go 语言的表现注定不会平庸。" />
 <meta property="og:type" content="article" />
@@ -347,113 +341,64 @@ Go 是一门开源，在语言层上支持并发，带垃圾回收的新型编�
 
           <div class="post-content markdown">
             <h2 id="go-语言简介">Go 语言简介</h2>
-
 <p>Go 是一门开源，在语言层上支持并发，带垃圾回收的新型编译型语言。具有动态语言的开发效率，静态语言的安全性。Go 语言是 Google 开发的，Go 语言的主要作者都是牛逼到不行的人物。比如：</p>
-
 <ul>
 <li>肯·汤普逊(Ken Thompson):C 语言的设计者，Unix 操作系统的创建者，并于 1983 年获得图灵奖。</li>
 <li>罗布·派克:Unix 小组的成员，《Unix 编程环境》作者之一。</li>
 <li>罗伯特·格里泽默(Robert Griesemer)参与 Java 的 HotSpot 编译器和 Chrome 浏览器的 JavaScript 引擎 V8 的制作。</li>
 </ul>
-
 <p>有这么多牛逼哄哄的人物镇楼，Go 语言的表现注定不会平庸。</p>
-
 <h2 id="安装">安装</h2>
-
 <h3 id="mac-下安装">Mac 下安装</h3>
-
-<pre><code class="language-sh">brew install go
-</code></pre>
-
-<h3 id="linux-ubuntu-下安装">Linux（Ubuntu）下安装</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install go
+</code></pre></div><h3 id="linux-ubuntu-下安装">Linux（Ubuntu）下安装</h3>
 <ol>
 <li>在<a href="https://golangtc.com/download">下载地址</a>中根据自己的电脑系统选择对应的下载。</li>
-
-<li><p>解压下载的安装包到 <code>/usr/local</code></p>
-
-<pre><code class="language-zsh">tar -C /usr/local/ -xzf go$VERSION.$OS-$ARCH.tar.gz #把 go$VERSION.$OS-$ARCH.tar.gz 换成你下载的文件名
-</code></pre></li>
+<li>解压下载的安装包到 <code>/usr/local</code></li>
 </ol>
-
-<h2 id="配置环境变量">配置环境变量</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh">tar -C /usr/local/ -xzf go<span class="nv">$VERSION</span>.<span class="nv">$OS</span>-<span class="nv">$ARCH</span>.tar.gz <span class="c1">#把 go$VERSION.$OS-$ARCH.tar.gz 换成你下载的文件名</span>
+</code></pre></div><h2 id="配置环境变量">配置环境变量</h2>
 <h3 id="goroot">GOROOT</h3>
-
 <p><code>GOROOT</code> 是 Go 语言的安装目录</p>
-
-<pre><code class="language-zsh">export GOROOT=/usr/local/opt/go/libexec # Mac 下使用`homebrew`安装的配置
-export GOROOT=/usr/local/go # Linux 下的配置
-</code></pre>
-
-<h3 id="gopath">GOPATH</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh"><span class="nb">export</span> <span class="nv">GOROOT</span><span class="o">=</span>/usr/local/opt/go/libexec <span class="c1"># Mac 下使用`homebrew`安装的配置</span>
+<span class="nb">export</span> <span class="nv">GOROOT</span><span class="o">=</span>/usr/local/go <span class="c1"># Linux 下的配置</span>
+</code></pre></div><h3 id="gopath">GOPATH</h3>
 <p><code>GOPATH</code> 是 Go 语言的工作目录，也就是我们通常开发用到的目录，从 1.8 版本开始， <code>GOPATH</code> 默认为 <code>$HOME/go</code></p>
-
-<pre><code class="language-zsh">export GOPATH=/home/$USER/go
-</code></pre>
-
-<h3 id="gobin">GOBIN</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span>/home/<span class="nv">$USER</span>/go
+</code></pre></div><h3 id="gobin">GOBIN</h3>
 <p><code>GOBIN</code> 是 Go 语言二进制文件目录，把 <code>GOBIN</code> 加入 <code>PATH</code> 可以在终端中调用。</p>
-
-<pre><code class="language-zsh">export GOBIN=$GOROOT/bin
-export PATH=$PATH:$GOBIN
-</code></pre>
-
-<h3 id="验证是否安装成功">验证是否安装成功</h3>
-
-<pre><code class="language-zsh"> ➜  ~ go version
-go version go1.8.3 darwin/amd64 #输出类似则安装成功。
-</code></pre>
-
-<h2 id="gopath-结构">GOPATH 结构</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh"><span class="nb">export</span> <span class="nv">GOBIN</span><span class="o">=</span><span class="nv">$GOROOT</span>/bin
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$GOBIN</span>
+</code></pre></div><h3 id="验证是否安装成功">验证是否安装成功</h3>
+<div class="highlight"><pre class="chroma"><code class="language-zsh" data-lang="zsh"> ➜  ~ go version
+go version go1.8.3 darwin/amd64 <span class="c1">#输出类似则安装成功。</span>
+</code></pre></div><h2 id="gopath-结构">GOPATH 结构</h2>
 <p>GOPATH 是 Go 语言的工作目录，在 GOPATH 下有三个重要的子目录分别是 <code>src</code> 、 <code>pkg</code> 、 <code>bin</code> 。</p>
-
 <p><code>src</code> 用来存放 Go 源代码</p>
-
 <p><code>pkg</code> 存放编译后生成的文件</p>
-
 <p><code>bin</code> 存放编译后生成的可执行文件</p>
-
 <h2 id="在-sublime-中使用">在 Sublime 中使用</h2>
-
 <p>Sublime 是一个文本编辑器，扩展性非常好，有丰富的插件库。通过 <code>GoSublime</code> 这个插件就能让 Sublime 具有类似 IDE 智能提示的功能。</p>
-
 <h3 id="启用-package-control">启用 package control</h3>
-
-<pre><code class="language-python">import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)
-</code></pre>
-
-<h3 id="安装-gosublime">安装 GoSublime</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">urllib.request</span><span class="o">,</span><span class="nn">os</span><span class="o">,</span><span class="nn">hashlib</span><span class="p">;</span> <span class="n">h</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">df21e130d211cfc94d9b0905775a7c0f</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">1e3d39e33b79698005270310898eea76</span><span class="s1">&#39;</span><span class="p">;</span> <span class="n">pf</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">Package Control.sublime-package</span><span class="s1">&#39;</span><span class="p">;</span> <span class="n">ipp</span> <span class="o">=</span> <span class="n">sublime</span><span class="o">.</span><span class="n">installed_packages_path</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">(</span><span class="p">)</span><span class="p">)</span> <span class="p">)</span><span class="p">;</span> <span class="n">by</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">http://packagecontrol.io/</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">pf</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1"> </span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">%</span><span class="s1">20</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="n">dh</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">by</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="p">)</span><span class="p">;</span> <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">Error validating download (got </span><span class="si">%s</span><span class="s1"> instead of </span><span class="si">%s</span><span class="s1">), please try manual install</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span><span class="p">)</span> <span class="k">if</span> <span class="n">dh</span> <span class="o">!=</span> <span class="n">h</span> <span class="k">else</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">ipp</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">wb</span><span class="s1">&#39;</span> <span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">by</span><span class="p">)</span>
+</code></pre></div><h3 id="安装-gosublime">安装 GoSublime</h3>
 <p>在 sublime 中同时按住 <code>cmd + shift + p</code> ,在弹出的框中输入 <code>install package</code> ,需要等待一会搜索包，搜索完毕后在输入框中输入 gosublime，选中第一个，回车安装好了重启生效</p>
-
 <h3 id="配置-gosublime">配置 GoSublime</h3>
-
 <p>在菜单中选择 Preferences -&gt; package settings -&gt; GoSublime -&gt; Settings -&gt; Uesrs</p>
-
 <p>在打开的文件中输入</p>
-
-<pre><code class="language-javascript">{
-    &quot;env&quot;: {
-        &quot;GOPATH&quot;: &quot;~/go&quot;,//根据自己的路径修改
-        &quot;GOROOT&quot;: &quot;/usr/local/opt/go/libexec&quot;
-    }
-}
-</code></pre>
-
-<h3 id="运行">运行</h3>
-
-<pre><code class="language-go">package main
-import (&quot;fmt&quot;)
-func main(){
-    fmt.Print(&quot;hello go&quot;)
-}
-</code></pre>
-
-<p>在 sublime 中 按住 <code>cmd+b</code> 后输入 <code>go run hello.go</code> 就可以看都控制台打印了 hello go</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
+    <span class="s2">&#34;env&#34;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&#34;GOPATH&#34;</span><span class="o">:</span> <span class="s2">&#34;~/go&#34;</span><span class="p">,</span><span class="c1">//根据自己的路径修改
+</span><span class="c1"></span>        <span class="s2">&#34;GOROOT&#34;</span><span class="o">:</span> <span class="s2">&#34;/usr/local/opt/go/libexec&#34;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id="运行">运行</h3>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span><span class="s">&#34;fmt&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">(</span><span class="p">)</span><span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="s">&#34;hello go&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><p>在 sublime 中 按住 <code>cmd+b</code> 后输入 <code>go run hello.go</code> 就可以看都控制台打印了 hello go</p>
           </div>
 
           
@@ -997,7 +942,7 @@ func main(){
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

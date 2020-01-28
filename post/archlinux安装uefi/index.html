@@ -9,14 +9,12 @@
   <meta name="author" content="dev.bins">
   <meta name="description" content="
 之前写过一篇 Arch Linux 安装的文章，不过那是使用 MBR 引导的，但是现在很多机器都已经使用上 UEFI 了，这里就是在 UEFI 上的实践。
-
 本篇文章只讲和 MBR 不一样的地方，不然文章会显得啰嗦很长。MBR 安装方式会在文末给出链接，两篇结合起来看会好点。
 ">
   
   <meta property="og:title" content="ArchLinux 安装 UEFI &#43; GPT" />
 <meta property="og:description" content="
 之前写过一篇 Arch Linux 安装的文章，不过那是使用 MBR 引导的，但是现在很多机器都已经使用上 UEFI 了，这里就是在 UEFI 上的实践。
-
 本篇文章只讲和 MBR 不一样的地方，不然文章会显得啰嗦很长。MBR 安装方式会在文末给出链接，两篇结合起来看会好点。
 " />
 <meta property="og:type" content="article" />
@@ -336,65 +334,42 @@
           <div class="post-content markdown">
             <blockquote>
 <p>之前写过一篇 Arch Linux 安装的文章，不过那是使用 MBR 引导的，但是现在很多机器都已经使用上 UEFI 了，这里就是在 UEFI 上的实践。</p>
-
 <p>本篇文章只讲和 MBR 不一样的地方，不然文章会显得啰嗦很长。MBR 安装方式会在文末给出链接，两篇结合起来看会好点。</p>
 </blockquote>
-
 <h2 id="uefi">UEFI</h2>
-
 <p>安装前先确认一下是不是 UEFI 启动的。如果是会输出一些文件，如果不是什么都没有。</p>
-
-<pre><code class="language-sh">ls /sys/firmware/efi/efivars
-</code></pre>
-
-<h2 id="分区">分区</h2>
-
-<pre><code class="language-sh">parted
-mklabel gpt # 采用 gpt 分区表
-mkpart ESP fat32 1M 513M # 创建 ESP 分区
-set 1 boot on # 设置启动 flag
-mkpart primary ext4 513M 10G # / 根分区
-mkpart primary ext4 10G 20G  # /home
-mkpart primary linux-swap 20G 24G  #swap
-q # 退出
-</code></pre>
-
-<h2 id="格式化分区">格式化分区</h2>
-
-<pre><code class="language-sh">mkfs.vfat -F32 /dev/sda1
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ls /sys/firmware/efi/efivars
+</code></pre></div><h2 id="分区">分区</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">parted
+mklabel gpt <span class="c1"># 采用 gpt 分区表</span>
+mkpart ESP fat32 1M 513M <span class="c1"># 创建 ESP 分区</span>
+<span class="nb">set</span> <span class="m">1</span> boot on <span class="c1"># 设置启动 flag</span>
+mkpart primary ext4 513M 10G <span class="c1"># / 根分区</span>
+mkpart primary ext4 10G 20G  <span class="c1"># /home</span>
+mkpart primary linux-swap 20G 24G  <span class="c1">#swap</span>
+q <span class="c1"># 退出</span>
+</code></pre></div><h2 id="格式化分区">格式化分区</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkfs.vfat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 mkfs.ext4 /dev/sda3
 mkswap /dev/sda4
-</code></pre>
-
-<h2 id="挂载分区">挂载分区</h2>
-
-<pre><code class="language-sh">mount /dev/sda2 /mnt
+</code></pre></div><h2 id="挂载分区">挂载分区</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mount /dev/sda2 /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 mkdir /mnt/home
 mount /dev/sda3 /mnt/home
 swapon /dev/sda4
-</code></pre>
-
-<h2 id="配置-grub">配置 GRUB</h2>
-
-<pre><code class="language-sh">pacman -S grub efibootmgr
+</code></pre></div><h2 id="配置-grub">配置 GRUB</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pacman -S grub efibootmgr
 grub-install /dev/sda
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
+grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot/efi --bootloader-id<span class="o">=</span>grub
 grub-mkconfig -o /boot/grub/grub.cfg
-</code></pre>
-
-<h2 id="virtualbox-下无法正常引导">VirtualBox 下无法正常引导</h2>
-
+</code></pre></div><h2 id="virtualbox-下无法正常引导">VirtualBox 下无法正常引导</h2>
 <p>在 VirtualBox 中安装 Arch 成功后，重启之后没法进入引导，这可能是 VirtualBox 的 bug，通过下面的操作可以解决这个问题。</p>
-
-<pre><code class="language-sh">mkdir /boot/efi/EFI/boot
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir /boot/efi/EFI/boot
 cp /boot/efi/EFI/arch-grub/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
-</code></pre>
-
-<h2 id="参考">参考</h2>
-
+</code></pre></div><h2 id="参考">参考</h2>
 <ul>
 <li><a href="../archlinux">MBR 安装 Arch Linux</a></li>
 </ul>
@@ -725,7 +700,7 @@ cp /boot/efi/EFI/arch-grub/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

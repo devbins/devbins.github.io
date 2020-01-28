@@ -8,16 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
   <meta name="description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
-
 本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
-
 本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
   
   <meta property="og:title" content="Arch Linux 安装" />
 <meta property="og:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
-
 本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
-
 本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devbins.github.io/post/archlinux/" />
@@ -335,325 +331,165 @@
 
           <div class="post-content markdown">
             <p>今年开始我一直使用 <code>Manjaro</code> ，这是一个基于 <code>Arch</code> 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 <code>Linux</code> ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。</p>
-
 <p>本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 <code>Manjaro</code> 或者 <code>Ubuntu</code> 可能会适合你。</p>
-
 <p>本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。</p>
-
 <h2 id="下载镜像">下载镜像</h2>
-
 <p>在开始之前先要从<a href="https://www.archlinux.org/download/">Arch Linux</a> 下载镜像，以便我们制作装机 U 盘。</p>
-
 <h2 id="制作启动盘">制作启动盘</h2>
-
 <p>把 U 盘接入电脑，使用 <code>lsblk</code> 查找 U 盘</p>
-
-<pre><code class="language-sh">lsblk
-</code></pre>
-
-<p>U 盘的格式如 <code>/dev/sdb</code> 这样的，不要带上数字。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">lsblk
+</code></pre></div><p>U 盘的格式如 <code>/dev/sdb</code> 这样的，不要带上数字。</p>
 <p>找到之后使用 <code>dd</code> (Linux 下制作)来制作启动 U 盘， <code>if</code> 后面跟 <code>archlinux</code> 的镜像路径， <code>of</code> 跟 U 盘的路径，把 <code>sdx</code> 换成对应的设备，下同。</p>
-
-<pre><code class="language-sh">dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress &amp;&amp; sync
-</code></pre>
-
-<h2 id="联网">联网</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>/path/to/archlinux.iso <span class="nv">of</span><span class="o">=</span>/dev/sdx <span class="nv">status</span><span class="o">=</span>progress <span class="o">&amp;&amp;</span> sync
+</code></pre></div><h2 id="联网">联网</h2>
 <p>重启电脑，选择从 U 盘启动。
-<img src="https://devbins.github.io/images/arch/arch.png" alt="" /></p>
-
+<img src="https://devbins.github.io/images/arch/arch.png" alt=""></p>
 <p>启动之后先检查网络，Arch 安装需要使用到网络，没有网络是无法安装的。如果可以正常访问网络了，跳过到下一步。</p>
-
-<pre><code class="language-sh">ping www.baidu.com
-</code></pre>
-
-<h3 id="有线连接">有线连接</h3>
-
-<pre><code class="language-sh">dhcpcd
-</code></pre>
-
-<h3 id="wifi-连接">WiFi 连接</h3>
-
-<pre><code class="language-sh">wifi-menu
-</code></pre>
-
-<h2 id="更新系统时间">更新系统时间</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ping www.baidu.com
+</code></pre></div><h3 id="有线连接">有线连接</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dhcpcd
+</code></pre></div><h3 id="wifi-连接">WiFi 连接</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wifi-menu
+</code></pre></div><h2 id="更新系统时间">更新系统时间</h2>
 <p>先来更新一下时间，确保时间是准确的。</p>
-
-<pre><code class="language-sh">timedatectl set-ntp true
-</code></pre>
-
-<h2 id="分区">分区</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">timedatectl set-ntp <span class="nb">true</span>
+</code></pre></div><h2 id="分区">分区</h2>
 <p>装系统很重要的一步就是分区，使用 <code>fdisk</code> 来建立分区。</p>
-
-<pre><code class="language-sh">fdisk /dev/sdx
-</code></pre>
-
-<p>按 <code>n</code> 创建一个新分区， <code>p</code> 创建主分区。
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">fdisk /dev/sdx
+</code></pre></div><p>按 <code>n</code> 创建一个新分区， <code>p</code> 创建主分区。
 这里创建 4 个分区</p>
-
 <ul>
 <li>sdx1 100M /boot</li>
 <li>sdx2 2G swap</li>
 <li>sdx3 10G /</li>
 <li>sdx4 10G /home</li>
 </ul>
-
 <figure>
     <img src="https://devbins.github.io/images/arch/fdiskl.jpg"/> 
 </figure>
 
-
 <h2 id="格式化分区">格式化分区</h2>
-
 <p>分区建立好之后，就是格式化分区了，不同的分区需要格式化为不同的格式。</p>
-
-<pre><code class="language-sh">mkfs.vfat -F32 /dev/sdx1
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkfs.vfat -F32 /dev/sdx1
 mkswap /dev/sdx2
 mkfs.ext4 /dev/sdx3
 mkfs.ext4 /dev/sdx4
-</code></pre>
-
-<h2 id="挂载分区">挂载分区</h2>
-
+</code></pre></div><h2 id="挂载分区">挂载分区</h2>
 <p>分区格式化完成之后，把格式化好的分区挂载到 <code>/mnt</code> 下，我们的新系统会安装到这里。</p>
-
-<pre><code class="language-sh">mount /dev/sdx3 /mnt #先挂载根分区，不然后面的没法挂载，根分区是一切的开始。
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mount /dev/sdx3 /mnt <span class="c1">#先挂载根分区，不然后面的没法挂载，根分区是一切的开始。</span>
 mkdir /mnt/boot
 mount /dev/sdx1 /mnt/boot
 mkidr /mnt/home
 mount /dev/sdx4 /mnt/home
-</code></pre>
-
-<p>swap 分区不需要挂载，但是要开启</p>
-
-<pre><code class="language-sh">swapon /dev/sdx2
-</code></pre>
-
-<h2 id="选择合适的软件源">选择合适的软件源</h2>
-
+</code></pre></div><p>swap 分区不需要挂载，但是要开启</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">swapon /dev/sdx2
+</code></pre></div><h2 id="选择合适的软件源">选择合适的软件源</h2>
 <p>选择一个快速的软件源，可以节约下载的时间，没必要浪费时间在这里等待。更改软件源在 <code>/etc/pacman.d/mirrorlist</code> 你可以使用 vi 打开，找到</p>
-
-<pre><code class="language-sh">## China
-Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
-</code></pre>
-
-<p>放到文件的最开头，并更新</p>
-
-<pre><code class="language-sh">pacman -Syy
-</code></pre>
-
-<h2 id="安装">安装</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## China</span>
+<span class="nv">Server</span> <span class="o">=</span> http://mirrors.ustc.edu.cn/archlinux/<span class="nv">$repo</span>/os/<span class="nv">$arch</span>
+</code></pre></div><p>放到文件的最开头，并更新</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pacman -Syy
+</code></pre></div><h2 id="安装">安装</h2>
 <p>做了这么多，可以开始安装系统了，输入如下指令</p>
-
-<pre><code class="language-sh">pacstrap -i /mnt base base-devel vim
-</code></pre>
-
-<h2 id="生成文件系统信息">生成文件系统信息</h2>
-
-<pre><code class="language-sh">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
-</code></pre>
-
-<p>查看生成的 <code>fstab</code></p>
-
-<pre><code class="language-sh">cat /mnt/etc/fstab
-</code></pre>
-
-<h2 id="配置">配置</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pacstrap -i /mnt base base-devel vim
+</code></pre></div><h2 id="生成文件系统信息">生成文件系统信息</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre></div><p>查看生成的 <code>fstab</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cat /mnt/etc/fstab
+</code></pre></div><h2 id="配置">配置</h2>
 <h3 id="进入到新系统">进入到新系统</h3>
-
 <p>系统装完了，我们需要对安装完的系统进行一些配置，不然安装完，很多东西没法用，而且也不太好用。要对配置安装完的系统，当然是要进入新系统中</p>
-
-<pre><code class="language-sh">arch-chroot /mnt
-</code></pre>
-
-<h3 id="设置时区">设置时区</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">arch-chroot /mnt
+</code></pre></div><h3 id="设置时区">设置时区</h3>
 <p>这里没什么好说的，设置时区</p>
-
-<pre><code class="language-sh">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
-</code></pre>
-
-<h3 id="本地化">本地化</h3>
-
+</code></pre></div><h3 id="本地化">本地化</h3>
 <p>编辑 <code>/etc/locale.gen</code> 把 <code>en_US.UTF-8 UTF-8</code> 与 <code>zh_CN.UTF-8 UTF-8</code> 注释去掉（移除行首的 #）</p>
-
-<pre><code class="language-sh">en_US.UTF-8 UTF-8
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
-</code></pre>
-
-<p>使用 <code>locale-gen</code> 生成 locale 信息</p>
-
+</code></pre></div><p>使用 <code>locale-gen</code> 生成 locale 信息</p>
 <p>设置系统语言
 编辑 <code>/etc/locale.conf</code> 文件，设置 <code>LANG</code></p>
-
-<pre><code class="language-sh">LANG=en_US.UTF-8
-</code></pre>
-
-<h3 id="主机名">主机名</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+</code></pre></div><h3 id="主机名">主机名</h3>
 <p>编辑 <code>/etc/hostname</code> ,其中 <code>hostname</code> 随意，写什么无所谓。</p>
-
-<pre><code class="language-sh">hostname
-</code></pre>
-
-<p>添加到 <code>/etc/hosts</code> ,第三行的 <code>hostname</code> 改为上一步写的。</p>
-
-<pre><code class="language-sh">127.0.0.1	localhost
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hostname
+</code></pre></div><p>添加到 <code>/etc/hosts</code> ,第三行的 <code>hostname</code> 改为上一步写的。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">127.0.0.1	localhost
 ::1	    	localhost
 127.0.1.1	hostname.localdomain	hostname
-</code></pre>
-
-<h3 id="配置网络">配置网络</h3>
-
+</code></pre></div><h3 id="配置网络">配置网络</h3>
 <p>这里要配置一下，不然系统装完了，重启发现没法上网就很尴尬</p>
-
-<pre><code class="language-sh"># 安装必要的软件包
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 安装必要的软件包</span>
 pacman -S wpa_supplicant dialog network-manager-applet networmanager
-systemctl enable dhcpcd.service
-systemctl enable NetworkManager
-</code></pre>
-
-<h3 id="设置-root-密码">设置 root 密码</h3>
-
+systemctl <span class="nb">enable</span> dhcpcd.service
+systemctl <span class="nb">enable</span> NetworkManager
+</code></pre></div><h3 id="设置-root-密码">设置 root 密码</h3>
 <p>更改 <code>root</code> 密码，有些操作需要在 <code>root</code> 下操作。</p>
-
-<pre><code class="language-sh">passwd
-</code></pre>
-
-<h3 id="创建用户">创建用户</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">passwd
+</code></pre></div><h3 id="创建用户">创建用户</h3>
 <p>为新系统创建一个用户， <code>root</code> 的权限太高了，建个普通用户在合适不过。</p>
-
-<pre><code class="language-sh">useradd -m -G wheel -s /bin/bash arch
-</code></pre>
-
-<p>为用户添加 <code>sudo</code> , 输入 <code>visudo</code></p>
-
-<pre><code class="language-sh">wheel ALL=(ALL) ALL # 找到这行，把行首的 #去掉
-</code></pre>
-
-<h3 id="配置-grub-进行开机引导">配置 GRUB 进行开机引导</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">useradd -m -G wheel -s /bin/bash arch
+</code></pre></div><p>为用户添加 <code>sudo</code> , 输入 <code>visudo</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">wheel <span class="nv">ALL</span><span class="o">=</span><span class="o">(</span>ALL<span class="o">)</span> ALL <span class="c1"># 找到这行，把行首的 #去掉</span>
+</code></pre></div><h3 id="配置-grub-进行开机引导">配置 GRUB 进行开机引导</h3>
 <p>配置开机引导，如果不做这一步，开机后没法进入系统。</p>
-
-<pre><code class="language-sh">pacman -S grub
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pacman -S grub
 grub-install /dev/sdx
 grub-mkconfig -o /boot/grub/grub.cfg
-</code></pre>
-
-<h2 id="重启">重启</h2>
-
+</code></pre></div><h2 id="重启">重启</h2>
 <p>安装好了，重启看看效果。别忘了把 U 盘弹出。</p>
-
-<pre><code class="language-sh">exit
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exit</span>
 umount -R /mnt
 reboot
-</code></pre>
-
-<h2 id="桌面">桌面</h2>
-
+</code></pre></div><h2 id="桌面">桌面</h2>
 <p>新系统是没有桌面环境的，有一个好看的桌面还是非常重要的。</p>
-
 <h3 id="装-x--x-是桌面环境的简称">装 X(X 是桌面环境的简称)</h3>
-
 <p>xorg 是 X11 的一个实现，是所有桌面环境的基础，没有这个就没有桌面可以看。</p>
-
-<pre><code class="language-sh">sudo pacman -S xorg
-</code></pre>
-
-<h3 id="显示管理器--display-manager">显示管理器(Display Manager)</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xorg
+</code></pre></div><h3 id="显示管理器--display-manager">显示管理器(Display Manager)</h3>
 <p>装好了桌面环境后，我们还需要一个用来管理桌面的管理器，不然你需要手动启动它。</p>
-
-<pre><code class="language-sh">sudo pacman -S lightdm lightdm-gtk-greeter
-sudo systemctl enable lightdm # 开机自启动
-</code></pre>
-
-<p>装好了 <code>lightdm</code> 之后需要配置一下。编辑 <code>/etc/lightdm/lightdm.conf</code></p>
-
-<pre><code class="language-sh">[Seat:*]
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S lightdm lightdm-gtk-greeter
+sudo systemctl <span class="nb">enable</span> lightdm <span class="c1"># 开机自启动</span>
+</code></pre></div><p>装好了 <code>lightdm</code> 之后需要配置一下。编辑 <code>/etc/lightdm/lightdm.conf</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>Seat:*<span class="o">]</span>
 ...
-greeter-session=lightdm-gtk-greeter # 如果你装了 deepin 可以改为 lightdm-deepin-greeter
-</code></pre>
-
-<p>有哪些 <code>greeter-session</code> 可以通过如下命令来查看。</p>
-
-<pre><code class="language-sh">ls -l /usr/share/xgreeters/
-</code></pre>
-
-<h3 id="deepin">deepin</h3>
-
+greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># 如果你装了 deepin 可以改为 lightdm-deepin-greeter</span>
+</code></pre></div><p>有哪些 <code>greeter-session</code> 可以通过如下命令来查看。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ls -l /usr/share/xgreeters/
+</code></pre></div><h3 id="deepin">deepin</h3>
 <p>deepin 是深度科技开发桌面系统，有着漂亮的界面，如果你需要使用 <code>QQ</code> ， <code>微信</code> 等软件，deepin 桌面是一个不错的选择。</p>
-
-<pre><code class="language-sh">sudo pacman -S deepin deepin-extra
-</code></pre>
-
-<figure>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S deepin deepin-extra
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/arch/arch_deepin.jpg"/> 
 </figure>
 
-
 <h3 id="kde">kde</h3>
-
 <p>kde 是另外一个非常好看的桌面，不过 <code>QQ</code> 不能在其上运行， <code>微信</code> 部分功能不能正常使用，比如截图，发文件等。</p>
-
-<pre><code class="language-sh">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
-</code></pre>
-
-<figure>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/arch/arch_kde.jpg"/> 
 </figure>
 
-
 <h3 id="安装显卡驱动">安装显卡驱动</h3>
-
 <p>显卡最好只安装集成显卡，不要使用独立显卡。</p>
-
 <h4 id="intel">Intel</h4>
-
-<pre><code class="language-sh">sudo pacman -S xf86-video-intel
-</code></pre>
-
-<h4 id="amd">AMD</h4>
-
-<pre><code class="language-sh">sudo pacman -S xf86-video-amdgpu
-</code></pre>
-
-<h4 id="ati">ATI</h4>
-
-<pre><code class="language-sh">sudo pacman -S xf86-video-ati
-</code></pre>
-
-<h4 id="nvidia">NVIDIA</h4>
-
-<pre><code class="language-sh">sudo pacman -S xf86-video-nv
-</code></pre>
-
-<h3 id="安装声卡驱动">安装声卡驱动</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-intel
+</code></pre></div><h4 id="amd">AMD</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-amdgpu
+</code></pre></div><h4 id="ati">ATI</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-ati
+</code></pre></div><h4 id="nvidia">NVIDIA</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-nv
+</code></pre></div><h3 id="安装声卡驱动">安装声卡驱动</h3>
 <p>安装声卡，听听歌还是不错的。</p>
-
-<pre><code class="language-sh">pacman -S alsa-utils alsa-oss
-</code></pre>
-
-<p>执行 <code>alsamixer</code> 取消静音</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">pacman -S alsa-utils alsa-oss
+</code></pre></div><p>执行 <code>alsamixer</code> 取消静音</p>
 <h3 id="字体">字体</h3>
-
 <p>中文字体按需选择。</p>
-
-<pre><code class="language-sh">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
-</code></pre>
-
-<h2 id="参考">参考</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
+</code></pre></div><h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://wiki.archlinux.org/index.php/Installation%5Fguide%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)">Installation guide (简体中文) - ArchWiki</a></li>
 <li><a href="https://wiki.archlinux.org/index.php/Locale%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)#.E8.AE.BE.E7.BD.AE%5Flocale">Locale (简体中文) - ArchWiki</a></li>
@@ -1701,7 +1537,7 @@ greeter-session=lightdm-gtk-greeter # 如果你装了 deepin 可以改为 lightd
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

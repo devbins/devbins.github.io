@@ -8,12 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
   <meta name="description" content="Manjaro 使用的原因
-
 最近把操作系统换成了 Linux，Linux 发行版众多，选择一个作为日常使用非常纠结。之前折腾过 RHEL 系、openSUSE、都非常不错，不过装 QQ 等国产软件还是比较麻烦，偶然在emacs-china上看到有人推荐使用 Manjaro 于是我就抱着尝试的心态试试，发现还不错。在distrowatch上排名排在第二，人气很高，这就让我放心了，那么多人使用解决问题也会比较方便。真正让我选择它的是在虚拟机上打开 Android Studio 速度比其他发行版快。">
   
   <meta property="og:title" content="Manjaro 的使用" />
 <meta property="og:description" content="Manjaro 使用的原因
-
 最近把操作系统换成了 Linux，Linux 发行版众多，选择一个作为日常使用非常纠结。之前折腾过 RHEL 系、openSUSE、都非常不错，不过装 QQ 等国产软件还是比较麻烦，偶然在emacs-china上看到有人推荐使用 Manjaro 于是我就抱着尝试的心态试试，发现还不错。在distrowatch上排名排在第二，人气很高，这就让我放心了，那么多人使用解决问题也会比较方便。真正让我选择它的是在虚拟机上打开 Android Studio 速度比其他发行版快。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devbins.github.io/post/manjaro/" />
@@ -331,103 +329,63 @@
 
           <div class="post-content markdown">
             <h2 id="manjaro-使用的原因">Manjaro 使用的原因</h2>
-
 <p>最近把操作系统换成了 Linux，Linux 发行版众多，选择一个作为日常使用非常纠结。之前折腾过 RHEL 系、openSUSE、都非常不错，不过装 QQ 等国产软件还是比较麻烦，偶然在<a href="https://emacs-china.org/">emacs-china</a>上看到有人推荐使用 Manjaro 于是我就抱着尝试的心态试试，发现还不错。在<a href="https://distrowatch.com/table.php?distribution=manjaro">distrowatch</a>上排名排在第二，人气很高，这就让我放心了，那么多人使用解决问题也会比较方便。真正让我选择它的是在虚拟机上打开 Android Studio 速度比其他发行版快。</p>
-
 <h2 id="配置">配置</h2>
-
 <h3 id="配置-archlinuxcn">配置 archlinuxcn</h3>
-
-<pre><code class="language-sh">sudo sed -i '$a [archlinuxcn]' /etc/pacman.conf
-sudo sed -i '$a SigLevel = Optional TrustedOnly' /etc/pacman.conf
-sudo sed -i '$a Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch' /etc/pacman.conf
-# 更新源
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo sed -i <span class="s1">&#39;$a [archlinuxcn]&#39;</span> /etc/pacman.conf
+sudo sed -i <span class="s1">&#39;$a SigLevel = Optional TrustedOnly&#39;</span> /etc/pacman.conf
+sudo sed -i <span class="s1">&#39;$a Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch&#39;</span> /etc/pacman.conf
+<span class="c1"># 更新源</span>
 sudo pacman -Syy
-# 安装 archlinuxcn-keyring
+<span class="c1"># 安装 archlinuxcn-keyring</span>
 sudo pacman -S --noconfirm archlinuxcn-keyring
-</code></pre>
-
-<h3 id="切换国内源">切换国内源</h3>
-
-<pre><code class="language-sh">sudo pacman-mirrors -c China
-</code></pre>
-
-<h3 id="软件管理-以-git-为例">软件管理（以 git 为例）</h3>
-
+</code></pre></div><h3 id="切换国内源">切换国内源</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman-mirrors -c China
+</code></pre></div><h3 id="软件管理-以-git-为例">软件管理（以 git 为例）</h3>
 <h4 id="安装软件">安装软件</h4>
-
-<pre><code class="language-sh">sudo pacman -S git
-</code></pre>
-
-<h4 id="删除软件">删除软件</h4>
-
-<pre><code class="language-sh">sudo pacman -R git
-</code></pre>
-
-<h4 id="查询软件">查询软件</h4>
-
-<pre><code class="language-sh">sudo pacman -Q git
-</code></pre>
-
-<h4 id="直接安装软件跳过安装询问">直接安装软件跳过安装询问</h4>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S git
+</code></pre></div><h4 id="删除软件">删除软件</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -R git
+</code></pre></div><h4 id="查询软件">查询软件</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -Q git
+</code></pre></div><h4 id="直接安装软件跳过安装询问">直接安装软件跳过安装询问</h4>
 <p>在安装软件的时候，通常还会问你是不是要执行安装，是输入 y，不是输入 n。这就很麻烦了，如果每安装一个软件都问那还不得累死，所以可以通过加入 &ndash;noconfirm 参数来避免每次输入。</p>
-
-<pre><code class="language-sh">sudo pacman -S --noconfirm git
-</code></pre>
-
-<h3 id="输入法">输入法</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S --noconfirm git
+</code></pre></div><h3 id="输入法">输入法</h3>
 <h4 id="安装搜狗输入法">安装搜狗输入法</h4>
-
-<pre><code class="language-sh">sudo pacman -S --noconfirm fcitx-sogoupinyin
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S --noconfirm fcitx-sogoupinyin
 sudo pacman -S --noconfirm fcitx-im
 sudo pacman -S --noconfirm fcitx-configtool
-</code></pre>
-
-<h4 id="配置搜狗">配置搜狗</h4>
-
-<pre><code class="language-sh">cat&gt;&gt;~/.xprofile&lt;&lt;EOF
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=&quot;@im=fcitx&quot;
-EOF
-</code></pre>
-
-<p>安装好之后启动 fcitx-configtool，在弹出的窗口中，点击左下角的加号，取消选中只显示当前语言，拉倒最后选择 Sougou pinyi。</p>
-
+</code></pre></div><h4 id="配置搜狗">配置搜狗</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cat&gt;&gt;~/.xprofile<span class="s">&lt;&lt;EOF
+</span><span class="s">export GTK_IM_MODULE=fcitx
+</span><span class="s">export QT_IM_MODULE=fcitx
+</span><span class="s">export XMODIFIERS=&#34;@im=fcitx&#34;
+</span><span class="s">EOF</span>
+</code></pre></div><p>安装好之后启动 fcitx-configtool，在弹出的窗口中，点击左下角的加号，取消选中只显示当前语言，拉倒最后选择 Sougou pinyi。</p>
 <h3 id="zsh">zsh</h3>
-
-<pre><code class="language-bash">chsh -s /bin/zsh
-sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-</code></pre>
-
-<h3 id="一些软件">一些软件</h3>
-
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">chsh -s /bin/zsh
+sh -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div><h3 id="一些软件">一些软件</h3>
 <ul>
 <li>git</li>
 <li>google-chrome</li>
 <li>guake</li>
 <li>TIM (deepin.com.qq.office)</li>
 <li>Wechat</li>
-
-<li><p>docky</p>
-
-<pre><code class="language-bash">sudo pacman -S --noconfirm git
+<li>docky</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo pacman -S --noconfirm git
 sudo pacman -S --noconfirm google-chrome
 sudo pacman -S --noconfirm guake
 sudo pacman -S --noconfirm deepin-wechat
 sudo pacman -S --noconfirm docky
 yaourt -S --noconfirm deepin.com.qq.office
-</code></pre></li>
-</ul>
-
-<h2 id="安装脚本">安装脚本</h2>
-
-<pre><code class="language-bash">sudo pacman-mirrors -c China
-sudo sed -i '$a [archlinuxcn]' /etc/pacman.conf
-sudo sed -i '$a SigLevel = Optional TrustedOnly' /etc/pacman.conf
-sudo sed -i '$a Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch' /etc/pacman.conf
+</code></pre></div><h2 id="安装脚本">安装脚本</h2>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">sudo pacman-mirrors -c China
+sudo sed -i <span class="s1">&#39;$a [archlinuxcn]&#39;</span> /etc/pacman.conf
+sudo sed -i <span class="s1">&#39;$a SigLevel = Optional TrustedOnly&#39;</span> /etc/pacman.conf
+sudo sed -i <span class="s1">&#39;$a Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch&#39;</span> /etc/pacman.conf
 sudo pacman -Syy
 
 sudo pacman -S --noconfirm archlinuxcn-keyring
@@ -438,31 +396,31 @@ sudo pacman -S --noconfirm fcitx-sogoupinyin
 sudo pacman -S --noconfirm fcitx-im
 sudo pacman -S --noconfirm fcitx-configtool
 
-#sudo nano ~/.xprofile
-cat&gt;&gt;~/.xprofile&lt;&lt;EOF
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=&quot;@im=fcitx&quot;
-EOF
+<span class="c1">#sudo nano ~/.xprofile</span>
+cat&gt;&gt;~/.xprofile<span class="s">&lt;&lt;EOF
+</span><span class="s">export GTK_IM_MODULE=fcitx
+</span><span class="s">export QT_IM_MODULE=fcitx
+</span><span class="s">export XMODIFIERS=&#34;@im=fcitx&#34;
+</span><span class="s">EOF</span>
 
-#wechat
+<span class="c1">#wechat</span>
 sudo pacman -S --noconfirm deepin-wechat
 
-#guake
+<span class="c1">#guake</span>
 sudo pacman -S --noconfirm guake
 
-#docky
+<span class="c1">#docky</span>
 sudo pacman -S --noconfirm docky
 
-#vim
+<span class="c1">#vim</span>
 sudo pacman -S --noconfirm vim
 
-#emacs
+<span class="c1">#emacs</span>
 sudo pacman -S --noconfirm emacs
 
 chsh -s /bin/zsh
-sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;
-</code></pre>
+sh -c <span class="s2">&#34;</span><span class="k">$(</span>curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div>
           </div>
 
           
@@ -1038,7 +996,7 @@ sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/to
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

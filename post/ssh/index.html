@@ -335,49 +335,31 @@
 有没有一种办法可以只输入一次密码，以后有都不用再输入密码的办法？如果有多个服务器怎么办？又要输密码吗？
 其实我们常常使用 SSH 登录服务器，这个 SSH 就提供了这样的操作，不过需要配置。</p>
 </blockquote>
-
 <h2 id="生成公私钥文件">生成公私钥文件</h2>
-
 <p>要不想每次都输入密码才登录服务器，那就得让程序来做，但是这样又不安全，所以我们先要加密。比较安全的就是 SSH，配合 <code>rsa</code> 算法来实现免密登录。
 先来生成加密的公私钥</p>
-
-<pre><code class="language-sh">ssh-keygen -t ras
-</code></pre>
-
-<p>在输完命令之后一路回车，会在 <code>~/.ssh</code> 目录下生成 <code>id_rsa</code> 私钥和 <code>id_rsa.pub</code> 公钥。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ras
+</code></pre></div><p>在输完命令之后一路回车，会在 <code>~/.ssh</code> 目录下生成 <code>id_rsa</code> 私钥和 <code>id_rsa.pub</code> 公钥。</p>
 <h2 id="把公钥拷贝到服务器">把公钥拷贝到服务器</h2>
-
 <p>上一步我们生成了公私钥文件，接下来就要把公钥放到服务器</p>
-
-<pre><code class="language-sh">cd ~/.ssh
-ssh-copy-id -i id_rsa.pub user@192.168.1.xxx # -i 表示把指定的文件拷贝到服务器
-</code></pre>
-
-<p>输入这条命令，还需要验证一次登录密码，也是唯一的一次，之后就可以不用再输入密码了。
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.ssh
+ssh-copy-id -i id_rsa.pub user@192.168.1.xxx <span class="c1"># -i 表示把指定的文件拷贝到服务器</span>
+</code></pre></div><p>输入这条命令，还需要验证一次登录密码，也是唯一的一次，之后就可以不用再输入密码了。
 如果修改了 ssh 的默认端口可以在使用 <code>-p</code> 来设置端口号</p>
-
-<pre><code class="language-sh">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx -p port
-</code></pre>
-
-<h2 id="配置多账号">配置多账号</h2>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-copy-id -i id_rsa.pub user@192.168.1.xxx -p port
+</code></pre></div><h2 id="配置多账号">配置多账号</h2>
 <p>通过上面的步骤，已经可以在登录服务器时不用在输入密码了。但是每次还要输入用户名和 <code>ip</code> ，也是挺麻烦的。有办法可以不需要每次都输吗？答案是可以的，接下来的内容就是解决这个问题的。</p>
-
 <p>先在 <code>~/.ssh</code> 目录下创建一个 <code>config</code> 的文件，并根据自己的情况加入如下内容</p>
-
-<pre><code class="language-sh">Host A # 别名
-User usera # 登录用户名
-Hostname 192.168.1.xxx # 服务器 ip
-IdentityFile ~/.ssh/id_rsa # 私钥文件存放地址
-Port 22 # 端口号，默认 22，没改可以不用写
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Host A <span class="c1"># 别名</span>
+User usera <span class="c1"># 登录用户名</span>
+Hostname 192.168.1.xxx <span class="c1"># 服务器 ip</span>
+IdentityFile ~/.ssh/id_rsa <span class="c1"># 私钥文件存放地址</span>
+Port <span class="m">22</span> <span class="c1"># 端口号，默认 22，没改可以不用写</span>
 Host B
 User userb
 Hostname 192.168.1.xxx
 IdentityFile ~/.ssh/id_rsab
-</code></pre>
-
-<p>做完了上面的如果我们要登录服务器 <code>A</code> ，就只需要输入 <code>ssh A</code> 就可以登录到服务器了。其中 <code>A</code> 是服务器 <code>A</code> 的别名。</p>
+</code></pre></div><p>做完了上面的如果我们要登录服务器 <code>A</code> ，就只需要输入 <code>ssh A</code> 就可以登录到服务器了。其中 <code>A</code> 是服务器 <code>A</code> 的别名。</p>
           </div>
 
           
@@ -617,7 +599,7 @@ IdentityFile ~/.ssh/id_rsab
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 

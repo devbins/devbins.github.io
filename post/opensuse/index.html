@@ -333,78 +333,54 @@ Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操�
             <blockquote>
 <p>Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。</p>
 </blockquote>
-
 <h2 id="安装-parallels-tools-初试">安装 Parallels Tools 初试</h2>
-
 <p>在 Parallels Desktop 上成功安装好 openSUSE 后，把 Parallels Tools 挂载到系统（不要和我说你不知道怎么操作）。进入挂载的目录，并执行安装程序</p>
-
-<pre><code class="language-sh">cd /run/media/$USER/Parallels Tools/ #$USER 为你的用户名，不知道什么也没关系，一般/run/media/下就只有一个目录，就是它
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /run/media/<span class="nv">$USER</span>/Parallels Tools/ <span class="c1">#$USER 为你的用户名，不知道什么也没关系，一般/run/media/下就只有一个目录，就是它</span>
 sudo ./install
-</code></pre>
-
-<p>输入密码等待程序启动，点击 next 等一小会,出现如下如所示，点击 next 安装。
-<img src="https://devbins.github.io/images/suse/parallel-install.png" alt="" />
+</code></pre></div><p>输入密码等待程序启动，点击 next 等一小会,出现如下如所示，点击 next 安装。
+<img src="https://devbins.github.io/images/suse/parallel-install.png" alt="">
 等待一杯咖啡的时间，如果一杯喝完没有提示安装失败，就再喝一杯。两杯咖啡下肚，终于出现如下错误
-<img src="https://devbins.github.io/images/suse/parallels.png" alt="" />
+<img src="https://devbins.github.io/images/suse/parallels.png" alt="">
 它告诉我安装失败了，去 <code>/var/log/parallels-tools-install.log</code> 下看更多的信息。直觉告诉我看了可能也没什么用。不过还是去看看。</p>
-
 <p>打开文件，映入眼帘，这么明显（此处略去后面的提示）
-<img src="https://devbins.github.io/images/suse/parallelslog.png" alt="" />
+<img src="https://devbins.github.io/images/suse/parallelslog.png" alt="">
 它告诉我 <code>dkms</code> 找不到，据我以前安装 Ubuntu 的经验很可能是这货的问题，于是安装 <code>dkms</code> 。</p>
-
 <h2 id="安装-dkms">安装 dkms</h2>
-
-<pre><code class="language-sh">sudo zypper in dkms
-</code></pre>
-
-<p>提示找不到这个软件包，估计 Parallels Tools 也是调用这条命令安装的吧，所以安装失败。</p>
-
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo zypper in dkms
+</code></pre></div><p>提示找不到这个软件包，估计 Parallels Tools 也是调用这条命令安装的吧，所以安装失败。</p>
 <p>既然没有，我们只好从别的地方找一个，在<a href="https://software.opensuse.org/search">官方软件包中</a>搜索 dkms，还真找到了
-<img src="https://devbins.github.io/images/suse/dkms.png" alt="" />
+<img src="https://devbins.github.io/images/suse/dkms.png" alt="">
 点击一键安装，待安装好 dkms 之后，重新执行上一小节的操作。换来的还是一样的结果，安装失败。
-<img src="https://devbins.github.io/images/suse/parallels.png" alt="" />
+<img src="https://devbins.github.io/images/suse/parallels.png" alt="">
 于是我决定重启系统再安装一次，结果还是一样，一点都不意外。心灰意冷的我不断在网上找相关的问题，一次一次的尝试，结果总是那么的相似，都没有找到解决方法。直到我在 <a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a>寻找答案的时候，偶然看了一下开机过程，发现了解决问题的契机。</p>
-
 <h2 id="发现问题">发现问题</h2>
-
 <p>在<a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a>这篇文章中说道</p>
-
 <ul>
 <li>kernel-default 是系统默认版内核。</li>
 <li>kernel-desktop 在 kernel-pae 基础上针对桌面进行优化，并屏蔽了只有服务器上才会使用的内核功能，提升启动速度和响应速度</li>
 </ul>
-
 <p>于是我在开机的时候观察到
-<img src="https://devbins.github.io/images/suse/default-kenel.png" alt="" />
+<img src="https://devbins.github.io/images/suse/default-kenel.png" alt="">
 openSUSE 默认的果然是 kernel-default 的内核。尝试一下 kernel-desktop 兴许会成功。
 于是便尝试安装 kernel-desktop 的内核。</p>
-
 <h2 id="尝试解决">尝试解决</h2>
-
 <p>在默认的源里是没有 kernel-desktop 的安装包，还需要使用如下命令把他添加进去,并安装 kernel-desktop</p>
-
-<pre><code class="language-sh">sudo zypper ar http://download.opensuse.org/repositories/home:/Ledest:/kernel:/lts/openSUSE_Leap_42.3/ kd
-sudo zypper refresh # 提示是否信任的时候选择 t 回车
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo zypper ar http://download.opensuse.org/repositories/home:/Ledest:/kernel:/lts/openSUSE_Leap_42.3/ kd
+sudo zypper refresh <span class="c1"># 提示是否信任的时候选择 t 回车</span>
 sudo zypper in kernel-desktop
-</code></pre>
-
-<p>第一次安装 kernel-desktop 可能会提示失败，输入 <code>r</code> 回车，重试一遍（也许多遍）就可成功。
+</code></pre></div><p>第一次安装 kernel-desktop 可能会提示失败，输入 <code>r</code> 回车，重试一遍（也许多遍）就可成功。
 安装之后重启系统
-<img src="https://devbins.github.io/images/suse/desktop-kernel.png" alt="" />
+<img src="https://devbins.github.io/images/suse/desktop-kernel.png" alt="">
 现在默认就是从 kernel-desktop 启动了。
 启动之后尝试安装 Parallels Tools，居然成功了。不过没有安装 dkms 它还是推荐安装一下，说明 dkms 不是必须的。之前的错误提示，成功的误导了我。我表示很无奈。
-<img src="https://devbins.github.io/images/suse/parallels-success.png" alt="" />
+<img src="https://devbins.github.io/images/suse/parallels-success.png" alt="">
 安装成功后，终于可以愉快的玩耍了。</p>
-
 <h2 id="总结">总结</h2>
-
 <ol>
 <li>安装好系统后，先不要安装 Parallels Tools。 直接安装 kernel-desktop。</li>
 <li>安装好 kernel-desktop 后再安装 Parallels Tools。</li>
 </ol>
-
 <h2 id="参考链接">参考链接</h2>
-
 <ul>
 <li><a href="https://software.opensuse.org/package/kernel-desktop">软件包</a></li>
 <li><a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a></li>
@@ -714,7 +690,7 @@ sudo zypper in kernel-desktop
   
   <div class="copyright py-4">
     
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
   </div>
   
 
