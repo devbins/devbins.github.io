@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="前言
+之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  
+  <meta property="og:title" content="GPG加密五：在 Emacs 中使用 GPG 加密" />
+<meta property="og:description" content="前言
+之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devbins.github.io/post/gpg5/" />
+<meta property="article:published_time" content="2020-02-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-02-06T00:00:00+08:00" />
+
+
+  <title>
+  
+       GPG加密五：在 Emacs 中使用 GPG 加密 | dev.bins 
+  
+  </title>
+
+  <link rel="canonical" href="https://devbins.github.io/post/gpg5/">
+
+  
+  
+
+  
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://devbins.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://devbins.github.io">
+          
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> dev.bins</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://devbins.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://devbins.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>dev.bins</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://devbins.github.io/categories/emacs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Emacs </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/gpg"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> GPG </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">GPG加密五：在 Emacs 中使用 GPG 加密</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Feb 6, 2020</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>One minute read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://devbins.github.io/images/gpg.svg.png" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <h2 id="前言">前言</h2>
+<p>之前我们介绍了 <code>GPG</code> 的使用，也介绍了用 <code>GPG</code> 来管理自己的密码。</p>
+<p>今天我们来讲一讲在 <code>Emacs</code> 中配合 <code>GPG</code> 加密 <code>Org mode</code> 。</p>
+<h2 id="emacs-配置">emacs 配置</h2>
+<p>在使用 <code>GPG</code> 加密之前，我们先要对 <code>Emacs</code> 进行配置。</p>
+<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">org-crypt</span>
+  <span class="nb">:ensure</span> <span class="no">nil</span>
+  <span class="nb">:demand</span> <span class="no">t</span>
+  <span class="nb">:config</span>
+  <span class="c1">;; 在文件加密之前进行保存</span>
+  <span class="p">(</span><span class="nv">org-crypt-use-before-save-magic</span><span class="p">)</span>
+  <span class="c1">;; 设置要加密的 TAG 为 crypt</span>
+  <span class="p">(</span><span class="nb">setq</span> <span class="nv">org-crypt-tag-matcher</span> <span class="s">&#34;</span><span class="s">crypt</span><span class="s">&#34;</span>
+        <span class="c1">;; 防止子 TAG 也为 crypt，进行再次加密</span>
+        <span class="nv">org-tags-exclude-from-inheritance</span> <span class="p">(</span><span class="nb">quote</span> <span class="p">(</span><span class="s">&#34;</span><span class="s">crypt</span><span class="s">&#34;</span><span class="p">)</span><span class="p">)</span>
+        <span class="c1">;; 设置要使用加密的 GPG 账户</span>
+        <span class="nv">org-crypt-key</span> <span class="s">&#34;</span><span class="s">test1</span><span class="s">&#34;</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><h2 id="使用">使用</h2>
+<p>配置好 <code>Emacs</code> 后，我们创建一个 <code>test.org</code> 并为标题添加 <code>crypt</code> 的 <code>TAG</code> ，然后保存文件， <code>Emacs</code> 会自动把含有 <code>crypt</code> 的内容进行加密。
+<img src="https://devbins.github.io/images/gpg/org-crypt.gif" alt="">
+解密使用 <code>org-decrypt-entry</code></p>
+<h2 id="mac-下的问题及解决方案">Mac 下的问题及解决方案</h2>
+<p>在 <code>Mac</code> 上使用的时候，会发现没办法输入密码，通过如下配置可以解决。</p>
+<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">pinentry</span>
+  <span class="nb">:hook</span><span class="p">(</span><span class="nv">after-init</span> <span class="o">.</span> <span class="nv">pinentry-start</span><span class="p">)</span><span class="p">)</span>
+</code></pre></div><h2 id="碰到的问题">碰到的问题</h2>
+<p>如果你之前有使用过 <code>GPG</code> 很可能会碰到 <code>Error: (error &quot;Encrypt failed&quot;)</code> 这个错误，我找了半天，终于在 <a href="https://gpgtools.tenderapp.com/discussions/problems/15313-symmetric-file-encryption-with-emacs-again-please-describe-the-steps-leading-up-to-the-problem">Symmetric file encryption with emacs / Stable / Discussion Area - GPGTools Support</a> 这里找到了解决办法，折腾了好久。</p>
+<p>决绝办法很简单，把 <code>GPG</code> 进程杀死，然后重新操作就可以了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">➜  ~ ps ax <span class="p">|</span>grep gpg
+<span class="m">14650</span>   ??  Ss     0:00.33 gpg-agent --homedir /Users/test/.gnupg --use-standard-socket --daemon
+➜  ~ <span class="nb">kill</span> <span class="m">14650</span>
+</code></pre></div><h2 id="总结">总结</h2>
+<p><code>GPG</code> 相关的内容，到这里就全部讲完了。</p>
+<p>我在日常中主要使用 <code>GPG</code> 来加密文件，管理密码，并配合 <code>Emacs</code> 使用。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://coldnew.github.io/4bb1df06/">使用 gnupg 加密你的 org-mode 文章 | coldnew&rsquo;s blog</a></li>
+</ul>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://devbins.github.io/tags/emacs" role="button">Emacs </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/gpg" role="button">GPG </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>dev.bins</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://devbins.github.io/post/gpg5/" title="GPG加密五：在 Emacs 中使用 GPG 加密">GPG加密五：在 Emacs 中使用 GPG 加密</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://devbins.github.io/post/gpg4/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>GPG加密四：用 GPG 加密你的密码</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
+												 前言
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#emacs-%e9%85%8d%e7%bd%ae">
+												 emacs 配置
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bd%bf%e7%94%a8">
+												 使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#mac-%e4%b8%8b%e7%9a%84%e9%97%ae%e9%a2%98%e5%8f%8a%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88">
+												 Mac 下的问题及解决方案
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%a2%b0%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98">
+												 碰到的问题
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
