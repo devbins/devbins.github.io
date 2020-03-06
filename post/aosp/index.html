@@ -342,21 +342,21 @@ chmod a+x ~/bin/repo
 <h2 id="构建容器并启动">构建容器并启动</h2>
 <h3 id="dockerfile">Dockerfile</h3>
 <div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> ubuntu</span><span class="err">
-</span><span class="err"></span><span class="err">
-</span><span class="err"></span><span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">/root/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&#34;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;/root/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&#34;</span><span class="err">
 </span><span class="err"></span><span class="k">ENV</span> <span class="nv">REPO_URL</span><span class="o">=</span><span class="s1">&#39;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#39;</span><span class="err">
-</span><span class="err"></span><span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">RUN</span> apt update <span class="o">&amp;&amp;</span> apt install -y git curl python openjdk-8-jdk git-core gnupg flex bison gperf build-essential zip zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip <span class="o">&amp;&amp;</span> <span class="se">\
 </span><span class="se"></span>    rm -rf /var/cahce/apt <span class="o">&amp;&amp;</span> <span class="se">\
 </span><span class="se"></span>    rm -rf /var/lib/apt/lists <span class="o">&amp;&amp;</span> <span class="se">\
 </span><span class="se"></span>    mkdir ~/bin <span class="o">&amp;&amp;</span> curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo <span class="o">&amp;&amp;</span> chmod a+x ~/bin/repo <span class="o">&amp;&amp;</span> mkdir ~/aosp<span class="err">
-</span><span class="err"></span><span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">VOLUME</span><span class="s"> ~/aosp</span><span class="err">
-</span><span class="err"></span><span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> ~/aosp</span><span class="err">
-</span><span class="err"></span><span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">COPY</span> entrypoint.sh /root/entrypoint.sh<span class="err">
-</span><span class="err"></span><span class="err">
+</span><span class="err">
 </span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;/root/entrypoint.sh&#34;</span><span class="p">]</span><span class="err">
 </span></code></pre></div><h3 id="entrypoint">ENTRYPOINT</h3>
 <p><code>entrypoint</code> 是个 <code>shell</code> 脚本，用来在启动容器时执行命令用的，在这里我们只要初始化 <code>repo</code> 并执行 <code>sync</code> 就会开始下载。</p>

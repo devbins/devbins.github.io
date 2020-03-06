@@ -386,7 +386,7 @@ vi config.json
 	<span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;CC:22:3D:E3:CE:30&#34;</span><span class="p">,</span>
 	<span class="nt">&#34;port&#34;</span><span class="p">:</span> <span class="mi">51826</span><span class="p">,</span>
 	<span class="nt">&#34;pin&#34;</span><span class="p">:</span> <span class="s2">&#34;031-45-154&#34;</span>
-  <span class="p">}</span><span class="p">,</span>
+  <span class="p">},</span>
 
   <span class="nt">&#34;platforms&#34;</span><span class="p">:</span> <span class="p">[</span>
 	<span class="p">{</span>
@@ -449,15 +449,15 @@ vi config.json
 <span class="nv">user</span><span class="o">=</span><span class="s2">&#34;pi&#34;</span>
 
 <span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span>
-<span class="nv">pid_file</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">/var/run/</span><span class="nv">$name</span><span class="s2">.pid</span><span class="s2">&#34;</span>
-<span class="nv">stdout_log</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">/var/log/</span><span class="nv">$name</span><span class="s2">.log</span><span class="s2">&#34;</span>
-<span class="nv">stderr_log</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">/var/log/</span><span class="nv">$name</span><span class="s2">.err</span><span class="s2">&#34;</span>
+<span class="nv">pid_file</span><span class="o">=</span><span class="s2">&#34;/var/run/</span><span class="nv">$name</span><span class="s2">.pid&#34;</span>
+<span class="nv">stdout_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.log&#34;</span>
+<span class="nv">stderr_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.err&#34;</span>
 
-get_pid<span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+get_pid<span class="o">()</span> <span class="o">{</span>
 	cat <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
 <span class="o">}</span>
 
-is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+is_running<span class="o">()</span> <span class="o">{</span>
 	<span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> ps -p <span class="sb">`</span>get_pid<span class="sb">`</span> &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
 <span class="o">}</span>
 
@@ -466,7 +466,7 @@ is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</sp
 		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
 			<span class="nb">echo</span> <span class="s2">&#34;Already started&#34;</span>
 		<span class="k">else</span>
-			<span class="nb">echo</span> <span class="s2">&#34;</span><span class="s2">Starting </span><span class="nv">$name</span><span class="s2">&#34;</span>
+			<span class="nb">echo</span> <span class="s2">&#34;Starting </span><span class="nv">$name</span><span class="s2">&#34;</span>
 			<span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$dir</span><span class="s2">&#34;</span>
 			<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
 				sudo <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
@@ -475,14 +475,14 @@ is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</sp
 			<span class="k">fi</span>
 			<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
 			<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
-				<span class="nb">echo</span> <span class="s2">&#34;</span><span class="s2">Unable to start, see </span><span class="nv">$stdout_log</span><span class="s2"> and </span><span class="nv">$stderr_log</span><span class="s2">&#34;</span>
+				<span class="nb">echo</span> <span class="s2">&#34;Unable to start, see </span><span class="nv">$stdout_log</span><span class="s2"> and </span><span class="nv">$stderr_log</span><span class="s2">&#34;</span>
 				<span class="nb">exit</span> <span class="m">1</span>
 			<span class="k">fi</span>
 		<span class="k">fi</span>
-		<span class="p">;</span><span class="p">;</span>
+		<span class="p">;;</span>
 	stop<span class="o">)</span>
 		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-			<span class="nb">echo</span> -n <span class="s2">&#34;</span><span class="s2">Stopping </span><span class="nv">$name</span><span class="s2">..</span><span class="s2">&#34;</span>
+			<span class="nb">echo</span> -n <span class="s2">&#34;Stopping </span><span class="nv">$name</span><span class="s2">..&#34;</span>
 			<span class="nb">kill</span> <span class="sb">`</span>get_pid<span class="sb">`</span>
 			<span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span>
 					 <span class="c1"># for i in `seq 10`</span>
@@ -508,7 +508,7 @@ is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</sp
 		<span class="k">else</span>
 			<span class="nb">echo</span> <span class="s2">&#34;Not running&#34;</span>
 		<span class="k">fi</span>
-		<span class="p">;</span><span class="p">;</span>
+		<span class="p">;;</span>
 	restart<span class="o">)</span>
 		<span class="nv">$0</span> stop
 		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
@@ -516,7 +516,7 @@ is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</sp
 			<span class="nb">exit</span> <span class="m">1</span>
 		<span class="k">fi</span>
 		<span class="nv">$0</span> start
-		<span class="p">;</span><span class="p">;</span>
+		<span class="p">;;</span>
 	status<span class="o">)</span>
 		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
 			<span class="nb">echo</span> <span class="s2">&#34;Running&#34;</span>
@@ -524,11 +524,11 @@ is_running<span class="o">(</span><span class="o">)</span> <span class="o">{</sp
 			<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
 			<span class="nb">exit</span> <span class="m">1</span>
 		<span class="k">fi</span>
-		<span class="p">;</span><span class="p">;</span>
+		<span class="p">;;</span>
 	*<span class="o">)</span>
-		<span class="nb">echo</span> <span class="s2">&#34;</span><span class="s2">Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}</span><span class="s2">&#34;</span>
+		<span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}&#34;</span>
 		<span class="nb">exit</span> <span class="m">1</span>
-		<span class="p">;</span><span class="p">;</span>
+		<span class="p">;;</span>
 <span class="k">esac</span>
 
 <span class="nb">exit</span> <span class="m">0</span>

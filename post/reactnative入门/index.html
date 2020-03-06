@@ -363,44 +363,44 @@ npm start
 <h3 id="props--属性">Props(属性)</h3>
 <p>props 在构造方法中初始化，props 不可以被自己更改。</p>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">class</span> <span class="nx">Greeting</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="o">!</span><span class="o">&lt;</span><span class="err">/</span><span class="err">T</span><span class="err">e</span><span class="err">x</span><span class="err">t</span><span class="err">&gt;</span>
-    <span class="p">)</span><span class="p">;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="o">!&lt;</span><span class="err">/Text&gt;</span>
+    <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">LotsOfGreetings</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span><span class="p">{</span><span class="nx">alignItems</span><span class="o">:</span> <span class="s1">&#39;center&#39;</span><span class="p">}</span><span class="p">}</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Rexxar&#39;</span> <span class="o">/</span><span class="o">&gt;</span> <span class="c1">//传递 props
-</span><span class="c1"></span>        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Jaina&#39;</span> <span class="o">/</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Valeera&#39;</span> <span class="o">/</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="err">/</span><span class="err">V</span><span class="err">i</span><span class="err">e</span><span class="err">w</span><span class="err">&gt;</span>
-    <span class="p">)</span><span class="p">;</span>
+        <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span><span class="nx">alignItems</span><span class="o">:</span> <span class="s1">&#39;center&#39;</span><span class="p">}}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Rexxar&#39;</span> <span class="o">/&gt;</span> <span class="c1">//传递 props
+</span><span class="c1"></span>        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Jaina&#39;</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Greeting</span> <span class="nx">name</span><span class="o">=</span><span class="s1">&#39;Valeera&#39;</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="err">/View&gt;</span>
+    <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><h3 id="state--状态">State(状态)</h3>
 <p>state 表示组件的状态，状态可以被自己改变，通常用来保存数据。state 在构造方法中初始化，使用 <code>setState</code> 来改变它的值，每次修改 state 会触发 <code>render</code> 来重新渲染界面。</p>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">class</span> <span class="nx">Blink</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
   <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="nx">showText</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span><span class="p">;</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span><span class="nx">showText</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
 
     <span class="c1">// Toggle the state every second
-</span><span class="c1"></span>    <span class="nx">setInterval</span><span class="p">(</span><span class="p">(</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span><span class="c1"></span>    <span class="nx">setInterval</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(</span><span class="nx">previousState</span> <span class="p">=&gt;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="p">{</span> <span class="nx">showText</span><span class="o">:</span> <span class="o">!</span><span class="nx">previousState</span><span class="p">.</span><span class="nx">showText</span> <span class="p">}</span><span class="p">;</span>
-      <span class="p">}</span><span class="p">)</span><span class="p">;</span>
-    <span class="p">}</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="nx">showText</span><span class="o">:</span> <span class="o">!</span><span class="nx">previousState</span><span class="p">.</span><span class="nx">showText</span> <span class="p">};</span>
+      <span class="p">});</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">let</span> <span class="nx">display</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">showText</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">text</span> <span class="o">:</span> <span class="s1">&#39; &#39;</span><span class="p">;</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">display</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/</span><span class="err">T</span><span class="err">e</span><span class="err">x</span><span class="err">t</span><span class="err">&gt;</span>
-    <span class="p">)</span><span class="p">;</span>
+        <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">display</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/Text&gt;</span>
+    <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><h3 id="生命周期">生命周期</h3>
@@ -454,22 +454,22 @@ npm start
 <p>在 React Native 中使用 Flexbox 来进行布局。Flexbox 是 W3C 在 2009 年推出的一种新的布局方案。没有 Flexbox 的时候布局写起来特别不舒服（个人觉得），比如：垂直居中。有了 Flexbox 之后再也不想使用过去的布局方式了。这里的 Flexbox 和 web 上的基本一致，有些许不同。比如： <code>flexDirection</code> 的默认值是 <code>column</code> 而不是 <code>row</code> 。布局中使用 <code>flexDirection</code> 、 <code>alignItems</code> 和 <code>justifyContent</code> 这三个的组合就能够正确的完成布局。</p>
 <h3 id="flex-direction">Flex Direction</h3>
 <p>flexDirection 表示布局的主轴，子元素会沿着主轴的方向排列。flexDirection 的方向有 <code>column</code> 和 <code>row</code> 表示竖直排列和水平排列。</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,flexDirection:&#39;column&#39;}}</span><span class="p"></span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,flexDirection:&#39;column&#39;}}</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{width:</span> <span class="na">50</span><span class="err">,</span> <span class="na">height:</span> <span class="na">50</span><span class="err">,</span> <span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">View</span><span class="p">&gt;</span>
 </code></pre></div><h4 id="column">column</h4>
 <!-- raw HTML omitted -->
 <h4 id="row">row</h4>
 <!-- raw HTML omitted -->
 <h3 id="justify-content">Justify Content</h3>
 <p>justifyContent 决定者子元素在主轴上的排列方式。justifyContent 的值有 <code>flex-start</code> ,  <code>center</code> , <code>flex-end</code>, <code>space-around</code>, 和 <code>pace-between</code> 。</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,justifyContent:&#39;flex-start&#39;}}</span><span class="p"></span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,justifyContent:&#39;flex-start&#39;}}</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span>  <span class="na">width:50</span><span class="err">,</span><span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">View</span><span class="p">&gt;</span>
 </code></pre></div><h4 id="flex-start-主轴开始对齐-也就是从主轴起点开始排列">flex-start 主轴开始对齐，也就是从主轴起点开始排列</h4>
 <!-- raw HTML omitted -->
 <h4 id="flex-end-主轴结束方向对齐-也就内容与是主轴结束点对齐">flex-end 主轴结束方向对齐，也就内容与是主轴结束点对齐</h4>
@@ -489,11 +489,11 @@ npm start
 <h4 id="center-内容居中">center 内容居中</h4>
 <!-- raw HTML omitted -->
 <h4 id="stretch-在次轴方向上展开至填满次轴-子元素控件不能在次轴上设置大小-不让会没有效果">stretch 在次轴方向上展开至填满次轴，子元素控件不能在次轴上设置大小，不让会没有效果</h4>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,alignItems:</span> <span class="err">&#39;</span><span class="na">stretch</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span><span class="p"></span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;</span><span class="err">}</span><span class="err">}</span> <span class="p">/</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="p">/</span><span class="nt">View</span><span class="p">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{flex:1,alignItems:</span> <span class="err">&#39;</span><span class="na">stretch</span><span class="err">&#39;}}</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">powderblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">skyblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">View</span> <span class="na">style</span><span class="o">=</span><span class="s">{{</span> <span class="na">height:50</span><span class="err">,</span><span class="na">backgroundColor:</span> <span class="err">&#39;</span><span class="na">steelblue</span><span class="err">&#39;}}</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">View</span><span class="p">&gt;</span>
 </code></pre></div><!-- raw HTML omitted -->
 <h2 id="网络">网络</h2>
 <h3 id="fetch">fetch</h3>
@@ -503,73 +503,73 @@ npm start
   <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
     <span class="s1">&#39;Accept&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-  <span class="p">}</span><span class="p">,</span>
-  <span class="nx">body</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="p">{</span>
+  <span class="p">},</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
     <span class="nx">firstParam</span><span class="o">:</span> <span class="s1">&#39;yourValue&#39;</span><span class="p">,</span>
     <span class="nx">secondParam</span><span class="o">:</span> <span class="s1">&#39;yourOtherValue&#39;</span><span class="p">,</span>
-  <span class="p">}</span><span class="p">)</span>
-<span class="p">}</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span>
 </code></pre></div><p>fetch 返回的是一个 Promise，这样我们可以很方便的处理返回的数据</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">getMoviesFromApiAsync</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">getMoviesFromApiAsync</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://facebook.github.io/react-native/movies.json&#39;</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="p">(</span><span class="nx">responseJson</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">responseJson</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">responseJson</span><span class="p">.</span><span class="nx">movies</span><span class="p">;</span>
-    <span class="p">}</span><span class="p">)</span>
-    <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="p">;</span>
-    <span class="p">}</span><span class="p">)</span><span class="p">;</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">});</span>
   <span class="p">}</span>
 </code></pre></div><p>在 RN 中使用 ES7 标准的 <code>async/await</code> 语法也是可以的</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getMoviesFromApi</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">async</span> <span class="kd">function</span> <span class="nx">getMoviesFromApi</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://facebook.github.io/react-native/movies.json&#39;</span><span class="p">)</span><span class="p">;</span>
-    <span class="kd">let</span> <span class="nx">responseJson</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://facebook.github.io/react-native/movies.json&#39;</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">responseJson</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">responseJson</span><span class="p">.</span><span class="nx">movies</span><span class="p">;</span>
   <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><h3 id="xmlhttprequest">XMLHttpRequest</h3>
 <p>除了 <code>fetchAPI</code> 外，RN 还内置了 XMLHttpRequest，也就是我们俗称 <code>ajax</code> 的东西。</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
 <span class="nx">request</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">!==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span><span class="p">;</span>
   <span class="p">}</span>
 
   <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success&#39;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">)</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">}</span><span class="p">;</span>
+<span class="p">};</span>
 
-<span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://mywebsite.com/endpoint/&#39;</span><span class="p">)</span><span class="p">;</span>
-<span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://mywebsite.com/endpoint/&#39;</span><span class="p">);</span>
+<span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
 </code></pre></div><h3 id="websocket">WebSocket</h3>
 <p>RN 还提供了 WebSocket 的支持</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://host.com/path&#39;</span><span class="p">)</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">&#39;ws://host.com/path&#39;</span><span class="p">);</span>
 
-<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="p">(</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="c1">// connection opened
-</span><span class="c1"></span>  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">)</span><span class="p">;</span> <span class="c1">// send a message
-</span><span class="c1"></span><span class="p">}</span><span class="p">;</span>
+</span><span class="c1"></span>  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;something&#39;</span><span class="p">);</span> <span class="c1">// send a message
+</span><span class="c1"></span><span class="p">};</span>
 
 <span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="c1">// a message was received
-</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span><span class="p">;</span>
-<span class="p">}</span><span class="p">;</span>
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
 
 <span class="nx">ws</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="c1">// an error occurred
-</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span><span class="p">;</span>
-<span class="p">}</span><span class="p">;</span>
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
 
 <span class="nx">ws</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="c1">// connection closed
-</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">code</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">reason</span><span class="p">)</span><span class="p">;</span>
-<span class="p">}</span><span class="p">;</span>
+</span><span class="c1"></span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">code</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">reason</span><span class="p">);</span>
+<span class="p">};</span>
 </code></pre></div>
           </div>
 

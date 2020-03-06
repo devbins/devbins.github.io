@@ -391,79 +391,79 @@ brew install offlineimap <span class="c1"># Mac</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="sa"></span><span class="s2">&#34;</span><span class="s2">utf-8</span><span class="s2">&#34;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">utf-16be</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">/</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">,</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">_in</span><span class="p">:</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="si">%s</span><span class="s1">-</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">_in</span><span class="p">[</span><span class="p">:</span><span class="p">]</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">-&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)))</span>
+        <span class="k">del</span> <span class="n">_in</span><span class="p">[:]</span>
 
 
-<span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
-    <span class="n">_in</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_in</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
         <span class="n">ordC</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">ordC</span> <span class="o">&lt;</span><span class="o">=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">ordC</span> <span class="o">&lt;</span><span class="o">=</span> <span class="mh">0x7e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x7e</span><span class="p">:</span>
             <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
             <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">:</span>
             <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;-</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;-&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 
 
 <span class="c1"># decoding</span>
 
 
-<span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">,</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">/</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">===</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">utf-16be</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;===&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">:</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
-    <span class="n">decode</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
-            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">-</span><span class="s1">&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
+            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decode</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&amp;</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
-            <span class="n">decode</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+            <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">elif</span> <span class="n">decode</span><span class="p">:</span>
             <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="p">)</span>
-    <span class="n">bin_str</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+    <span class="n">bin_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">)</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">strict</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">)</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">strict</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">imap4-utf-7</span><span class="s1">&#39;</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;imap4-utf-7&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">StreamReader</span><span class="p">,</span> <span class="n">StreamWriter</span><span class="p">)</span>
 
 
@@ -492,7 +492,7 @@ brew install mu --with-emacs <span class="c1"># Mac</span>
 <p>在 <code>user-config</code> 中增加 <code>mu4e</code> 配置</p>
 <div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">with-eval-after-load</span> <span class="ss">&#39;mu4e-alert</span>
   <span class="c1">;; Enable Desktop notifications</span>
-  <span class="p">(</span><span class="nv">mu4e-alert-set-default-style</span> <span class="ss">&#39;notifier</span><span class="p">)</span><span class="p">)</span> <span class="c1">; For linux</span>
+  <span class="p">(</span><span class="nv">mu4e-alert-set-default-style</span> <span class="ss">&#39;notifier</span><span class="p">))</span> <span class="c1">; For linux</span>
 
 <span class="c1">;;; Set up some common mu4e variables</span>
 <span class="p">(</span><span class="k">setq</span> <span class="nv">mu4e-maildir</span> <span class="s">&#34;~/mails&#34;</span>

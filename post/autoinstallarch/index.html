@@ -7,27 +7,31 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
-  <meta name="description" content="前言
-之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
-今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  <meta name="description" content="前因
+由于我经常需要用到 Linux 就不可避免的要经常需要安装各种 Linux 实在是非常耗费时间的事情，装系统可能不下于百次了。
+每次装系统都要花费许多时间，于是我就考虑能不能写一个脚本让其自动化安装，以节约时间。
+虽然现在安装 Linux 非常方便，尤其是带有良好的安装界面，基本上只要点击下一步就能够装好。
+但是我的需求是不需要带有 GUI 的，毕竟在虚拟机上使用 GUI 体验并不是非常好。">
   
-  <meta property="og:title" content="GPG加密五：在 Emacs 中使用 GPG 加密" />
-<meta property="og:description" content="前言
-之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
-今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。" />
+  <meta property="og:title" content="一键自动安装 ArchLinux" />
+<meta property="og:description" content="前因
+由于我经常需要用到 Linux 就不可避免的要经常需要安装各种 Linux 实在是非常耗费时间的事情，装系统可能不下于百次了。
+每次装系统都要花费许多时间，于是我就考虑能不能写一个脚本让其自动化安装，以节约时间。
+虽然现在安装 Linux 非常方便，尤其是带有良好的安装界面，基本上只要点击下一步就能够装好。
+但是我的需求是不需要带有 GUI 的，毕竟在虚拟机上使用 GUI 体验并不是非常好。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/gpg5/" />
-<meta property="article:published_time" content="2020-02-06T00:00:00+08:00" />
-<meta property="article:modified_time" content="2020-02-06T00:00:00+08:00" />
+<meta property="og:url" content="https://devbins.github.io/post/autoinstallarch/" />
+<meta property="article:published_time" content="2020-03-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-03-06T00:00:00+08:00" />
 
 
   <title>
   
-       GPG加密五：在 Emacs 中使用 GPG 加密 | dev.bins 
+       一键自动安装 ArchLinux | dev.bins 
   
   </title>
 
-  <link rel="canonical" href="https://devbins.github.io/post/gpg5/">
+  <link rel="canonical" href="https://devbins.github.io/post/autoinstallarch/">
 
   
   
@@ -301,29 +305,29 @@
   <ul class="post-meta li-x">
     
       
-        <li><a href="https://devbins.github.io/categories/emacs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Emacs </a></li>
+        <li><a href="https://devbins.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
       
-        <li><a href="https://devbins.github.io/categories/gpg"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> GPG </a></li>
+        <li><a href="https://devbins.github.io/categories/arch"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Arch </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">GPG加密五：在 Emacs 中使用 GPG 加密</div>
+  <div class="px-4 post-heading">一键自动安装 ArchLinux</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>Feb 6, 2020</li>
+      <li>Mar 6, 2020</li>
     
 
     
       <li class="middot"></li>
-      <li>One minute read</li>
+      <li>3 minutes read</li>
     
   </ul>
   
     <div class="view">
-      <img src="https://devbins.github.io/images/gpg.svg.png" />
+      <img src="https://devbins.github.io/images/arch/arch.png" />
     </div>
   
 
@@ -332,44 +336,133 @@
 
 
           <div class="post-content markdown">
-            <h2 id="前言">前言</h2>
-<p>之前我们介绍了 <code>GPG</code> 的使用，也介绍了用 <code>GPG</code> 来管理自己的密码。</p>
-<p>今天我们来讲一讲在 <code>Emacs</code> 中配合 <code>GPG</code> 加密 <code>Org mode</code> 。</p>
-<h2 id="emacs-配置">emacs 配置</h2>
-<p>在使用 <code>GPG</code> 加密之前，我们先要对 <code>Emacs</code> 进行配置。</p>
-<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">org-crypt</span>
-  <span class="nb">:ensure</span> <span class="no">nil</span>
-  <span class="nb">:demand</span> <span class="no">t</span>
-  <span class="nb">:config</span>
-  <span class="c1">;; 在文件加密之前进行保存</span>
-  <span class="p">(</span><span class="nv">org-crypt-use-before-save-magic</span><span class="p">)</span>
-  <span class="c1">;; 设置要加密的 TAG 为 crypt</span>
-  <span class="p">(</span><span class="nb">setq</span> <span class="nv">org-crypt-tag-matcher</span> <span class="s">&#34;crypt&#34;</span>
-        <span class="c1">;; 防止子 TAG 也为 crypt，进行再次加密</span>
-        <span class="nv">org-tags-exclude-from-inheritance</span> <span class="p">(</span><span class="nb">quote</span> <span class="p">(</span><span class="s">&#34;crypt&#34;</span><span class="p">))</span>
-        <span class="c1">;; 设置要使用加密的 GPG 账户</span>
-        <span class="nv">org-crypt-key</span> <span class="s">&#34;test1&#34;</span><span class="p">))</span>
-</code></pre></div><h2 id="使用">使用</h2>
-<p>配置好 <code>Emacs</code> 后，我们创建一个 <code>test.org</code> 并为标题添加 <code>crypt</code> 的 <code>TAG</code> ，然后保存文件， <code>Emacs</code> 会自动把含有 <code>crypt</code> 的内容进行加密。
-<img src="https://devbins.github.io/images/gpg/org-crypt.gif" alt="">
-解密使用 <code>org-decrypt-entry</code></p>
-<h2 id="mac-下的问题及解决方案">Mac 下的问题及解决方案</h2>
-<p>在 <code>Mac</code> 上使用的时候，会发现没办法输入密码，通过如下配置可以解决。</p>
-<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">pinentry</span>
-  <span class="nb">:hook</span><span class="p">(</span><span class="nv">after-init</span> <span class="o">.</span> <span class="nv">pinentry-start</span><span class="p">))</span>
-</code></pre></div><h2 id="碰到的问题">碰到的问题</h2>
-<p>如果你之前有使用过 <code>GPG</code> 很可能会碰到 <code>Error: (error &quot;Encrypt failed&quot;)</code> 这个错误，我找了半天，终于在 <a href="https://gpgtools.tenderapp.com/discussions/problems/15313-symmetric-file-encryption-with-emacs-again-please-describe-the-steps-leading-up-to-the-problem">Symmetric file encryption with emacs / Stable / Discussion Area - GPGTools Support</a> 这里找到了解决办法，折腾了好久。</p>
-<p>决绝办法很简单，把 <code>GPG</code> 进程杀死，然后重新操作就可以了。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">➜  ~ ps ax <span class="p">|</span>grep gpg
-<span class="m">14650</span>   ??  Ss     0:00.33 gpg-agent --homedir /Users/test/.gnupg --use-standard-socket --daemon
-➜  ~ <span class="nb">kill</span> <span class="m">14650</span>
-</code></pre></div><h2 id="总结">总结</h2>
-<p><code>GPG</code> 相关的内容，到这里就全部讲完了。</p>
-<p>我在日常中主要使用 <code>GPG</code> 来加密文件，管理密码，并配合 <code>Emacs</code> 使用。</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://coldnew.github.io/4bb1df06/">使用 gnupg 加密你的 org-mode 文章 | coldnew&rsquo;s blog</a></li>
-</ul>
+            <h2 id="前因">前因</h2>
+<p>由于我经常需要用到 <code>Linux</code> 就不可避免的要经常需要安装各种 <code>Linux</code> 实在是非常耗费时间的事情，装系统可能不下于百次了。</p>
+<p>每次装系统都要花费许多时间，于是我就考虑能不能写一个脚本让其自动化安装，以节约时间。</p>
+<p>虽然现在安装 <code>Linux</code> 非常方便，尤其是带有良好的安装界面，基本上只要点击下一步就能够装好。</p>
+<p>但是我的需求是不需要带有 GUI 的，毕竟在虚拟机上使用 GUI 体验并不是非常好。</p>
+<h2 id="选择发行版">选择发行版</h2>
+<p>最早开始我使用的是 <code>Ubuntu</code> 然后是 <code>CentOS</code> 其中 <code>Ubuntu</code> 用的比较多，服务器用 <code>CentOS</code> 比较多。那时候安装没现在这么方便，加上是新手安装起来还是非常费劲的。</p>
+<p>然后又了解到了 <code>Mint</code> ，这是一个长期在桌面发行版排第一的系统，使用起来非常不错，也一度成为我的首选。直到2年前我接触到了 <code>Manjaro</code> 然后就选定了以后就用它了。</p>
+<p>于是我到现在一直个人使用都是首选 <code>Manjaro</code> ，期间也使用过 <code>Deepin</code> 在国内要使用微信、QQ等软件，用 <code>Deepin</code> 是非常方便的。但是我还是选择了 <code>Arch</code> 系的 <code>Manjaro</code> ，选择这个的原因是安装软件实在是太方便了，软件仓库有非常丰富的软件，包括QQ、微信等。常见的 <code>DDE(深度桌面)</code> 都有社区版本，虽然我们可以自己编译来解决安装软件的问题，但是编译一个软件需要安装各种编译环境，还需要花费太多时间在这上面，到不如直接用现成的，可以把节约的时间花到更重要的事情上。而且有时候事情还非常紧急，这时候有一个非常快速方便安装的方法那就能省下很多时间，进而快速解决问题。</p>
+<p>我现在的需求就是一个不需要 GUI <code>Linux</code> ，所以就选择了 <code>ArchLinux</code> 。</p>
+<h2 id="分区方案">分区方案</h2>
+<p>看一下脚本中的分区方案</p>
+<table>
+<thead>
+<tr>
+<th>挂载点</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/boot</td>
+<td>512M</td>
+</tr>
+<tr>
+<td>swap</td>
+<td>2G</td>
+</tr>
+<tr>
+<td>//</td>
+<td>10G</td>
+</tr>
+<tr>
+<td>/home</td>
+<td>10G</td>
+</tr>
+</tbody>
+</table>
+<p>这是我的分区方案，可以根据自己的需要进行更改</p>
+<h2 id="完整脚本">完整脚本</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">timedatectl set-ntp <span class="nb">true</span>
+
+fdisk /dev/sda <span class="s">&lt;&lt;EOF
+</span><span class="s">n
+</span><span class="s">p
+</span><span class="s">1
+</span><span class="s">
+</span><span class="s">+512M
+</span><span class="s">n
+</span><span class="s">p
+</span><span class="s">2
+</span><span class="s">
+</span><span class="s">+2G
+</span><span class="s">n
+</span><span class="s">p
+</span><span class="s">3
+</span><span class="s">
+</span><span class="s">+10G
+</span><span class="s">n
+</span><span class="s">p
+</span><span class="s">
+</span><span class="s">+10G
+</span><span class="s">w
+</span><span class="s">EOF</span>
+
+mkfs.vfat -F32 /dev/sda1
+mkswap /dev/sda2
+swapon /dev/sda2
+mkfs.ext4 /dev/sda3
+mkfs.ext4 /dev/sda4
+
+mount /dev/sda3 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+mkdir /mnt/home
+mount /dev/sda4 /mnt/home
+
+pacman -Syy
+
+pacstrap /mnt base linux linux-firmware vim git
+
+genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+
+arch-chroot /mnt <span class="s">&lt;&lt;EOFARCH
+</span><span class="s">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span><span class="s">hwclock --systohc
+</span><span class="s">
+</span><span class="s">sed -i &#39;s/^#en_US.UTF-8/en_US.UTF-8/&#39; /etc/locale.gen
+</span><span class="s">sed -i &#39;s/^#zh_CN.UTF-8/zh_CN.UTF-8/&#39; /etc/locale.gen
+</span><span class="s">locale-gen
+</span><span class="s">
+</span><span class="s">echo &#34;LANG=en_US.UTF-8&#34; &gt;&gt; /etc/locale.conf
+</span><span class="s">
+</span><span class="s">cat&gt;&gt;/etc/hosts&lt;&lt;EOF
+</span><span class="s">127.0.0.1	     test
+</span><span class="s">::1	    	test
+</span><span class="s">127.0.1.1	     test.localdomain	   test
+</span><span class="s">EOF
+</span><span class="s">
+</span><span class="s">pacman -S --noconfirm dhcp wpa_supplicant dialog networkmanager zsh sudo
+</span><span class="s">systemctl enable NetworkManager
+</span><span class="s">
+</span><span class="s">passwd&lt;&lt;EOF
+</span><span class="s">test
+</span><span class="s">test
+</span><span class="s">EOF
+</span><span class="s">
+</span><span class="s">useradd -m -G wheel -s /bin/zsh test
+</span><span class="s">
+</span><span class="s">passwd test&lt;&lt;EOF
+</span><span class="s">test
+</span><span class="s">test
+</span><span class="s">EOF
+</span><span class="s">
+</span><span class="s">
+</span><span class="s">pacman -S --noconfirm grub
+</span><span class="s">grub-install /dev/sda
+</span><span class="s">grub-mkconfig -o /boot/grub/grub.cfg
+</span><span class="s">
+</span><span class="s">EOFARCH</span>
+</code></pre></div><p>前面都是一下安装指令，后面的就是一些配置，包括新建账号、 <code>zsh</code> 的配置，最后就是安装 <code>GRUB</code> 来进行引导。这是很关键的一步，这边如果出错了，基本上连系统都进不去。</p>
+<h2 id="后记">后记</h2>
+<p>这里还省略了很多步骤，比如下载镜像，制做启动盘之类的。不过由于我是在虚拟机中安装的所以并需要这一步。</p>
+<p>有了这上面的脚本，你需要做的就是下载镜像，然后执行这个文件。我是通过 <code>scp</code> 把文件发送到安装系统中，然后执行的，当然你也可以从网络上直接下载，然后执行也是一样的。</p>
+<p>执行后你就需要等待一段时间，网速快的话就十几分钟，慢的话也要半个小时。</p>
+<h2 id="为什么不使用-docker">为什么不使用 Docker</h2>
+<p>Docker 适合做容器，我可能需要多个开发环境，如果都跑一个容器那也是非常麻烦。</p>
           </div>
 
           
@@ -382,10 +475,7 @@
   <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://devbins.github.io/tags/emacs" role="button">Emacs </a></li>
-      
-    
-      <li><a href="https://devbins.github.io/tags/gpg" role="button">GPG </a></li>
+      <li><a href="https://devbins.github.io/tags/linux" role="button">Linux </a></li>
       
     
   </div>
@@ -408,7 +498,7 @@
             <strong>本文作者： </strong>dev.bins</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/gpg5/" title="GPG加密五：在 Emacs 中使用 GPG 加密">GPG加密五：在 Emacs 中使用 GPG 加密</a>
+            <a href="https://devbins.github.io/post/autoinstallarch/" title="一键自动安装 ArchLinux">一键自动安装 ArchLinux</a>
         </li>
         <li class="post-copyright-license">
             <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -421,23 +511,16 @@
           <div class="row pt-3 np">
             <div class="col-md-6">
               
-                <a href=https://devbins.github.io/post/gpg4/ class="post-meta">Previous
+                <a href=https://devbins.github.io/post/gpg5/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>GPG加密四：用 GPG 加密你的密码</span>
+                    <span>GPG加密五：在 Emacs 中使用 GPG 加密</span>
                   </div>
                 </a>
               
             </div>
             
             <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/autoinstallarch/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>一键自动安装 ArchLinux</span>
-                  </div>
-                </a>
               
             </div>
           </div>
@@ -483,8 +566,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
-												 前言
+						 					<a class="nav-link" href="#%e5%89%8d%e5%9b%a0">
+												 前因
 											</a>
 										</li>
 						 
@@ -505,8 +588,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#emacs-%e9%85%8d%e7%bd%ae">
-												 emacs 配置
+						 					<a class="nav-link" href="#%e9%80%89%e6%8b%a9%e5%8f%91%e8%a1%8c%e7%89%88">
+												 选择发行版
 											</a>
 										</li>
 						 
@@ -527,8 +610,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%bd%bf%e7%94%a8">
-												 使用
+						 					<a class="nav-link" href="#%e5%88%86%e5%8c%ba%e6%96%b9%e6%a1%88">
+												 分区方案
 											</a>
 										</li>
 						 
@@ -549,8 +632,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#mac-%e4%b8%8b%e7%9a%84%e9%97%ae%e9%a2%98%e5%8f%8a%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88">
-												 Mac 下的问题及解决方案
+						 					<a class="nav-link" href="#%e5%ae%8c%e6%95%b4%e8%84%9a%e6%9c%ac">
+												 完整脚本
 											</a>
 										</li>
 						 
@@ -571,8 +654,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%a2%b0%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98">
-												 碰到的问题
+						 					<a class="nav-link" href="#%e5%90%8e%e8%ae%b0">
+												 后记
 											</a>
 										</li>
 						 
@@ -593,30 +676,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
-												 总结
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
+						 					<a class="nav-link" href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e4%bd%bf%e7%94%a8-docker">
+												 为什么不使用 Docker
 											</a>
 										</li>
 						 
