@@ -365,16 +365,8 @@
     <span class="c1">// 省略代码
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></div><p>看到这，解决方案也就差不多出来了，在每次绘制 X 轴的文字时，我们主动设置画笔的颜色，这样就可以做到，绘制你想要的颜色。</p>
-<p>但是故事还没结束，这时候你会发现画笔是 <code>protected</code> ，这时候真是绝望，明明就离成功只有一步之遥，偏偏出现一只黑天鹅。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="cm">/**
-</span><span class="cm">     * paint for the x-label values
-</span><span class="cm">     */</span>
-<span class="kd">protected</span> <span class="n">Paint</span> <span class="n">mAxisLabelPaint</span><span class="o">;</span>
-</code></pre></div><p>我的第一反应是要通过反射去拿到画笔，但是转念一想， <code>Kotlin</code> 不是有类扩展吗？于是解决方案出炉了， <code>Kotlin</code> 真香。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">fun</span> <span class="nf">XAxisRenderer</span><span class="p">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">paintAxisLabels</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">color</span>
-<span class="p">}</span>
-</code></pre></div><p>通过这个函数我们就可以为画笔设置不同的颜色了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">xAxisRenderer</span><span class="p">.</span><span class="n">paintAxisLabels</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">highlightColor</span>
+</code></pre></div><p>通过这样设置，我们就可以在 X 轴的任何位置设置成你想要的颜色。</p>
 <h4 id="间隔">间隔</h4>
 <p><img src="https://devbins.github.io/images/mpandroidchart/xcolor1.png" alt="">
 在给 X 轴设置文字的时候，文字的字数比较多的时候，就会导致文字会重叠。可以通过设置 <code>chart.zoom(1.5f, 1f, 1f, 1f)</code> 来提供更多的空间。</p>
