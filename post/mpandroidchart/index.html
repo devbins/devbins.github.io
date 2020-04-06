@@ -316,7 +316,7 @@
 
     
       <li class="middot"></li>
-      <li>2 minutes read</li>
+      <li>3 minutes read</li>
     
   </ul>
   
@@ -376,6 +376,39 @@
 <p>使用过程中还发现一个问题是，在 Y 轴上添加 <code>LimitLine</code> 有时候会不显示。不显示是没有给 Y 轴设置最大和最小值，在绘制的时候绘制到了不可见区域，因为我们的图表是不能缩放和拖动的。</p>
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">axisLeft</span><span class="p">.</span><span class="n">axisMinimum</span> <span class="p">=</span> <span class="m">0f</span>
 <span class="n">axisLeft</span><span class="p">.</span><span class="n">axisMaximum</span> <span class="p">=</span> <span class="n">max</span> <span class="p">+</span> <span class="m">1</span>
+</code></pre></div><h4 id="为-limitline-设置设置偏移-2020-04-06-更新">为 LimitLine 设置设置偏移 2020-04-06 更新</h4>
+<p>在添加 LimitLine 时，线会从左边一直画到右边
+<img src="https://devbins.github.io/images/mpandroidchart/limitline.png" alt="">
+但是我们碰到的需求是需要线从文字的结束开始绘制，如下所示
+<img src="https://devbins.github.io/images/mpandroidchart/limitline1.png" alt="">
+查找源码后发现，这些都是通过 <code>YAxisRenderer</code> 来绘制的，所以解决这个问题就很简单了，只要继承 <code>YAxisRenderer</code> 覆写 <code>renderLimitLines</code> 就行了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">class</span> <span class="nc">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">:</span> <span class="n">ViewPortHandler</span><span class="p">?,</span> <span class="n">yAxis</span><span class="p">:</span> <span class="n">YAxis</span><span class="p">?,</span> <span class="n">trans</span><span class="p">:</span> <span class="n">Transformer</span><span class="p">?)</span> <span class="p">:</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">yAxis</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 绘制 LimitLine
+</span><span class="cm">     */</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">renderLimitLines</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Canvas</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// 省略无关代码
+</span><span class="c1"></span>        <span class="n">limitLinePath</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="n">limitLines</span><span class="p">.</span><span class="n">indices</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">val</span> <span class="py">l</span> <span class="p">=</span> <span class="n">limitLines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1">// 测量要绘制文本的宽度
+</span><span class="c1"></span>            <span class="k">val</span> <span class="py">textWidth</span> <span class="p">=</span> <span class="n">mLimitLinePaint</span><span class="p">.</span><span class="n">measureText</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">label</span> <span class="o">?:</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+            <span class="n">pts</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="n">l</span><span class="p">.</span><span class="n">limit</span>
+            <span class="n">mTrans</span><span class="p">.</span><span class="n">pointValuesToPixel</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+            <span class="c1">// 进行偏移
+</span><span class="c1"></span>            <span class="n">limitLinePath</span><span class="p">.</span><span class="n">moveTo</span><span class="p">(</span><span class="n">mViewPortHandler</span><span class="p">.</span><span class="n">contentLeft</span><span class="p">()</span> <span class="p">+</span> <span class="n">textWidth</span> <span class="p">+</span> <span class="n">mLimitLinePaint</span><span class="p">.</span><span class="n">textSize</span><span class="p">,</span> <span class="n">pts</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+            <span class="n">limitLinePath</span><span class="p">.</span><span class="n">lineTo</span><span class="p">(</span><span class="n">mViewPortHandler</span><span class="p">.</span><span class="n">contentRight</span><span class="p">(),</span> <span class="n">pts</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+            <span class="n">c</span><span class="p">.</span><span class="n">drawPath</span><span class="p">(</span><span class="n">limitLinePath</span><span class="p">,</span> <span class="n">mLimitLinePaint</span><span class="p">)</span>
+            <span class="n">limitLinePath</span><span class="p">.</span><span class="n">reset</span><span class="p">()</span>
+
+            <span class="c1">// 省略无关代码
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>最后别忘了通过设置 Y 轴的 Renderer 来实现效果</p>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">chart</span><span class="p">.</span><span class="n">rendererLeftYAxis</span> <span class="p">=</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">axisLeft</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">getTransformer</span><span class="p">(</span><span class="n">AxisDependency</span><span class="p">.</span><span class="n">LEFT</span><span class="p">))</span>
 </code></pre></div><h2 id="饼图-2020-04-06-更新">饼图 2020-04-06 更新</h2>
 <p><img src="https://devbins.github.io/images/mpandroidchart/holoradius.png" alt="">
 图中红色圈出来的可以通过如下代码来设置</p>
@@ -754,6 +787,36 @@
 										<li class="nav-item">
 						 					<a class="nav-link" href="#limitline-%e4%b8%8d%e6%98%be%e7%a4%ba">
 												 LimitLine 不显示
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%ba-limitline-%e8%ae%be%e7%bd%ae%e8%ae%be%e7%bd%ae%e5%81%8f%e7%a7%bb-2020-04-06-%e6%9b%b4%e6%96%b0">
+												 为 LimitLine 设置设置偏移 2020-04-06 更新
 											</a>
 										</li>
 						 
