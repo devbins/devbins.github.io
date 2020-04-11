@@ -366,13 +366,15 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 </figure>
 
 <h2 id="本地方法栈">本地方法栈</h2>
-<p>本地方法栈和虚拟机栈基本相同，这里不再赘述。</p>
+<p>本地方法栈和虚拟机栈基本相同，不同的是这里针对的是本地方法，这里不再赘述。</p>
 <h2 id="方法区">方法区</h2>
 <p>这个名字取的很奇怪，不知道为什么要叫方法区。方法区里面存放的是类的信息，有版本、字段、方法、接口、常量(1.6之前常量池就是在这个地方，1.7之后放到了堆中)、静态变量。</p>
 <p>方法区是线程共享的。</p>
 <h2 id="堆">堆</h2>
 <p>这个应该是我们平时接触最多的一类了，平常我们 <code>new</code> 出来的对象都是放到这个区域， <code>GC</code> 回收也主要是对这个区域进行回收。</p>
 <p>堆和方法区一样是线程共享的。</p>
+<p>堆中的对象按照存储的时间不同，划分为不同的区域，如下所示
+<img src="https://devbins.github.io/images/jvm/heap.png" alt=""></p>
 <h2 id="一个例子">一个例子</h2>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">HelloWorld</span>
 <span class="o">{</span>
