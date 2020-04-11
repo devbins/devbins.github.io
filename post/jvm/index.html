@@ -346,20 +346,39 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 <p>程序计数器是线程私有的，每个线程都有自己的程序计数器。</p>
 <h2 id="虚拟机栈">虚拟机栈</h2>
 <p>虚拟机栈算是最复杂的一个了，包含了栈帧，局部变量表，操作数栈，动态链接，返回地址。通常虚拟机栈也叫线程栈，里面的数据是线程私有的。</p>
-<h3 id="栈帧">栈帧</h3>
+<p>虚拟机栈默认大小是1024，通过 <code>java -XX:+PrintFlagsFinal -version |grep Thread</code> 来查看</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">uintx <span class="nv">ParallelGCThreads</span>                         <span class="o">=</span> <span class="m">4</span>                                   <span class="o">{</span>product<span class="o">}</span>
+intx <span class="nv">ThreadPriorityPolicy</span>                      <span class="o">=</span> <span class="m">0</span>                                   <span class="o">{</span>product<span class="o">}</span>
+bool <span class="nv">ThreadPriorityVerbose</span>                     <span class="o">=</span> <span class="nb">false</span>                               <span class="o">{</span>product<span class="o">}</span>
+uintx <span class="nv">ThreadSafetyMargin</span>                        <span class="o">=</span> <span class="m">52428800</span>                            <span class="o">{</span>product<span class="o">}</span>
+// 大小是 <span class="m">1024</span>
+intx <span class="nv">ThreadStackSize</span>                           <span class="o">=</span> <span class="m">1024</span>                                <span class="o">{</span>pd product<span class="o">}</span>
+bool <span class="nv">TraceDynamicGCThreads</span>                     <span class="o">=</span> <span class="nb">false</span>                               <span class="o">{</span>product<span class="o">}</span>
+bool <span class="nv">UseBoundThreads</span>                           <span class="o">=</span> <span class="nb">true</span>                                <span class="o">{</span>product<span class="o">}</span>
+bool <span class="nv">UseBsdPosixThreadCPUClocks</span>                <span class="o">=</span> <span class="nb">true</span>                                <span class="o">{</span>product<span class="o">}</span>
+bool <span class="nv">UseDynamicNumberOfGCThreads</span>               <span class="o">=</span> <span class="nb">false</span>                               <span class="o">{</span>product<span class="o">}</span>
+bool <span class="nv">UseThreadPriorities</span>                       <span class="o">=</span> <span class="nb">true</span>                                <span class="o">{</span>pd product<span class="o">}</span>
+bool <span class="nv">VMThreadHintNoPreempt</span>                     <span class="o">=</span> <span class="nb">false</span>                               <span class="o">{</span>product<span class="o">}</span>
+intx <span class="nv">VMThreadPriority</span>                          <span class="o">=</span> -1                                  <span class="o">{</span>product<span class="o">}</span>
+intx <span class="nv">VMThreadStackSize</span>                         <span class="o">=</span> <span class="m">1024</span>                                <span class="o">{</span>pd product<span class="o">}</span>
+java version <span class="s2">&#34;1.8.0_45&#34;</span>
+Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.8.0_45-b14<span class="o">)</span>
+Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 25.45-b02, mixed mode<span class="o">)</span>
+</code></pre></div><h3 id="栈帧">栈帧</h3>
 <p>栈帧可以看做是一个方法的容器，里面存放了局部变量表、操作数栈、动态链接和返回地址，线程进行方法调用的时候会为每一个方法创建栈帧，所以一个线程可以对应多个栈帧，我们程序的入口 <code>main</code> 函数就是第一个栈帧。</p>
-<h3 id="局部变量表">局部变量表</h3>
+<h4 id="局部变量表">局部变量表</h4>
 <p>局部变量表中存放了函数中创建的局部变量和函数声明的形参，比如</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span><span class="kt">int</span> <span class="n">b</span><span class="o">){</span>
     <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
 <span class="o">}</span>
 </code></pre></div><p>这个例子中局部变量表的大小是3，存放了 <code>a</code> , <code>b</code> , <code>c</code> 。</p>
-<h3 id="操作数栈">操作数栈</h3>
+<h4 id="操作数栈">操作数栈</h4>
 <p>操作数栈存放的是我们要操作的数字，比如上面的例子中， <code>a</code> 和 <code>b</code> 是我们要操作的数字，就会把这两个数字放到操作数中，等待操作。操作数栈有点像一个操作的中转站，把要操作的东西放入这里，操作完后放回去。</p>
-<h3 id="动态链接">动态链接</h3>
-<p>动态链接的作用是我们在方法中调用了另外的方法，我们需要知道这个方法在哪里，所以需要持有这个方法的符号引用。</p>
-<h3 id="返回地址">返回地址</h3>
-<p>返回地址有两中情况，一种正常返回，另一种是异常返回。</p>
+<h4 id="动态链接">动态链接</h4>
+<p>动态链接的作用是我们在方法中调用了另外的方法，我们需要知道这个方法在哪里，所以需要将这个方法的符号引用转换为直接地址，而符号引用存在于方法区中。</p>
+<h4 id="返回地址">返回地址</h4>
+<p>返回地址有两种情况，一种正常返回，另一种是异常返回。</p>
+<p>正常返回的时候通常就是调用者的程序计数器的地址。异常的时候由异常处理器表决定。</p>
 <h3 id="一图胜千言">一图胜千言</h3>
 <figure>
     <img src="https://devbins.github.io/images/jvm/stack.png"/> 
@@ -490,7 +509,7 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
          <span class="n">LineNumberTable</span><span class="o">:</span>
            <span class="n">line</span> <span class="n">9</span><span class="o">:</span> <span class="n">0</span>
            <span class="n">line</span> <span class="n">10</span><span class="o">:</span> <span class="n">4</span>
-</code></pre></div><p>在 <code>Code</code> 中可以看到 <code>locals=3</code> 在 <code>add</code> 方法中有变量 <code>a</code> 、 <code>b</code> 、 <code>c</code> 所以局部变量表的长度是3。后面的 <code>args_size</code> 就是形参的个数。
+</code></pre></div><p>在 <code>Code</code> 中可以看到 <code>stack=2</code> 所以操作数栈的大小是2， <code>locals=3</code> 在 <code>add</code> 方法中有变量 <code>a</code> 、 <code>b</code> 、 <code>c</code> 所以局部变量表的长度是3。后面的 <code>args_size</code> 就是形参的个数。
 在看具体的指令之前，先来了解一下各个指令是干什么用的</p>
 <ul>
 <li>iload_x 将局部变量表中x索引的值加载到操作数栈栈顶</li>
@@ -704,6 +723,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 								
 									<ul class="nav">
 								
+									<ul class="nav">
+								
 								
 
 										<li class="nav-item">
@@ -718,6 +739,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 								
 									</ul>
 								
+									</ul>
+								
 							
 						
 				 
@@ -725,6 +748,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 						
 							
 								
+								
+									<ul class="nav">
 								
 									<ul class="nav">
 								
@@ -744,6 +769,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 								
 									</ul>
 								
+									</ul>
+								
 							
 						
 				 
@@ -751,6 +778,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 						
 							
 								
+								
+									<ul class="nav">
 								
 									<ul class="nav">
 								
@@ -770,6 +799,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 								
 									</ul>
 								
+									</ul>
+								
 							
 						
 				 
@@ -777,6 +808,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 						
 							
 								
+								
+									<ul class="nav">
 								
 									<ul class="nav">
 								
@@ -791,6 +824,8 @@ JVM 规范中规定， JVM 运行时内存分为程序计数器、虚拟机栈�
 										</li>
 						 
 								
+								
+									</ul>
 								
 									</ul>
 								
