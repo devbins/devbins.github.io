@@ -400,10 +400,12 @@
 年轻代分为 <code>Eden</code> 、 <code>Survivor0</code> 、 <code>Survivor1</code> ，他们的比例为8:1:1。</p>
 <p>新创建的对象首先分配在 <code>Eden</code> 中，第一次 <code>GC</code> 会把 <code>Eden</code> 中的存活对象复制到 <code>Survivor0</code> 并清空 <code>Eden</code> 。</p>
 <p>第二次当 <code>Eden</code> 满的时候会把 <code>Eden</code> 、 <code>Survivor0</code> 中的存活对象复制到 <code>Survivor1</code> 中并清空 <code>Eden</code> 和 <code>Survivor0</code> 。如此反复15次对象都没有被回收的话，就会把对象转移到老年代中。</p>
+<p>年轻代触发回收的时机是 <code>Eden</code> 区内存不足的时候，也就是 <code>YGC</code> ， <code>也叫 Minor GC</code></p>
 <h3 id="老年代">老年代</h3>
 <p>上小节我们说到一个对象在经历过15次GC后没有被回收会被放入老年代中，除此之外，一个对象如果较大，年轻代中放不下，会把这个对象直接放入老年代中。</p>
 <p>放入老年代对象的大小可以通过 <code>-XX:PretenureSizeThreshold</code> 来控制，大于这个值会直接放进老年代中，老年代中的对象存活的比较长，一般采用标记-压缩算法。</p>
 <p>老年代中还有一个 512 byte 的 <code>card table</code> ，用来存放老年代对年轻代的引用，这样当老年代有引用年轻代的时候就不需要遍历整个老年代，只要查表就可以了，这样大大提高了回收效率。</p>
+<p>老年代回收的时机是老年代内存不足的时候，也就是 <code>FGC</code> ，也叫 <code>Major GC</code> ，老年代回收的时候也会把年轻代也回收。</p>
 <h2 id="总结">总结</h2>
 <p>本次我们学习了 <code>JVM</code> 通过可达性分析对象是否为垃圾，以及回收垃圾的几种算法和分代回收策略。垃圾回收是影响并发性能的因之一，学会了可以在出现问题的时候更好的帮我们分析问题，进行优化。</p>
 <h2 id="参考">参考</h2>
