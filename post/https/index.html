@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="为什么要有 HTTPS
+做开发的都知道 HTTP 使用明文进行传输内容，就是在裸奔，一点安全感都没有。
+在传输的过程中任何一个节点都可以对内容进行监听，篡改，冒充。
+为了解决 HTTP 存在的这些问题就出现了 HTTPS 。">
+  
+  <meta property="og:title" content="HTTPS 原理" />
+<meta property="og:description" content="为什么要有 HTTPS
+做开发的都知道 HTTP 使用明文进行传输内容，就是在裸奔，一点安全感都没有。
+在传输的过程中任何一个节点都可以对内容进行监听，篡改，冒充。
+为了解决 HTTP 存在的这些问题就出现了 HTTPS 。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devbins.github.io/post/https/" />
+<meta property="article:published_time" content="2020-04-23T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-04-23T00:00:00+08:00" />
+
+
+  <title>
+  
+       HTTPS 原理 | dev.bins 
+  
+  </title>
+
+  <link rel="canonical" href="https://devbins.github.io/post/https/">
+
+  
+  
+
+  
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://devbins.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
+      
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://devbins.github.io">
+          
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> dev.bins</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://devbins.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://devbins.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>dev.bins</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://devbins.github.io/categories/http"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> HTTP </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/https"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> HTTPS </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">HTTPS 原理</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Apr 23, 2020</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>5 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://devbins.github.io/images/http.jpg" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <h2 id="为什么要有-https">为什么要有 HTTPS</h2>
+<p>做开发的都知道 <code>HTTP</code> 使用明文进行传输内容，就是在裸奔，一点安全感都没有。</p>
+<p>在传输的过程中任何一个节点都可以对内容进行监听，篡改，冒充。</p>
+<p>为了解决 <code>HTTP</code> 存在的这些问题就出现了 <code>HTTPS</code> 。</p>
+<h2 id="加密">加密</h2>
+<p>我们都知道 <code>HTTP</code> 协议是明文传输的，存在被窃听，篡改，伪装的风险。</p>
+<p>想要解决窃听的问题就可以通过把要传输的内容进行加密，这样别人即使窃听到了内容，也看不懂内容是什么。</p>
+<p><code>HTTPS</code> 的加密使用了对称加密和非对称加密组合的方式来保证内容的安全。</p>
+<h3 id="对称加密">对称加密</h3>
+<p>对称加密的意思是加密和解密都用同样的密钥。使用这种方式加密的话需要把秘钥发送给对方，这样对方才能解密。但是密码在传输的过程中，也会碰到类似被窃听的风险，这样加密也就没有意义了。</p>
+<p>对称加密的优点是：算法简单，性能好。</p>
+<p>对称加密的缺点是：安全性不高，容易被破解。</p>
+<p>常用的对称加密算法有：AES、DES</p>
+<h3 id="非对称加密">非对称加密</h3>
+<p>非对称加密是相对于对称加密而言的，在非对称加密中用于加密和解密使用的是不同的密钥，他们被称为公钥和私钥。</p>
+<p>其中公钥是对外公开的，谁都可以获得。私钥是自己持有的，不能让别人知道，要绝对的保密。</p>
+<p>公钥加密的内容只有私钥才能解密，同样私钥加密的内容只有公钥可以解密。但是我们通常不会用私钥加密，因为私钥加密之后，公钥进行解密，而公钥是公开的，谁都可以获得，所以加密等于没加。通常大家也都是通过公钥加密私钥解密。</p>
+<p>私钥还有一个作用就是用于认证和签名，因为私钥是只有自己持有，所以可以认为用私钥进行签名，就代表的是你本人。</p>
+<p>非对称加密的优点是：加密安全性高，不容易被破解</p>
+<p>非对称加密的缺点是：加密时间长，性能不高。</p>
+<p>常用的非对称加密算法有：RSA、DSA</p>
+<h3 id="混合加密">混合加密</h3>
+<p>在 <code>HTTPS</code> 中使用的加密是混合了对称加密和非对称加密。为什么要这样设计呢？</p>
+<p>对称加密容易被破解安全性不高但是加密速度快，而非对称加密安全性高，加密速度慢。把这两者结合就可以保证安全性和性能。</p>
+<p>混合加密在 <code>HTTPS</code> 中的使用场景是在交换密钥阶段使用非对称加密，而传输的内容使用对称加密。因为秘钥交换阶段需要传输的内容较少，所以用非对称加密时可以接受的。</p>
+<h2 id="签名">签名</h2>
+<p>加密可以解决传输内容被窃听的风险，但是不能解决内容被篡改的风险。所以为了防止内容被篡改需要对，内容进行签名，从而确保内容的正确性。</p>
+<p>签名需要使用私钥，私钥只有自己有，别人没法伪造。</p>
+<p>在服务端给客户端发送消息的时候，会把内容进行 <code>Hash</code> 处理生成摘要，并用私钥进行加密生成签名，发给客户端。</p>
+<p>客户端使用公钥进行解密得到内容，再对内容进行 <code>Hash</code> 处理生成摘要，如果两次摘要相同，就可以表示内容没有被修改过。因为只要内容被改过了，生成的 <code>Hash</code> 摘要也是千差万别。</p>
+<h2 id="证书">证书</h2>
+<p>通过加密的手段可以保证内容不被窃听，经过签名之后可以保证内容的完整性，但是公钥在传输的过程中还是有可能被人拦截给冒充了，冒充的人把自己公钥发给了客户端，让客户端以为收到的是服务器的公钥。所以冒充者可以解密客户端发送到服务端的数据，又能用服务端的公钥加密数据，往服务端发送数据。</p>
+<p>有了这个风险之后就需要一种机制可以验证客户端收到的公钥确实是服务端自己的，而不是别人的。这种机制就是证书认证。</p>
+<p>证书认证就是服务端把自己的公钥交给认证机构，认证机构在确认申请人的身份后会对这个公钥的一些相关信息进行签名并生成进一个证书发给服务器。</p>
+<p>服务器在和客户端通信的时候会把证书也发给客户端，客户端收到这个证书就会对这个证书进行验证，通常在浏览器中会内置一些认证机构的公钥，用于确定客户端收到的这个证书是否是我认证的过的。如果是认证过的说明服务器的公钥没有被篡改，可以进行通信。</p>
+<p>既然服务器的公钥都可以造假，那么认证机构是不是也可以造假？</p>
+<p>谁都可以开发一个浏览器，那么这些自己开发的浏览器就可以对认证机构的证书进行伪造，这样也就没有办法保证认证机构的正确性了。</p>
+<p>为了解决认证机构伪造的问题，需要使用根证书来验证，而根证书是操作系统内置的，通常我们认为根证书是可信的。</p>
+<p>证书的作用就是用来验证公钥的身份，保证没有被人冒充。</p>
+<h2 id="https-通信机制">HTTPS 通信机制</h2>
+<p><code>HTTPS</code> 中的 <code>TLS</code> 有以下几个阶段
+<img src="https://devbins.github.io/images/https.jpg" alt=""></p>
+<h3 id="client-hello">Client Hello</h3>
+<p>客户端向服务端发送 <code>Client Hello</code> 报文给服务端，其中包含了 <code>TLS</code> 的版本，客户端支持的加密算法列表和加密算法的长度，还有一个随机数。</p>
+<h3 id="server-hello">Server Hello</h3>
+<p>服务端发送一个 <code>Server Hello</code> 的报文给客户端，其中包含了服务端从客户端支持的加密算法中筛选出的加密算法和随机数</p>
+<h3 id="certificate">Certificate</h3>
+<p>服务端把公钥和证书发给客户端</p>
+<h3 id="server-hello-done">Server Hello Done</h3>
+<p>服务端发送 <code>Server Hello Done</code> 报文给客户端，告诉客户端最初的阶段完成了。</p>
+<h3 id="client-key-exchange">Client Key Exchange</h3>
+<p>客户端使用证书验证公钥的正确性，验证通过后，会生成一个 <code>pre-master key</code> 的随机数，用服务端给的公钥进行加密后发送给服务端。</p>
+<h3 id="change-cipher-spec">Change Cipher Spec</h3>
+<p>客户端告诉服务器，加密算法改变，后面的消息都会使用密钥加密。</p>
+<h3 id="finished">Finished</h3>
+<p>客户端告诉服务器，我这里完成了，并把握手开始的所有消息的 <code>Hash</code> 和 <code>MAC(Message Authentication Code)</code> 发给服务器，让服务器在验证一遍。</p>
+<h3 id="change-cipher-spec">Change Cipher Spec</h3>
+<p>服务端收到客户端发送的 <code>pre-master key</code> 之后，用私钥解密。然后通过密钥协商算法计算出加密的密钥。服务器发送 <code>Chnage Cipher Spec</code> 报文给客户端，告诉客户端加密算法改变，之后的消息会用密钥进行加密。</p>
+<h3 id="finished">Finished</h3>
+<p>服务器告诉客户端，我这里完成了，也会把所有的消息的 <code>Hash</code> 和 <code>MAC</code> 发给客户端，让其验证。</p>
+<h2 id="抓包工具为甚能够抓取-https-的内容">抓包工具为甚能够抓取 HTTPS 的内容</h2>
+<p>既然 <code>HTTPS</code> 这么安全为什么能够通过抓包工具得到内容，比如使用 <code>Fiddler</code> 和 <code>Charles</code> 。</p>
+<p>在使用 <code>Fiddler</code> 或者 <code>Charles</code> 的时候，通常这些工具会让你先在手机上安装一个根证书，安装完这个根证书之后，它就能够验证抓包工具的证书，所以让客户端认为它确实是服务器的公钥。</p>
+<h2 id="总结">总结</h2>
+<p><code>HTTPS</code> 通过加密来确保内容不被窃听，通过签名保证内容不被篡改，通过数字证书来保证不会被人冒充。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.zhihu.com/question/52493697">数字签名、数字证书与HTTPS是什么关系？ - 知乎</a></li>
+<li><a href="https://juejin.im/post/5ea06953f265da47e159581e">https握手流程详解 - 掘金</a></li>
+<li>《图解HTTP》</li>
+</ul>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://devbins.github.io/tags/http" role="button">HTTP </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/https" role="button">HTTPS </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>dev.bins</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://devbins.github.io/post/https/" title="HTTPS 原理">HTTPS 原理</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://devbins.github.io/post/classloader/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>ClassLoader</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e6%9c%89-https">
+												 为什么要有 HTTPS
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8a%a0%e5%af%86">
+												 加密
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86">
+												 对称加密
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9d%9e%e5%af%b9%e7%a7%b0%e5%8a%a0%e5%af%86">
+												 非对称加密
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b7%b7%e5%90%88%e5%8a%a0%e5%af%86">
+												 混合加密
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%ad%be%e5%90%8d">
+												 签名
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%af%81%e4%b9%a6">
+												 证书
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#https-%e9%80%9a%e4%bf%a1%e6%9c%ba%e5%88%b6">
+												 HTTPS 通信机制
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#client-hello">
+												 Client Hello
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#server-hello">
+												 Server Hello
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#certificate">
+												 Certificate
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#server-hello-done">
+												 Server Hello Done
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#client-key-exchange">
+												 Client Key Exchange
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#change-cipher-spec">
+												 Change Cipher Spec
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#finished">
+												 Finished
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#change-cipher-spec">
+												 Change Cipher Spec
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#finished">
+												 Finished
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8a%93%e5%8c%85%e5%b7%a5%e5%85%b7%e4%b8%ba%e7%94%9a%e8%83%bd%e5%a4%9f%e6%8a%93%e5%8f%96-https-%e7%9a%84%e5%86%85%e5%ae%b9">
+												 抓包工具为甚能够抓取 HTTPS 的内容
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
