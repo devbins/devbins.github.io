@@ -358,7 +358,7 @@
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div><p>程序执行的时候， <code>t1</code> 和 <code>t2</code> 线程会把变量 <code>i</code> 读取到各自的高速缓存中，之后对 <code>i</code> 的计算都只会对高速缓存中进行运算。</p>
-<p>所以在 <code>t1</code> 和 <code>t2</code> 线程中读取到的可能都是 <code>0</code> ，这时 <code>t1</code> 对 <code>i</code> 加1， <code>t2</code> 缓存中的 <code>i</code> 还是 <code>0</code> 也进行加1。当它们执行完之后会把计算的结果刷会主内存，这时候 <code>i</code> 的值应该是 <code>2</code> 的，结果却由于缓存的原因导致结果不是预期的。这就是多个 <code>CPU</code> 操作同一块内存时，每个 <code>CPU</code> 都有自己缓存，导致的缓存一致性问题。</p>
+<p>所以在 <code>t1</code> 和 <code>t2</code> 线程中读取到的可能都是 <code>0</code> ，这时 <code>t1</code> 对 <code>i</code> 加1， <code>t2</code> 缓存中的 <code>i</code> 还是 <code>0</code> 也进行加1。当它们执行完之后会把计算的结果刷回主内存，这时候 <code>i</code> 的值应该是 <code>2</code> 的，结果却由于缓存的原因导致结果不是预期的。这就是多个 <code>CPU</code> 操作同一块内存时，每个 <code>CPU</code> 都有自己缓存，导致的缓存一致性问题。</p>
 <h3 id="指令重排">指令重排</h3>
 <p>编译器为了让 <code>CPU</code> 能够更好的计算，在编译的时候会对代码进行优化。比如：进行指令重排。有如下代码：</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span>
