@@ -7,10 +7,14 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
-  <meta name="description" content="Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用手动做这些操作。构建完成后可以帮你上传到第三方测试平台，或者做其他一些操作。例如：发送邮件通知测试人员可以开始测试了，邮件中包含下载地址，或者二维码。整个流程不需要手动管理，非常高效。 Docker 中的 Jenkins Jenkins 官方提供 docker 的镜像，我们可以直接使用。但如果要用来打包 Android 项目还需要把 Android SDK 装上，不然没法构建 Android 项目。 所以我们基于 Jenkins 镜像进行定制，把它改造成带有 Android SDK 的镜像。 命令行">
+  <meta name="description" content="
+Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用手动做这些操作。构建完成后可以帮你上传到第三方测试平台，或者做其他一些操作。例如：发送邮件通知测试人员可以开始测试了，邮件中包含下载地址，或者二维码。整个流程不需要手动管理，非常高效。
+">
   
   <meta property="og:title" content="在 Docker 中用 Jenkins 搭建 Android 自动化打包" />
-<meta property="og:description" content="Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用手动做这些操作。构建完成后可以帮你上传到第三方测试平台，或者做其他一些操作。例如：发送邮件通知测试人员可以开始测试了，邮件中包含下载地址，或者二维码。整个流程不需要手动管理，非常高效。 Docker 中的 Jenkins Jenkins 官方提供 docker 的镜像，我们可以直接使用。但如果要用来打包 Android 项目还需要把 Android SDK 装上，不然没法构建 Android 项目。 所以我们基于 Jenkins 镜像进行定制，把它改造成带有 Android SDK 的镜像。 命令行" />
+<meta property="og:description" content="
+Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用手动做这些操作。构建完成后可以帮你上传到第三方测试平台，或者做其他一些操作。例如：发送邮件通知测试人员可以开始测试了，邮件中包含下载地址，或者二维码。整个流程不需要手动管理，非常高效。
+" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://devbins.github.io/post/jenkins/" />
 <meta property="article:published_time" content="2018-10-02T00:00:00+08:00" />
@@ -410,9 +414,10 @@ Jenkins 就可以用了，但是要想打包 <code>Android</code> 程序还要�
             <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span><span class="nl">UMENG_CHANNEL_VALUE:</span> <span class="s2">&#34;xiaomi&#34;</span><span class="o">]</span>
         <span class="o">}</span>
     <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div><p>打开终端在项目的根目录输入如下指令，就可以打包</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gradle assembleXiaomiRelease // 小米渠道包
-gradle assembleWandoujiaRelease // 豌豆荚渠道包
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gradlew assembleXiaomiRelease // 小米渠道包
+gradlew assembleWandoujiaRelease // 豌豆荚渠道包
 </code></pre></div><h2 id="创建打包任务">创建打包任务</h2>
 <p>做了这么多，是驴是马拿出来遛遛，看看可行不可行。</p>
 <p>回到首页，点击新建，取个名字，选择构建一个自由风格的软件项目
@@ -471,7 +476,6 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
 <li><a href="https://www.pgyer.com/doc/view/jenkins">蒲公英</a></li>
 <li><a href="https://blog.csdn.net/zhaoyanjun6/article/details/77102359">Jenkins 实现 Android 自动化打包</a></li>
 </ul>
-
           </div>
 
           
