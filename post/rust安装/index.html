@@ -384,21 +384,21 @@ rustup component add rust-src --toolchain nightly
 <h3 id="配置中科大镜像">配置中科大镜像</h3>
 <p>安装好 <code>Rust</code> 之后，它的包管理工具 <code>cargo</code> 也是一并安装好了的。 <code>Rust</code> 第三方库也在国外，地址是 <a href="https://crates.io">https://crates.io</a> 。访问它同样比较慢，幸运的是中科大也提供了镜像，这样我们就可以用它来加速。</p>
 <p>在 <code>~/.cargo</code> 下创建一个 <code>config</code> 的文件，把如下内容复制进去</p>
-<pre><code class="language-conf" data-lang="conf">[source.crates-io]
-registry = &quot;https://github.com/rust-lang/crates.io-index&quot;
-replace-with = 'ustc'
-[source.ustc]
-registry = &quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;
-</code></pre><h3 id="创建新项目">创建新项目</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>source.crates-io<span class="o">]</span>
+<span class="nv">registry</span> <span class="o">=</span> <span class="s2">&#34;https://github.com/rust-lang/crates.io-index&#34;</span>
+replace-with <span class="o">=</span> <span class="s1">&#39;ustc&#39;</span>
+<span class="o">[</span>source.ustc<span class="o">]</span>
+<span class="nv">registry</span> <span class="o">=</span> <span class="s2">&#34;git://mirrors.ustc.edu.cn/crates.io-index&#34;</span>
+</code></pre></div><h3 id="创建新项目">创建新项目</h3>
 <p><code>cargo</code> 提供了创建项目的命令，我们可以通过它来帮我们创建好基本的项目结构</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cargo new hello-rust
 </code></pre></div><p>项目结构如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">hello-rust
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">hello-rust
 ├── Cargo.toml
 └── src
     └── main.rs
 
-1 directory, 2 files
+<span class="m">1</span> directory, <span class="m">2</span> files
 </code></pre></div><p>其中 <code>Cargo.toml</code> 是第三方依赖的配置文件， <code>src</code> 下存放着源代码。</p>
 <h3 id="运行项目">运行项目</h3>
 <p>当我们写好代码后，可以想要运行看下效果，可以通过如下命令。</p>
