@@ -7,23 +7,25 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="dev.bins">
-  <meta name="description" content="现象 这些日子切换到 Windows 下使用 Emacs ，在使用 Org-Mode 设置计划时间后，星期几显示不出来，如下所示 解决办法 (setq system-time-locale &#34;C&#34;) 参考 org-mode中timestamp格式的设定 - Org-mode - Emacs China">
+  <meta name="description" content="前言
+由于工作需要，需要使用 Windows ，在 Windows 中开发始终没有那么方便。最近在用 Git 提交代码时想用 GPG 进行签名，于是就下载了 Gpg4win 。">
   
-  <meta property="og:title" content="Windows 下 Org-Mode 星期不显示" />
-<meta property="og:description" content="现象 这些日子切换到 Windows 下使用 Emacs ，在使用 Org-Mode 设置计划时间后，星期几显示不出来，如下所示 解决办法 (setq system-time-locale &#34;C&#34;) 参考 org-mode中timestamp格式的设定 - Org-mode - Emacs China" />
+  <meta property="og:title" content="Windows 下的 Git 自带 GPG" />
+<meta property="og:description" content="前言
+由于工作需要，需要使用 Windows ，在 Windows 中开发始终没有那么方便。最近在用 Git 提交代码时想用 GPG 进行签名，于是就下载了 Gpg4win 。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/orgmode%E6%98%9F%E6%9C%9F%E4%B8%8D%E6%98%BE%E7%A4%BA/" />
-<meta property="article:published_time" content="2020-06-25T00:00:00+08:00" />
-<meta property="article:modified_time" content="2020-06-25T00:00:00+08:00" />
+<meta property="og:url" content="https://devbins.github.io/post/gitgpg/" />
+<meta property="article:published_time" content="2020-06-29T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-06-29T00:00:00+08:00" />
 
 
   <title>
   
-       Windows 下 Org-Mode 星期不显示 | dev.bins 
+       Windows 下的 Git 自带 GPG | dev.bins 
   
   </title>
 
-  <link rel="canonical" href="https://devbins.github.io/post/orgmode%E6%98%9F%E6%9C%9F%E4%B8%8D%E6%98%BE%E7%A4%BA/">
+  <link rel="canonical" href="https://devbins.github.io/post/gitgpg/">
 
   
   
@@ -299,17 +301,23 @@
   <ul class="post-meta li-x">
     
       
+        <li><a href="https://devbins.github.io/categories/git"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Git </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/gpg"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> GPG </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/windows"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Windows </a></li>
+      
         <li><a href="https://devbins.github.io/categories/emacs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Emacs </a></li>
       
     
     
   </ul>
 
-  <div class="px-4 post-heading">Windows 下 Org-Mode 星期不显示</div>
+  <div class="px-4 post-heading">Windows 下的 Git 自带 GPG</div>
 
   <ul class="post-meta li-x mt-1">
     
-      <li>Jun 25, 2020</li>
+      <li>Jun 29, 2020</li>
     
 
     
@@ -319,7 +327,7 @@
   </ul>
   
     <div class="view">
-      <img src="https://devbins.github.io/images/org-mode.png" />
+      <img src="https://devbins.github.io/images/git/git.jpeg" />
     </div>
   
 
@@ -328,14 +336,83 @@
 
 
           <div class="post-content markdown">
-            <h2 id="现象">现象</h2>
-<p>这些日子切换到 <code>Windows</code> 下使用 <code>Emacs</code> ，在使用 <code>Org-Mode</code> 设置计划时间后，星期几显示不出来，如下所示
-<img src="https://devbins.github.io/images/org-weekly.png" alt=""></p>
-<h2 id="解决办法">解决办法</h2>
-<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">setq</span> <span class="nv">system-time-locale</span> <span class="s">&#34;C&#34;</span><span class="p">)</span>
-</code></pre></div><h2 id="参考">参考</h2>
-<p><a href="https://emacs-china.org/t/topic/4513/8">org-mode中timestamp格式的设定 - Org-mode - Emacs China</a></p>
-
+            <h2 id="前言">前言</h2>
+<p>由于工作需要，需要使用 <code>Windows</code> ，在 <code>Windows</code> 中开发始终没有那么方便。最近在用 <code>Git</code> 提交代码时想用 <code>GPG</code> 进行签名，于是就下载了 <a href="https://www.gpg4win.org/">Gpg4win</a> 。</p>
+<p>安装好之后，在 <code>Git Bash</code> 中查看有没有配置好，于是输入 <code>where gpg</code> ，得到如下结果</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ where gpg
+C:<span class="se">\P</span>rogram Files<span class="se">\G</span>it<span class="se">\u</span>sr<span class="se">\b</span>in<span class="se">\g</span>pg.exe
+C:<span class="se">\P</span>rogram Files <span class="o">(</span>x86<span class="o">)</span><span class="se">\G</span>nuPG<span class="se">\b</span>in<span class="se">\g</span>pg.exe
+</code></pre></div><p>定睛一看， <code>Git</code> 目录下居然有 <code>gpg</code> 。</p>
+<h2 id="配置环境变量">配置环境变量</h2>
+<p>既然 <code>Git</code> 自带了 <code>GPG</code> ，那么久没有必要再额外安装了，我们只需要把其加入环境变量中就可以在 <code>cmd</code> 中使用了。</p>
+<p>除了 <code>gpg</code> 之外，我还在 <code>C:\Program Files\Git\usr\bin</code> 中发现了其它一些常用的命令，比如 <code>chmod</code> 、 <code>chown</code> 等等，下面列出了一部分。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">bunzip2.exe*                    msys-kdc-2.dll*
+bzcat.exe*                      msys-krb5-26.dll*
+bzcmp*                          msys-ksba-8.dll*
+bzdiff*                         msys-lz4-1.dll*
+bzegrep*                        msys-lzma-5.dll*
+bzfgrep*                        msys-magic-1.dll*
+bzgrep*                         msys-menuw6.dll*
+bzip2.exe*                      msys-metalink-3.dll*
+bzip2recover.exe*               msys-mpfr-6.dll*
+bzless*                         msys-ncurses++w6.dll*
+bzmore*                         msys-ncursesw6.dll*
+c_rehash*                       msys-nettle-8.dll*
+captoinfo.exe*                  msys-nghttp2-14.dll*
+cat.exe*                        msys-npth-0.dll*
+chattr.exe*                     msys-p11-kit-0.dll*
+chcon.exe*                      msys-panelw6.dll*
+chgrp.exe*                      msys-pcre-1.dll*
+chmod.exe*                      msys-pcre2-8-0.dll*
+chown.exe*                      msys-perl5_30.dll*
+chroot.exe*                     msys-psl-5.dll*
+cksum.exe*                      msys-readline8.dll*
+clear.exe*                      msys-roken-18.dll*
+cmp.exe*                        msys-sasl2-3.dll*
+column.exe*                     msys-serf-1-0.dll*
+comm.exe*                       msys-sl-0.dll*
+core_perl/                      msys-smartcols-1.dll*
+cp.exe*                         msys-sqlite3-0.dll*
+csplit.exe*                     msys-ssh2-1.dll*
+cut.exe*                        msys-ssl-1.1.dll*
+cygcheck.exe*                   msys-svn_delta-1-0.dll*
+cygpath.exe*                    msys-svn_diff-1-0.dll*
+cygwin-console-helper.exe*      msys-svn_fs_fs-1-0.dll*
+dir.exe*                        msys-svn_wc-1-0.dll*
+dircolors.exe*                  msys-tasn1-6.dll*
+dirmngr.exe*                    msys-ticw6.dll*
+dirmngr-client.exe*             msys-unistring-2.dll*
+dirname.exe*                    msys-uuid-1.dll*
+docx2txt*                       msys-wind-0.dll*
+docx2txt.pl*                    msys-xml2-2.dll*
+dos2unix.exe*                   msys-xslt-1.dll*
+du.exe*                         msys-z.dll*
+dumpsexp.exe*                   mv.exe*
+echo.exe*                       nano.exe*
+egrep*                          nettle-hash.exe*
+env.exe*                        nettle-lfib-stream.exe*
+envsubst.exe*                   nettle-pbkdf2.exe*
+ex.exe*                         ngettext.exe*
+expand.exe*                     nice.exe*
+expr.exe*                       nl.exe*
+factor.exe*                     nohup.exe*
+false.exe*                      notepad*
+fgrep*                          nproc.exe*
+fido2-assert.exe*               numfmt.exe*
+fido2-cred.exe*                 od.exe*
+fido2-token.exe*                openssl.exe*
+file.exe*                       p11-kit.exe*
+find.exe*                       passwd.exe*
+findssl.sh*                     paste.exe*
+fmt.exe*                        patch.exe*
+fold.exe*                       pathchk.exe*
+funzip.exe*                     perl.exe*
+gapplication.exe*               perl5.30.2.exe*
+gawk.exe*                       pinentry.exe*
+gawk-5.0.0.exe*                 pinentry-w32.exe
+</code></pre></div><h2 id="总结">总结</h2>
+<p>这次安装 <code>GPG</code> 顺藤摸瓜，发现了 <code>Git</code> 自带的一些命令，对于 <code>Windows</code> 开发的用户实在是非常方便。这样可以节约我们安装一些软件的时间，免去不少麻烦。</p>
+<p>如果你不想配置环境变量，在 <code>Git Bash</code> 中使用也是没问题的。</p>
           </div>
 
           
@@ -348,7 +425,16 @@
   <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
   <div class="tags-sm">
     
-      <li><a href="https://devbins.github.io/tags/org" role="button">Org </a></li>
+      <li><a href="https://devbins.github.io/tags/git" role="button">Git </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/gpg" role="button">GPG </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/windows" role="button">Windows </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/emacs" role="button">Emacs </a></li>
       
     
   </div>
@@ -371,7 +457,7 @@
             <strong>本文作者： </strong>dev.bins</li>
         <li class="post-copyright-link">
             <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/orgmode%E6%98%9F%E6%9C%9F%E4%B8%8D%E6%98%BE%E7%A4%BA/" title="Windows 下 Org-Mode 星期不显示">Windows 下 Org-Mode 星期不显示</a>
+            <a href="https://devbins.github.io/post/gitgpg/" title="Windows 下的 Git 自带 GPG">Windows 下的 Git 自带 GPG</a>
         </li>
         <li class="post-copyright-license">
             <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -384,10 +470,10 @@
           <div class="row pt-3 np">
             <div class="col-md-6">
               
-                <a href=https://devbins.github.io/post/rust%E5%AE%89%E8%A3%85/ class="post-meta">Previous
+                <a href=https://devbins.github.io/post/orgmode%E6%98%9F%E6%9C%9F%E4%B8%8D%E6%98%BE%E7%A4%BA/ class="post-meta">Previous
                   <div class="pt-2 pb-5 d-flex">
                     <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>Rust 环境搭建</span>
+                    <span>Windows 下 Org-Mode 星期不显示</span>
                   </div>
                 </a>
               
@@ -395,10 +481,10 @@
             
             <div class="col-md-6 text-right" >
               
-                <a href=https://devbins.github.io/post/gitgpg/ class="post-meta">Next
+                <a href=https://devbins.github.io/post/%E5%9C%A8arch%E4%B8%8A%E5%AE%89%E8%A3%85ros/ class="post-meta">Next
                   <div class="pt-2 pb-5 flex-reverse">
                     <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>Windows 下的 Git 自带 GPG</span>
+                    <span>在Arch上安装ROS</span>
                   </div>
                 </a>
               
@@ -446,8 +532,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%8e%b0%e8%b1%a1">
-												 现象
+						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
+												 前言
 											</a>
 										</li>
 						 
@@ -468,8 +554,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%a7%a3%e5%86%b3%e5%8a%9e%e6%b3%95">
-												 解决办法
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">
+												 配置环境变量
 											</a>
 										</li>
 						 
@@ -490,8 +576,8 @@
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
 											</a>
 										</li>
 						 
