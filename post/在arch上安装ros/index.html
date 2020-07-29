@@ -320,7 +320,7 @@
 
     
       <li class="middot"></li>
-      <li>2 minutes read</li>
+      <li>3 minutes read</li>
     
   </ul>
   
@@ -337,24 +337,27 @@
             <h2 id="前言">前言</h2>
 <p>上周开始，我在 <code>Arch</code> 上安装 <code>ROS</code> ，装了一周才搞定，记录一下碰到的问题。</p>
 <p>官方推荐使用 <code>Ubuntu</code> 来安装 <code>ROS</code> ，但是我比较喜欢 <code>Arch</code> 所以就尝试在 <code>Arch</code> 上安装， <code>Arch</code> 上安装 <code>ROS</code> 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。</p>
-<h2 id="配置源">配置源</h2>
-<p>在 <code>/etc/pacman.conf</code> 中加入如下配置</p>
+<h2 id="配置仓库">配置仓库</h2>
+<p>由于官方自带的仓库没有 <code>ROS</code> 的包，所以需要配置一下仓库地址，只需要在 <code>/etc/pacman.conf</code> 中加入如下配置</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oscloud<span class="o">]</span>
 <span class="nv">Server</span> <span class="o">=</span> http://repo.oscloud.info/
 </code></pre></div><h2 id="配置代理">配置代理</h2>
-<p>安装之前配置一下代理，不然非常慢，而且可能还容易失败，不要止步于安装环境</p>
+<p>安装之前配置一下代理，不然非常慢，而且可能还容易失败，很多人止步于安装环境，非常可惜</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">http_proxy</span><span class="o">=</span>socks5://127.0.0.1:1080
 <span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span>socks5://127.0.0.1:1080
 git config --global http.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
 git config --global https.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
 </code></pre></div><h2 id="导入-gpg-key">导入 GPG key</h2>
+<p>配置好仓库后，我们还要配置一下 <code>GPG</code> ，这样下载的时候才能通过验证</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman-key --recv-keys CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
 sudo pacman-key --finger CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
 sudo pacman-key --lsign-key CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
 </code></pre></div><h2 id="安装">安装</h2>
+<p>配置好仓库后，就可以通过如下命令来安装 <code>ROS</code> 了</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -Syy
 yay -S ros-melodic-desktop-full
 </code></pre></div><h2 id="初始化-rosdep">初始化 rosdep</h2>
+<p>安装好之后，我们还需要初始化 <code>rosdep</code> ，这个可以方便的安装系统的依赖，和系统的一些核心组件</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo rosdep init
 rosdep update
 </code></pre></div><h2 id="设置ros环境">设置ROS环境</h2>
@@ -366,6 +369,7 @@ rosdep update
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">echo</span> <span class="s2">&#34;source /opt/ros/melodic/setup.zsh&#34;</span> &gt;&gt; ~/.zshrc
 <span class="nb">source</span> ~/.zshrc
 </code></pre></div><h2 id="检查是否安装成功">检查是否安装成功</h2>
+<p>最后我们通过 <code>roscore</code> 来检查是否安装成功</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">➜  ~ roscore
 ... logging to /home/test/.ros/log/cebd27dc-ce7d-11ea-b37c-001c42662094/roslaunch-test-42399.log
 Checking log directory <span class="k">for</span> disk usage. This may take awhile.
@@ -569,8 +573,8 @@ error: target not found: ros-melodic-ros-environme
 								
 
 										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e6%ba%90">
-												 配置源
+						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e4%bb%93%e5%ba%93">
+												 配置仓库
 											</a>
 										</li>
 						 
