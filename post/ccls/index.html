@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="前言
+最近使用 C/C&#43;&#43; 开发，在 Emacs 下使用 Cmake 作为编译工具，结合 ccls 进行代码补全，有着不错的体验，于是记录一下。">
+  
+  <meta property="og:title" content="使用ccls作为C/C&#43;&#43;的补全方案" />
+<meta property="og:description" content="前言
+最近使用 C/C&#43;&#43; 开发，在 Emacs 下使用 Cmake 作为编译工具，结合 ccls 进行代码补全，有着不错的体验，于是记录一下。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devbins.github.io/post/ccls/" />
+<meta property="article:published_time" content="2020-09-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-09-06T00:00:00+08:00" />
+
+
+  <title>
+  
+       使用ccls作为C/C&#43;&#43;的补全方案 | dev.bins 
+  
+  </title>
+
+  <link rel="canonical" href="https://devbins.github.io/post/ccls/">
+
+  
+  
+
+  
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://devbins.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
+      
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://devbins.github.io">
+          
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> dev.bins</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://devbins.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://devbins.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>dev.bins</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="container">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://devbins.github.io/categories/c/c&#43;&#43;"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> C/C&#43;&#43; </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/emacs"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Emacs </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/ccls"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> ccls </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/lsp"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> LSP </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">使用ccls作为C/C&#43;&#43;的补全方案</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Sep 6, 2020</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>2 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://devbins.github.io/images/cpp_logo.png" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <h2 id="前言">前言</h2>
+<p>最近使用 <code>C/C++</code> 开发，在 <code>Emacs</code> 下使用 <code>Cmake</code> 作为编译工具，结合 <code>ccls</code> 进行代码补全，有着不错的体验，于是记录一下。</p>
+<h2 id="ccls-介绍">ccls 介绍</h2>
+<p><code>ccls</code> 是基于<a href="https://github.com/jacobdufault/cquery">cquery</a>的 <code>C/C++/Objective-C</code> 的代码补全的工具，它实现了 <code>C/C++/Objective-C</code> 的<a href="https://langserver.org/">Language Server Protocol</a>的服务端。支持代码补全，代码的引用查找和跳转，有着良好的体验。</p>
+<p>我使用 <code>ccls</code> 是由于它能支持 <code>lsp</code> ，可以在 <code>Emacs</code> 中使用。当然也是支持 <code>Atom</code> 、 <code>Vim</code> 、 <code>VSCode</code> 等编辑器的。</p>
+<h2 id="安装ccls">安装ccls</h2>
+<h3 id="mac">Mac</h3>
+<p>在 <code>mac</code> 下安装 <code>ccls</code> 使用 <code>brew install ccls</code> 十分的方便，但是这个版本还停留在 <code>0.20190823.6</code> 实在是太老旧了。使用过程中发现并不能很好的工作，建议采用源码编译。</p>
+<p>编译过程如下</p>
+<h4 id="cmake-and-llvm">cmake &amp;llvm</h4>
+<p><code>ccls</code> 的编译需要 <code>cmake</code> 和 <code>llvm</code> ，所以在编译之前需要安装 <code>cmake</code> 和 <code>llvm</code> 。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">brew install cmake llvm
+</code></pre></div><p>使用 <code>brew</code> 安装的 <code>llvm</code> 路径在 <code>/usr/local/Cellar/llvm/10.0.1</code> ，编译 <code>ccls</code> 会用到。</p>
+<h4 id="编译ccls">编译ccls</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">git clone --depth<span class="o">=</span><span class="m">1</span> --recursive https://github.com/MaskRay/ccls
+<span class="nb">cd</span> ccls
+cmake -H. -BRelease -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DCMAKE_PREFIX_PATH<span class="o">=</span>/usr/local/Cellar/llvm/10.0.1/lib/cmake -DUSE_SYSTEM_RAPIDJSON<span class="o">=</span>off
+cmake --build Release --target install
+</code></pre></div><p><code>ccls</code> 会被安装到 <code>/usr/local/bin/ccls</code> 。</p>
+<p>其中 <code>-DCMAKE_PREFIX_PATH</code> 需要换成你的 <code>llvm</code> 的安装路径。</p>
+<p>这样 <code>ccls</code> 就编译好了。</p>
+<h3 id="linux">Linux</h3>
+<p>我所使用的 <code>Linux</code> 发行版是 <code>Manjaro</code> ，所以安装起来就非常方便了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S ccls-git
+</code></pre></div><p>命令执行完，也就安装好了，非常省事。</p>
+<p>其它 <code>Linux</code> 发现版，可以参考 <a href="https://github.com/MaskRay/ccls/wiki/Build">Build · MaskRay/ccls Wiki</a></p>
+<h2 id="为项目配置-ccls-补全">为项目配置 ccls 补全</h2>
+<p>当我们装好 <code>ccls</code> 后，就可以使用 <code>Emacs</code> 结合 <code>lsp</code> 打开 <code>C/C++</code> 的项目，在项目的根目录下就会生成 <code>.ccls-cache</code> 的文件夹。这就表示当前项目被 <code>ccls</code> 识别了。</p>
+<p>做完上面之后，我们打开文件，会发现许多文件都会找不到头文件，补全也不完整，甚至连 <code>iostream</code> 都找不到，这就很纳闷了。</p>
+<p>我的 <code>C/C++</code> 项目采用的是 <code>cmake</code> 作为编译工具，所以在查找官网资料后，发现只要在使用 <code>cmake</code> 的时候加上 <code>-DCMAKE_EXPORT_COMPILE_COMMANDS=On</code> ，然后把 <code>compile_commands.json</code> 放到根目录就行。
+具体操作入下</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span>On ..
+<span class="nb">cd</span> ..
+ln -s build/compile_commands.json
+</code></pre></div><p><code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 会告诉 <code>cmake</code> 把编译的指令都导出到 <code>compile_commands.json</code> 中，当 <code>ccls</code> 解析 <code>compile_commands.json</code> 后就知道源码在哪里了，知道去哪里找头文件等等。</p>
+<p>除了在命令行加上 <code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 参数外，还可以在 <code>cmake</code> 中设置，这样就可以避免每次编译都要输入，或者忘记。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">EXPORT_COMPILE_COMMANDS</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>如果你不是使用 <code>cmake</code> 作为编译工具可以参考 <a href="https://github.com/MaskRay/ccls/wiki/Project-Setup">Project Setup · MaskRay/ccls Wiki</a></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/MaskRay/ccls/wiki/Build">Build · MaskRay/ccls Wiki</a></li>
+</ul>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://devbins.github.io/tags/ccls" role="button">ccls </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/c/c&#43;&#43;" role="button">C/C&#43;&#43; </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/emacs" role="button">Emacs </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/lsp" role="button">LSP </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>dev.bins</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://devbins.github.io/post/ccls/" title="使用ccls作为C/C&#43;&#43;的补全方案">使用ccls作为C/C&#43;&#43;的补全方案</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://devbins.github.io/post/rosfilesystem/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>ROS文件系统</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
