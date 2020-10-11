@@ -355,7 +355,7 @@
 <p><img src="https://devbins.github.io/images/mpandroidchart/xcolor.png" alt="">
 在开发的过程中，有个需求是需要对 X 轴上某个值显示特殊的颜色，查了文档发现只有一个 <code>xAxis.textColor</code> 是用来设置文字的颜色，所有的颜色都只能用这个颜色。</p>
 <p>最开始我的想法是通过 <code>ValueFormatter</code> 在绘制的时候进行设置不同的颜色，后面发现不行。一路跟踪源码发现 X 轴上的内容是由 <code>XAxisRenderer</code> 绘制的，在其中找到了原因。发现是在绘制的时候会先给画笔设置颜色，之后就一直都用这个颜色。所以我们只是设置颜色是没有用的，画笔的颜色没有改变。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">@Override</span>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="nd">@Override</span>
 <span class="k">public</span> <span class="n">void</span> <span class="n">renderAxisLabels</span><span class="p">(</span><span class="n">Canvas</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="c1">//  此处省略无关代码 ...
@@ -394,7 +394,7 @@
         <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="n">limitLines</span><span class="p">.</span><span class="n">indices</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">val</span> <span class="py">l</span> <span class="p">=</span> <span class="n">limitLines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="c1">// 测量要绘制文本的宽度
-</span><span class="c1"></span>            <span class="k">val</span> <span class="py">textWidth</span> <span class="p">=</span> <span class="n">mLimitLinePaint</span><span class="p">.</span><span class="n">measureText</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">label</span> <span class="o">?:</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>            <span class="k">val</span> <span class="py">textWidth</span> <span class="p">=</span> <span class="n">mLimitLinePaint</span><span class="p">.</span><span class="n">measureText</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">label</span> <span class="o">?:</span> <span class="s2">&#34;&#34;</span><span class="p">)</span>
             <span class="n">pts</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="n">l</span><span class="p">.</span><span class="n">limit</span>
             <span class="n">mTrans</span><span class="p">.</span><span class="n">pointValuesToPixel</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
             <span class="c1">// 进行偏移
