@@ -373,7 +373,7 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span>On ..
 ln -s build/compile_commands.json
 </code></pre></div><p><code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 会告诉 <code>cmake</code> 把编译的指令都导出到 <code>compile_commands.json</code> 中，当 <code>ccls</code> 解析 <code>compile_commands.json</code> 后就知道源码在哪里了，知道去哪里找头文件等等。</p>
 <p>除了在命令行加上 <code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 参数外，还可以在 <code>cmake</code> 中设置，这样就可以避免每次编译都要输入，或者忘记。</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">EXPORT_COMPILE_COMMANDS</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_EXPORT_COMPILE_COMMANDS</span> <span class="s">ON</span><span class="p">)</span><span class="err">
 </span></code></pre></div><p>如果你不是使用 <code>cmake</code> 作为编译工具可以参考 <a href="https://github.com/MaskRay/ccls/wiki/Project-Setup">Project Setup · MaskRay/ccls Wiki</a></p>
 <h2 id="在-qt-中使用-ccls">在 QT 中使用 ccls</h2>
 <p>在上面提到过，要为项目配置 <code>ccls</code> 关键就是 <code>compile_commands.json</code> ，所以想要在 <code>QT</code> 中使用 <code>ccls</code> 就需要生成 <code>compile_commands.json</code> 文件。</p>
