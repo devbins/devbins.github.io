@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="前言 自从 AndroidStudio2.2 开始支持 CMAKE 来构建 C/C&#43;&#43; 程序之后，作为 Android 开发就可以使用 CMake 来替换 Android.mk 了。 基本使用 在学习 CMAKE 之前，我们先来看一下如何使用 CMAKE 编译项目。假设 CMakeLists.txt 已经编写完毕，并且是正确的。 mkdir build &amp;&amp; cd build cmake .. make make install 在这个例子中，我们建了一个 build 文件夹用于执行 cmake 指令，这种做法叫做外部编译(out-of-source-build)。注意 cmake .. 这后边有个 .. 这是用于告诉 CMAKE CMakeLists.txt 在哪个文件夹下。 这样做有一个好处就是不会污染源码，因为在执行 cmake 的过程">
+  
+  <meta property="og:title" content="CMake基础" />
+<meta property="og:description" content="前言 自从 AndroidStudio2.2 开始支持 CMAKE 来构建 C/C&#43;&#43; 程序之后，作为 Android 开发就可以使用 CMake 来替换 Android.mk 了。 基本使用 在学习 CMAKE 之前，我们先来看一下如何使用 CMAKE 编译项目。假设 CMakeLists.txt 已经编写完毕，并且是正确的。 mkdir build &amp;&amp; cd build cmake .. make make install 在这个例子中，我们建了一个 build 文件夹用于执行 cmake 指令，这种做法叫做外部编译(out-of-source-build)。注意 cmake .. 这后边有个 .. 这是用于告诉 CMAKE CMakeLists.txt 在哪个文件夹下。 这样做有一个好处就是不会污染源码，因为在执行 cmake 的过程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devbins.github.io/post/cmake/" />
+<meta property="article:published_time" content="2020-12-06T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-12-06T00:00:00+08:00" />
+
+
+  <title>
+  
+       CMake基础 | dev.bins 
+  
+  </title>
+
+  <link rel="canonical" href="https://devbins.github.io/post/cmake/">
+
+  
+  
+
+  
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://devbins.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
+      
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://devbins.github.io">
+          
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> dev.bins</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://devbins.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://devbins.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>dev.bins</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://devbins.github.io/categories/c/c&#43;&#43;"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> C/C&#43;&#43; </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/cmake"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> CMake </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">CMake基础</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Dec 6, 2020</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>4 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://devbins.github.io/images/" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <h2 id="前言">前言</h2>
+<p>自从 <code>AndroidStudio2.2</code> 开始支持 <code>CMAKE</code> 来构建 <code>C/C++</code> 程序之后，作为 <code>Android</code> 开发就可以使用 <code>CMake</code> 来替换 <code>Android.mk</code> 了。</p>
+<h2 id="基本使用">基本使用</h2>
+<p>在学习 <code>CMAKE</code> 之前，我们先来看一下如何使用 <code>CMAKE</code> 编译项目。假设 <code>CMakeLists.txt</code> 已经编写完毕，并且是正确的。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+cmake ..
+make
+make install
+</code></pre></div><p>在这个例子中，我们建了一个 <code>build</code> 文件夹用于执行 <code>cmake</code> 指令，这种做法叫做外部编译(out-of-source-build)。注意 <code>cmake ..</code> 这后边有个 <code>..</code> 这是用于告诉 <code>CMAKE</code> <code>CMakeLists.txt</code> 在哪个文件夹下。</p>
+<p>这样做有一个好处就是不会污染源码，因为在执行 <code>cmake</code> 的过程中会产生一些临时文件、缓存文件、日志文件等，如果都和源码放在一起就非常的乱，会影响到代码的阅读。</p>
+<p>使用外部编译也可方便源码的管理。</p>
+<p>既然有外部编译那么也就有内部编译(in-source-build)，内部编译很好理解也就是在 <code>CMakeList.txt</code> 所在的目录存放产生的临时文件。</p>
+<p>建议尽可能使用外部编译。</p>
+<h2 id="语法">语法</h2>
+<h3 id="基本语法">基本语法</h3>
+<p>来看一下 <code>CMAKE</code> 的最小配置，在项目的根目录创建一个 <code>CMakeLists.txt</code> 文件，并把如下内容拷贝进去</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12</span><span class="p">)</span> <span class="c"># 设置 CMake 的版本
+</span><span class="c"></span><span class="nb">project</span><span class="p">(</span><span class="s">Demo</span><span class="p">)</span> <span class="c"># 设置项目名
+</span><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span> <span class="c"># 编译成可执行文件，参与编译的源文件为 main.cpp
+</span></code></pre></div><p><code>CMAKE</code> 的最小配置需要你设置 <code>CMAKE</code> 的最小版本号，为项目取一个名字，编译成可执行文件(或者库)并指定需要参与编译的源文件。</p>
+<p>编写好了 <code>CMakeLists.txt</code> 就可以通过上一小节的知识进行构建了，但还需要准备一个 <code>main.cpp</code> 文件就行了。</p>
+<h3 id="设置变量">设置变量</h3>
+<p>在 <code>CMake</code> 中设置变量的语法使用 <code>set</code> ，来看个例子</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">name</span> <span class="s">cmake</span><span class="p">)</span> <span class="c"># 把 cmake 赋值给 name
+</span><span class="c"></span><span class="nb">message</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span><span class="p">)</span> <span class="c"># 打印 name 的值
+</span></code></pre></div><p>设置变量挺简单的，在使用的时候通过 <code>${}</code> 来引用，我们可以用 <code>message</code> 来打印变量的值。</p>
+<p>变量区分大小写</p>
+<h3 id="预定义常量">预定义常量</h3>
+<p>我们可以自己定义变量，系统也内置来一些变量来方便我们的使用</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PROJECT_SOURCE_DIR</td>
+<td>项目的源代码所在的目录，最顶层的目录</td>
+</tr>
+<tr>
+<td>CMAKE_SOURCE_DIR</td>
+<td>项目的源代码所在的目录，也是最顶层目录</td>
+</tr>
+<tr>
+<td>CMAKE_CURRENT_SOURCE_DIR</td>
+<td>当前CMakeLists.txt所在的目录</td>
+</tr>
+<tr>
+<td>CMAKE_CURRENT_LIST_FILE</td>
+<td>当前CMakeLists.txt的完整路径</td>
+</tr>
+</tbody>
+</table>
+<h3 id="编译成可执行文件">编译成可执行文件</h3>
+<p>把要源码编译成可执行文件只需要使用 <code>add_executable</code> 函数，并指定名字和要参与编译的源文件就行。</p>
+<p>除此之外，我们还可以设置编译的类型为 <code>Debug</code> 还是 <code>Release</code> 。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># 设置构建类型为 Debug，也可以设置为 Release
+</span><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Debug</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>除了在 <code>CMakeLists.txt</code> 中指定编译类型，还可以通过命令行来指定，如下所示</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cmake .. -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
+</code></pre></div><p>其中 <code>-D</code> 表示定义变量并赋值，可以理解为 <code>definition</code></p>
+<h3 id="编译成库">编译成库</h3>
+<p>在 <code>Android</code> 开发中，我们通常使用 <code>C/C++</code> 来进行动态库的开发，而不是直接编译成可执行文件。来看个例子</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_library</span><span class="p">(</span><span class="c"># 设置库的名字
+</span><span class="c"></span>  <span class="s">native-lib</span>
+  <span class="c"># 设置库为动态库还是静态库，SHARED动态库，STATIC 静态库
+</span><span class="c"></span>  <span class="s">SHARED</span>
+  <span class="c"># 参与编译的源文件
+</span><span class="c"></span>  <span class="s">native-lib.cpp</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>编译成库文件使用 <code>add_library</code> 函数，需要指定库的名字并且要指定是动态库还是静态库，最后就是指定需要参与编译的源文件了。</p>
+<h3 id="添加第三方库">添加第三方库</h3>
+<p>在平时的开发中难免会用到第三方库，我们来看一下怎么添加第三方库的依赖</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_library</span><span class="p">(</span><span class="s">glfw</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">glfw</span> <span class="s">PROPERTIES</span> <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/lib/libglfw3.so</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>添加第三方库和编译第三方库一样使用 <code>add_library</code> 函数，不一样的是第三库使用的是导入的形式，不需要使用源码再进行编译一遍。</p>
+<p>不过第三方库需要指定 <code>so</code> 的位置，使用 <code>set_target_properties</code> 来指定导入路径这个属性。</p>
+<p>最后还需要把第三方库链接到我们自己的库中，使用 <code>target_include_directories</code> ，只需要把指定目标和要链接到目标的库就行。</p>
+<h3 id="添加头文件">添加头文件</h3>
+<p>在开发中我们常常会把头文件和源文件分开放，这样方便管理。分开放之后我们就需要告诉 <code>CMake</code> 去哪里查找头文件，通过 <code>include_directories</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p><code>include_directories</code> 相当于 <code>g++</code> 选项中的 <code>-I</code> 参数。</p>
+<h3 id="一次性添加所有源文件">一次性添加所有源文件</h3>
+<p>之前使用 <code>add_library</code> 或者 <code>add_executable</code> 都是在变量里直接写源文件的路径，文件少还好，文件多了那简直是噩梦。如果不小心删掉了，或者增加来非常容易遗忘，所以在 <code>CMake</code> 中可以通过 <code>AUX_SOURCE_DIRECTORY</code> 来一次性把指定目录下的源文件存在一个变量中。</p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s">.</span> <span class="s">SRC_LIST</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></code></pre></div><p>需要注意的是 <code>aux_source_directory</code> 不会遍历子目录</p>
+<h3 id="查找系统库">查找系统库</h3>
+<p>在做 <code>Android</code> 开发的时候， <code>Android</code> 系统本身也提供一些库，比如 <code>log</code> ，当我们需要的时候就可以直接使用，不需要再自己写一遍了。使用系统库的时候，先要查找一下在哪，通过 <code>find_library</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># 查找 log 库，把找到的库放到 log-lib 这个变量中
+</span><span class="c"></span><span class="nb">find_library</span><span class="p">(</span><span class="s">log-lib</span> <span class="s">log</span><span class="p">)</span><span class="err">
+</span></code></pre></div><h2 id="参考">参考</h2>
+<h3 id="cmake-tutorial-cmake-3-dot-19-dot-1-documentation"><a href="https://cmake.org/cmake/help/latest/guide/tutorial/index.html">CMake Tutorial — CMake 3.19.1 Documentation</a></h3>
+<h3 id="ttroy50-cmake-examples-useful-cmake-examples"><a href="https://github.com/ttroy50/cmake-examples">ttroy50/cmake-examples: Useful CMake Examples</a></h3>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://devbins.github.io/tags/c/c&#43;&#43;" role="button">C/C&#43;&#43; </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/cmake" role="button">CMake </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>dev.bins</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://devbins.github.io/post/cmake/" title="CMake基础">CMake基础</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://devbins.github.io/post/ccls/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>使用ccls作为C/C&#43;&#43;的补全方案</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
+												 前言
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8">
+												 基本使用
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%af%ad%e6%b3%95">
+												 语法
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%9f%ba%e6%9c%ac%e8%af%ad%e6%b3%95">
+												 基本语法
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae%e5%8f%98%e9%87%8f">
+												 设置变量
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%a2%84%e5%ae%9a%e4%b9%89%e5%b8%b8%e9%87%8f">
+												 预定义常量
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%bc%96%e8%af%91%e6%88%90%e5%8f%af%e6%89%a7%e8%a1%8c%e6%96%87%e4%bb%b6">
+												 编译成可执行文件
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%bc%96%e8%af%91%e6%88%90%e5%ba%93">
+												 编译成库
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b7%bb%e5%8a%a0%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93">
+												 添加第三方库
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%b7%bb%e5%8a%a0%e5%a4%b4%e6%96%87%e4%bb%b6">
+												 添加头文件
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%80%e6%ac%a1%e6%80%a7%e6%b7%bb%e5%8a%a0%e6%89%80%e6%9c%89%e6%ba%90%e6%96%87%e4%bb%b6">
+												 一次性添加所有源文件
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%9f%a5%e6%89%be%e7%b3%bb%e7%bb%9f%e5%ba%93">
+												 查找系统库
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#cmake-tutorial-cmake-3-dot-19-dot-1-documentation">
+												 CMake Tutorial — CMake 3.19.1 Documentation
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#ttroy50-cmake-examples-useful-cmake-examples">
+												 ttroy50/cmake-examples: Useful CMake Examples
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2020 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
