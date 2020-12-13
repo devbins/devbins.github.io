@@ -410,7 +410,7 @@ make install
 </span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
 </span></code></pre></div><p>添加第三方库和编译第三方库一样使用 <code>add_library</code> 函数，不一样的是第三库使用的是导入的形式，不需要使用源码再进行编译一遍。</p>
 <p>不过第三方库需要指定 <code>so</code> 的位置，使用 <code>set_target_properties</code> 来指定导入路径这个属性。</p>
-<p>最后还需要把第三方库链接到我们自己的库中，使用 <code>target_include_directories</code> ，只需要把指定目标和要链接到目标的库就行。</p>
+<p>最后还需要把第三方库链接到我们自己的库中，使用 <code>target_link_libraries</code> ，只需要把指定目标和要链接到目标的库就行。</p>
 <h3 id="添加头文件">添加头文件</h3>
 <p>在开发中我们常常会把头文件和源文件分开放，这样方便管理。分开放之后我们就需要告诉 <code>CMake</code> 去哪里查找头文件，通过 <code>include_directories</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
