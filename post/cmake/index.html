@@ -417,8 +417,8 @@ make install
 </span></code></pre></div><p><code>include_directories</code> 相当于 <code>g++</code> 选项中的 <code>-I</code> 参数。</p>
 <h3 id="一次性添加所有源文件">一次性添加所有源文件</h3>
 <p>之前使用 <code>add_library</code> 或者 <code>add_executable</code> 都是在变量里直接写源文件的路径，文件少还好，文件多了那简直是噩梦。如果不小心删掉了，或者增加来非常容易遗忘，所以在 <code>CMake</code> 中可以通过 <code>AUX_SOURCE_DIRECTORY</code> 来一次性把指定目录下的源文件存在一个变量中。</p>
-<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s">.</span> <span class="s">SRC_LIST</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
+<div class="highlight"><pre class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s">.</span> <span class="s">SRC_LIST</span><span class="p">)</span>  <span class="c"># 查找当前目录下的所有源文件，放到 SRC_LIST 中
+</span><span class="c"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
 </span></code></pre></div><p>需要注意的是 <code>aux_source_directory</code> 不会遍历子目录</p>
 <h3 id="查找系统库">查找系统库</h3>
