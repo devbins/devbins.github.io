@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="dev.bins">
+  <meta name="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。 可是我又不想把 macOS 给删除，毕竟还能用。有一种方案是通过 Boot Camp 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才">
+  
+  <meta property="og:title" content="把Manjaro安装到Macbook Pro的外置硬盘" />
+<meta property="og:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。 可是我又不想把 macOS 给删除，毕竟还能用。有一种方案是通过 Boot Camp 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://devbins.github.io/post/%E5%9C%A8macbook-pro%E4%B8%8A%E5%AE%89%E8%A3%85-manjaro-%E5%88%B0%E5%A4%96%E7%BD%AE%E7%A1%AC%E7%9B%98/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-13T00:00:00&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-13T00:00:00&#43;08:00" />
+
+
+
+  <title>
+  
+       把Manjaro安装到Macbook Pro的外置硬盘 | dev.bins 
+  
+  </title>
+
+  <link rel="canonical" href="https://devbins.github.io/post/%E5%9C%A8macbook-pro%E4%B8%8A%E5%AE%89%E8%A3%85-manjaro-%E5%88%B0%E5%A4%96%E7%BD%AE%E7%A1%AC%E7%9B%98/">
+
+  
+  
+
+  
+  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://devbins.github.io/images/fav.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+
+    
+	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
+      
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://devbins.github.io">
+          
+        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> dev.bins</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://devbins.github.io">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://devbins.github.io">
+          
+            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://devbins.github.io">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>dev.bins</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://devbins.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
+      
+        <li><a href="https://devbins.github.io/categories/manjaro"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Manjaro </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">把Manjaro安装到Macbook Pro的外置硬盘</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Jan 13, 2021</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>3 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://devbins.github.io/images/macmanjaro/mac-linux.jpg.webp" />
+    </div>
+  
+
+</div>
+
+
+
+          <div class="post-content markdown">
+            <h2 id="前言">前言</h2>
+<p><strong>在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。</strong></p>
+<p>随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。</p>
+<p>可是我又不想把 <code>macOS</code> 给删除，毕竟还能用。有一种方案是通过 <code>Boot Camp</code> 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才能装上，所以这条路不通。</p>
+<p>于是我就想在外置硬盘上安装，毕竟我曾经在一台电脑上装过黑苹果，Windows还有Linux。</p>
+<p>有了这个想法后，我就开始搜相关的教程，发现没有十分满意的，于是我就按我自己的想法开始折腾了，还成功了，便有了此文。希望对有同样需求的人能够有帮助。</p>
+<h2 id="需要准备的材料">需要准备的材料</h2>
+<ol>
+<li>Macbook Pro一台(我这里是Macbook Pro 2015)</li>
+<li>U盘一个，需要8G及以上的空间</li>
+<li>外置硬盘或者移动硬盘，最好是固态</li>
+</ol>
+<h2 id="刻录镜像">刻录镜像</h2>
+<p>刻录镜像之前，我们需要对U盘进行格式化，这里用到的工具是 SD Card Formatter，可以在 <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formatter官网</a>下载到。</p>
+<p>下载完成后安装好软件，然后打开，选择你的U盘，点击格式化就行了。</p>
+<p>U盘格式化好后，在<a href="https://manjaro.org/download/">Manjaro官网</a>中下载镜像，通过如下命令进行刻录镜像。刻录的时间很长，需要好几个小时，耐心等待一下</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo dd <span class="nv">bs</span><span class="o">=</span>4m <span class="k">if</span><span class="o">=</span>~/Downloads/manjaro-kde-20.2.1-210103-linux59.iso <span class="nv">of</span><span class="o">=</span>/dev/disk2 <span class="nv">conv</span><span class="o">=</span>sync
+</code></pre></div><ul>
+<li>其中 <code>if</code> 是输入文件，也就是我们的镜像所在的路径，需要替换成你本地的下载路径</li>
+<li><code>of</code> 是我们的U盘，可以通过 <code>diskutil list</code> 来查看 U盘所在路径，一次不插入U盘，然后看插入U盘的，多出来的就是U盘的路径。</li>
+</ul>
+<h2 id="安装">安装</h2>
+<p>先把电脑关机，让后按下 option (alt)键，出现两个启动选项一个是Mactonish，另一个是 EFI Boot，选择EFI Boot回车后启动
+<img src="https://devbins.github.io/images/macmanjaro/20210228_161048_CHuNEt.png" alt="">
+来到如下界面，回车进入安装桌面
+<img src="https://devbins.github.io/images/macmanjaro/20210228_143151_4F6WYr.png" alt=""></p>
+<p><img src="https://devbins.github.io/images/macmanjaro/20210228_145631_FdPF34.png" alt="">
+点击中间的 <code>Launch installer</code> 然后一路下一步, 中间的选项可以根据自己的需要做适当的调整，直到来到分区界面，如下所示
+<img src="https://devbins.github.io/images/macmanjaro/20210228_145449_YgjD0k.png" alt="">
+在分区界面要注意的是在选择存储器中一定要选择你的外置硬盘，可别选错了。</p>
+<p>在接下来就是进行磁盘分区了，如果你是高手那么按照自己的要求来分就行来，如果不是很熟练就使用默认的就行了。然后一路下一步，输入一些用户名和密码之类的。</p>
+<p>然后点击安装，等待安装好，这一步稍微快一些，需要半个小时左右。安装完成后关机，拔掉U盘。</p>
+<p>然后按下 option (alt)键，还是出现两个启动选项一个是Mactonish，另一个是 EFI Boot，这个EFI Boot就是移动硬盘上的了，选择EFI Boot回车后启动，就能进入到 <code>Manjaro</code> 了。</p>
+<h2 id="总结">总结</h2>
+<p>在 <code>Mac</code> 上装上了 <code>Linux</code> 现在想用哪个就用哪个，对于性能要求比较高的，我会切换到外置硬盘上，一般使用我就会在虚拟机上使用了。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://florisvanbreugel.wordpress.com/2018/03/23/installing-ubuntu-on-an-external-ssd-drive-on-a-macbook/">Installing Ubuntu on an external SSD drive on a Macbook – Floris van Breugel</a></p>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://devbins.github.io/tags/linux" role="button">Linux </a></li>
+      
+    
+      <li><a href="https://devbins.github.io/tags/manjaro" role="button">Manjaro </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          
+
+
+          
+          <div>
+    <ul class="post-copyright">
+        <li class="post-copyright-author">
+            <strong>本文作者： </strong>dev.bins</li>
+        <li class="post-copyright-link">
+            <strong>本文链接：</strong>
+            <a href="https://devbins.github.io/post/%E5%9C%A8macbook-pro%E4%B8%8A%E5%AE%89%E8%A3%85-manjaro-%E5%88%B0%E5%A4%96%E7%BD%AE%E7%A1%AC%E7%9B%98/" title="把Manjaro安装到Macbook Pro的外置硬盘">把Manjaro安装到Macbook Pro的外置硬盘</a>
+        </li>
+        <li class="post-copyright-license">
+            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+    </ul>
+
+</div>
+
+
+          
+          <div class="row pt-3 np">
+            <div class="col-md-6">
+              
+                <a href=https://devbins.github.io/post/cmake/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>CMake基础</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://devbins.github.io/post/construct/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>C&#43;&#43;5大构造函数</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
+												 前言
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87%e7%9a%84%e6%9d%90%e6%96%99">
+												 需要准备的材料
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%88%bb%e5%bd%95%e9%95%9c%e5%83%8f">
+												 刻录镜像
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
+												 安装
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
+												 总结
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
+												 参考
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    const gitalk = new Gitalk({
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: "devbins.github.io",
+        owner: 'devbins',
+        admin: ["devbins"],
+        id: location.pathname, 
+        distractionFreeMode:  false  
+    })
+
+    gitalk.render('gitalk-container')
+</script>
+
+
+
+
+  </main>
+  
+
+
+
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
