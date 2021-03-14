@@ -83,7 +83,7 @@ Photo by Thomas Martinsen on Unsplash
 
   
     
-    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
   
 
 </head>
@@ -352,7 +352,7 @@ Photo by Thomas Martinsen on Unsplash
 <p>这里有一个<a href="http://www.plantuml.com/plantuml/">在线体验</a>的网址，有兴趣可以点击链接，前去体验。</p>
 <h2 id="安装">安装</h2>
 <p>由于我用的 <code>Emacs</code> 是 <code>Spacemacs</code> 所以我只要在 <code>init.el</code> 中加入如下配置，并下载好<a href="http://plantuml.com/zh/download">PlantUML的jar包</a>放到家目录下，重启之后等待包安装好就可以用了。当然你还需要安装 <code>Java</code> 环境，毕竟这是个 <code>Java</code> 写的工具。</p>
-<div class="highlight"><pre class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">setq-default</span> <span class="nv">dotspacemacs-configuration-layers</span> <span class="o">&#39;</span><span class="p">((</span><span class="nv">plantuml</span> <span class="nb">:variables</span> <span class="nv">org-plantuml-jar-path</span> <span class="s">&#34;~/plantUml.jar&#34;</span><span class="p">)))</span>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">(setq-default dotspacemacs-configuration-layers &#39;((plantuml :variables org-plantuml-jar-path &#34;~/plantUml.jar&#34;)))
 </code></pre></div><p>除了在 <code>Emacs</code> 中使用，也可以在其他文本编辑其中使用。比如： <code>Vim</code> 、 <code>VSCode</code> 、 <code>Sublime</code> 、 <code>Notepad++</code> 中使用。</p>
 <h2 id="类之间的关系">类之间的关系</h2>
 <p>我们先来看一下类之间的关系在 <code>PlantUML</code> 中是怎么画的</p>
@@ -393,23 +393,19 @@ Photo by Thomas Martinsen on Unsplash
 <p>我们就根据上表，来画一下类图。这里顺便提一下，如果要类之间的关系加上标识，可以在行尾加上 <code>:</code> 和标识。</p>
 <p>由于使用到了中文所以要加上 <code>-charset utf-8</code> 不然中文会出现乱码，我们给当前的代码块指定一个输出的文件，以便查看。</p>
 <p>所以 <code>Org-Babel</code> 要用如下格式，下文全部采用这种格式，就不在每个代码中列出了。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">#+begin_src plantuml :file ./uml.jpg :cmdline -charset utf-8 :exports both</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">#+begin_src sh :file ./uml.jpg :cmdline -charset utf-8 :exports both</span>
 这里填写PlantUML的相关语句
 <span class="c1">#+end_src</span>
 </code></pre></div><p>来看一下类图之间的关系是怎么画的，写完之后使用快捷键 <code>C-c C-c</code> 来生成图片，如下图</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-Class1 &lt;|-- Class2 : 继承
-Class1 &lt;|.. Class2 : 实现
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+Class1 &lt;<span class="p">|</span>-- Class2 : 继承
+Class1 &lt;<span class="p">|</span>.. Class2 : 实现
 Class1 &lt;.. Class2 : 依赖
 Class1 &lt;-- Class2 : 关联
 Class1 o-- Class2 : 聚合
 Class1 *-- Class2 : 组合
 @enduml
-</code></pre><figure>
-    <img src="https://devbins.github.io/images/plantuml/uml.jpg"/> 
-</figure>
-
-<p>可以看到在 <code>PlantUML</code> 中使用 <code>@startuml</code> 开始， <code>@enduml</code> 结尾，中间就是各个关系之间表示了。</p>
+</code></pre></div><p>可以看到在 <code>PlantUML</code> 中使用 <code>@startuml</code> 开始， <code>@enduml</code> 结尾，中间就是各个关系之间表示了。</p>
 <figure>
     <img src="https://devbins.github.io/images/plantuml/uml.jpg"/> 
 </figure>
@@ -418,40 +414,40 @@ Class1 *-- Class2 : 组合
 <p>看完了类之间关系的画法，来看看成员变量是怎么画的</p>
 <h3 id="方法一">方法一</h3>
 <p>通过在类名后面添加成员变量或者方法，使用 <code>:</code> 分割，系统会根据有没有 <code>()</code> 来判断是成员变量还是方法。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-ArrayList : Object[] elementData
-ArrayList : void size()
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+ArrayList : Object<span class="o">[]</span> elementData
+ArrayList : void size<span class="o">()</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/field.png"/> 
 </figure>
 
 <h3 id="方法二">方法二</h3>
 <p>使用 <code>{}</code> 把成员变量和方法括起来，成员变量的类型可以写在字段名前面，也可以写在字段名后面，写在后面的要用 <code>:</code> 分割。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-class Dummy {
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+class Dummy <span class="o">{</span>
   String data
-  void methods()
-}
+  void methods<span class="o">()</span>
+<span class="o">}</span>
 
-class Flight {
+class Flight <span class="o">{</span>
    flightNumber : Integer
    departureTime : Date
-}
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/field2.png"/> 
 </figure>
 
 <h3 id="方法三">方法三</h3>
 <p>显示的使用 <code>{field}</code> 来指定成员变量，或者 <code>{method}</code> 指定方法，不过不建议使用这种方式，这样会把成员变量和方法搞混。因为这样可以把字段设置为方法，也能把方法设置为字段。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-class Dummy {
-  {field} A field (despite parentheses)
-  {method} Some method
-}
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+class Dummy <span class="o">{</span>
+  <span class="o">{</span>field<span class="o">}</span> A field <span class="o">(</span>despite parentheses<span class="o">)</span>
+  <span class="o">{</span>method<span class="o">}</span> Some method
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/field3.png"/> 
 </figure>
 
@@ -483,89 +479,89 @@ class Dummy {
 </tr>
 </tbody>
 </table>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-class Visible{
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+class Visible<span class="o">{</span>
  -field1
- #field2
- ~method1()
- +method2()
-}
+ <span class="c1">#field2</span>
+ ~method1<span class="o">()</span>
+ +method2<span class="o">()</span>
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/access.png"/> 
 </figure>
 
 <p>如果不想用图形符号表示可见性，可以通过 <code>skinparam classAttributeIconSize 0</code> 来禁用</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-skinparam classAttributeIconSize 0
-class Visible{
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+skinparam classAttributeIconSize <span class="m">0</span>
+class Visible<span class="o">{</span>
  -field1
- #field2
- ~method1()
- +method2()
-}
+ <span class="c1">#field2</span>
+ ~method1<span class="o">()</span>
+ +method2<span class="o">()</span>
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/access1.png"/> 
 </figure>
 
 <h2 id="抽象与静态的表示">抽象与静态的表示</h2>
 <p>除了可见性之外， <code>Java</code> 还有抽象类，静态方法。我们可以通过通过 <code>{abstract}</code> 来修饰抽象方法或属性。通过 <code>{static}</code> 修饰静态方法或属性。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-class Dummy {
-  {static} String id
-  {abstract} void methods()
-}
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+class Dummy <span class="o">{</span>
+  <span class="o">{</span>static<span class="o">}</span> String id
+  <span class="o">{</span>abstract<span class="o">}</span> void methods<span class="o">()</span>
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/abstract.png"/> 
 </figure>
 
 <h2 id="接口-注解-枚举的表示">接口、注解、枚举的表示</h2>
 <p>除了类之外，还有接口、注解、枚举，它们分别用 <code>interface</code> 、 <code>annotation</code> 、 <code>enum</code> 表示</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 abstract class AbstractList
 abstract AbstractCollection
 interface List
 interface Collection
 
-List &lt;|-- AbstractList
-Collection &lt;|-- AbstractCollection
+List &lt;<span class="p">|</span>-- AbstractList
+Collection &lt;<span class="p">|</span>-- AbstractCollection
 
-Collection &lt;|-- List
-AbstractCollection &lt;|-- AbstractList
-AbstractList &lt;|-- ArrayList
+Collection &lt;<span class="p">|</span>-- List
+AbstractCollection &lt;<span class="p">|</span>-- AbstractList
+AbstractList &lt;<span class="p">|</span>-- ArrayList
 
-class ArrayList {
-  Object[] elementData
-  size()
-}
+class ArrayList <span class="o">{</span>
+  Object<span class="o">[]</span> elementData
+  size<span class="o">()</span>
+<span class="o">}</span>
 
-enum TimeUnit {
+enum TimeUnit <span class="o">{</span>
   DAYS
   HOURS
   MINUTES
-}
+<span class="o">}</span>
 
 annotation SuppressWarnings
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/interface.png"/> 
 </figure>
 
 <h2 id="包">包</h2>
 <p>包在 <code>Java</code> 中是一个重要的概念，我们不会把所有的类都放到一个包下面（简单的只有几个类除外），这就要求我们需要区分不同类来自哪个包。或者有一种情况是同名的类在不同的包中，有了包才能比较直观看出这个包有哪些类并且能够区分开。包在 <code>PlantUML</code> 中通过 <code>package</code> 关键字来标识。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
-package &quot;Classic Collections&quot; #DDDDDD {
-  Object &lt;|-- ArrayList
-}
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
+package <span class="s2">&#34;Classic Collections&#34;</span> <span class="c1">#DDDDDD {</span>
+  Object &lt;<span class="p">|</span>-- ArrayList
+<span class="o">}</span>
 
-package net.sourceforge.plantuml {
-  Object &lt;|-- Demo1
+package net.sourceforge.plantuml <span class="o">{</span>
+  Object &lt;<span class="p">|</span>-- Demo1
   Demo1 *- Demo2
-}
+<span class="o">}</span>
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/package.png"/> 
 </figure>
 
@@ -573,32 +569,32 @@ package net.sourceforge.plantuml {
 <p>使用文字来画 <code>UML</code> 图有一个很大的限制是不能直接拖拽它们之间的方向，这就需要提供摆放这些类位置的功能。 <code>PlantUML</code> 主要提供了如下两种方法。</p>
 <h3 id="方法一">方法一</h3>
 <p>类之间默认使用 <code>--</code> 画竖线，画横线使用 <code>-</code> 。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 Room o- Student
 Room *-- Chair
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/arrow1.png"/> 
 </figure>
 
 <p>我们可以调换 <code>Romm</code> 和 <code>Student</code> 的顺序来达到摆放的目的。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 Student -o Room
 Chair --* Room
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/arrow2.png"/> 
 </figure>
 
 <h3 id="方法二">方法二</h3>
 <p>使用箭头内部关键字来改变方向，也就是上下左右了。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 foo -left-&gt; dummyLeft
 foo -right-&gt; dummyRight
 foo -up-&gt; dummyUp
 foo -down-&gt; dummyDown
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/arrow3.png"/> 
 </figure>
 
@@ -606,17 +602,17 @@ foo -down-&gt; dummyDown
 <p>有时候我们想要对一个类或者其他东西加一些说明，备注一些信息，我们就会需要用到 <code>PlantUML</code> 的备注功能，下面介绍三种加备注的方法。</p>
 <h3 id="在类的末尾添加备注">在类的末尾添加备注</h3>
 <p>我们可以在一个类的末尾通过 <code>note left: xxx</code> 为其添加一个在左边的备注。在上边、右边、下边分别是 <code>note top: xxx</code> 、 <code>note right: xxx</code> 、 <code>note bottom: xxx</code> 。这种方式比较适合只有一个方向上需要添加备注的，如果所有方向都需要备注使用这种方式其实会乱掉，它会相对前一条进行位置的摆放。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 class Foo
 note left: 左边的备注
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/note1.png"/> 
 </figure>
 
 <h3 id="为具体的类添加备注">为具体的类添加备注</h3>
 <p>当 <code>UML</code> 中的类有多个的时候，我们需要为某个具体的类添加备注，通过添加 <code>note left of xxx</code> 来在类的某个方向上添加备注。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 class Object
 
 note left of Object : Object 左边的备注
@@ -625,17 +621,17 @@ note right of Object : Object 右边的备注
 note bottom of Object : Object 下边的备注
 
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/note2.png"/> 
 </figure>
 
 <h3 id="浮动的备注">浮动的备注</h3>
 <p>有时候我们可能需要一个独立的浮动备注，不和任何类相关，这时候可以使用 <code>note</code> 来表示。这里有一点需要注意的是最后面需要用 <code>as xxx</code> 取一个别名，不然会报错。</p>
-<pre><code class="language-plantuml" data-lang="plantuml">@startuml
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">@startuml
 class Foo
-note &quot;浮动的备注&quot; as N1
+note <span class="s2">&#34;浮动的备注&#34;</span> as N1
 @enduml
-</code></pre><figure>
+</code></pre></div><figure>
     <img src="https://devbins.github.io/images/plantuml/notefloat.png"/> 
 </figure>
 
@@ -1327,14 +1323,18 @@ note &quot;浮动的备注&quot; as N1
 
 
 
-  
-  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
   <script>hljs.initHighlightingOnLoad();</script>
 
 
 
 
- 
+
   <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
   <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
 
@@ -1355,9 +1355,6 @@ note &quot;浮动的备注&quot; as N1
   
   new WOW().init();
 </script>
-
-
-
 
   </body>
 </html>

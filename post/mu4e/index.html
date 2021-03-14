@@ -81,7 +81,7 @@
 
   
     
-    <link rel="stylesheet" href="https://devbins.github.io/css/vendors/highlight/androidstudio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
   
 
 </head>
@@ -486,29 +486,29 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mu index --rebuild --maildir<span class="o">=</span>~/mails <span class="c1"># 目录要根据自己目录修改</span>
 </code></pre></div><h2 id="emacs-配置">Emacs 配置</h2>
 <h3 id="启用-mu4e-layer">启用 mu4e layer</h3>
-<p>在 Spacemacs= 中启用 <code>mu4e</code> layer</p>
-<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">mu4e</span> <span class="ss">:variables</span> <span class="nv">mu4e-installation-path</span> <span class="s">&#34;/usr/share/Emacs/site-lisp&#34;</span>
-      <span class="nv">mu4e-enable-mode-line</span> <span class="no">t</span>
-      <span class="nv">mu4e-enable-async-operations</span> <span class="no">t</span>
-      <span class="nv">mu4e-enable-notifications</span> <span class="no">t</span><span class="p">)</span>
+<p>在 <code>Spacemacs</code> 中启用 <code>mu4e</code> layer</p>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">(mu4e :variables mu4e-installation-path &#34;/usr/share/Emacs/site-lisp&#34;
+      mu4e-enable-mode-line t
+      mu4e-enable-async-operations t
+      mu4e-enable-notifications t)
 </code></pre></div><h3 id="配置-mu4e">配置 mu4e</h3>
 <p>在 <code>user-config</code> 中增加 <code>mu4e</code> 配置</p>
-<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">with-eval-after-load</span> <span class="ss">&#39;mu4e-alert</span>
-  <span class="c1">;; Enable Desktop notifications</span>
-  <span class="p">(</span><span class="nv">mu4e-alert-set-default-style</span> <span class="ss">&#39;notifier</span><span class="p">))</span> <span class="c1">; For linux</span>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">(with-eval-after-load &#39;mu4e-alert
+  ;; Enable Desktop notifications
+  (mu4e-alert-set-default-style &#39;notifier)) ; For linux
 
-<span class="c1">;;; Set up some common mu4e variables</span>
-<span class="p">(</span><span class="k">setq</span> <span class="nv">mu4e-maildir</span> <span class="s">&#34;~/mails&#34;</span>
-      <span class="nv">mu4e-trash-folder</span> <span class="s">&#34;/已删除&#34;</span>
-      <span class="nv">mu4e-refile-folder</span> <span class="s">&#34;/Archive&#34;</span>
-      <span class="nv">mu4e-sent-folder</span> <span class="s">&#34;/已发送&#34;</span>
-      <span class="nv">mu4e-drafts-folder</span> <span class="s">&#34;/草稿箱&#34;</span>
-      <span class="c1">;; sync email from imap server</span>
-      <span class="nv">mu4e-get-mail-command</span> <span class="s">&#34;offlineimap&#34;</span>
-      <span class="nv">mu4e-update-interval</span> <span class="mi">300</span>
-      <span class="nv">mu4e-compose-signature-auto-include</span> <span class="no">nil</span>
-      <span class="nv">mu4e-view-show-images</span> <span class="no">t</span>
-      <span class="nv">mu4e-view-show-addresses</span> <span class="no">t</span><span class="p">)</span>
+;;; Set up some common mu4e variables
+(setq mu4e-maildir &#34;~/mails&#34;
+      mu4e-trash-folder &#34;/已删除&#34;
+      mu4e-refile-folder &#34;/Archive&#34;
+      mu4e-sent-folder &#34;/已发送&#34;
+      mu4e-drafts-folder &#34;/草稿箱&#34;
+      ;; sync email from imap server
+      mu4e-get-mail-command &#34;offlineimap&#34;
+      mu4e-update-interval 300
+      mu4e-compose-signature-auto-include nil
+      mu4e-view-show-images t
+      mu4e-view-show-addresses t)
 </code></pre></div><h2 id="使用">使用</h2>
 <h3 id="打开-mu4e-使用快捷键-spc-a-m">打开 mu4e 使用快捷键 <code>SPC a M</code></h3>
 <figure>
@@ -1070,14 +1070,18 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 
 
 
-  
-  <script src="https://devbins.github.io/js/vendors/highlight.pack.js"> </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
   <script>hljs.initHighlightingOnLoad();</script>
 
 
 
 
- 
+
   <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
   <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
 
@@ -1098,9 +1102,6 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
   
   new WOW().init();
 </script>
-
-
-
 
   </body>
 </html>
