@@ -284,8 +284,11 @@
 <li>管道只能在具有公共祖先的两个进程之间使用。通常配合 <code>fork</code> 一起使用</li>
 <li>管道是半双工的（数据只能在一个方向上流动）。当然有些系统提供全双工的管道。</li>
 </ol>
-<p>当我们调用 <code>fork</code> 的时候，描述符如下所示
-<img src="/images/pipe/pipe.png" alt=""></p>
+<p>当我们调用 <code>fork</code> 的时候，描述符如下所示</p>
+<figure>
+    <img src="/images/pipe/pipe.png"/> 
+</figure>
+
 <p><code>fork</code> 之后我们可以决定数据的流向，是从父进程流向子进程还是从子进程流向父进程。上面的例子关闭了父进程的读描述符和子进程的写描述符，所以数据从父进程流向子进程，如下图所示。
 <img src="/images/pipe/pipe_fork.png" alt=""></p>
 <p>在《UNIX环境高级编程》一书中提到，单个进程中的管道几乎没有任何用处。然而最近读Android源码发现许多地方用到的就是单个进程的管道。</p>
