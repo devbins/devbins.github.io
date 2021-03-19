@@ -1,341 +1,191 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="Photo by Markus Spiske on Unsplash
-前言
-Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文件是 Java 虚拟机能够识别加载的文件。有了这个字节码文件 Java 实现一次编写到处运行才成为可能。
-然而我们平时都是写 .java 文件，很少接触 .class 文件，今天就来看看 .class 文件中有什么秘密，它长什么样子。">
-  
-  <meta property="og:title" content="Java Class 探秘" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Java Class 探秘 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="Photo by Markus Spiske on Unsplash
+前言 Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文件是 Java 虚拟机能够识别加载的文件。有了这个字节码文件 Java 实现一次编写到处运行才成为可能。
+然而我们平时都是写 .java 文件，很少接触 .class 文件，今天就来看看 .class 文件中有什么秘密，它长什么样子。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/class/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Java Class 探秘" />
 <meta property="og:description" content="Photo by Markus Spiske on Unsplash
 前言
 Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文件是 Java 虚拟机能够识别加载的文件。有了这个字节码文件 Java 实现一次编写到处运行才成为可能。
 然而我们平时都是写 .java 文件，很少接触 .class 文件，今天就来看看 .class 文件中有什么秘密，它长什么样子。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/class/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/class/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-04-17T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2020-04-17T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="Java Class 探秘">
+<meta itemprop="description" content="Photo by Markus Spiske on Unsplash
+前言
+Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文件是 Java 虚拟机能够识别加载的文件。有了这个字节码文件 Java 实现一次编写到处运行才成为可能。
+然而我们平时都是写 .java 文件，很少接触 .class 文件，今天就来看看 .class 文件中有什么秘密，它长什么样子。"><meta itemprop="datePublished" content="2020-04-17T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-04-17T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="2723">
+<meta itemprop="keywords" content="Java," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java Class 探秘"/>
+<meta name="twitter:description" content="Photo by Markus Spiske on Unsplash
+前言
+Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文件是 Java 虚拟机能够识别加载的文件。有了这个字节码文件 Java 实现一次编写到处运行才成为可能。
+然而我们平时都是写 .java 文件，很少接触 .class 文件，今天就来看看 .class 文件中有什么秘密，它长什么样子。"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       Java Class 探秘 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/class/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/java"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Java </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">Java Class 探秘</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Apr 17, 2020</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>6 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/code.jpg" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <p>Photo by Markus Spiske on Unsplash</p>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Java Class 探秘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-17 </span>
+        <div class="post-category">
+            <a href="/categories/java/"> Java </a>
+            </div>
+          <span class="more-meta"> 约 2723 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#class-内部数据结构">class 内部数据结构</a>
+      <ul>
+        <li><a href="#无符号数">无符号数</a></li>
+        <li><a href="#表">表</a></li>
+      </ul>
+    </li>
+    <li><a href="#class-文件结构">class 文件结构</a>
+      <ul>
+        <li><a href="#魔术数-magic-number">魔术数（magic number）</a></li>
+        <li><a href="#版本号">版本号</a></li>
+        <li><a href="#常量池">常量池</a></li>
+        <li><a href="#访问标志">访问标志</a></li>
+        <li><a href="#类索引-父类索引-接口索引计数器">类索引、父类索引、接口索引计数器</a></li>
+        <li><a href="#字段表">字段表</a></li>
+        <li><a href="#方法表">方法表</a></li>
+        <li><a href="#属性表">属性表</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Photo by Markus Spiske on Unsplash</p>
 <h2 id="前言">前言</h2>
 <p><code>Java</code> 开发都知道 <code>.java</code> 文件编译后得到的是 <code>.class</code> 文件，这个文件是 <code>Java</code> 虚拟机能够识别加载的文件。有了这个字节码文件 <code>Java</code> 实现一次编写到处运行才成为可能。</p>
 <p>然而我们平时都是写 <code>.java</code> 文件，很少接触 <code>.class</code> 文件，今天就来看看 <code>.class</code> 文件中有什么秘密，它长什么样子。</p>
@@ -347,7 +197,7 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 <p>表由多个无符号数或者其他表作为数据项构成的符合数据类型。 <code>class</code> 中所有的表都是以 <code>info</code> 结尾。</p>
 <h2 id="class-文件结构">class 文件结构</h2>
 <p>我们把 <code>Java</code> 文件编译成字节码之后，会按照下面所示的规则排列好
-<img src="https://devbins.github.io/images/jvm/class_struct.png" alt="">
+<img src="/images/jvm/class_struct.png" alt="">
 它们的数据类型如下所示</p>
 <table>
 <thead>
@@ -458,7 +308,22 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </tbody>
 </table>
 <p>我们把如下文件编译成字节码</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">HelloWorld</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">HelloWorld</span>
 <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
     <span class="o">{</span>
@@ -469,8 +334,43 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
         <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><p>把编译好的 <code>HelloWorld.class</code> 在 <code>Emacs</code> 中使用 <code>hexl-mode</code> 打开，如下所示。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">cafe</span> <span class="n">babe</span> <span class="mo">0000</span> <span class="mo">0034</span> <span class="mf">001f</span> <span class="mi">0</span><span class="n">a00</span> <span class="mo">0600</span> <span class="mi">1109</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>把编译好的 <code>HelloWorld.class</code> 在 <code>Emacs</code> 中使用 <code>hexl-mode</code> 打开，如下所示。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">cafe</span> <span class="n">babe</span> <span class="mo">0000</span> <span class="mo">0034</span> <span class="mf">001f</span> <span class="mi">0</span><span class="n">a00</span> <span class="mo">0600</span> <span class="mi">1109</span>
 <span class="mo">0012</span> <span class="mo">0013</span> <span class="mi">0</span><span class="n">a00</span> <span class="mo">0500</span> <span class="mi">140</span><span class="n">a</span> <span class="mo">0015</span> <span class="mo">0016</span> <span class="mo">0700</span>
 <span class="mi">1707</span> <span class="mo">001</span><span class="mi">8</span> <span class="mo">0100</span> <span class="mo">063</span><span class="n">c</span> <span class="mi">696</span><span class="n">e</span> <span class="mi">6974</span> <span class="mf">3e01</span> <span class="mo">0003</span>
 <span class="mi">2829</span> <span class="mi">5601</span> <span class="mo">0004</span> <span class="mf">436f</span> <span class="mi">6465</span> <span class="mo">0100</span> <span class="mf">0f</span><span class="mi">4</span><span class="n">c</span> <span class="mi">696</span><span class="n">e</span>
@@ -499,7 +399,9 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 <span class="mo">000</span><span class="mi">9</span> <span class="mo">0000</span> <span class="mo">001</span><span class="n">c</span> <span class="mo">0002</span> <span class="mo">0002</span> <span class="mo">0000</span> <span class="mo">0004</span> <span class="mi">1</span><span class="n">a1b</span>
 <span class="mi">60</span><span class="n">ac</span> <span class="mo">0000</span> <span class="mo">0001</span> <span class="mo">000</span><span class="n">a</span> <span class="mo">0000</span> <span class="mo">0006</span> <span class="mo">0001</span> <span class="mo">0000</span>
 <span class="mo">000</span><span class="mi">9</span> <span class="mo">0001</span> <span class="mf">000f</span> <span class="mo">0000</span> <span class="mo">0002</span> <span class="mo">0010</span>
-</code></pre></div><h3 id="魔术数-magic-number">魔术数（magic number）</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="魔术数-magic-number">魔术数（magic number）</h3>
 <p><code>Java</code> 中的前4个字节是 <code>cafe babe</code> ，也就是魔术数，表示的是可以被 <code>Java</code> 虚拟机执行的。如果不是以这个开头虚拟机就不会加载这个文件。</p>
 <h3 id="版本号">版本号</h3>
 <p>继魔术数之后是 <code>class</code> 文件的版本号，为 <code>00 00 00 34</code> 分为次版本号(minor version)和主版本号(major version)。也就是前面两个字节是次版本号，后面两个自己是主版本号。</p>
@@ -592,20 +494,55 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </table>
 <p>常量池中有这么多的表，所以在每个表中都有一个 <code>u1</code> 类型的 <code>tag</code> 用来标识是哪个表。</p>
 <p>我们来看下 <code>CONSTANT_Class_info</code> 表的结构</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">table</span> <span class="n">CONSTANT_Class_info</span><span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">table</span> <span class="n">CONSTANT_Class_info</span><span class="o">{</span>
     <span class="n">u1</span> <span class="n">tag</span> <span class="o">=</span> <span class="n">7</span><span class="o">;</span>
     <span class="n">u2</span> <span class="n">name_index</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p>我们接着往下看第一个常量， 他的 <code>tag</code> 是 <code>0a</code> 转换成 10 进制是10，从上面的表中可以知道， <code>tag</code> 为 10 的是 <code>CONSTANT_MethodRef_info</code> ，它的结构是</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Methodref_info</span><span class="o">{</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们接着往下看第一个常量， 他的 <code>tag</code> 是 <code>0a</code> 转换成 10 进制是10，从上面的表中可以知道， <code>tag</code> 为 10 的是 <code>CONSTANT_MethodRef_info</code> ，它的结构是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Methodref_info</span><span class="o">{</span>
     <span class="n">u1</span> <span class="n">tag</span><span class="o">=</span><span class="n">10</span><span class="o">;</span>
     <span class="n">u2</span> <span class="n">class_index</span><span class="o">;</span>
     <span class="n">u2</span> <span class="n">name_type_index</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p>其中 <code>class_index</code> 指的是方法所属的类，占2个字节，也就是接来下的 <code>0006</code> 转换成10进制等于6，在常量池中的索引为6。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>class_index</code> 指的是方法所属的类，占2个字节，也就是接来下的 <code>0006</code> 转换成10进制等于6，在常量池中的索引为6。</p>
 <p><code>name_type_index</code> 指的是方法的名称和类型，也是占两个字节，也就是 <code>0011</code> ，转换成10进制等于 17，在常量池索引为 17 的地方。</p>
 <p>单纯从16进制的 class 文件中很难看出来是什么，我们通过 <code>javap -v HelloWorld.class</code> 得到结果如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Constant</span> <span class="n">pool</span><span class="o">:</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Constant</span> <span class="n">pool</span><span class="o">:</span>
    <span class="err">#</span><span class="n">1</span> <span class="o">=</span> <span class="n">Methodref</span>          <span class="err">#</span><span class="n">6</span><span class="o">.</span><span class="err">#</span><span class="n">17</span>         <span class="c1">// java/lang/Object.&#34;&lt;init&gt;&#34;:()V
 </span><span class="c1"></span>   <span class="c1">// ...
 </span><span class="c1"></span>   <span class="err">#</span><span class="n">6</span> <span class="o">=</span> <span class="n">Class</span>              <span class="err">#</span><span class="n">24</span>            <span class="c1">// java/lang/Object
@@ -615,7 +552,9 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </span><span class="c1"></span>  <span class="err">#</span><span class="n">17</span> <span class="o">=</span> <span class="n">NameAndType</span>        <span class="err">#</span><span class="n">7</span><span class="o">:</span><span class="err">#</span><span class="n">8</span>          <span class="c1">// &#34;&lt;init&gt;&#34;:()V
 </span><span class="c1"></span>  <span class="c1">// ...
 </span><span class="c1"></span>  <span class="err">#</span><span class="n">24</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="n">java</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span>
-</code></pre></div><p>这样就非常清楚能看出来常量池中第一个是索引是 <code>Object</code> 的构造方法。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>这样就非常清楚能看出来常量池中第一个是索引是 <code>Object</code> 的构造方法。</p>
 <h3 id="访问标志">访问标志</h3>
 <p>字节码中的访问标识有如下几种</p>
 <table>
@@ -665,24 +604,45 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </tbody>
 </table>
 <p>字节码的访问标识在常量池之后，占两个字节。如下所示
-<img src="https://devbins.github.io/images/jvm/class_access_flag.png" alt=""></p>
+<img src="/images/jvm/class_access_flag.png" alt=""></p>
 <h3 id="类索引-父类索引-接口索引计数器">类索引、父类索引、接口索引计数器</h3>
 <p>访问标识之后就是类索引、父类索引和接口索引计数器。由于 <code>Java</code> 是单继承，可以实现多个接口所以接口要有一个计数器来确定有多少个接口。</p>
 <p>可以看到在访问标识之后类索引就是 <code>0005</code> ，父类索引是 <code>0006</code> ，接口索引计数器是 <code>0000</code> 也就是没有实现接口。</p>
 <p>在常量池中 <code>0005</code> 和 <code>0006</code> 分别是 <code>HelloWorld</code> 和 <code>Object</code> ，从字节码中看出 <code>Object</code> 是所有类的父类。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">5</span> <span class="o">=</span> <span class="n">Class</span>              <span class="err">#</span><span class="n">23</span>            <span class="c1">// HelloWorld
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">5</span> <span class="o">=</span> <span class="n">Class</span>              <span class="err">#</span><span class="n">23</span>            <span class="c1">// HelloWorld
 </span><span class="c1"></span><span class="err">#</span><span class="n">6</span> <span class="o">=</span> <span class="n">Class</span>              <span class="err">#</span><span class="n">24</span>            <span class="c1">// java/lang/Object
-</span></code></pre></div><h3 id="字段表">字段表</h3>
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="字段表">字段表</h3>
 <p>字段表跟在接口索引计数器后面，类中的字段也可能有多个，所以也需要一个计数器，但是我们没有写任何字段，所以这个值依然是 <code>0000</code> 。</p>
 <p>虽然我没有写任何字段，但还是要了解一下字段表的结构，如下所示</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Fieldref_info</span><span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Fieldref_info</span><span class="o">{</span>
     <span class="n">u2</span> <span class="n">access_flags</span><span class="o">;</span><span class="c1">// 字段访问标识
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">name_index</span><span class="o">;</span><span class="c1">// 变量名
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">descriptor_index</span><span class="o">;</span><span class="c1">// 变量的类型
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">attributes_count</span><span class="o">;</span> <span class="c1">// 属性计数器
 </span><span class="c1"></span>    <span class="n">attributes_info</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p>字段的访问标识和类的有点不一样，如下所示</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>字段的访问标识和类的有点不一样，如下所示</p>
 <table>
 <thead>
 <tr>
@@ -736,17 +696,30 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </table>
 <h3 id="方法表">方法表</h3>
 <p>字段表接着往下走就是方法表，方法表和字段表一样也会有多个的情况，所以也有一个计数器。
-<img src="https://devbins.github.io/images/jvm/method_count.png" alt="">
+<img src="/images/jvm/method_count.png" alt="">
 从图中看出方法计数器的值为 <code>0003</code> ，所以一共有三个方法，除了我们显示的写出来的 <code>main</code> 和 <code>add</code> 多出来的一个是构造方法。</p>
 <p>方法表的结构如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Methodref_info</span><span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Methodref_info</span><span class="o">{</span>
     <span class="n">u2</span> <span class="n">access_flags</span><span class="o">;</span> <span class="c1">// 方法访问标识
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">name_index</span><span class="o">;</span> <span class="c1">// 方法名
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">descriptor_index</span><span class="o">;</span> <span class="c1">// 返回值
 </span><span class="c1"></span>    <span class="n">u2</span> <span class="n">attributes_count</span><span class="o">;</span> <span class="c1">// 方法属性计数器
 </span><span class="c1"></span>    <span class="n">attribute_info</span> <span class="n">attributes</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p>在方法表中也有 <code>access_flags</code> ，它和字段的也不一样，如下所示</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在方法表中也有 <code>access_flags</code> ，它和字段的也不一样，如下所示</p>
 <table>
 <thead>
 <tr>
@@ -804,25 +777,68 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
 </tbody>
 </table>
 <p>我们以 <code>add</code> 方法为例，如下所示
-<img src="https://devbins.github.io/images/jvm/method_add.png" alt="">
+<img src="/images/jvm/method_add.png" alt="">
 <code>add</code> 方法是用 <code>public</code> 和 <code>static</code> 修饰的，所以 <code>access_flags</code> 为 <code>0009</code> 。 接下来的两个字节为 <code>000d</code> 转换为 10 进制是 13，13 所对应的索引是 <code>add</code> 也就是方法名。再接下来是 <code>000e</code> 其对应的10进制是 14 也就是 <code>int</code> 也就是返回值类型。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">13</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="n">add</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">13</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="n">add</span>
 <span class="err">#</span><span class="n">14</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="o">(</span><span class="n">II</span><span class="o">)</span><span class="n">I</span>
 <span class="c1">//...
 </span><span class="c1"></span><span class="err">#</span><span class="n">20</span> <span class="o">=</span> <span class="n">NameAndType</span>        <span class="err">#</span><span class="n">13</span><span class="o">:</span><span class="err">#</span><span class="n">14</span>        <span class="c1">// add:(II)I
-</span></code></pre></div><h3 id="属性表">属性表</h3>
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="属性表">属性表</h3>
 <p>最后来看一下属性表，之前在字段表中和方法表中都有看到过这么一个属性 <code>attribute_info attributes;</code> 它没有一个固定的结构，只要满足如下结构就行</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Attribute_info</span><span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">CONSTANT_Attribute_info</span><span class="o">{</span>
     <span class="n">u2</span> <span class="n">name_index</span><span class="o">;</span>
     <span class="n">u2</span> <span class="n">attribute_length</span> <span class="n">length</span><span class="o">;</span>
     <span class="n">u1</span><span class="o">[]</span> <span class="n">info</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p><code>JVM</code> 中预定义了许多属性表，我们以 <code>add</code> 方法的 <code>Code</code> 属性表为例。我们接着字节码往下分析，得到 <code>0001</code> 和 <code>0009</code>
-<img src="https://devbins.github.io/images/jvm/code.png" alt="">
+</code></pre></td></tr></table>
+</div>
+</div><p><code>JVM</code> 中预定义了许多属性表，我们以 <code>add</code> 方法的 <code>Code</code> 属性表为例。我们接着字节码往下分析，得到 <code>0001</code> 和 <code>0009</code>
+<img src="/images/jvm/code.png" alt="">
 也就是 <code>add</code> 方法有一个属性表，属性表的索引为 9，9对应的就是 <code>Code</code> 属性表</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">9</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="n">Code</span>
-</code></pre></div><p><code>Code</code> 所对应的就是 <code>add</code> 方法的字节码指令，如下所示</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span><span class="o">,</span> <span class="kt">int</span><span class="o">);</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">9</span> <span class="o">=</span> <span class="n">Utf8</span>               <span class="n">Code</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Code</code> 所对应的就是 <code>add</code> 方法的字节码指令，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span><span class="o">,</span> <span class="kt">int</span><span class="o">);</span>
 <span class="nl">descriptor:</span> <span class="o">(</span><span class="n">II</span><span class="o">)</span><span class="n">I</span>
     <span class="n">flags</span><span class="o">:</span> <span class="n">ACC_PUBLIC</span><span class="o">,</span> <span class="n">ACC_STATIC</span>
     <span class="n">Code</span><span class="o">:</span>
@@ -833,616 +849,125 @@ Java 开发都知道 .java 文件编译后得到的是 .class 文件，这个文
          <span class="n">3</span><span class="o">:</span> <span class="n">ireturn</span>
       <span class="n">LineNumberTable</span><span class="o">:</span>
         <span class="n">line</span> <span class="n">9</span><span class="o">:</span> <span class="n">0</span>
-</code></pre></div><h2 id="总结">总结</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
 <p>从上面看到 <code>.class</code> 文件还是比较复杂的，了解了这些我们更容易理解虚拟机是怎么运作的。有些问题就迎刃而解，例如：泛型被擦除了，在使用的时候会做一次强制类型转换等等。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=67#/detail/pc?id=1857">字节码层面分析class类文件结构</a></li>
 </ul>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/java" role="button">Java </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/class/" title="Java Class 探秘">Java Class 探秘</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/gc/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>Java 垃圾回收机制</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/classloader/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>ClassLoader</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
-												 前言
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#class-%e5%86%85%e9%83%a8%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84">
-												 class 内部数据结构
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%97%a0%e7%ac%a6%e5%8f%b7%e6%95%b0">
-												 无符号数
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%a1%a8">
-												 表
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#class-%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84">
-												 class 文件结构
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%ad%94%e6%9c%af%e6%95%b0-magic-number">
-												 魔术数（magic number）
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%89%88%e6%9c%ac%e5%8f%b7">
-												 版本号
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%b8%b8%e9%87%8f%e6%b1%a0">
-												 常量池
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%ae%bf%e9%97%ae%e6%a0%87%e5%bf%97">
-												 访问标志
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%b1%bb%e7%b4%a2%e5%bc%95-%e7%88%b6%e7%b1%bb%e7%b4%a2%e5%bc%95-%e6%8e%a5%e5%8f%a3%e7%b4%a2%e5%bc%95%e8%ae%a1%e6%95%b0%e5%99%a8">
-												 类索引、父类索引、接口索引计数器
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ad%97%e6%ae%b5%e8%a1%a8">
-												 字段表
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%96%b9%e6%b3%95%e8%a1%a8">
-												 方法表
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%b1%9e%e6%80%a7%e8%a1%a8">
-												 属性表
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
-												 总结
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-17
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/java/">Java</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/classloader/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ClassLoader</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/gc/">
+            <span class="next-text nav-default">Java 垃圾回收机制</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-04-17 00:00:00 \u002b0800 CST',
+        title: 'Java Class 探秘',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

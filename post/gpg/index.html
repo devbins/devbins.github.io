@@ -1,339 +1,184 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="GPG介绍
-提到 GPG 不得不提一下 PGP(Pretty Good Privacy) ， PGP 最开始是由 Phil Zimmermann 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 PGP 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 GPG ，这就是 GPG 的由来。 GPG 和 PGP 都遵循 OpenPGP 加解密标准， 现在 PGP 被赛门铁克公司收购了。">
-  
-  <meta property="og:title" content="GPG加密一" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>GPG加密一 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="GPG介绍 提到 GPG 不得不提一下 PGP(Pretty Good Privacy) ， PGP 最开始是由 Phil Zimmermann 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 PGP 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 GPG ，这就是 GPG 的由来。 GPG 和 PGP 都遵循 OpenPGP 加解密标准， 现在 PGP 被赛门铁克公司收购了。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/gpg/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="GPG加密一" />
 <meta property="og:description" content="GPG介绍
 提到 GPG 不得不提一下 PGP(Pretty Good Privacy) ， PGP 最开始是由 Phil Zimmermann 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 PGP 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 GPG ，这就是 GPG 的由来。 GPG 和 PGP 都遵循 OpenPGP 加解密标准， 现在 PGP 被赛门铁克公司收购了。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/gpg/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/gpg/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-01-31T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2020-01-31T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="GPG加密一">
+<meta itemprop="description" content="GPG介绍
+提到 GPG 不得不提一下 PGP(Pretty Good Privacy) ， PGP 最开始是由 Phil Zimmermann 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 PGP 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 GPG ，这就是 GPG 的由来。 GPG 和 PGP 都遵循 OpenPGP 加解密标准， 现在 PGP 被赛门铁克公司收购了。"><meta itemprop="datePublished" content="2020-01-31T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-01-31T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="2100">
+<meta itemprop="keywords" content="GPG," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GPG加密一"/>
+<meta name="twitter:description" content="GPG介绍
+提到 GPG 不得不提一下 PGP(Pretty Good Privacy) ， PGP 最开始是由 Phil Zimmermann 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 PGP 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 GPG ，这就是 GPG 的由来。 GPG 和 PGP 都遵循 OpenPGP 加解密标准， 现在 PGP 被赛门铁克公司收购了。"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       GPG加密一 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/gpg/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
-      
-        <li><a href="https://devbins.github.io/categories/%E5%AE%89%E5%85%A8"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 安全 </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">GPG加密一</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Jan 31, 2020</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>4 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/gpg.svg.png" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <h2 id="gpg介绍">GPG介绍</h2>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">GPG加密一</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-01-31 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            <a href="/categories/%E5%AE%89%E5%85%A8/"> 安全 </a>
+            </div>
+          <span class="more-meta"> 约 2100 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#gpg介绍">GPG介绍</a></li>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#mac">Mac</a></li>
+        <li><a href="#linux-manjaro">Linux/Manjaro</a></li>
+      </ul>
+    </li>
+    <li><a href="#生成密钥">生成密钥</a></li>
+    <li><a href="#生成撤销密钥">生成撤销密钥</a></li>
+    <li><a href="#加密">加密</a></li>
+    <li><a href="#解密">解密</a></li>
+    <li><a href="#签名">签名</a>
+      <ul>
+        <li><a href="#二进制签名">二进制签名</a></li>
+        <li><a href="#ascii-签名">ASCII 签名</a></li>
+        <li><a href="#签名与加密">签名与加密</a></li>
+        <li><a href="#分离签名文件">分离签名文件</a></li>
+        <li><a href="#验证签名">验证签名</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="gpg介绍">GPG介绍</h2>
 <p>提到 <code>GPG</code> 不得不提一下 <code>PGP(Pretty Good Privacy)</code> ， <code>PGP</code> 最开始是由 <code>Phil Zimmermann</code> 开发，开发的目的是为了躲避监视，如果文件在网络上明文传输，那是多么危险。 <code>PGP</code> 虽然受很多人喜爱，但是是个商业软件，不能自由使用。所以自由基金会决定自己开发一个取名叫 <code>GPG</code> ，这就是 <code>GPG</code> 的由来。 <code>GPG</code> 和 <code>PGP</code> 都遵循 <code>OpenPGP</code> 加解密标准， 现在 <code>PGP</code> 被赛门铁克公司收购了。</p>
 <p>我们平时用各个网站免不了要记住密码，但如果都用一个那风险就很高，如果每个网站都不一样，那也记不住。通常的做法是把这些密码存到一个文件里，但是这个文件本身的安全我们没法保证，所以我们需要对这个文件进行加密。这就要用到我们今天的主角 <code>GPG</code> 。</p>
 <h2 id="安装">安装</h2>
@@ -344,7 +189,68 @@
 <p><code>sudo pacman -S gnupg</code></p>
 <h2 id="生成密钥">生成密钥</h2>
 <p>现在我们通过 <code>gpg --full-gen-key</code> 来生成密钥</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg --full-gen-key
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg --full-gen-key
 gpg <span class="o">(</span>GnuPG<span class="o">)</span> 2.2.19<span class="p">;</span> Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2019</span> Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -401,24 +307,71 @@ pub   rsa4096 2020-01-05 <span class="o">[</span>SC<span class="o">]</span>
 32BB424E02712F45B9E1A1CA0E827A8AE76FFEB0
 uid                      test1 <span class="o">(</span><span class="nb">test</span><span class="o">)</span> &lt;test@test.com&gt;
 sub   rsa4096 2020-01-05 <span class="o">[</span>E<span class="o">]</span>
-</code></pre></div><p>通过上面的操作，生成了一个名为 <code>test1</code> ，使用 <code>RAS</code> 算法加密，并且永不过期的账户。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过上面的操作，生成了一个名为 <code>test1</code> ，使用 <code>RAS</code> 算法加密，并且永不过期的账户。</p>
 <p>你如果不想选择加密算法和长度信息，可以使用 <code>gpg --gen-key</code> 来快速生成。这样生成的默认算法是 <code>RAS</code> ，有效时间是一年， comment 为空。</p>
 <h2 id="生成撤销密钥">生成撤销密钥</h2>
 <p>生成完密钥之后，为了保险起见，我们需要生成一个撤销证书，以便在日后我们不使用这个密钥的时候可以撤销。</p>
 <p>这个撤销只有你把公钥上传到公钥服务器才有效，如果你不上传到公钥服务器其实没多大作用。即便申请撤销了，它还是会存在，只是不建议使用了。</p>
 <p>撤销的命令如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg --gen-revoke test1
-</code></pre></div><h2 id="加密">加密</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg --gen-revoke test1
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="加密">加密</h2>
 <p>有了密钥之后，我们来看看怎么用它来加密一个文件</p>
 <p>通过 <code>gpg -r [uid] -o file -e file</code> 来加密一个文件，其中 <code>-r</code> 指定用哪个用户加密， <code>-o</code> 表示加密后输出的文件， <code>-e</code> 表示要加密的文件。如果不用 <code>-o</code> 默认会在原来的文件后面添加 <code>.gpg</code> 的后缀，用来表示加密文件。</p>
 <p>举个例子：假设我们有一个 <code>test.txt</code> 的文件，内容如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">This is gpg <span class="nb">test</span>
-</code></pre></div><p>我们对其进行加密</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg -r test1 -e test.txt
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">This is gpg <span class="nb">test</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们对其进行加密</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg -r test1 -e test.txt
 <span class="c1"># 可以使用 gpg -r test1 -o test.txt.gpg -e test.txt 效果是一样的</span>
-</code></pre></div><p>执行完成后会得到一个名为 <code>test.txt.gpg</code> 的文件，这个文件是一个二进制文件。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行完成后会得到一个名为 <code>test.txt.gpg</code> 的文件，这个文件是一个二进制文件。</p>
 <p>如果我们想要显示 ASCII ，可以通过添加 <code>-a</code> 来显示</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg -r test1 -a -e test.txt
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg -r test1 -a -e test.txt
 cat test.txt.asc
 -----BEGIN PGP MESSAGE-----
 
@@ -437,25 +390,66 @@ UAG6DZHSUVvhOZyQjWxOe098nFir80BXXc9cw39luMOxjw3d4kaID/6xwSD0HJc5
 <span class="nv">6xgDoK0FLsbAAv4zfgttrNdPbxmOM9eoKMVUyPZJGX1f</span>
 <span class="o">=</span>2XkE
 -----END PGP MESSAGE-----
-</code></pre></div><h2 id="解密">解密</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="解密">解密</h2>
 <p>加密完之后，我们来看如何解密</p>
 <p>通过 <code>gpg -o file -d file</code> 来对文件进行解密，其中 <code>-o</code> 表示解密后输出的文件，要放在前面， <code>-d</code> 表示要解密的文件。</p>
 <p>我们就拿之前加密的文件来进行解密</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg -o decrypt.txt -d test.txt.gpg
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg -o decrypt.txt -d test.txt.gpg
 cat decrypt.txt
 This is gpg <span class="nb">test</span>
 
 gpg -o decrypt.txt -d test.txt.asc
 cat decrypt.txt
 This is gpg <span class="nb">test</span>
-</code></pre></div><p>可以看到解密前后内容是一样的，并且二进制和 ASCII 解密出来是一样的。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到解密前后内容是一样的，并且二进制和 ASCII 解密出来是一样的。</p>
 <h2 id="签名">签名</h2>
 <h3 id="二进制签名">二进制签名</h3>
 <p>GPG除了可以用来加密，还可以用来签名，比如在 <code>Github</code> 上可以添加公钥来表示这个代码确实是你提交的。</p>
 <p>使用 <code>gpg --sign test.txt</code> 对 <code>test.txt</code> 进行签名，生成 <code>test.txt.gpg</code> ，里面的内容是二进制。</p>
 <h3 id="ascii-签名">ASCII 签名</h3>
 <p>除了二进制的方式还可以输出 ASCII 的签名，用 <code>gpg --clearsign test.txt</code> 对 <code>test.txt</code> 进行 ASCII 签名</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg --clearsign test.txt
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg --clearsign test.txt
 cat test.txt.asc
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
@@ -477,12 +471,50 @@ o1TQxd3h5YhVInCs0XFzSx3Ty/Ds0Lm0zFa4AyINl0QiHkQy2OoD4rsFO7n6LdOk
 <span class="nv">zJKrFEkSwuvTOeIBUOGulwZiZEFrxb9KpaCjhMLZgQfjSYAnyQ8</span><span class="o">=</span>
 <span class="o">=</span>lmwE
 -----END PGP SIGNATURE-----
-</code></pre></div><p>这种方式会在源文件里加上签名。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>这种方式会在源文件里加上签名。</p>
 <h3 id="签名与加密">签名与加密</h3>
 <p>我们除了进行签名，也支持在进行签名的同时进行加密。</p>
 <p><code>gpg -u test1 -r test1 -se test.txt</code> 其中 <code>-u</code> 表示 <code>--local-user</code> 也就是用谁来签名， <code>-r</code> 同前面一样表示用谁来加密。</p>
 <p>为什么签名和加密不是同一个人呢？其实很好理解，我们签名表示的是这份文件确实是我写的，而加密要用对方的公钥来加密，这样对方才能解密。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg -u test1 -r test1 -se -a test.txt
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg -u test1 -r test1 -se -a test.txt
 cat test.txt.asc
 -----BEGIN PGP MESSAGE-----
 
@@ -514,21 +546,44 @@ SjxOzmSJyX5xlQSNfe8vaxrY0gyh/mJ9mnQtspUFIKvV68lJPy3J2ujFl3RyZNSf
 DlE2OtHLOqFKq/U4aJU5
 <span class="o">=</span>5rfp
 -----END PGP MESSAGE-----
-</code></pre></div><h3 id="分离签名文件">分离签名文件</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="分离签名文件">分离签名文件</h3>
 <p>之前的方式会把加密和签名放在同一个文件里，如果想要分开需要加上 <code>-b</code> 它表示 <code>detach-sign</code></p>
 <p>使用 <code>gpg -b test.txt</code> 会得到 <code>test.txt.sig</code> 这个单独的签名文件</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg -b test.txt
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg -b test.txt
 ls <span class="p">|</span>grep <span class="nb">test</span>
 test.txt
 test.txt.sig
-</code></pre></div><h3 id="验证签名">验证签名</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="验证签名">验证签名</h3>
 <p>对文件加上签名后，我们需要验证这个签名看看对不对，验证也很简单加上 <code>--verify</code> 就行</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">gpg --verify test.txt.sig
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">gpg --verify test.txt.sig
 gpg: assuming signed data in <span class="s1">&#39;test.txt&#39;</span>
 gpg: Signature made Sat Jan <span class="m">05</span> 22:54:09 <span class="m">2020</span> CST
 gpg:                using RSA key 32BB424E02712F45B9E1A1CA0E827A8AE76FFEB0
 gpg: Good signature from <span class="s2">&#34;test1 (test) &lt;test@test.com&gt;&#34;</span> <span class="o">[</span>ultimate<span class="o">]</span>
-</code></pre></div><h2 id="参考">参考</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://zh.wikipedia.org/wiki/PGP">PGP - 维基百科，自由的百科全书</a></li>
 <li><a href="https://zh.wikipedia.org/wiki/GnuPG">GnuPG - 维基百科，自由的百科全书</a></li>
@@ -545,598 +600,117 @@ gpg: Good signature from <span class="s2">&#34;test1 (test) &lt;test@test.com&gt
 <li><a href="https://blog.starryvoid.com/archives/348.html">GPG 密钥的创建、管理和使用 - StarryVoid - Blog</a></li>
 <li><a href="https://www.gnupg.org/howtos/zh/GPGMiniHowto-1.html">Gnu Privacy Guard (GnuPG) Mini Howto (English): Concepts</a></li>
 </ul>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/gpg" role="button">GPG </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/gpg/" title="GPG加密一">GPG加密一</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/2019%E6%80%BB%E7%BB%93/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>2019总结</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/gpg2/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>GPG加密二</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#gpg%e4%bb%8b%e7%bb%8d">
-												 GPG介绍
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
-												 安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#mac">
-												 Mac
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#linux-manjaro">
-												 Linux/Manjaro
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%94%9f%e6%88%90%e5%af%86%e9%92%a5">
-												 生成密钥
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%94%9f%e6%88%90%e6%92%a4%e9%94%80%e5%af%86%e9%92%a5">
-												 生成撤销密钥
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8a%a0%e5%af%86">
-												 加密
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%a7%a3%e5%af%86">
-												 解密
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%ad%be%e5%90%8d">
-												 签名
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%ba%8c%e8%bf%9b%e5%88%b6%e7%ad%be%e5%90%8d">
-												 二进制签名
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#ascii-%e7%ad%be%e5%90%8d">
-												 ASCII 签名
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%ad%be%e5%90%8d%e4%b8%8e%e5%8a%a0%e5%af%86">
-												 签名与加密
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%86%e7%a6%bb%e7%ad%be%e5%90%8d%e6%96%87%e4%bb%b6">
-												 分离签名文件
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%aa%8c%e8%af%81%e7%ad%be%e5%90%8d">
-												 验证签名
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-01-31
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/gpg/">GPG</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/gpg2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">GPG加密二</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2019%E6%80%BB%E7%BB%93/">
+            <span class="next-text nav-default">2019总结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-01-31 00:00:00 \u002b0800 CST',
+        title: 'GPG加密一',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

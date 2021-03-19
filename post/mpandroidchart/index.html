@@ -1,362 +1,233 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="前言
-今年开工以来，一直接触图表相关的开发，经过选择最后采用 MPAndroidChart ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。">
-  
-  <meta property="og:title" content="MPAndroidChart 使用总结" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MPAndroidChart 使用总结 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 今年开工以来，一直接触图表相关的开发，经过选择最后采用 MPAndroidChart ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/mpandroidchart/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MPAndroidChart 使用总结" />
 <meta property="og:description" content="前言
 今年开工以来，一直接触图表相关的开发，经过选择最后采用 MPAndroidChart ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/mpandroidchart/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/mpandroidchart/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-03-16T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2020-03-16T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="MPAndroidChart 使用总结">
+<meta itemprop="description" content="前言
+今年开工以来，一直接触图表相关的开发，经过选择最后采用 MPAndroidChart ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。"><meta itemprop="datePublished" content="2020-03-16T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-16T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1196">
+<meta itemprop="keywords" content="Android," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MPAndroidChart 使用总结"/>
+<meta name="twitter:description" content="前言
+今年开工以来，一直接触图表相关的开发，经过选择最后采用 MPAndroidChart ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       MPAndroidChart 使用总结 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/mpandroidchart/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">MPAndroidChart 使用总结</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Mar 16, 2020</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>3 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/mpandroidchart/mpandroidchart.png" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <h2 id="前言">前言</h2>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MPAndroidChart 使用总结</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-03-16 </span>
+        <div class="post-category">
+            <a href="/categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 1196 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#去除指示线">去除指示线</a></li>
+    <li><a href="#设置-marker">设置 marker</a>
+      <ul>
+        <li><a href="#顶部偏移">顶部偏移</a></li>
+        <li><a href="#第一次不显示的问题">第一次不显示的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#坐标轴">坐标轴</a>
+      <ul>
+        <li><a href="#x-轴">X 轴</a></li>
+        <li><a href="#y-轴">Y 轴</a></li>
+      </ul>
+    </li>
+    <li><a href="#饼图-2020-04-06-更新">饼图 2020-04-06 更新</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
 <p>今年开工以来，一直接触图表相关的开发，经过选择最后采用 <a href="https://github.com/PhilJay/MPAndroidChart">MPAndroidChart</a> ，期间碰到了一些问题，踩了不少坑。特来总结一下，以免日后忘记。这些知识点虽然不难，但是非常零碎，找起来比较麻烦。</p>
 <h2 id="去除指示线">去除指示线</h2>
 <p>先来看一下怎么去除点击之后出现的指示线
-<img src="https://devbins.github.io/images/mpandroidchart/indicator.png" alt=""></p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">set</span><span class="p">.</span><span class="n">setDrawHighlightIndicators</span><span class="p">(</span><span class="k">false</span><span class="p">)</span>
-</code></pre></div><p>这里需要注意的是要在数据上设置，而不是在控件上设置，之前的文档都是在控件上设置，找了好久才发现 <code>API</code> 已经变化了。</p>
+<img src="/images/mpandroidchart/indicator.png" alt=""></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">set</span><span class="p">.</span><span class="n">setDrawHighlightIndicators</span><span class="p">(</span><span class="k">false</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里需要注意的是要在数据上设置，而不是在控件上设置，之前的文档都是在控件上设置，找了好久才发现 <code>API</code> 已经变化了。</p>
 <h2 id="设置-marker">设置 marker</h2>
 <h3 id="顶部偏移">顶部偏移</h3>
-<p><img src="https://devbins.github.io/images/mpandroidchart/marker.png" alt="">
+<p><img src="/images/mpandroidchart/marker.png" alt="">
 使用中碰到的问题是， <code>marker</code> 在最顶部的时候，显示的位置不能契合，通过给顶部设置偏移来保证显示的位置契合。
 <code>setExtraOffsets(0f,30f,0f,0f)</code></p>
 <h3 id="第一次不显示的问题">第一次不显示的问题</h3>
-<p><img src="https://devbins.github.io/images/mpandroidchart/marker1.png" alt="">
+<p><img src="/images/mpandroidchart/marker1.png" alt="">
 <code>marker</code> 的另外一个问题是， <code>marker</code> 第一次显示的时候，里面的数据没有被正确赋值。解决这个问题需要把赋值的代码放到 <code>super.refreshContent(e,highlight)</code> 之前。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">override</span> <span class="k">fun</span> <span class="nf">refreshContent</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">Entry</span><span class="p">?,</span> <span class="n">highlight</span><span class="p">:</span> <span class="n">Highlight</span><span class="p">?)</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">override</span> <span class="k">fun</span> <span class="nf">refreshContent</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">Entry</span><span class="p">?,</span> <span class="n">highlight</span><span class="p">:</span> <span class="n">Highlight</span><span class="p">?)</span> <span class="p">{</span>
     <span class="c1">// UI 的设置需要放到 super.refreshContent 的上面，不然第一次显示的时候会没有数据
 </span><span class="c1"></span>    <span class="k">super</span><span class="p">.</span><span class="n">refreshContent</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">highlight</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre></div><h2 id="坐标轴">坐标轴</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="坐标轴">坐标轴</h2>
 <h3 id="x-轴">X 轴</h3>
 <h4 id="x-轴的文字显示不同的颜色">X 轴的文字显示不同的颜色</h4>
-<p><img src="https://devbins.github.io/images/mpandroidchart/xcolor.png" alt="">
+<p><img src="/images/mpandroidchart/xcolor.png" alt="">
 在开发的过程中，有个需求是需要对 X 轴上某个值显示特殊的颜色，查了文档发现只有一个 <code>xAxis.textColor</code> 是用来设置文字的颜色，所有的颜色都只能用这个颜色。</p>
 <p>最开始我的想法是通过 <code>ValueFormatter</code> 在绘制的时候进行设置不同的颜色，后面发现不行。一路跟踪源码发现 X 轴上的内容是由 <code>XAxisRenderer</code> 绘制的，在其中找到了原因。发现是在绘制的时候会先给画笔设置颜色，之后就一直都用这个颜色。所以我们只是设置颜色是没有用的，画笔的颜色没有改变。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="nd">@Override</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="nd">@Override</span>
 <span class="k">public</span> <span class="n">void</span> <span class="n">renderAxisLabels</span><span class="p">(</span><span class="n">Canvas</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="c1">//  此处省略无关代码 ...
@@ -365,25 +236,71 @@
 
     <span class="c1">// 省略代码
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p>看到这，解决方案也就差不多出来了，在每次绘制 X 轴的文字时，我们主动设置画笔的颜色，这样就可以做到，绘制你想要的颜色。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">xAxisRenderer</span><span class="p">.</span><span class="n">paintAxisLabels</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">highlightColor</span>
-</code></pre></div><p>通过这样设置，我们就可以在 X 轴的任何位置设置成你想要的颜色。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>看到这，解决方案也就差不多出来了，在每次绘制 X 轴的文字时，我们主动设置画笔的颜色，这样就可以做到，绘制你想要的颜色。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">xAxisRenderer</span><span class="p">.</span><span class="n">paintAxisLabels</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">highlightColor</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过这样设置，我们就可以在 X 轴的任何位置设置成你想要的颜色。</p>
 <h4 id="间隔">间隔</h4>
-<p><img src="https://devbins.github.io/images/mpandroidchart/xcolor1.png" alt="">
+<p><img src="/images/mpandroidchart/xcolor1.png" alt="">
 在给 X 轴设置文字的时候，文字的字数比较多的时候，就会导致文字会重叠。可以通过设置 <code>chart.zoom(1.5f, 1f, 1f, 1f)</code> 来提供更多的空间。</p>
 <p>设置了 <code>chart.zoom()</code> 之后不要设置 <code>chart.setVisibleXRangeMinimum</code> 不然会没有效果。我在这里踩了个坑，以为有效，结果测老半天才发现，浪费了许多精力。</p>
 <h3 id="y-轴">Y 轴</h3>
 <h4 id="limitline-不显示">LimitLine 不显示</h4>
 <p>使用过程中还发现一个问题是，在 Y 轴上添加 <code>LimitLine</code> 有时候会不显示。不显示是没有给 Y 轴设置最大和最小值，在绘制的时候绘制到了不可见区域，因为我们的图表是不能缩放和拖动的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">axisLeft</span><span class="p">.</span><span class="n">axisMinimum</span> <span class="p">=</span> <span class="m">0f</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">axisLeft</span><span class="p">.</span><span class="n">axisMinimum</span> <span class="p">=</span> <span class="m">0f</span>
 <span class="n">axisLeft</span><span class="p">.</span><span class="n">axisMaximum</span> <span class="p">=</span> <span class="n">max</span> <span class="p">+</span> <span class="m">1</span>
-</code></pre></div><h4 id="为-limitline-设置设置偏移-2020-04-06-更新">为 LimitLine 设置设置偏移 2020-04-06 更新</h4>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="为-limitline-设置设置偏移-2020-04-06-更新">为 LimitLine 设置设置偏移 2020-04-06 更新</h4>
 <p>在添加 LimitLine 时，线会从左边一直画到右边
-<img src="https://devbins.github.io/images/mpandroidchart/limitline.png" alt="">
+<img src="/images/mpandroidchart/limitline.png" alt="">
 但是我们碰到的需求是需要线从文字的结束开始绘制，如下所示
-<img src="https://devbins.github.io/images/mpandroidchart/limitline1.png" alt="">
+<img src="/images/mpandroidchart/limitline1.png" alt="">
 查找源码后发现，这些都是通过 <code>YAxisRenderer</code> 来绘制的，所以解决这个问题就很简单了，只要继承 <code>YAxisRenderer</code> 覆写 <code>renderLimitLines</code> 就行了。</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">class</span> <span class="nc">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">:</span> <span class="n">ViewPortHandler</span><span class="p">?,</span> <span class="n">yAxis</span><span class="p">:</span> <span class="n">YAxis</span><span class="p">?,</span> <span class="n">trans</span><span class="p">:</span> <span class="n">Transformer</span><span class="p">?)</span> <span class="p">:</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">yAxis</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">class</span> <span class="nc">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">:</span> <span class="n">ViewPortHandler</span><span class="p">?,</span> <span class="n">yAxis</span><span class="p">:</span> <span class="n">YAxis</span><span class="p">?,</span> <span class="n">trans</span><span class="p">:</span> <span class="n">Transformer</span><span class="p">?)</span> <span class="p">:</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">yAxis</span><span class="p">,</span> <span class="n">trans</span><span class="p">)</span> <span class="p">{</span>
 
     <span class="cm">/**
 </span><span class="cm">     * 绘制 LimitLine
@@ -408,608 +325,145 @@
 </span><span class="c1"></span>        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><p>最后别忘了通过设置 Y 轴的 Renderer 来实现效果</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">chart</span><span class="p">.</span><span class="n">rendererLeftYAxis</span> <span class="p">=</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">axisLeft</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">getTransformer</span><span class="p">(</span><span class="n">AxisDependency</span><span class="p">.</span><span class="n">LEFT</span><span class="p">))</span>
-</code></pre></div><h2 id="饼图-2020-04-06-更新">饼图 2020-04-06 更新</h2>
-<p><img src="https://devbins.github.io/images/mpandroidchart/holoradius.png" alt="">
+</code></pre></td></tr></table>
+</div>
+</div><p>最后别忘了通过设置 Y 轴的 Renderer 来实现效果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">chart</span><span class="p">.</span><span class="n">rendererLeftYAxis</span> <span class="p">=</span> <span class="n">YAxisRenderer</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="n">viewPortHandler</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">axisLeft</span><span class="p">,</span> <span class="n">chart</span><span class="p">.</span><span class="n">getTransformer</span><span class="p">(</span><span class="n">AxisDependency</span><span class="p">.</span><span class="n">LEFT</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="饼图-2020-04-06-更新">饼图 2020-04-06 更新</h2>
+<p><img src="/images/mpandroidchart/holoradius.png" alt="">
 图中红色圈出来的可以通过如下代码来设置</p>
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">chart</span><span class="p">.</span><span class="n">holeRadius</span> <span class="p">=</span> <span class="m">80f</span>
-</code></pre></div><p><code>holeRadius</code> 使用的是百分比，一开始我使用具体数值，在地分辨率的手机上开起来就非常奇怪，别扭。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">chart</span><span class="p">.</span><span class="n">holeRadius</span> <span class="p">=</span> <span class="m">80f</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>holeRadius</code> 使用的是百分比，一开始我使用具体数值，在地分辨率的手机上开起来就非常奇怪，别扭。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://weeklycoding.com/mpandroidchart/">MPAndroidChart - Weeklycoding</a></li>
 <li><a href="https://juejin.im/post/5c7647cff265da2d98091035#heading-85">MPAndroidChart文档翻译 - 掘金</a></li>
 </ul>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/android" role="button">Android </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/mpandroidchart/" title="MPAndroidChart 使用总结">MPAndroidChart 使用总结</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/autoinstallarch/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>一键自动安装 ArchLinux</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/shortcutkey/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>我的快捷键跨平台方案</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
-												 前言
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8e%bb%e9%99%a4%e6%8c%87%e7%a4%ba%e7%ba%bf">
-												 去除指示线
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae-marker">
-												 设置 marker
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%a1%b6%e9%83%a8%e5%81%8f%e7%a7%bb">
-												 顶部偏移
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%ac%ac%e4%b8%80%e6%ac%a1%e4%b8%8d%e6%98%be%e7%a4%ba%e7%9a%84%e9%97%ae%e9%a2%98">
-												 第一次不显示的问题
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%9d%90%e6%a0%87%e8%bd%b4">
-												 坐标轴
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#x-%e8%bd%b4">
-												 X 轴
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#x-%e8%bd%b4%e7%9a%84%e6%96%87%e5%ad%97%e6%98%be%e7%a4%ba%e4%b8%8d%e5%90%8c%e7%9a%84%e9%a2%9c%e8%89%b2">
-												 X 轴的文字显示不同的颜色
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%97%b4%e9%9a%94">
-												 间隔
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#y-%e8%bd%b4">
-												 Y 轴
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#limitline-%e4%b8%8d%e6%98%be%e7%a4%ba">
-												 LimitLine 不显示
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%b8%ba-limitline-%e8%ae%be%e7%bd%ae%e8%ae%be%e7%bd%ae%e5%81%8f%e7%a7%bb-2020-04-06-%e6%9b%b4%e6%96%b0">
-												 为 LimitLine 设置设置偏移 2020-04-06 更新
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%a5%bc%e5%9b%be-2020-04-06-%e6%9b%b4%e6%96%b0">
-												 饼图 2020-04-06 更新
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-03-16
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/android/">Android</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/shortcutkey/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">我的快捷键跨平台方案</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/autoinstallarch/">
+            <span class="next-text nav-default">一键自动安装 ArchLinux</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-03-16 00:00:00 \u002b0800 CST',
+        title: 'MPAndroidChart 使用总结',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

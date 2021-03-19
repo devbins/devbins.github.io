@@ -1,352 +1,216 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="Photo by Kimon Maritz on Unsplash
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Retrofit 源码解析 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="Photo by Kimon Maritz on Unsplash
+ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。
-">
-  
-  <meta property="og:title" content="Retrofit 源码解析" />
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/retrofit/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Retrofit 源码解析" />
 <meta property="og:description" content="Photo by Kimon Maritz on Unsplash
 
 Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/retrofit/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/retrofit/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-12-02T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2018-12-02T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="Retrofit 源码解析">
+<meta itemprop="description" content="Photo by Kimon Maritz on Unsplash
 
+Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+本文基于 retrofit2.5.0 进行分析。
+"><meta itemprop="datePublished" content="2018-12-02T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2018-12-02T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="2901">
+<meta itemprop="keywords" content="Retrofit,RESTful," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Retrofit 源码解析"/>
+<meta name="twitter:description" content="Photo by Kimon Maritz on Unsplash
 
-  <title>
-  
-       Retrofit 源码解析 | dev.bins 
-  
-  </title>
+Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+本文基于 retrofit2.5.0 进行分析。
+"/>
 
-  <link rel="canonical" href="https://devbins.github.io/post/retrofit/">
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
-      
-        <li><a href="https://devbins.github.io/categories/http"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> HTTP </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">Retrofit 源码解析</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Dec 2, 2018</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>6 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/retrofit/retrofit.jpg" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <p>Photo by Kimon Maritz on Unsplash</p>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Retrofit 源码解析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-12-02 </span>
+        <div class="post-category">
+            <a href="/categories/android/"> Android </a>
+            <a href="/categories/http/"> HTTP </a>
+            </div>
+          <span class="more-meta"> 约 2901 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简单使用">简单使用</a></li>
+    <li><a href="#retrofit-dot-build">Retrofit.build</a></li>
+    <li><a href="#retrofit-dot-create">Retrofit.create</a>
+      <ul>
+        <li><a href="#loadservicemethod">loadServiceMethod</a></li>
+        <li><a href="#parseannotations">parseAnnotations</a></li>
+        <li><a href="#createcalladapter">createCallAdapter</a></li>
+        <li><a href="#createresponseconverter">createResponseConverter</a></li>
+        <li><a href="#invoke">invoke</a></li>
+        <li><a href="#小节一下-retrofit-create-里做了这么几件事">小节一下 <code>Retrofit#create</code> 里做了这么几件事</a></li>
+      </ul>
+    </li>
+    <li><a href="#执行请求">执行请求</a>
+      <ul>
+        <li><a href="#okhttpcall">OkHttpCall</a></li>
+      </ul>
+    </li>
+    <li><a href="#解析请求结果">解析请求结果</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Photo by Kimon Maritz on Unsplash</p>
 <blockquote>
 <p>Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。</p>
 <p>本文基于 <code>retrofit2.5.0</code> 进行分析。</p>
 </blockquote>
 <h2 id="简单使用">简单使用</h2>
 <p>我们先从官方的例子中了解一下怎么使用，相信对于 Android 开发者来说，使用已经非常熟练了。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GitHubService</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GitHubService</span> <span class="o">{</span>
   <span class="nd">@GET</span><span class="o">(</span><span class="s">&#34;users/{user}/repos&#34;</span><span class="o">)</span>
   <span class="n">Call</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Repo</span><span class="o">&gt;&gt;</span> <span class="nf">listRepos</span><span class="o">(</span><span class="nd">@Path</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">user</span><span class="o">);</span>
 <span class="o">}</span>
@@ -357,11 +221,49 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <span class="n">GitHubService</span> <span class="n">service</span> <span class="o">=</span> <span class="n">retrofit</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">GitHubService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 <span class="n">Call</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Repo</span><span class="o">&gt;&gt;</span> <span class="n">repos</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">listRepos</span><span class="o">(</span><span class="s">&#34;octocat&#34;</span><span class="o">);</span>
 <span class="n">repos</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-</code></pre></div><p>例子中先创建了 API 接口，然后创建了 Retrofit 实例，接着调用 <code>retrofit.create</code> 创建了接口实现类，最后就是我们调用网络请求获取数据了。 <code>retrofit</code> 基本的用法就是这样。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>例子中先创建了 API 接口，然后创建了 Retrofit 实例，接着调用 <code>retrofit.create</code> 创建了接口实现类，最后就是我们调用网络请求获取数据了。 <code>retrofit</code> 基本的用法就是这样。</p>
 <p>下面我们就来一步一步分析</p>
 <h2 id="retrofit-dot-build">Retrofit.build</h2>
 <p><code>Retrofit</code> 使用建造者模式创建 API，我们从 <code>Retrofit.build</code> 开始分析</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Retrofit</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Retrofit</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">baseUrl</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Base URL required.&#34;</span><span class="o">);</span>
   <span class="o">}</span>
@@ -393,9 +295,33 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="k">return</span> <span class="k">new</span> <span class="n">Retrofit</span><span class="o">(</span><span class="n">callFactory</span><span class="o">,</span> <span class="n">baseUrl</span><span class="o">,</span> <span class="n">unmodifiableList</span><span class="o">(</span><span class="n">converterFactories</span><span class="o">),</span>
                       <span class="n">unmodifiableList</span><span class="o">(</span><span class="n">callAdapterFactories</span><span class="o">),</span> <span class="n">callbackExecutor</span><span class="o">,</span> <span class="n">validateEagerly</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre></div><p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
 <p>接下来设置 <code>callbackExecutor</code> ，如果没有设置则会调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ， <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> 。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">Android</span> <span class="kd">extends</span> <span class="n">Platform</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">Android</span> <span class="kd">extends</span> <span class="n">Platform</span> <span class="o">{</span>
   <span class="nd">@Override</span> <span class="kd">public</span> <span class="n">Executor</span> <span class="nf">defaultCallbackExecutor</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="n">MainThreadExecutor</span><span class="o">();</span>
   <span class="o">}</span>
@@ -413,7 +339,9 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
     <span class="o">}</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
 <p>可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。</p>
 <p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
 <p>总结一下 <code>Retrofit#build</code> 干了什么</p>
@@ -425,7 +353,32 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </ol>
 <h2 id="retrofit-dot-create">Retrofit.create</h2>
 <p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">create</span><span class="o">(</span><span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">create</span><span class="o">(</span><span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
 
   <span class="o">...</span>
 
@@ -446,10 +399,29 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
        <span class="o">}</span>
      <span class="o">});</span>
 <span class="o">}</span>
-</code></pre></div><p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，当我们调用接口中的方法会执行 <code>invoke</code> ，第一参数就是调用的对象，第二个参数就是调用对象的某个方法，第三个参数就是方法需要的参数。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，当我们调用接口中的方法会执行 <code>invoke</code> ，第一参数就是调用的对象，第二个参数就是调用对象的某个方法，第三个参数就是方法需要的参数。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
 <h3 id="loadservicemethod">loadServiceMethod</h3>
 <p>接下来我们来看最有料的 <code>loadServiceMethod</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">loadServiceMethod</span><span class="o">(</span><span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">loadServiceMethod</span><span class="o">(</span><span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">serviceMethodCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">method</span><span class="o">);</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 
@@ -462,17 +434,63 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="o">}</span>
   <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p><code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。这样看来重点在 <code>parseAnnotations</code> 中，跟进去看看。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。这样看来重点在 <code>parseAnnotations</code> 中，跟进去看看。</p>
 <h3 id="parseannotations">parseAnnotations</h3>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ServiceMethod</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ServiceMethod</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">RequestFactory</span> <span class="n">requestFactory</span> <span class="o">=</span> <span class="n">RequestFactory</span><span class="o">.</span><span class="na">parseAnnotations</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">);</span>
 
   <span class="c1">// 省略一些检查判断...
 </span><span class="c1"></span>
   <span class="k">return</span> <span class="n">HttpServiceMethod</span><span class="o">.</span><span class="na">parseAnnotations</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">,</span> <span class="n">requestFactory</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre></div><p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">RequestFactory</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">RequestFactory</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="k">new</span> <span class="n">Builder</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
 <span class="o">}</span>
 
@@ -499,8 +517,24 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="n">isMultipart</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">isMultipart</span><span class="o">;</span>
   <span class="n">parameterHandlers</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">parameterHandlers</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">HttpServiceMethod</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">RequestFactory</span> <span class="n">requestFactory</span><span class="o">)</span> <span class="o">{</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">HttpServiceMethod</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">RequestFactory</span> <span class="n">requestFactory</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">callAdapter</span> <span class="o">=</span> <span class="n">createCallAdapter</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">);</span>
   <span class="n">Type</span> <span class="n">responseType</span> <span class="o">=</span> <span class="n">callAdapter</span><span class="o">.</span><span class="na">responseType</span><span class="o">();</span>
 
@@ -510,10 +544,40 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="n">okhttp3</span><span class="o">.</span><span class="na">Call</span><span class="o">.</span><span class="na">Factory</span> <span class="n">callFactory</span> <span class="o">=</span> <span class="n">retrofit</span><span class="o">.</span><span class="na">callFactory</span><span class="o">;</span>
   <span class="k">return</span> <span class="k">new</span> <span class="n">HttpServiceMethod</span><span class="o">&lt;&gt;(</span><span class="n">requestFactory</span><span class="o">,</span> <span class="n">callFactory</span><span class="o">,</span> <span class="n">callAdapter</span><span class="o">,</span> <span class="n">responseConverter</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre></div><p><code>HttpServiceMethod.parseAnnotations</code> 先调用了 <code>createCallAdapter</code> 找到对应的 <code>callAdapter</code> 并取出返回值的类型，然后调用 <code>createResponseConverter</code> 把返回值类型传递进去，找到对应的 <code>responseConverter</code> 、最后把它们和 <code>callFactory</code> 、 <code>requestFactory</code> 封装成 <code>serviceMethod</code> 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>HttpServiceMethod.parseAnnotations</code> 先调用了 <code>createCallAdapter</code> 找到对应的 <code>callAdapter</code> 并取出返回值的类型，然后调用 <code>createResponseConverter</code> 把返回值类型传递进去，找到对应的 <code>responseConverter</code> 、最后把它们和 <code>callFactory</code> 、 <code>requestFactory</code> 封装成 <code>serviceMethod</code> 。</p>
 <p>接下来看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
 <h3 id="createcalladapter">createCallAdapter</h3>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">createCallAdapter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">createCallAdapter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">Type</span> <span class="n">returnType</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getGenericReturnType</span><span class="o">();</span>
   <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotations</span><span class="o">();</span>
   <span class="c1">// 省略部分代码
@@ -537,9 +601,47 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
     <span class="o">}</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><p><code>createCallAdapter</code> 方法调最后调用的是 <code>nextCallAdapter</code> ，它会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的适配器。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>createCallAdapter</code> 方法调最后调用的是 <code>nextCallAdapter</code> ，它会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的适配器。</p>
 <h3 id="createresponseconverter">createResponseConverter</h3>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">&gt;</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="o">,</span> <span class="n">ResponseT</span><span class="o">&gt;</span> <span class="nf">createResponseConverter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Type</span> <span class="n">responseType</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">&gt;</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="o">,</span> <span class="n">ResponseT</span><span class="o">&gt;</span> <span class="nf">createResponseConverter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Type</span> <span class="n">responseType</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotations</span><span class="o">();</span>
   <span class="k">try</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">retrofit</span><span class="o">.</span><span class="na">responseBodyConverter</span><span class="o">(</span><span class="n">responseType</span><span class="o">,</span> <span class="n">annotations</span><span class="o">);</span>
@@ -571,17 +673,50 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="o">}</span>
   <span class="c1">// ....
 </span><span class="c1"></span><span class="o">}</span>
-</code></pre></div><p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
+</code></pre></td></tr></table>
+</div>
+</div><p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
 <code>loadServiceMethod</code> 做的就是通过返回值和注解生成 <code>CallAdapter</code> 和 <code>ResponseConverter</code> ，最后构造 <code>HttpServiceMethod</code> 。</p>
 <h3 id="invoke">invoke</h3>
 <p><code>loadServiceMethod</code> 最后返回的是 <code>HttpServiceMethod</code> ，所以最后调用的 <code>invoke</code> ，是 <code>HttpServiceMethod</code> 的 <code>invoke</code> 。</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// HttpServiceMethod
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// HttpServiceMethod
 </span><span class="c1"></span><span class="nd">@Override</span> <span class="n">ReturnT</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="n">callAdapter</span><span class="o">.</span><span class="na">adapt</span><span class="o">(</span>
       <span class="k">new</span> <span class="n">OkHttpCall</span><span class="o">&lt;&gt;(</span><span class="n">requestFactory</span><span class="o">,</span> <span class="n">args</span><span class="o">,</span> <span class="n">callFactory</span><span class="o">,</span> <span class="n">responseConverter</span><span class="o">));</span>
 <span class="o">}</span>
-</code></pre></div><p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="n">CallAdapter</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">get</span><span class="o">(</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="n">CallAdapter</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">get</span><span class="o">(</span>
     <span class="n">Type</span> <span class="n">returnType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">getRawType</span><span class="o">(</span><span class="n">returnType</span><span class="o">)</span> <span class="o">!=</span> <span class="n">Call</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
@@ -597,7 +732,9 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
     <span class="o">}</span>
   <span class="o">};</span>
 <span class="o">}</span>
-</code></pre></div><p>在 <code>adapt</code> 方法中返回了 <code>ExecutorCallbackCall</code> 所以调用接口的方法最后返回的是 <code>ExecutorCallbackCall</code> ，也就是我们调用 <code>Retrofit.create</code> 创建的服务，调用其中的方法，最后面其实调用 <code>ExecutorCallbackCall</code> 。 关于 <code>ExecutorCallbackCall</code> 我们后面还会碰到。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>adapt</code> 方法中返回了 <code>ExecutorCallbackCall</code> 所以调用接口的方法最后返回的是 <code>ExecutorCallbackCall</code> ，也就是我们调用 <code>Retrofit.create</code> 创建的服务，调用其中的方法，最后面其实调用 <code>ExecutorCallbackCall</code> 。 关于 <code>ExecutorCallbackCall</code> 我们后面还会碰到。</p>
 <h3 id="小节一下-retrofit-create-里做了这么几件事">小节一下 <code>Retrofit#create</code> 里做了这么几件事</h3>
 <ol>
 <li>根据动态代理为每个接口方法创建 <code>ServiceMethod</code></li>
@@ -606,7 +743,46 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <li>在 <code>HttpServiceMethod#invoke</code> 中调用 <code>callAdapter.adapt</code> 把 <code>Retrofit.Call</code> 适配成 <code>callFactory</code> 能调用的请求，也就是 <code>OkHttpCall</code> 。</li>
 </ol>
 <h2 id="执行请求">执行请求</h2>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ExecutorCallbackCall</span><span class="o">(</span><span class="n">Executor</span> <span class="n">callbackExecutor</span><span class="o">,</span> <span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ExecutorCallbackCall</span><span class="o">(</span><span class="n">Executor</span> <span class="n">callbackExecutor</span><span class="o">,</span> <span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">this</span><span class="o">.</span><span class="na">callbackExecutor</span> <span class="o">=</span> <span class="n">callbackExecutor</span><span class="o">;</span>
   <span class="k">this</span><span class="o">.</span><span class="na">delegate</span> <span class="o">=</span> <span class="n">delegate</span><span class="o">;</span>
 <span class="o">}</span>
@@ -641,11 +817,66 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <span class="nd">@Override</span> <span class="kd">public</span> <span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">execute</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
   <span class="k">return</span> <span class="n">delegate</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
 <span class="o">}</span>
-</code></pre></div><p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>ExecutorCallbackCall</code> ，其中 <code>delegate</code> 是个 <code>OkHttpCall</code> 我们调用 <code>enqueue</code> 其实调用的是 <code>OkHttpCall</code> 的 <code>enqueue</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>ExecutorCallbackCall</code> ，其中 <code>delegate</code> 是个 <code>OkHttpCall</code> 我们调用 <code>enqueue</code> 其实调用的是 <code>OkHttpCall</code> 的 <code>enqueue</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
 <p>来看 <code>enqueue</code> 的 <code>onResponse</code> 中，最后的的结果会调用 <code>callbackExecutor.execute</code> ，之前我们分析在 <code>Android</code> 中 这个 <code>callbackExecutor</code> 是 <code>MainThreadExecutor</code> ，所以最后的结果是在主线程中被回调的。</p>
 <h3 id="okhttpcall">OkHttpCall</h3>
 <p>接下来我们来看看 <code>OkHttpCall</code> 代码如下</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">// ...
 </span><span class="c1"></span>
   <span class="k">try</span> <span class="o">{</span>
@@ -694,9 +925,28 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <span class="o">}</span>
   <span class="k">return</span> <span class="n">call</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div><p><code>enqueue</code> 中先调用了 <code>createRawCall</code> ，而 <code>createRawCall</code> 中调用了 <code>callFactory.newCall</code> ，所以最后是调用了 <code>OkHttpClient</code> 的 <code>newCall</code> 来创建 <code>OkHttp</code> 的 <code>Call</code> 。 而 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 。这样就把网络请求交给了 <code>OkHttp</code> 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>enqueue</code> 中先调用了 <code>createRawCall</code> ，而 <code>createRawCall</code> 中调用了 <code>callFactory.newCall</code> ，所以最后是调用了 <code>OkHttpClient</code> 的 <code>newCall</code> 来创建 <code>OkHttp</code> 的 <code>Call</code> 。 而 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 。这样就把网络请求交给了 <code>OkHttp</code> 。</p>
 <h2 id="解析请求结果">解析请求结果</h2>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseResponse</span><span class="o">(</span><span class="n">okhttp3</span><span class="o">.</span><span class="na">Response</span> <span class="n">rawResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseResponse</span><span class="o">(</span><span class="n">okhttp3</span><span class="o">.</span><span class="na">Response</span> <span class="n">rawResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
 
   <span class="c1">// ...
 </span><span class="c1"></span>  <span class="k">try</span> <span class="o">{</span>
@@ -709,7 +959,9 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
     <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><p>在 <code>OkHttpCall</code> 中请求成功后，会调用 <code>parseResponse</code> 来把服务返回的数据转换成对应的 <code>JavaBean</code> 。 而实际进行转换的是 <code>responseBodyConverter.convert</code> 。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>OkHttpCall</code> 中请求成功后，会调用 <code>parseResponse</code> 来把服务返回的数据转换成对应的 <code>JavaBean</code> 。 而实际进行转换的是 <code>responseBodyConverter.convert</code> 。</p>
 <h2 id="总结">总结</h2>
 <ol>
 <li><code>Retrofit</code> 通过动态代理创建 API 的实现类。</li>
@@ -724,579 +976,118 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p><a href="https://www.jianshu.com/p/45cb536be2f4">Retrofit 分析-漂亮的解耦套路</a></p>
 <p><a href="http://static.blog.piasy.com/2016/06/25/Understand-Retrofit/">拆轮子系列：拆 Retrofit</a></p>
 <p><a href="https://yuqirong.me/2017/08/03/Retrofit%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">Retrofit 源码解析</a></p>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/retrofit" role="button">Retrofit </a></li>
-      
-    
-      <li><a href="https://devbins.github.io/tags/restful" role="button">RESTful </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/retrofit/" title="Retrofit 源码解析">Retrofit 源码解析</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/mu4e/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>在 Emacs 中用 mu4e 来收邮件</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/hugo/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>使用 hugo 搭建网站</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%ae%80%e5%8d%95%e4%bd%bf%e7%94%a8">
-												 简单使用
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#retrofit-dot-build">
-												 Retrofit.build
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#retrofit-dot-create">
-												 Retrofit.create
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#loadservicemethod">
-												 loadServiceMethod
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#parseannotations">
-												 parseAnnotations
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#createcalladapter">
-												 createCallAdapter
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#createresponseconverter">
-												 createResponseConverter
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#invoke">
-												 invoke
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%b0%8f%e8%8a%82%e4%b8%80%e4%b8%8b-retrofit-create-%e9%87%8c%e5%81%9a%e4%ba%86%e8%bf%99%e4%b9%88%e5%87%a0%e4%bb%b6%e4%ba%8b">
-												 小节一下 Retrofit#create 里做了这么几件事
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%89%a7%e8%a1%8c%e8%af%b7%e6%b1%82">
-												 执行请求
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#okhttpcall">
-												 OkHttpCall
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%a7%a3%e6%9e%90%e8%af%b7%e6%b1%82%e7%bb%93%e6%9e%9c">
-												 解析请求结果
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
-												 总结
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-12-02
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/retrofit/">Retrofit</a>
+          <a href="/tags/restful/">RESTful</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/hugo/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用 hugo 搭建网站</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/mu4e/">
+            <span class="next-text nav-default">在 Emacs 中用 mu4e 来收邮件</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-12-02 00:00:00 \u002b0800 CST',
+        title: 'Retrofit 源码解析',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

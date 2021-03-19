@@ -1,337 +1,165 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。 可是我又不想把 macOS 给删除，毕竟还能用。有一种方案是通过 Boot Camp 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才">
-  
-  <meta property="og:title" content="把Manjaro安装到Macbook Pro的外置硬盘" />
-<meta property="og:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。 可是我又不想把 macOS 给删除，毕竟还能用。有一种方案是通过 Boot Camp 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>把Manjaro安装到Macbook Pro的外置硬盘 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/macinstallmanjaro/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="把Manjaro安装到Macbook Pro的外置硬盘" />
+<meta property="og:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/macinstallmanjaro/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/macinstallmanjaro/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-13T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2021-01-13T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="把Manjaro安装到Macbook Pro的外置硬盘">
+<meta itemprop="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，"><meta itemprop="datePublished" content="2021-01-13T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-13T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1085">
+<meta itemprop="keywords" content="Linux,Manjaro," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="把Manjaro安装到Macbook Pro的外置硬盘"/>
+<meta name="twitter:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。 随着电脑的使用，软件越装越多，感觉越来越卡，"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       把Manjaro安装到Macbook Pro的外置硬盘 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/macinstallmanjaro/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/linux"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Linux </a></li>
-      
-        <li><a href="https://devbins.github.io/categories/manjaro"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Manjaro </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">把Manjaro安装到Macbook Pro的外置硬盘</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Jan 13, 2021</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>3 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/macmanjaro/mac-linux.jpg.webp" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <h2 id="前言">前言</h2>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">把Manjaro安装到Macbook Pro的外置硬盘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-13 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            <a href="/categories/manjaro/"> Manjaro </a>
+            </div>
+          <span class="more-meta"> 约 1085 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#需要准备的材料">需要准备的材料</a></li>
+    <li><a href="#刻录镜像">刻录镜像</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
 <p><strong>在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。</strong></p>
 <p>随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。</p>
 <p>可是我又不想把 <code>macOS</code> 给删除，毕竟还能用。有一种方案是通过 <code>Boot Camp</code> 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才能装上，所以这条路不通。</p>
@@ -347,19 +175,26 @@
 <p>刻录镜像之前，我们需要对U盘进行格式化，这里用到的工具是 SD Card Formatter，可以在 <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formatter官网</a>下载到。</p>
 <p>下载完成后安装好软件，然后打开，选择你的U盘，点击格式化就行了。</p>
 <p>U盘格式化好后，在<a href="https://manjaro.org/download/">Manjaro官网</a>中下载镜像，通过如下命令进行刻录镜像。刻录的时间很长，需要好几个小时，耐心等待一下</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo dd <span class="nv">bs</span><span class="o">=</span>4m <span class="k">if</span><span class="o">=</span>~/Downloads/manjaro-kde-20.2.1-210103-linux59.iso <span class="nv">of</span><span class="o">=</span>/dev/disk2 <span class="nv">conv</span><span class="o">=</span>sync
-</code></pre></div><ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo dd <span class="nv">bs</span><span class="o">=</span>4m <span class="k">if</span><span class="o">=</span>~/Downloads/manjaro-kde-20.2.1-210103-linux59.iso <span class="nv">of</span><span class="o">=</span>/dev/disk2 <span class="nv">conv</span><span class="o">=</span>sync
+</code></pre></td></tr></table>
+</div>
+</div><ul>
 <li>其中 <code>if</code> 是输入文件，也就是我们的镜像所在的路径，需要替换成你本地的下载路径</li>
 <li><code>of</code> 是我们的U盘，可以通过 <code>diskutil list</code> 来查看 U盘所在路径，一次不插入U盘，然后看插入U盘的，多出来的就是U盘的路径。</li>
 </ul>
 <h2 id="安装">安装</h2>
 <p>先把电脑关机，让后按下 option (alt)键，出现两个启动选项一个是Mactonish，另一个是 EFI Boot，选择EFI Boot回车后启动
-<img src="https://devbins.github.io/images/macmanjaro/20210228_161048_CHuNEt.png" alt="">
+<img src="/images/macmanjaro/20210228_161048_CHuNEt.png" alt="">
 来到如下界面，回车进入安装桌面
-<img src="https://devbins.github.io/images/macmanjaro/20210228_143151_4F6WYr.png" alt=""></p>
-<p><img src="https://devbins.github.io/images/macmanjaro/20210228_145631_FdPF34.png" alt="">
+<img src="/images/macmanjaro/20210228_143151_4F6WYr.png" alt=""></p>
+<p><img src="/images/macmanjaro/20210228_145631_FdPF34.png" alt="">
 点击中间的 <code>Launch installer</code> 然后一路下一步, 中间的选项可以根据自己的需要做适当的调整，直到来到分区界面，如下所示
-<img src="https://devbins.github.io/images/macmanjaro/20210228_145449_YgjD0k.png" alt="">
+<img src="/images/macmanjaro/20210228_145449_YgjD0k.png" alt="">
 在分区界面要注意的是在选择存储器中一定要选择你的外置硬盘，可别选错了。</p>
 <p>在接下来就是进行磁盘分区了，如果你是高手那么按照自己的要求来分就行来，如果不是很熟练就使用默认的就行了。然后一路下一步，输入一些用户名和密码之类的。</p>
 <p>然后点击安装，等待安装好，这一步稍微快一些，需要半个小时左右。安装完成后关机，拔掉U盘。</p>
@@ -369,375 +204,118 @@
 <h2 id="参考">参考</h2>
 <p><a href="https://florisvanbreugel.wordpress.com/2018/03/23/installing-ubuntu-on-an-external-ssd-drive-on-a-macbook/">Installing Ubuntu on an external SSD drive on a Macbook – Floris van Breugel</a></p>
 
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/linux" role="button">Linux </a></li>
-      
-    
-      <li><a href="https://devbins.github.io/tags/manjaro" role="button">Manjaro </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/macinstallmanjaro/" title="把Manjaro安装到Macbook Pro的外置硬盘">把Manjaro安装到Macbook Pro的外置硬盘</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/cmake/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>CMake基础</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/construct/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>C&#43;&#43;5大构造函数</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
-												 前言
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87%e7%9a%84%e6%9d%90%e6%96%99">
-												 需要准备的材料
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%bb%e5%bd%95%e9%95%9c%e5%83%8f">
-												 刻录镜像
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85">
-												 安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
-												 总结
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-13
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/manjaro/">Manjaro</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/construct/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">C&#43;&#43;5大构造函数</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/cmake/">
+            <span class="next-text nav-default">CMake基础</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-01-13 00:00:00 \u002b0800 CST',
+        title: '把Manjaro安装到Macbook Pro的外置硬盘',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

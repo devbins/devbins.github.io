@@ -1,339 +1,185 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="
-苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
-">
-  
-  <meta property="og:title" content="Siri 帮我开灯" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Siri 帮我开灯 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content=" 苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Siri 帮我开灯" />
 <meta property="og:description" content="
 苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-01-07T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2018-01-07T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="Siri 帮我开灯">
+<meta itemprop="description" content="
+苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
+"><meta itemprop="datePublished" content="2018-01-07T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2018-01-07T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="2307">
+<meta itemprop="keywords" content="RaspberryPi,Yeelight," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Siri 帮我开灯"/>
+<meta name="twitter:description" content="
+苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
+"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       Siri 帮我开灯 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/iot"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> IOT </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">Siri 帮我开灯</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Jan 7, 2018</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>5 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/siri/siri.gif" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <blockquote>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Siri 帮我开灯</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-01-07 </span>
+        <div class="post-category">
+            <a href="/categories/iot/"> IOT </a>
+            </div>
+          <span class="more-meta"> 约 2307 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#材料准备">材料准备</a></li>
+    <li><a href="#yeelight-设置局域网控制-极客模式">Yeelight 设置局域网控制（极客模式）</a></li>
+    <li><a href="#树莓派的配置">树莓派的配置</a>
+      <ul>
+        <li><a href="#安装-node-dot-js">安装 Node.js</a></li>
+        <li><a href="#安装-homebridge">安装 homebridge</a></li>
+        <li><a href="#安装-yeelight-插件">安装 Yeelight 插件</a></li>
+        <li><a href="#插件配置">插件配置</a></li>
+        <li><a href="#启动-homebridge">启动 homebridge</a></li>
+      </ul>
+    </li>
+    <li><a href="#接入-homekit">接入 HomeKit</a></li>
+    <li><a href="#开机自启动">开机自启动</a>
+      <ul>
+        <li><a href="#先验证一下-homebridge-的路径">先验证一下 <code>homebridge</code> 的路径</a></li>
+        <li><a href="#制作启动脚本">制作启动脚本</a></li>
+        <li><a href="#设置权限">设置权限</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
 <p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p>
 </blockquote>
 <h2 id="材料准备">材料准备</h2>
@@ -361,29 +207,94 @@ Yeelight 台灯的设置就这些，没有了。</p>
 </blockquote>
 <h3 id="安装-node-dot-js">安装 Node.js</h3>
 <p>首先打开终端，通过 <code>ssh</code> 连接上树莓派，我们的操作都是在命令行下进行。Windows 可以使用 Xshell、PuTTY 等工具。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh pi@192.168.1.x <span class="c1">#这里换成你自己的 IP，回车后输入密码</span>
-</code></pre></div><p>接下来安装 Node.js</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">curl -sL https://deb.nodesource.com/setup_9.x <span class="p">|</span> sudo -E bash -
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ssh pi@192.168.1.x <span class="c1">#这里换成你自己的 IP，回车后输入密码</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来安装 Node.js</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">curl -sL https://deb.nodesource.com/setup_9.x <span class="p">|</span> sudo -E bash -
 sudo apt-get install -y nodejs
 node -v <span class="c1"># 查看一下是否安装成功，成功会输出类似 v9.x.x</span>
-</code></pre></div><p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入 <code>vi .npmrc</code>
+</code></pre></td></tr></table>
+</div>
+</div><p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入 <code>vi .npmrc</code>
 按下 <code>i</code> 后输入下面内容</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">registry</span> <span class="o">=</span> https://registry.npm.taobao.org
-</code></pre></div><p>输好后按下 <code>ESC（一般在 F1 旁边）</code> ,输入 <code>:</code> ,接着按下 <code>wq</code> 回车。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">registry</span> <span class="o">=</span> https://registry.npm.taobao.org
+</code></pre></td></tr></table>
+</div>
+</div><p>输好后按下 <code>ESC（一般在 F1 旁边）</code> ,输入 <code>:</code> ,接着按下 <code>wq</code> 回车。</p>
 <p>不做这一步也是可以的，但是国内速度可能会稍慢。</p>
 <h3 id="安装-homebridge">安装 homebridge</h3>
 <p>装好了 Node.js 就可以安装 homebridge，homebridge 是一个把设备接入 HomeKit 的工具（类似桥梁的作用），没有它就不能使用没有经过苹果认证的设备。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install libavahi-compat-libdnssd-dev
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install libavahi-compat-libdnssd-dev
 sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
-</code></pre></div><h3 id="安装-yeelight-插件">安装 Yeelight 插件</h3>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="安装-yeelight-插件">安装 Yeelight 插件</h3>
 <p>装好了 homebridge 还需要装上插件才能使用对应的智能设备，这里我使用的 Yeelight 台灯，所以还要安装 homebridge-yeelight 这个插件。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo npm install -g homebridge-yeelight
-</code></pre></div><h3 id="插件配置">插件配置</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo npm install -g homebridge-yeelight
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="插件配置">插件配置</h3>
 <p>插件装好了之后，我们需要配置一下让 homebridge 识别我们。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.homebridge  <span class="c1"># 没有的话手动创建，使用 mkdir ~/.homebridge</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.homebridge  <span class="c1"># 没有的话手动创建，使用 mkdir ~/.homebridge</span>
 vi config.json
-</code></pre></div><p>打开文件之后按下 <code>i</code> 键，复制下面的内容到里面。</p>
-<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>打开文件之后按下 <code>i</code> 键，复制下面的内容到里面。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
   <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="p">{</span>
 	<span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Homebridge&#34;</span><span class="p">,</span>
 	<span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;CC:22:3D:E3:CE:30&#34;</span><span class="p">,</span>
@@ -398,7 +309,9 @@ vi config.json
 	<span class="p">}</span>
   <span class="p">]</span>
 <span class="p">}</span>
-</code></pre></div><p>写好之后按下 <code>ESC</code> ，输入 <code>:</code> 后再输入 <code>wq</code> 回车，该操作会保存文件并退出 <code>vi</code> 回到终端。解释一下上面 bridge 中的配置</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>写好之后按下 <code>ESC</code> ，输入 <code>:</code> 后再输入 <code>wq</code> 回车，该操作会保存文件并退出 <code>vi</code> 回到终端。解释一下上面 bridge 中的配置</p>
 <ul>
 <li>name 一个名称，在家庭 APP 上添加配件时显示，可以随意填写</li>
 <li>username 一个唯一标识符，类似 MAC 地址，可以随意填写，格式不能变</li>
@@ -408,8 +321,15 @@ vi config.json
 </ul>
 <h3 id="启动-homebridge">启动 homebridge</h3>
 <p>在终端中输入下面命令，启动 homebridge</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">homebridge
-</code></pre></div><p><img src="https://devbins.github.io/images/siri/homebridge.png" alt="">
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">homebridge
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/siri/homebridge.png" alt="">
 会看到一个二维码和我们刚刚配置的 pin（图中红色方框中的），二维码暂时用不到，pin 会在接下来用到。到这里树莓派上的操作都完成了。</p>
 <h2 id="接入-homekit">接入 HomeKit</h2>
 <p>打开 iPad，进入家庭 APP，选择添加配件。
@@ -431,12 +351,130 @@ vi config.json
 <h2 id="开机自启动">开机自启动</h2>
 <p>照着上面的配置好了，也能够使用了。但是每次使用都要我手动运行 <code>homebridge</code> 太麻烦了，有没有开机自启动？有，接下来就来配置开机自启动。</p>
 <h3 id="先验证一下-homebridge-的路径">先验证一下 <code>homebridge</code> 的路径</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">which homebridge
-</code></pre></div><p>如果输出不是 <code>/usr/bin/homebridge</code> ，那么你需要把下面拷贝第 13 行的 <code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code> 改为 <code>cmd =&quot;DEBUG=* 刚刚输出的东西&quot;</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">which homebridge
+</code></pre></td></tr></table>
+</div>
+</div><p>如果输出不是 <code>/usr/bin/homebridge</code> ，那么你需要把下面拷贝第 13 行的 <code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code> 改为 <code>cmd =&quot;DEBUG=* 刚刚输出的东西&quot;</code> 。</p>
 <h3 id="制作启动脚本">制作启动脚本</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo vi /etc/init.d/homebridge
-</code></pre></div><p>按下键盘上 <code>i</code> ，把下面的内容拷贝进去</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo vi /etc/init.d/homebridge
+</code></pre></td></tr></table>
+</div>
+</div><p>按下键盘上 <code>i</code> ，把下面的内容拷贝进去</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
 </span><span class="cp"></span><span class="c1">### BEGIN INIT INFO</span>
 <span class="c1"># Provides: homebridge</span>
 <span class="c1"># Required-Start:    $network $remote_fs $syslog</span>
@@ -536,12 +574,22 @@ is_running<span class="o">()</span> <span class="o">{</span>
 
 <span class="nb">exit</span> <span class="m">0</span>
 
-</code></pre></div><p>按下 <code>ESC</code> ,输入 <code>:</code> 后按下 <code>wq</code> 回车保存并退出编辑。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>按下 <code>ESC</code> ,输入 <code>:</code> 后按下 <code>wq</code> 回车保存并退出编辑。</p>
 <h3 id="设置权限">设置权限</h3>
 <p>保存之后我们还要给执行的文件权限，不然开机之后还是没法自动启动的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo chmod <span class="m">755</span> /etc/init.d/homebridge
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo chmod <span class="m">755</span> /etc/init.d/homebridge
 sudo update-rc.d homebridge defaults
-</code></pre></div><p>重启之后 homebridge 就会自己运行。</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>重启之后 homebridge 就会自己运行。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://github.com/nfarina/homebridge">homebridge</a></li>
@@ -550,583 +598,118 @@ sudo update-rc.d homebridge defaults
 <li><a href="https://sspai.com/post/36617">借助树莓派与 HomeBridge，将 YeeLight 彩光灯接入 Apple HomeKit</a></li>
 <li><a href="https://sspai.com/post/38358">从米家到 HomeKit，你只需要一个树莓派</a></li>
 </ul>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/raspberrypi" role="button">RaspberryPi </a></li>
-      
-    
-      <li><a href="https://devbins.github.io/tags/yeelight" role="button">Yeelight </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" title="Siri 帮我开灯">Siri 帮我开灯</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/2017%E7%9A%84%E6%88%91/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>2017 的我</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/ssh/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>使用 SSH 登录服务器</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%9d%90%e6%96%99%e5%87%86%e5%a4%87">
-												 材料准备
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#yeelight-%e8%ae%be%e7%bd%ae%e5%b1%80%e5%9f%9f%e7%bd%91%e6%8e%a7%e5%88%b6-%e6%9e%81%e5%ae%a2%e6%a8%a1%e5%bc%8f">
-												 Yeelight 设置局域网控制（极客模式）
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%9a%84%e9%85%8d%e7%bd%ae">
-												 树莓派的配置
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-node-dot-js">
-												 安装 Node.js
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-homebridge">
-												 安装 homebridge
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%ae%89%e8%a3%85-yeelight-%e6%8f%92%e4%bb%b6">
-												 安装 Yeelight 插件
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%8f%92%e4%bb%b6%e9%85%8d%e7%bd%ae">
-												 插件配置
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%90%af%e5%8a%a8-homebridge">
-												 启动 homebridge
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%8e%a5%e5%85%a5-homekit">
-												 接入 HomeKit
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%bc%80%e6%9c%ba%e8%87%aa%e5%90%af%e5%8a%a8">
-												 开机自启动
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%85%88%e9%aa%8c%e8%af%81%e4%b8%80%e4%b8%8b-homebridge-%e7%9a%84%e8%b7%af%e5%be%84">
-												 先验证一下 homebridge 的路径
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%88%b6%e4%bd%9c%e5%90%af%e5%8a%a8%e8%84%9a%e6%9c%ac">
-												 制作启动脚本
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%ae%be%e7%bd%ae%e6%9d%83%e9%99%90">
-												 设置权限
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-01-07
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/raspberrypi/">RaspberryPi</a>
+          <a href="/tags/yeelight/">Yeelight</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/ssh/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用 SSH 登录服务器</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/2017%E7%9A%84%E6%88%91/">
+            <span class="next-text nav-default">2017 的我</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-01-07 00:00:00 \u002b0800 CST',
+        title: 'Siri 帮我开灯',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>

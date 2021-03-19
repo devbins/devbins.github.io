@@ -1,341 +1,188 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="dev.bins">
-  <meta name="description" content="
-本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。
-">
-  
-  <meta property="og:title" content="使用 Appium 做测试" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用 Appium 做测试 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content=" 本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/appium/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="使用 Appium 做测试" />
 <meta property="og:description" content="
 本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://devbins.github.io/post/appium/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="http://devbins.githu.io/post/appium/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-06-02T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2018-06-02T00:00:00&#43;08:00" />
 
+<meta itemprop="name" content="使用 Appium 做测试">
+<meta itemprop="description" content="
+本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。
+"><meta itemprop="datePublished" content="2018-06-02T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2018-06-02T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1522">
+<meta itemprop="keywords" content="Appium," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用 Appium 做测试"/>
+<meta name="twitter:description" content="
+本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。
+"/>
 
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <title>
-  
-       使用 Appium 做测试 | dev.bins 
-  
-  </title>
-
-  <link rel="canonical" href="https://devbins.github.io/post/appium/">
-
-  
-  
-
-  
-  <link href="https://devbins.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://devbins.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://devbins.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://devbins.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://devbins.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://devbins.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://devbins.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/androidstudio.min.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-	  <canvas class="fireworks" style="position: fixed; left: 0px; top: 0px; z-index: 1; pointer-events: none; width: 1280px; height: 192px;" width="2560" height="384"><script type="text/javascript" src="https://devbins.github.io/js/vendors/anime.min.js"></script><script type="text/javascript" src="https://devbins.github.io/js/vendors/fireworks.js"></script></canvas>
-      
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://devbins.github.io">
-          
-        <img class="avatar" src="https://devbins.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> dev.bins</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://devbins.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://devbins.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
-
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://devbins.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://devbins.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://devbins.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://devbins.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>dev.bins</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://devbins.github.io/categories/%E6%B5%8B%E8%AF%95"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 测试 </a></li>
-      
-        <li><a href="https://devbins.github.io/categories/python"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Python </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">使用 Appium 做测试</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Jun 2, 2018</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>3 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://devbins.github.io/images/appium/appium.png" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <blockquote>
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用 Appium 做测试</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-02 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%B5%8B%E8%AF%95/"> 测试 </a>
+            <a href="/categories/python/"> Python </a>
+            </div>
+          <span class="more-meta"> 约 1522 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#python-的安装">Python 的安装</a></li>
+    <li><a href="#java-的安装">Java 的安装</a>
+      <ul>
+        <li><a href="#配置环境变量">配置环境变量</a></li>
+      </ul>
+    </li>
+    <li><a href="#android-环境搭建">Android 环境搭建</a>
+      <ul>
+        <li><a href="#配置环境变量">配置环境变量</a></li>
+      </ul>
+    </li>
+    <li><a href="#nodejs-的安装">Nodejs 的安装</a></li>
+    <li><a href="#appium-doctor-的安装">appium-doctor 的安装</a></li>
+    <li><a href="#appium-安装">appium 安装</a></li>
+    <li><a href="#一个小例子">一个小例子</a></li>
+    <li><a href="#踩过的坑">踩过的坑</a>
+      <ul>
+        <li><a href="#数据被清除">数据被清除</a></li>
+        <li><a href="#测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</a></li>
+      </ul>
+    </li>
+    <li><a href="#下载链接">下载链接</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
 <p>本文使用 Windows7 64bit 操作系统。如果你的操作系统不是 64 位的，不可直接使用下文中提供的地址。但是文末给出了各个软件对应操的作系统下载链接，请根据自己的系统自行选择对应的下载，以免误伤自己，毕竟折腾很容易受伤。</p>
 </blockquote>
 <h2 id="python-的安装">Python 的安装</h2>
@@ -346,109 +193,116 @@
 <p>下载<a href="http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-windows-x64.exe?AuthParam=1527859736%5Fff9148e041d14d460c8ae4d7f5a7a311">JDK</a>，然后运行安装程序。
 选择安装的位置，这里需要注意一下，不要选择带有特殊字符（比如：空格之类的）和带有中文的路径，以免反生不明所以的错误。
 安装位置这里需要记一下，等下用来配置环境变量，如果你和图上选择的路径的不一样，在设置环境变量时请跟着修改。
-<img src="https://devbins.github.io/images/appium/java_path.png" alt=""></p>
+<img src="/images/appium/java_path.png" alt=""></p>
 <p>由于 <code>JDK</code> 中包含了 <code>JRE</code> 所以这里直接取消，不在进行安装，安装也是可以的。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/jre.png"/> 
+    <img src="/images/appium/jre.png"/> 
 </figure>
 
 <h3 id="配置环境变量">配置环境变量</h3>
 <p>接下来进行 <code>Java</code> 的环境变量配置。在计算机中右键-&gt;属性</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/property.png"/> 
+    <img src="/images/appium/property.png"/> 
 </figure>
 
 <p>选择高级系统设置</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/setting.png"/> 
+    <img src="/images/appium/setting.png"/> 
 </figure>
 
 <p>点击环境变量</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/env.png"/> 
+    <img src="/images/appium/env.png"/> 
 </figure>
 
 <p>点击新建</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/newenv.png"/> 
+    <img src="/images/appium/newenv.png"/> 
 </figure>
 
 <p>变量名输入（变量名要大写） <code>JAVA_HOME</code>,变量值输入刚才安装的路径，如果改过安装路径，请选择正确的安装路径。我这里是 <code>C:\Java</code> ，输入完后点击确定保存。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/java_home.png"/> 
+    <img src="/images/appium/java_home.png"/> 
 </figure>
 
 <p>和上一步一样，点击新建。设置变量名为 <code>Path</code> ,变量值为 <code>%JAVA_HOME%\bin</code> 。 其中 <code>%%</code> 的意思是引用变量的值，所以这里 <code>Path</code> 其实是 <code>C:\Java\bin</code></p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/java.png"/> 
+    <img src="/images/appium/java.png"/> 
 </figure>
 
 <h2 id="android-环境搭建">Android 环境搭建</h2>
 <p>点击下载<a href="https://dl.google.com/dl/android/studio/install/3.1.2.0/android-studio-ide-173.4720617-windows.exe">AndroidStudio</a>，下载完成后运行安装程序。
 点击下一步，出现选择安装路径。和安装 <code>Java</code> 一样选择一个不带有特殊字符和中文的路径。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/androidstudio.png"/> 
+    <img src="/images/appium/androidstudio.png"/> 
 </figure>
 
 <p>选择自定义安装</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/custome.png"/> 
+    <img src="/images/appium/custome.png"/> 
 </figure>
 
 <p>选择 <code>SDK</code> 安装路径，也是需要记住安装路径，用于配置环境变量。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/sdk.png"/> 
+    <img src="/images/appium/sdk.png"/> 
 </figure>
 
 <h3 id="配置环境变量">配置环境变量</h3>
 <p>配置 <code>ANDROID_HOME</code> ，和 <code>Java</code> 配置环境变量在同一个地方。不过这次的变量名是 <code>ANDROID_HOME</code> ，变量值是刚刚 <code>SDK</code> 的安装路径。
 右键计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;新建</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/android_home.png"/> 
+    <img src="/images/appium/android_home.png"/> 
 </figure>
 
 <p>除了配置 <code>ANDROID_HOME</code> 还需要把 <code>adb</code> 加入 <code>Path</code> 中，这样才能调试设备。</p>
 <p>在环境变量中选择 <code>Path</code> 点击编辑，加入 <code>;%ANDROID_HOME%\platform-tools</code> ，注意前面有一个 <code>;</code> 环境变量有多个可以使用 <code>;</code> 分隔。最后 <code>Path</code> 为 <code>%JAVA_HOME%\bin;%ANDROID_HOME%\platform-tools</code></p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/add_path.png"/> 
+    <img src="/images/appium/add_path.png"/> 
 </figure>
 
 <h2 id="nodejs-的安装">Nodejs 的安装</h2>
 <p>点击<a href="http://cdn.npm.taobao.org/dist/node/v10.2.0/node-v10.2.0-x64.msi">Node</a>下载 Node.js，下载完成后运行安装，一直点击下一步。没了，就这么简单。
 Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这里使用淘宝镜像加速。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">npm config <span class="nb">set</span> registry http://registry.cnpmjs.org
-</code></pre></div><h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">npm config <span class="nb">set</span> registry http://registry.cnpmjs.org
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
 <p><code>appium-doctor</code> 是一个用来检查 <code>appium</code> 环境是否安装并配置好的工具，让我们来检测一下上面的步骤都成功了没有。
 点击屏幕左下角，在搜索框中输入 <code>cmd</code> 回车</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/cmd.png"/> 
+    <img src="/images/appium/cmd.png"/> 
 </figure>
 
 <p>在打开的窗口中输入 <code>npm install -g appium-doctor</code></p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/install_appium_doctor.png"/> 
+    <img src="/images/appium/install_appium_doctor.png"/> 
 </figure>
 
 <p>安装好之后，输入 <code>appium-doctor</code> 来查看环境是否配置成功。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/appium_doctor.png"/> 
+    <img src="/images/appium/appium_doctor.png"/> 
 </figure>
 
 <h2 id="appium-安装">appium 安装</h2>
 <p>点击<a href="https://github.com/appium/appium-desktop/releases/download/v1.6.1/appium-desktop-setup-1.6.1.exe">Appium</a>下载，点击安装。没了。
 运行起来看看。</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/appium.png"/> 
+    <img src="/images/appium/appium.png"/> 
 </figure>
 
 <h2 id="一个小例子">一个小例子</h2>
 <p>经过上面的环境搭建，终于可以测试了，下面使用 <code>Python</code> 来简单的测试计算器的加法。使用时请保证设备安装好了驱动，并能正确连接到电脑。
 在用 <code>Python</code> 测试时需要用到 <code>Appium-Python-Client</code> ，先来安装一下。
 打开终端
-<img src="https://devbins.github.io/images/appium/anaconda_prompt.png" alt="">
+<img src="/images/appium/anaconda_prompt.png" alt="">
 输入 <code>pip install Appium-Python-Client</code></p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/appium_python_client.png"/> 
+    <img src="/images/appium/appium_python_client.png"/> 
 </figure>
 
 <ul>
@@ -458,7 +312,44 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <li>appActivity 测试应用的界面</li>
 <li>noReset 测试不清除应用数据</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">appium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 
@@ -491,17 +382,26 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">()</span><span class="o">.</span><span class="n">loadTestsFromTestCase</span><span class="p">(</span><span class="n">Calc</span><span class="p">)</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
-</code></pre></div><p>看看效果，还不错</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>看看效果，还不错</p>
 <figure>
-    <img src="https://devbins.github.io/images/appium/screenshot.gif"/> 
+    <img src="/images/appium/screenshot.gif"/> 
 </figure>
 
 <h2 id="踩过的坑">踩过的坑</h2>
 <h3 id="数据被清除">数据被清除</h3>
 <p>在使用 Appium 进行测试时，每次都会把要进行测试的软件对应的数据给清除掉。可怜我第一次使用微信进行测试，虽然测通了，但是我重新打开微信的时候，什么都没了。哭晕在厕所。
 解决这个问题很简单，只要配置一个参数即可</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-</code></pre></div><h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
 <p>跟着官方的例子自己写了一个试试，但是发现还是太年轻，调了好久都没用，最后想起了 <code>Go</code> 语言里测试函数是要以 <code>test</code> 开头的，于是试了一下就通了。</p>
 <h2 id="下载链接">下载链接</h2>
 <ul>
@@ -511,542 +411,117 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <li><a href="https://github.com/appium/appium-desktop/releases/tag/v1.6.1">Appium</a></li>
 <li><a href="https://developer.android.google.cn/studio/#downloads">AndroidStudio</a></li>
 </ul>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://devbins.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://devbins.github.io/tags/appium" role="button">Appium </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>dev.bins</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://devbins.github.io/post/appium/" title="使用 Appium 做测试">使用 Appium 做测试</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://devbins.github.io/post/miwifipadavan/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>小米路由器刷 Padavan</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-                <a href=https://devbins.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>单例模式的多种写法</span>
-                  </div>
-                </a>
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#python-%e7%9a%84%e5%ae%89%e8%a3%85">
-												 Python 的安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#java-%e7%9a%84%e5%ae%89%e8%a3%85">
-												 Java 的安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">
-												 配置环境变量
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#android-%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba">
-												 Android 环境搭建
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e9%85%8d%e7%bd%ae%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">
-												 配置环境变量
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#nodejs-%e7%9a%84%e5%ae%89%e8%a3%85">
-												 Nodejs 的安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#appium-doctor-%e7%9a%84%e5%ae%89%e8%a3%85">
-												 appium-doctor 的安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#appium-%e5%ae%89%e8%a3%85">
-												 appium 安装
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%b8%80%e4%b8%aa%e5%b0%8f%e4%be%8b%e5%ad%90">
-												 一个小例子
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e8%b8%a9%e8%bf%87%e7%9a%84%e5%9d%91">
-												 踩过的坑
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%95%b0%e6%8d%ae%e8%a2%ab%e6%b8%85%e9%99%a4">
-												 数据被清除
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%b5%8b%e8%af%95%e5%87%bd%e6%95%b0%e8%a6%81%e4%bb%a5-test-%e5%bc%80%e5%a4%b4">
-												 测试函数要以 test 开头
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%b8%8b%e8%bd%bd%e9%93%be%e6%8e%a5">
-												 下载链接
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-06-02
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/appium/">Appium</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">单例模式的多种写法</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/miwifipadavan/">
+            <span class="next-text nav-default">小米路由器刷 Padavan</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-06-02 00:00:00 \u002b0800 CST',
+        title: '使用 Appium 做测试',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "devbins.github.io",
-        owner: 'devbins',
-        admin: ["devbins"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2021 &copy; | Theme <a href='https://github.com/devbins/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/devbins' target="_blank">devbins</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://devbins.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://devbins.github.io/js/main.js"></script>
-
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/cmake.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/groovy.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/gradle.min.js"> </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/languages/dockerfile.min.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-  <script src="https://devbins.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://devbins.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
 
-  </body>
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
 </html>
