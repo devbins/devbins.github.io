@@ -55,7 +55,7 @@
 上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。
 本文源码基于 Android10"><meta itemprop="datePublished" content="2021-03-21T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-03-21T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="4609">
+<meta itemprop="wordCount" content="5215">
 <meta itemprop="keywords" content="消息机制,Handler,MessageQueue," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Handler 之 MessageQueue"/>
 <meta name="twitter:description" content="前言
@@ -144,8 +144,8 @@
         <div class="post-category">
             <a href="/categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 4609 字 </span>
-          <span class="more-meta"> 预计阅读 10 分钟 </span>
+          <span class="more-meta"> 约 5215 字 </span>
+          <span class="more-meta"> 预计阅读 11 分钟 </span>
         
       </div>
     </header>
@@ -291,6 +291,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="rebuildepolllocked">rebuildEpollLocked</h2>
+<p><code>/system/core/libutils/Looper.cpp</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -408,6 +409,7 @@
 </div>
 </div><p>在 <code>nativePollOnce</code> 中最重要的就是调用了 <code>Looper.pollOnce</code></p>
 <h2 id="looper-dot-pollonce">Looper.pollOnce</h2>
+<p><code>/system/core/libutils/Looper.cpp</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -481,6 +483,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="pollinner">pollInner</h2>
+<p><code>/system/core/libutils/Looper.cpp</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">  1
@@ -1355,7 +1358,96 @@
 </div>
 </div><p><code>Response</code> 处理也很简单就只是调用了 <code>handleEvent</code> 而已。</p>
 <h3 id="源码中使用的例子">源码中使用的例子</h3>
-<p><code>/frameworks/native/services/inputflinger/InputDispatcher.cpp</code></p>
+<h4 id="nativeactivity">NativeActivity</h4>
+<p><code>/frameworks/base/core/jni/android_app_NativeActivity.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="n">jlong</span>
+<span class="nf">loadNativeCode_native</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">path</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">funcName</span><span class="p">,</span>
+        <span class="n">jobject</span> <span class="n">messageQueue</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">internalDataDir</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">obbDir</span><span class="p">,</span>
+        <span class="n">jstring</span> <span class="n">externalDataDir</span><span class="p">,</span> <span class="n">jint</span> <span class="n">sdkVersion</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">jAssetMgr</span><span class="p">,</span>
+        <span class="n">jbyteArray</span> <span class="n">savedState</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">classLoader</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">libraryPath</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// ...
+</span><span class="c1"></span>    <span class="c1">// 获取 MessageQueue
+</span><span class="c1"></span>    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span> <span class="o">=</span> <span class="n">android_os_MessageQueue_getMessageQueue</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">messageQueue</span><span class="p">);</span>
+
+    <span class="c1">// 这里使用管道通信，和我们之间讲的 Epoll 中使用的是 eventfd 不一样
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">msgpipe</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">msgpipe</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">g_error_msg</span> <span class="o">=</span> <span class="n">android</span><span class="o">::</span><span class="n">base</span><span class="o">::</span><span class="n">StringPrintf</span><span class="p">(</span><span class="s">&#34;could not create pipe: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">g_error_msg</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span> <span class="o">=</span> <span class="n">msgpipe</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkWrite</span> <span class="o">=</span> <span class="n">msgpipe</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkWrite</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+    <span class="c1">// 监听管道读描述符，并在有事件发生的时候使用 mainWorkCallback 进行回调，这里监听 ALOOPER_EVENT_INPUT 事件，不关心 POLLIN, 在 mainWorkCallback 中会进行判断
+</span><span class="c1"></span>    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">getLooper</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addFd</span><span class="p">(</span>
+            <span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">,</span> <span class="n">mainWorkCallback</span><span class="p">,</span> <span class="n">code</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">jlong</span><span class="p">)</span><span class="n">code</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>做过 <code>Native</code> 开发的都知道有一个叫 <code>NativeActivity</code> 的类，通常我们会把它作为主要的 <code>Activity</code> 和 <code>C++</code> 进行交互，在这个类中就使用到了自定义描述符来和 <code>MessageQueue</code> 进行通信。</p>
+<p>这里先通过 <code>getMessageQueue</code> 获得 <code>NativeMessageQueue</code> 的指针，然后在通过其获取 <code>Looper</code> ，并使用 <code>addFd</code> 监听读描述符的事件。</p>
+<p>根据我们之前的分析，当管道中写入数据的时候 <code>epoll</code> 中能够收到事件，这时候就会调用回调方法 <code>mainWorkCallback</code> 。</p>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>getMessageQueue</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageQueue</span><span class="o">&gt;</span> <span class="n">android_os_MessageQueue_getMessageQueue</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">messageQueueObj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">jlong</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetLongField</span><span class="p">(</span><span class="n">messageQueueObj</span><span class="p">,</span> <span class="n">gMessageQueueClassInfo</span><span class="p">.</span><span class="n">mPtr</span><span class="p">);</span> <span class="c1">// 从 Java 的 MessageQueue 获取 NativeMessageQueue 的指针
+</span><span class="c1"></span>    <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">NativeMessageQueue</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// 类型转换
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从 <code>Java</code> 的 <code>MessageQueue</code> 取出 <code>mPtr</code> ，根据我们之前的讲解，这个 <code>mPtr</code> 就是 <code>NativeMessageQueue</code> 的指针。所以在这里进行了类型转换。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>mainWorkCallback</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1405,134 +1497,177 @@
 </span><span class="lnt">45
 </span><span class="lnt">46
 </span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span><span class="lnt">72
-</span><span class="lnt">73
-</span><span class="lnt">74
-</span><span class="lnt">75
-</span><span class="lnt">76
-</span><span class="lnt">77
-</span><span class="lnt">78
-</span><span class="lnt">79
-</span><span class="lnt">80
-</span><span class="lnt">81
-</span><span class="lnt">82
-</span><span class="lnt">83
-</span><span class="lnt">84
-</span><span class="lnt">85
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">status_t</span> <span class="n">InputDispatcher</span><span class="o">::</span><span class="n">registerInputChannel</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">InputChannel</span><span class="o">&gt;&amp;</span> <span class="n">inputChannel</span><span class="p">,</span>
-                                               <span class="kt">int32_t</span> <span class="n">displayId</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">getConnectionIndexLocked</span><span class="p">(</span><span class="n">inputChannel</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Attempted to register already registered input channel &#39;%s&#39;&#34;</span><span class="p">,</span>
-                    <span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
-            <span class="k">return</span> <span class="n">BAD_VALUE</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="n">sp</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span> <span class="n">connection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Connection</span><span class="p">(</span><span class="n">inputChannel</span><span class="p">,</span> <span class="nb">false</span> <span class="cm">/*monitor*/</span><span class="p">);</span>
-
-        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getFd</span><span class="p">();</span>
-        <span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">connection</span><span class="p">);</span>
-        <span class="n">mInputChannelsByToken</span><span class="p">[</span><span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getToken</span><span class="p">()]</span> <span class="o">=</span> <span class="n">inputChannel</span><span class="p">;</span>
-
-        <span class="c1">// 添加输入描述符到 Looper 中，把 handleReceiveCallback 作为回调函数
-</span><span class="c1"></span>        <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">addFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">,</span> <span class="n">handleReceiveCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">int</span> <span class="nf">mainWorkCallback</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NativeCode</span><span class="o">*</span> <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="n">NativeCode</span><span class="o">*</span><span class="p">)</span><span class="n">data</span><span class="p">;</span>
+    <span class="c1">// 根据我们之前的分析 events 设置的是 ALOOPER_EVENT_INPUT = 1, 而 POLLIN = 1 所以这里直接返回了。这里并不关心 POLLIN 事件
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">((</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">wake</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">OK</span><span class="p">;</span>
+    <span class="n">ActivityWork</span> <span class="n">work</span><span class="p">;</span>
+    <span class="c1">// 从管道中读取事件
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">read_work</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">work</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 把读取到的事件传递到 Java
+</span><span class="c1"></span>    <span class="k">switch</span> <span class="p">(</span><span class="n">work</span><span class="p">.</span><span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nl">CMD_FINISH</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span> <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">finish</span><span class="p">);</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;finish&#34;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">CMD_SET_WINDOW_FORMAT</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span>
+                                <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">setWindowFormat</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">arg1</span><span class="p">);</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;setWindowFormat&#34;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">CMD_SET_WINDOW_FLAGS</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span>
+                                <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">setWindowFlags</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">arg1</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">arg2</span><span class="p">);</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;setWindowFlags&#34;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">CMD_SHOW_SOFT_INPUT</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span>
+                                <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">showIme</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">arg1</span><span class="p">);</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;showIme&#34;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">CMD_HIDE_SOFT_INPUT</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span>
+                                <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">hideIme</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">arg1</span><span class="p">);</span>
+        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;hideIme&#34;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
+        <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Unknown work command: %d&#34;</span><span class="p">,</span> <span class="n">work</span><span class="p">.</span><span class="n">cmd</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 这里返回的是1，我们之前讨论了，返回0的话就会移除监听，所以这里不能返回 0
+</span><span class="c1"></span>    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">InputDispatcher</span><span class="o">::</span><span class="n">handleReceiveCallback</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">InputDispatcher</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">InputDispatcher</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
-
-    <span class="p">{</span> <span class="c1">// acquire lock
-</span><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">_l</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">mLock</span><span class="p">);</span>
-
-        <span class="n">ssize_t</span> <span class="n">connectionIndex</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">connectionIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Received spurious receive callback for unknown input channel.  &#34;</span>
-                    <span class="s">&#34;fd=%d, events=0x%x&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">);</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// remove the callback
-</span><span class="c1"></span>        <span class="p">}</span>
-
-        <span class="kt">bool</span> <span class="n">notify</span><span class="p">;</span>
-        <span class="n">sp</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">connectionIndex</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ALOOPER_EVENT_ERROR</span> <span class="o">|</span> <span class="n">ALOOPER_EVENT_HANGUP</span><span class="p">)))</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">))</span> <span class="p">{</span>
-                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Received spurious callback for unhandled poll event.  &#34;</span>
-                        <span class="s">&#34;events=0x%x&#34;</span><span class="p">,</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">events</span><span class="p">);</span>
-                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="n">nsecs_t</span> <span class="n">currentTime</span> <span class="o">=</span> <span class="n">now</span><span class="p">();</span>
-            <span class="kt">bool</span> <span class="n">gotOne</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-            <span class="n">status_t</span> <span class="n">status</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
-                <span class="kt">uint32_t</span> <span class="n">seq</span><span class="p">;</span>
-                <span class="kt">bool</span> <span class="n">handled</span><span class="p">;</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">inputPublisher</span><span class="p">.</span><span class="n">receiveFinishedSignal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">seq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">handled</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="n">d</span><span class="o">-&gt;</span><span class="n">finishDispatchCycleLocked</span><span class="p">(</span><span class="n">currentTime</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">handled</span><span class="p">);</span>
-                <span class="n">gotOne</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">gotOne</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">d</span><span class="o">-&gt;</span><span class="n">runCommandsLockedInterruptible</span><span class="p">();</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">WOULD_BLOCK</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="n">notify</span> <span class="o">=</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">DEAD_OBJECT</span> <span class="o">||</span> <span class="o">!</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">monitor</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">notify</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Failed to receive finished signal.  status=%d&#34;</span><span class="p">,</span>
-                        <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">status</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">notify</span> <span class="o">=</span> <span class="o">!</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">monitor</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">notify</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Consumer closed input channel or an error occurred.  &#34;</span>
-                        <span class="s">&#34;events=0x%x&#34;</span><span class="p">,</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">events</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Unregister the channel.
-</span><span class="c1"></span>        <span class="n">d</span><span class="o">-&gt;</span><span class="n">unregisterInputChannelLocked</span><span class="p">(</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">inputChannel</span><span class="p">,</span> <span class="n">notify</span><span class="p">);</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// remove the callback
-</span><span class="c1"></span>    <span class="p">}</span> <span class="c1">// release lock
-</span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>在处理输入事件的时候采用的是监听描述的做法。</p>
+</div></li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>什么时候往管道中写数据的呢？</p>
+<p>经过排查发现在生命周期变化的时候会向管道中写入数据</p>
+<p><code>NativeActivity.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
+    <span class="n">onResumeNative</span><span class="o">(</span><span class="n">mNativeHandle</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>NativeActivity</code> 中的 <code>onResume</code> 中会调用 <code>onResumeNative</code> ，这是一个 <code>JNI</code> 调用，我们跟进去看看</p>
+<p><code>/frameworks/base/core/jni/android_app_NativeActivity.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="kt">void</span>
+<span class="nf">onResume_native</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">jlong</span> <span class="n">handle</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">kLogTrace</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ALOGD</span><span class="p">(</span><span class="s">&#34;onResume_native&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NativeCode</span><span class="o">*</span> <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="n">NativeCode</span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">callbacks</span><span class="p">.</span><span class="n">onResume</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">code</span><span class="o">-&gt;</span><span class="n">callbacks</span><span class="p">.</span><span class="n">onResume</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里会调用 <code>NativeCode.callbacks.onResume</code> ，这里的绑定在 <code>android_app_NativeActivity.cpp</code> 的 <code>loadNativeCode_native</code> 中，有兴趣取可以了解一下，这里不赘述，不然太多了。我们直接看 <code>callbacks.onResume</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="p">(</span><span class="n">ANativeActivity</span><span class="o">*</span> <span class="n">activity</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LOGV</span><span class="p">(</span><span class="s">&#34;Resume: %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">activity</span><span class="p">);</span>
+    <span class="n">android_app_set_activity_state</span><span class="p">((</span><span class="k">struct</span> <span class="nc">android_app</span><span class="o">*</span><span class="p">)</span><span class="n">activity</span><span class="o">-&gt;</span><span class="n">instance</span><span class="p">,</span> <span class="n">APP_CMD_RESUME</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里比较简单直接调用了 <code>android_app_set_activity_state</code> ，跟进去看看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_app_set_activity_state</span><span class="p">(</span><span class="k">struct</span> <span class="nc">android_app</span><span class="o">*</span> <span class="n">android_app</span><span class="p">,</span> <span class="kt">int8_t</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
+    <span class="c1">// 写数据
+</span><span class="c1"></span>    <span class="n">android_app_write_cmd</span><span class="p">(</span><span class="n">android_app</span><span class="p">,</span> <span class="n">cmd</span><span class="p">);</span>
+    <span class="c1">// 直到成功为止
+</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">activityState</span> <span class="o">!=</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">cond</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在这个方法中会调用 <code>android_app_write_cmd</code> 可以猜测这里应该要往管道中写数据了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_app_write_cmd</span><span class="p">(</span><span class="k">struct</span> <span class="n">android_app</span><span class="o">*</span> <span class="n">android_app</span><span class="p">,</span> <span class="n">int8_t</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">write</span><span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">msgwrite</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cmd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">LOGE</span><span class="p">(</span><span class="s">&#34;Failure writing android_app cmd: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>不出所料向管道中写数据了。这样一来整个事件就串通了。</p>
+</li>
+</ul>
 <h3 id="小结">小结</h3>
 <ul>
 <li>自定义描述符事件，要先根据 <code>Request</code> 生成 <code>Reponse</code> 才能被处理，生成 <code>Response</code> 的时机实在 <code>Request</code> 中的描述符有事件发生，会根据 <code>Reqeust</code> 生成 <code>Response</code> ，然后调用 <code>Request</code> 的回调函数进行处理。</li>
