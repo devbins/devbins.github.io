@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Handler 之 MessageQueue - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/handler_mq/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Handler 之 MessageQueue" />
+<meta property="og:description" content="前言
+上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.githu.io/post/handler_mq/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-21T00:00:00&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-21T00:00:00&#43;08:00" />
+
+<meta itemprop="name" content="Handler 之 MessageQueue">
+<meta itemprop="description" content="前言
+上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。"><meta itemprop="datePublished" content="2021-03-21T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-21T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="4602">
+<meta itemprop="keywords" content="消息机制,Handler,MessageQueue," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Handler 之 MessageQueue"/>
+<meta name="twitter:description" content="前言
+上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Handler 之 MessageQueue</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-21 </span>
+        <div class="post-category">
+            <a href="/categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 4602 字 </span>
+          <span class="more-meta"> 预计阅读 10 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#nativeinit">nativeInit</a></li>
+    <li><a href="#nativemessagequeue">NativeMessageQueue</a></li>
+    <li><a href="#native-层-looper">Native 层 Looper</a></li>
+    <li><a href="#rebuildepolllocked">rebuildEpollLocked</a></li>
+    <li><a href="#nativepollonce">nativePollOnce</a></li>
+    <li><a href="#looper-dot-pollonce">Looper.pollOnce</a></li>
+    <li><a href="#pollinner">pollInner</a>
+      <ul>
+        <li><a href="#没有看到处理-java-层的消息">没有看到处理 Java 层的消息</a></li>
+        <li><a href="#response-的处理方式">Response 的处理方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#awoken">awoken</a></li>
+    <li><a href="#nativemessage">NativeMessage</a>
+      <ul>
+        <li><a href="#message">Message</a></li>
+        <li><a href="#messageenvelope">MessageEnvelope</a></li>
+        <li><a href="#messagehandler">MessageHandler</a></li>
+        <li><a href="#weakmessagehandler">WeakMessageHandler</a></li>
+        <li><a href="#sendmessageattime">sendMessageAtTime</a></li>
+        <li><a href="#消息的处理">消息的处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#监听自定义事件">监听自定义事件</a>
+      <ul>
+        <li><a href="#request-and-response">Request &amp; Response</a></li>
+        <li><a href="#loopercallback">LooperCallback</a></li>
+        <li><a href="#simpleloopercallback">SimpleLooperCallback</a></li>
+        <li><a href="#源码中使用的例子">源码中使用的例子</a></li>
+        <li><a href="#小结">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章，我们从 <code>Java</code> 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 <code>MessageQueue</code> 入手，带你了解 <code>Native</code> 层的原理。</p>
+<h2 id="nativeinit">nativeInit</h2>
+<p>在上一篇文章中提到， <code>Java</code> 层的 <code>MessageQueue</code> 的构造方法中会调用 <code>nativeInit</code> ，我们就从这个函数入手来一探究竟。</p>
+<p><code>/frameworks/base/core/jni/android_os_MessageQueue.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="n">jlong</span> <span class="nf">android_os_MessageQueue_nativeInit</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jclass</span> <span class="n">clazz</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NativeMessageQueue</span><span class="o">*</span> <span class="n">nativeMessageQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NativeMessageQueue</span><span class="p">();</span>
+    <span class="n">nativeMessageQueue</span><span class="o">-&gt;</span><span class="n">incStrong</span><span class="p">(</span><span class="n">env</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">jlong</span><span class="o">&gt;</span><span class="p">(</span><span class="n">nativeMessageQueue</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在这里创建了 <code>NativeMessageQueue</code> 然后把它的指针返回到 <code>Java</code> 层，在源码里面会发现有许多类似这种把一个对象的指针返回给 <code>Java</code> 的做法，这样可以避免在 <code>Java</code> 层与 <code>Native</code> 层之间传递大对象，而且也很不方便，使用指针就方便多了。我们在自己写代码的时候也可以参照这样的做法，是一个不错的技巧。</p>
+<h2 id="nativemessagequeue">NativeMessageQueue</h2>
+<p><code>/frameworks/base/core/jni/android_os_MessageQueue.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">NativeMessageQueue</span> <span class="o">:</span> <span class="k">public</span> <span class="n">MessageQueue</span><span class="p">,</span> <span class="k">public</span> <span class="n">LooperCallback</span> <span class="p">{</span>
+    <span class="n">NativeMessageQueue</span><span class="o">::</span><span class="n">NativeMessageQueue</span><span class="p">()</span> <span class="o">:</span>
+        <span class="n">mPollEnv</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">mPollObj</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">mExceptionObj</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mLooper</span> <span class="o">=</span> <span class="n">Looper</span><span class="o">::</span><span class="n">getForThread</span><span class="p">();</span> <span class="c1">// 从 ThreadLocal 中获取 Looper
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">mLooper</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">mLooper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Looper</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="c1">// 创建 Looper
+</span><span class="c1"></span>            <span class="n">Looper</span><span class="o">::</span><span class="n">setForThread</span><span class="p">(</span><span class="n">mLooper</span><span class="p">);</span> <span class="c1">// 把 Looper 设置给 ThreadLocal
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里稍微和 <code>Java</code> 层不一样， <code>Java</code> 层是从 <code>Looper</code> 的构造方法创建 <code>MessageQueue</code> ，而 <code>Native</code> 层是反过来，在 <code>NativeMessageQueue</code> 里创建 <code>Looper</code> 。</p>
+<p>不过它们的套路都是一样的把 <code>Looper</code> 放到 <code>ThreadLocal</code> 中。</p>
+<p>这里的 <code>Looper</code> 和 <code>Java</code> 不是同一个对象，所以其实是存在两个 <code>Looper</code> 和 <code>MessageQueue</code> 。</p>
+<p><code>Java</code> 层和 <code>Native</code> 都有一套各自的实现，它们功能是相同的。</p>
+<h2 id="native-层-looper">Native 层 Looper</h2>
+<p><code>/system/core/libutils/Looper.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">Looper</span><span class="o">::</span><span class="n">Looper</span><span class="p">(</span><span class="kt">bool</span> <span class="n">allowNonCallbacks</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">mAllowNonCallbacks</span><span class="p">(</span><span class="n">allowNonCallbacks</span><span class="p">),</span>
+      <span class="n">mSendingMessage</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
+      <span class="n">mPolling</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
+      <span class="n">mEpollRebuildRequired</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
+      <span class="n">mNextRequestSeq</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+      <span class="n">mResponseIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+      <span class="n">mNextMessageUptime</span><span class="p">(</span><span class="n">LLONG_MAX</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 创建用于唤醒的描述符，5.0以前使用的是管道
+</span><span class="c1"></span>    <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EFD_NONBLOCK</span> <span class="o">|</span> <span class="n">EFD_CLOEXEC</span><span class="p">));</span>
+    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake event fd: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+    <span class="c1">// 重建 Epoll 事件
+</span><span class="c1"></span>    <span class="n">rebuildEpollLocked</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="rebuildepolllocked">rebuildEpollLocked</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">rebuildEpollLocked</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mEpollFd</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 创建 Epoll 描述符，用于监听其它描述符
+</span><span class="c1"></span>    <span class="n">mEpollFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">));</span>
+    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create epoll instance: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
+    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">epoll_event</span><span class="p">));</span>
+    <span class="c1">// 设置要监听读事件
+</span><span class="c1"></span>    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
+    <span class="n">eventItem</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+    <span class="c1">// 将唤醒描述符添加到 Epoll 中，用于监听
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not add wake event fd to epoll instance: %s&#34;</span><span class="p">,</span>
+                        <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="n">Request</span><span class="o">&amp;</span> <span class="n">request</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">initEventItem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+        <span class="c1">// 处理自定义请求中的描述符，也一并加入到 Epoll 中进行监听。关于 Request, 我们后面再聊
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error adding epoll events for fd %d while rebuilding epoll set: %s&#34;</span><span class="p">,</span>
+                  <span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nativepollonce">nativePollOnce</h2>
+<p>在 <code>Java</code> 层的 <code>MessageQueue</code> 中 <code>next</code> 方法中会调用 <code>nativePollOnce</code> 当时我们并没有探究下去，接下来我们来看看里面都做了啥</p>
+<p><code>/frameworks/base/core/jni/android_os_MessageQueue.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_os_MessageQueue_nativePollOnce</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">obj</span><span class="p">,</span>
+                                                   <span class="n">jlong</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">jint</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NativeMessageQueue</span><span class="o">*</span> <span class="n">nativeMessageQueue</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">NativeMessageQueue</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+    <span class="n">nativeMessageQueue</span><span class="o">-&gt;</span><span class="n">pollOnce</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">NativeMessageQueue</span><span class="o">::</span><span class="n">pollOnce</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">pollObj</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">mPollEnv</span> <span class="o">=</span> <span class="n">env</span><span class="p">;</span>
+    <span class="n">mPollObj</span> <span class="o">=</span> <span class="n">pollObj</span><span class="p">;</span>
+    <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">pollOnce</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">);</span> <span class="c1">// 调用了 Looper 的 pollOnce
+</span><span class="c1"></span>    <span class="n">mPollObj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">mPollEnv</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">mExceptionObj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">env</span><span class="o">-&gt;</span><span class="n">Throw</span><span class="p">(</span><span class="n">mExceptionObj</span><span class="p">);</span>
+        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">mExceptionObj</span><span class="p">);</span>
+        <span class="n">mExceptionObj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>nativePollOnce</code> 中最重要的就是调用了 <code>Looper.pollOnce</code></p>
+<h2 id="looper-dot-pollonce">Looper.pollOnce</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kr">inline</span> <span class="kt">int</span> <span class="nf">pollOnce</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">pollOnce</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollOnce</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">outFd</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">outEvents</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span> <span class="n">outData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">// 先处理没有 Callback 的Response
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">mResponseIndex</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">const</span> <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="n">mResponseIndex</span><span class="o">++</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">ident</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span><span class="p">;</span>
+            <span class="c1">// ident &gt;= 0 表示没有 callback ，所以在这里会直接返回，有关reponse 之后和 request 一起聊
+</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">ident</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
+                <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">outFd</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outFd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">outEvents</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outEvents</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">outData</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outData</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">ident</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">outFd</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outFd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">outEvents</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outEvents</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">outData</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">*</span><span class="n">outData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 处理内部事件
+</span><span class="c1"></span>        <span class="n">result</span> <span class="o">=</span> <span class="n">pollInner</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="pollinner">pollInner</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollInner</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// ...
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
+    <span class="n">mResponses</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">mResponseIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// We are about to idle.
+</span><span class="c1"></span>    <span class="n">mPolling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">EPOLL_MAX_EVENTS</span><span class="p">];</span>
+    <span class="c1">// 等待被监听的描述符中的事件发生
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
+
+    <span class="n">mPolling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">mEpollRebuildRequired</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mEpollRebuildRequired</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">rebuildEpollLocked</span><span class="p">();</span>
+        <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span> <span class="c1">// 重建 Epoll 直接跳转到 Done
+</span><span class="c1"></span>    <span class="p">}</span>
+
+    <span class="c1">// 发生错误直接跳转到 Done
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Poll failed with an unexpected error: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_ERROR</span><span class="p">;</span>
+        <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 没有事件发生直接跳转到 Done
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_TIMEOUT</span><span class="p">;</span>
+        <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 逐个处理发生事件的描述符
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+        <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
+        <span class="c1">// 判断是不是唤醒描述符
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 是读事件
+</span><span class="c1"></span>                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 唤醒并读取描述符中的内容
+</span><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on wake event fd.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_INPUT</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_OUTPUT</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
+                <span class="c1">// 对 request 进行封装成 response ，放到数组中
+</span><span class="c1"></span>                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
+                      <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="nl">Done</span><span class="p">:</span> <span class="p">;</span>
+
+    <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
+    <span class="c1">// 先处理 Native Message
+</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
+        <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">{</span> <span class="c1">// obtain handler
+</span><span class="c1"></span>                <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+                <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
+                <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+                <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+                <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="c1">// 处理消息
+</span><span class="c1"></span>            <span class="p">}</span>
+
+            <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+            <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+
+    <span class="c1">// 处理自定义描述符事件
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">editItemAt</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">==</span> <span class="n">POLL_CALLBACK</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
+            <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="c1">// 调用回调方法进行处理
+</span><span class="c1"></span>            <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">callbackResult</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// 回调返回 0，则移除对该描述符的监听
+</span><span class="c1"></span>                <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个函数非常的长，我们分成三部份来看</p>
+<ol>
+<li>等待监听中的描述符事件发生，如果是唤醒描述符则读取唤醒描述符中所哟内容，不是则处理自定义描述符的请求，生成 Response 放入到数组中等待处理</li>
+<li>处理 NativeMessage</li>
+<li>处理有 Callback 的 Response 事件</li>
+</ol>
+<h3 id="没有看到处理-java-层的消息">没有看到处理 Java 层的消息</h3>
+<p>这里会发现一个奇怪的现象，怎么就没有看到处理 <code>Java</code> 层的地方。</p>
+<p>这是因为调用 <code>pollInner</code> 这个方法可以追溯到调用者其实是 <code>Java</code> 层发起的，所以只要 <code>Native</code> 层的事件处理完了，返回到 <code>Java</code> 层， <code>Java</code> 层就可以取处理对应的 <code>Message</code> 了。</p>
+<p>这样也不用把 <code>Java</code> 层的数据传递到 <code>native</code> 。</p>
+<h3 id="response-的处理方式">Response 的处理方式</h3>
+<p>在上面的方法中还可以发现 <code>Response</code> 的处理方式不是按照时间一个一个处理的，而是一次性全部处理。</p>
+<p>这是因为这些事件都是通过监听描述符来触发的，所以当这些描述符没有事件的时候是不会生成 <code>Response</code> 的，也就没有必要一个一个处理了。这里就需要知道 <code>Epoll</code> 可以同时监听多个描述符。</p>
+<p>当然 <code>NativeMessage</code> 还是和 <code>Java</code> 一样按照时间进行处理的。</p>
+<h2 id="awoken">awoken</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">awoken</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">counter</span><span class="p">;</span>
+    <span class="c1">// 不断同 mWakeEventFd 中读取数据，直到清空
+</span><span class="c1"></span>    <span class="n">TEMP_FAILURE_RETRY</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">counter</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nativemessage">NativeMessage</h2>
+<h3 id="message">Message</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="nc">Message</span> <span class="p">{</span>
+    <span class="n">Message</span><span class="p">()</span> <span class="o">:</span> <span class="n">what</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="n">Message</span><span class="p">(</span><span class="kt">int</span> <span class="n">w</span><span class="p">)</span> <span class="o">:</span> <span class="n">what</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">what</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Native</code> 层的 <code>Message</code> 只有一个 <code>waht</code> 少来很多相比于 <code>Java</code></p>
+<h3 id="messageenvelope">MessageEnvelope</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="nc">MessageEnvelope</span> <span class="p">{</span>
+    <span class="n">MessageEnvelope</span><span class="p">()</span> <span class="o">:</span> <span class="n">uptime</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+
+    <span class="n">MessageEnvelope</span><span class="p">(</span><span class="n">nsecs_t</span> <span class="n">u</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">h</span><span class="p">,</span>
+                    <span class="k">const</span> <span class="n">Message</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">:</span> <span class="n">uptime</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">handler</span><span class="p">(</span><span class="n">h</span><span class="p">),</span> <span class="n">message</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="n">nsecs_t</span> <span class="n">uptime</span><span class="p">;</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">;</span>
+    <span class="n">Message</span> <span class="n">message</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>MessageEnvelope</code> 里面持有 <code>Message</code> 和 <code>MessageHandler</code> 。</p>
+<h3 id="messagehandler">MessageHandler</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">MessageHandler</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">RefBase</span> <span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">MessageHandler</span><span class="p">();</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">handleMessage</span><span class="p">(</span><span class="k">const</span> <span class="n">Message</span><span class="o">&amp;</span> <span class="n">message</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>MessageHandler</code> 是个纯虚类，里面包含一个纯虚函数 <code>handleMessage</code></p>
+<h3 id="weakmessagehandler">WeakMessageHandler</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">WeakMessageHandler</span> <span class="o">:</span> <span class="k">public</span> <span class="n">MessageHandler</span> <span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">WeakMessageHandler</span><span class="p">();</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">WeakMessageHandler</span><span class="p">(</span><span class="k">const</span> <span class="n">wp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;&amp;</span> <span class="n">handler</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="p">(</span><span class="k">const</span> <span class="n">Message</span><span class="o">&amp;</span> <span class="n">message</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">wp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">mHandler</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>/system/core/libutils/Looper.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">WeakMessageHandler</span><span class="o">::</span><span class="n">handleMessage</span><span class="p">(</span><span class="k">const</span> <span class="n">Message</span><span class="o">&amp;</span> <span class="n">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">mHandler</span><span class="p">.</span><span class="n">promote</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">handler</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>WeakMessageHandler</code> 继承自 <code>MessageHandler</code> ，并实现了虚函数 <code>handleMessage</code> ，使用弱引用包了一下 <code>MessageHandler</code> 。</p>
+<h3 id="sendmessageattime">sendMessageAtTime</h3>
+<p>了解了 <code>Message</code> 、 <code>MessageHandler</code> 还有 <code>MessageEnvelope</code> 来看看它们一起是如何搭配使用的
+<code>/system/core/libutils/Looper.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">sendMessageAtTime</span><span class="p">(</span><span class="n">nsecs_t</span> <span class="n">uptime</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;&amp;</span> <span class="n">handler</span><span class="p">,</span>
+                               <span class="k">const</span> <span class="n">Message</span><span class="o">&amp;</span> <span class="n">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">{</span>
+        <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+
+        <span class="n">size_t</span> <span class="n">messageCount</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageCount</span> <span class="o">&amp;&amp;</span> <span class="n">uptime</span> <span class="o">&gt;=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">uptime</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 使用 MessageEnvelope 封装了 handler 、message
+</span><span class="c1"></span>        <span class="n">MessageEnvelope</span> <span class="nf">messageEnvelope</span><span class="p">(</span><span class="n">uptime</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+        <span class="c1">// 放到数组的合适位置
+</span><span class="c1"></span>        <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">insertAt</span><span class="p">(</span><span class="n">messageEnvelope</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">mSendingMessage</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">wake</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>sendMessageAtTime</code> 方法中会把 <code>Message</code> 、 <code>MessageHandler</code> 封装成 <code>MessageEnvelope</code> ，然后把它放到数组中。</p>
+<p>这里和 <code>Java</code> 层有些不同， <code>Java</code> 使用的是链表而这里使用的是  <code>Vector</code> ，但不是 <code>std::vector</code> ，它的代码在 <code>/system/core/libutils/include/utils/Vector.h</code> ，有兴趣可以了解下。</p>
+<p>另外一个不同是 <code>Java</code> 使用 <code>Handler</code> 来发送消息，而 <code>Native</code> 确是使用 <code>Looper</code> 来发送消息。</p>
+<h3 id="消息的处理">消息的处理</h3>
+<p>事件的处理是在 <code>pollInner</code> 里处理的，单独拎出来看一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
+    <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">{</span> <span class="c1">// obtain handler
+</span><span class="c1"></span>            <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+            <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
+            <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+            <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="c1">// 处理消息
+</span><span class="c1"></span>        <span class="p">}</span>
+
+        <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+        <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到由于 <code>Native</code> 层的 <code>Message</code> 没有 <code>Callback</code> ， <code>MessageHandler</code> 也没有 <code>mCallback</code> 所以，就简单多了，直接调用 <code>handleMessage</code> 就完事了。</p>
+<h2 id="监听自定义事件">监听自定义事件</h2>
+<h3 id="request-and-response">Request &amp; Response</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="nc">Request</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ident</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">events</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">seq</span><span class="p">;</span>
+    <span class="n">sp</span><span class="o">&lt;</span><span class="n">LooperCallback</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">;</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="nf">initEventItem</span><span class="p">(</span><span class="k">struct</span> <span class="nc">epoll_event</span><span class="o">*</span> <span class="n">eventItem</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="nc">Response</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">events</span><span class="p">;</span>
+    <span class="n">Request</span> <span class="n">request</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>Response</code> 中保存了 <code>Request</code> 。</li>
+<li><code>Request</code> 中保存了文件描述符、事件、ident(唯一标识)、和回调</li>
+</ul>
+<h4 id="request-的创建">Request 的创建</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">addFd</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ident</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">LooperCallback</span><span class="o">&gt;&amp;</span> <span class="n">callback</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">callback</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">mAllowNonCallbacks</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Invalid attempt to set NULL callback but not allowed for this looper.&#34;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ident</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Invalid attempt to set NULL callback with ident &lt; 0.&#34;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// callback 不为空，则把 ident 赋值为 POLL_CALLBACK
+</span><span class="c1"></span>        <span class="n">ident</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span>
+        <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+
+        <span class="c1">// 创建 Request 对象，并赋值
+</span><span class="c1"></span>        <span class="n">Request</span> <span class="n">request</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">=</span> <span class="n">ident</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">mNextRequestSeq</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mNextRequestSeq</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">mNextRequestSeq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// reserve sequence number -1
+</span><span class="c1"></span>
+        <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
+        <span class="n">request</span><span class="p">.</span><span class="n">initEventItem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+
+        <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+        <span class="c1">// 不存在额描述符加入监听
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 加入 Epoll 中监听描述符事件
+</span><span class="c1"></span>            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error adding epoll events for fd %d: %s&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">// 放到数组中
+</span><span class="c1"></span>            <span class="n">mRequests</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">request</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// 如果已经存在，则更新 Request
+</span><span class="c1"></span>            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_MOD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">ENOENT</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error modifying or adding epoll events for fd %d: %s&#34;</span><span class="p">,</span>
+                              <span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+                        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">scheduleEpollRebuildLocked</span><span class="p">();</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error modifying epoll events for fd %d: %s&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">mRequests</span><span class="p">.</span><span class="n">replaceValueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">,</span> <span class="n">request</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Request</code> 的创建是通过 <code>addFd</code> 添加自定义描述符的时候创建的。如果有设置 <code>callback</code> 则 <code>ident</code> 一定为 <code>POLL_CALLBACK</code> 。所以在 <code>pollOnce</code> 中会首先根据 <code>ident&gt;=0</code> 来判断是否有 <code>callback</code> ，没有的话就先处理，也就是直接返回，因为没有 <code>callback</code> 系统也不知道要怎么处理。
+<code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">enum</span> <span class="p">{</span>
+    <span class="n">POLL_WAKE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">POLL_CALLBACK</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">POLL_TIMEOUT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">POLL_ERROR</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="response-的创建">Response 的创建</h4>
+<p><code>Response</code> 的创建是在 <code>pollInner</code> 中，来看一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// 逐个处理发生事件的描述符
+</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
+    <span class="c1">// 判断是不是唤醒描述符
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+        <span class="c1">// ...
+</span><span class="c1"></span>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_INPUT</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_OUTPUT</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
+            <span class="c1">// 对 request 进行封装成 response ，放到数组中
+</span><span class="c1"></span>            <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
+                  <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Epoll</code> 在发现不是唤醒描述符会根据描述符的 <code>id</code> 创建 <code>Response</code> ，并放到数组中，等待处理。</p>
+<h3 id="loopercallback">LooperCallback</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">LooperCallback</span> <span class="o">:</span> <span class="k">public</span> <span class="k">virtual</span> <span class="n">RefBase</span> <span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">LooperCallback</span><span class="p">();</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">handleEvent</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="simpleloopercallback">SimpleLooperCallback</h3>
+<p><code>/system/core/libutils/include/utils/Looper.h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="nf">int</span> <span class="p">(</span><span class="o">*</span><span class="n">Looper_callbackFunc</span><span class="p">)(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">SimpleLooperCallback</span> <span class="o">:</span> <span class="k">public</span> <span class="n">LooperCallback</span> <span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">SimpleLooperCallback</span><span class="p">();</span>
+
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">SimpleLooperCallback</span><span class="p">(</span><span class="n">Looper_callbackFunc</span> <span class="n">callback</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">handleEvent</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">Looper_callbackFunc</span> <span class="n">mCallback</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>/system/core/libutils/Looper.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">SimpleLooperCallback</span><span class="o">::</span><span class="n">handleEvent</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">mCallback</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>SimpleLooperCallback</code> 继承自 <code>LooperCallback</code> 也很简单就只有一个 <code>handleEvent</code> 方法，在这个方法中也只是调用了一下回调函数而已。</p>
+<p><code>SimpleLooperCallback</code> 的处理也是在 <code>pollInner</code> 中处理的，照样单独拎出来看一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// 处理自定义描述符事件
+</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">editItemAt</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">==</span> <span class="n">POLL_CALLBACK</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
+        <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+        <span class="c1">// 调用回调方法进行处理
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">callbackResult</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 回调返回 0，则移除对该描述符的监听
+</span><span class="c1"></span>            <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Response</code> 处理也很简单就只是调用了 <code>handleEvent</code> 而已。</p>
+<h3 id="源码中使用的例子">源码中使用的例子</h3>
+<p><code>/frameworks/native/services/inputflinger/InputDispatcher.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">status_t</span> <span class="n">InputDispatcher</span><span class="o">::</span><span class="n">registerInputChannel</span><span class="p">(</span><span class="k">const</span> <span class="n">sp</span><span class="o">&lt;</span><span class="n">InputChannel</span><span class="o">&gt;&amp;</span> <span class="n">inputChannel</span><span class="p">,</span>
+                                               <span class="kt">int32_t</span> <span class="n">displayId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">getConnectionIndexLocked</span><span class="p">(</span><span class="n">inputChannel</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Attempted to register already registered input channel &#39;%s&#39;&#34;</span><span class="p">,</span>
+                    <span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="k">return</span> <span class="n">BAD_VALUE</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">sp</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span> <span class="n">connection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Connection</span><span class="p">(</span><span class="n">inputChannel</span><span class="p">,</span> <span class="nb">false</span> <span class="cm">/*monitor*/</span><span class="p">);</span>
+
+        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getFd</span><span class="p">();</span>
+        <span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">connection</span><span class="p">);</span>
+        <span class="n">mInputChannelsByToken</span><span class="p">[</span><span class="n">inputChannel</span><span class="o">-&gt;</span><span class="n">getToken</span><span class="p">()]</span> <span class="o">=</span> <span class="n">inputChannel</span><span class="p">;</span>
+
+        <span class="c1">// 添加输入描述符到 Looper 中，把 handleReceiveCallback 作为回调函数
+</span><span class="c1"></span>        <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">addFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">,</span> <span class="n">handleReceiveCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">wake</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">OK</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">InputDispatcher</span><span class="o">::</span><span class="n">handleReceiveCallback</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">InputDispatcher</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">InputDispatcher</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+
+    <span class="p">{</span> <span class="c1">// acquire lock
+</span><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">scoped_lock</span> <span class="n">_l</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">mLock</span><span class="p">);</span>
+
+        <span class="n">ssize_t</span> <span class="n">connectionIndex</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">connectionIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Received spurious receive callback for unknown input channel.  &#34;</span>
+                    <span class="s">&#34;fd=%d, events=0x%x&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">);</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// remove the callback
+</span><span class="c1"></span>        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">notify</span><span class="p">;</span>
+        <span class="n">sp</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">mConnectionsByFd</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">connectionIndex</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ALOOPER_EVENT_ERROR</span> <span class="o">|</span> <span class="n">ALOOPER_EVENT_HANGUP</span><span class="p">)))</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Received spurious callback for unhandled poll event.  &#34;</span>
+                        <span class="s">&#34;events=0x%x&#34;</span><span class="p">,</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">events</span><span class="p">);</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">nsecs_t</span> <span class="n">currentTime</span> <span class="o">=</span> <span class="n">now</span><span class="p">();</span>
+            <span class="kt">bool</span> <span class="n">gotOne</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">status_t</span> <span class="n">status</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+                <span class="kt">uint32_t</span> <span class="n">seq</span><span class="p">;</span>
+                <span class="kt">bool</span> <span class="n">handled</span><span class="p">;</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">inputPublisher</span><span class="p">.</span><span class="n">receiveFinishedSignal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">seq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">handled</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">d</span><span class="o">-&gt;</span><span class="n">finishDispatchCycleLocked</span><span class="p">(</span><span class="n">currentTime</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">handled</span><span class="p">);</span>
+                <span class="n">gotOne</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">gotOne</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">d</span><span class="o">-&gt;</span><span class="n">runCommandsLockedInterruptible</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">WOULD_BLOCK</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">notify</span> <span class="o">=</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">DEAD_OBJECT</span> <span class="o">||</span> <span class="o">!</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">monitor</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">notify</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Failed to receive finished signal.  status=%d&#34;</span><span class="p">,</span>
+                        <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">status</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">notify</span> <span class="o">=</span> <span class="o">!</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">monitor</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">notify</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;channel &#39;%s&#39; ~ Consumer closed input channel or an error occurred.  &#34;</span>
+                        <span class="s">&#34;events=0x%x&#34;</span><span class="p">,</span> <span class="n">connection</span><span class="o">-&gt;</span><span class="n">getInputChannelName</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">events</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Unregister the channel.
+</span><span class="c1"></span>        <span class="n">d</span><span class="o">-&gt;</span><span class="n">unregisterInputChannelLocked</span><span class="p">(</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">inputChannel</span><span class="p">,</span> <span class="n">notify</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// remove the callback
+</span><span class="c1"></span>    <span class="p">}</span> <span class="c1">// release lock
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在处理输入事件的时候采用的是监听描述的做法。</p>
+<h3 id="小结">小结</h3>
+<ul>
+<li>自定义描述符事件，要先根据 <code>Request</code> 生成 <code>Reponse</code> 才能被处理，生成 <code>Response</code> 的时机实在 <code>Request</code> 中的描述符有事件发生，会根据 <code>Reqeust</code> 生成 <code>Response</code> ，然后调用 <code>Request</code> 的回调函数进行处理。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>这里借用一下<a href="http://gityuan.com/2015/12/27/handler-message-native/">Android消息机制2-Handler(Native层) - Gityuan博客 | 袁辉辉的技术博客</a>这篇文章的图片来展示一下消息机制在 <code>Java</code> 层与 <code>Native</code> 层之间是怎么协作的。
+<img src="/images/handler/handler_arch.png" alt=""></p>
+<ul>
+<li>红色虚线关系：Java层和Native层的MessageQueue通过JNI建立关联，彼此之间能相互调用</li>
+<li>蓝色虚线关系：Handler/Looper/Message这三大类Java层与Native层并没有任何的真正关联，只是分别在Java层和Native层的handler消息模型中具有相似的功能。都是彼此独立的，各自实现相应的逻辑。</li>
+<li>处理消息的顺序：先过滤没有 <code>callback</code> 的描述符中的事件，然后处理 <code>Native</code> 层消息，接着再处理监听中描述符所产生的 <code>Response</code> 的事件（根据Request生成），最后才处理 <code>Java</code> 层的消息。</li>
+</ul>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://gityuan.com/2015/12/26/handler-message-framework/">Android消息机制1-Handler(Java层) - Gityuan博客 | 袁辉辉的技术博客</a></li>
+<li><a href="http://gityuan.com/2015/12/27/handler-message-native/">Android消息机制2-Handler(Native层) - Gityuan博客 | 袁辉辉的技术博客</a></li>
+<li><a href="https://www.cnblogs.com/angeldevil/p/3340644.html">Android消息处理机制(Handler、Looper、MessageQueue与Message) - AngelDevil - 博客园</a></li>
+<li><a href="http://yifeiyuan.me/blog/f77487d3.html">一文看穿 Handler | 程序亦非猿</a></li>
+<li><a href="http://yifeiyuan.me/blog/b27867af.html">深入理解 Jetpack 之 Lifecycle | 程序亦非猿</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-03-21
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6/">消息机制</a>
+          <a href="/tags/handler/">Handler</a>
+          <a href="/tags/messagequeue/">MessageQueue</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/handler/">
+            <span class="next-text nav-default">Handler</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-03-21 00:00:00 \u002b0800 CST',
+        title: 'Handler 之 MessageQueue',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins\u0027',
+        admin: ['devbins\u0027'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
