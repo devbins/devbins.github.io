@@ -55,7 +55,7 @@
 上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。
 本文源码基于 Android10"><meta itemprop="datePublished" content="2021-03-21T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-03-21T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="5215">
+<meta itemprop="wordCount" content="5224">
 <meta itemprop="keywords" content="消息机制,Handler,MessageQueue," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Handler 之 MessageQueue"/>
 <meta name="twitter:description" content="前言
@@ -144,7 +144,7 @@
         <div class="post-category">
             <a href="/categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 5215 字 </span>
+          <span class="more-meta"> 约 5224 字 </span>
           <span class="more-meta"> 预计阅读 11 分钟 </span>
         
       </div>
@@ -457,8 +457,8 @@
 </span><span class="c1"></span>    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
         <span class="k">while</span> <span class="p">(</span><span class="n">mResponseIndex</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
             <span class="k">const</span> <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="n">mResponseIndex</span><span class="o">++</span><span class="p">);</span>
-            <span class="kt">int</span> <span class="n">ident</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span><span class="p">;</span>
-            <span class="c1">// ident &gt;= 0 表示没有 callback ，所以在这里会直接返回，有关reponse 之后和 request 一起聊
+
+            <span class="c1">// ident &gt;= 0 表示没有 callback ，有 callback 的会默认被赋值为 POLL_CALLBACK = -2 所以在这里会直接返回，有关reponse 之后和 request 一起聊
 </span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">ident</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                 <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
                 <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
