@@ -17,6 +17,7 @@
 
 
 <meta name="author" content="devbins" /><meta name="description" content="前言 Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。
+本文基于 Android10
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
@@ -42,7 +43,8 @@
 
 <meta property="og:title" content="Zygote" />
 <meta property="og:description" content="前言
-Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。" />
+Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。
+本文基于 Android10" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.githu.io/post/zygote/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-03-22T00:00:00&#43;08:00" />
@@ -50,13 +52,15 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 
 <meta itemprop="name" content="Zygote">
 <meta itemprop="description" content="前言
-Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。"><meta itemprop="datePublished" content="2021-03-22T00:00:00&#43;08:00" />
+Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。
+本文基于 Android10"><meta itemprop="datePublished" content="2021-03-22T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-03-22T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="3335">
+<meta itemprop="wordCount" content="3340">
 <meta itemprop="keywords" content="Framework,Zygote," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Zygote"/>
 <meta name="twitter:description" content="前言
-Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。"/>
+Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。了解了 Zygote 可以让你对系统如何工作有更深入的了解，今天来学习一下 Zygote 的知识。
+本文基于 Android10"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -140,7 +144,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
         <div class="post-category">
             <a href="/categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 3335 字 </span>
+          <span class="more-meta"> 约 3340 字 </span>
           <span class="more-meta"> 预计阅读 7 分钟 </span>
         
       </div>
@@ -178,6 +182,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
     <div class="post-content">
       <h2 id="前言">前言</h2>
 <p><code>Zygote</code> 是 <code>Android</code> 中所有 <code>App</code> 的父进程，有着举足轻重的地位。了解了 <code>Zygote</code> 可以让你对系统如何工作有更深入的了解，今天来学习一下 <code>Zygote</code> 的知识。</p>
+<p>本文基于 <code>Android10</code></p>
 <h2 id="app-main">app_main</h2>
 <p>做 <code>Android</code> 的都知道，它是基于 <code>Linux</code> 的，所以在内核启动之后的第一个进程是 <code>init</code> ，而 <code>init</code> 的进程会通过解析 <code>init.rc</code> 来创建一系列进程，比如本文要讲的 <code>Zygote</code> ，我们来看一下 <code>init.zygote.rc</code> 的内容。</p>
 <p>源码中许多 <code>init.zygotexxx.rc</code> ，我们就挑一个 <code>init.zygote64.rc</code> 来看</p>
