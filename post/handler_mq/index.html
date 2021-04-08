@@ -55,7 +55,7 @@
 上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。
 本文源码基于 Android10"><meta itemprop="datePublished" content="2021-03-21T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-03-21T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="5224">
+<meta itemprop="wordCount" content="5228">
 <meta itemprop="keywords" content="消息机制,Handler,MessageQueue," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Handler 之 MessageQueue"/>
 <meta name="twitter:description" content="前言
@@ -144,7 +144,7 @@
         <div class="post-category">
             <a href="/categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 5224 字 </span>
+          <span class="more-meta"> 约 5228 字 </span>
           <span class="more-meta"> 预计阅读 11 分钟 </span>
         
       </div>
@@ -772,7 +772,7 @@
 <span class="p">};</span>
 </code></pre></td></tr></table>
 </div>
-</div><p><code>Native</code> 层的 <code>Message</code> 只有一个 <code>waht</code> 少来很多相比于 <code>Java</code></p>
+</div><p><code>Native</code> 层的 <code>Message</code> 只有一个 <code>waht</code> 少了很多字段，相比于 <code>Java</code></p>
 <h3 id="messageenvelope">MessageEnvelope</h3>
 <p><code>/system/core/libutils/include/utils/Looper.h</code></p>
 <div class="highlight"><div class="chroma">
@@ -936,7 +936,7 @@
 </div>
 </div><p>在 <code>sendMessageAtTime</code> 方法中会把 <code>Message</code> 、 <code>MessageHandler</code> 封装成 <code>MessageEnvelope</code> ，然后把它放到数组中。</p>
 <p>这里和 <code>Java</code> 层有些不同， <code>Java</code> 使用的是链表而这里使用的是  <code>Vector</code> ，但不是 <code>std::vector</code> ，它的代码在 <code>/system/core/libutils/include/utils/Vector.h</code> ，有兴趣可以了解下。</p>
-<p>另外一个不同是 <code>Java</code> 使用 <code>Handler</code> 来发送消息，而 <code>Native</code> 确是使用 <code>Looper</code> 来发送消息。</p>
+<p>另外一个不同是 <code>Java</code> 使用 <code>Handler</code> 来发送消息，而 <code>Native</code> 却是使用 <code>Looper</code> 来发送消息。</p>
 <h3 id="消息的处理">消息的处理</h3>
 <p>事件的处理是在 <code>pollInner</code> 里处理的，单独拎出来看一下</p>
 <div class="highlight"><div class="chroma">
@@ -1134,7 +1134,7 @@
         <span class="n">request</span><span class="p">.</span><span class="n">initEventItem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 
         <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-        <span class="c1">// 不存在额描述符加入监听
+        <span class="c1">// 不存在则把描述符加入监听
 </span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// 加入 Epoll 中监听描述符事件
 </span><span class="c1"></span>            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>

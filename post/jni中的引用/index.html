@@ -58,7 +58,7 @@
 然而在 JNI 中，几乎都是 C/C&#43;&#43; 的代码，它们是没有 GC 的，所以对内存的使用就需要格外小心了。
 因此在 JNI 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。"><meta itemprop="datePublished" content="2021-03-28T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-03-28T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1180">
+<meta itemprop="wordCount" content="1173">
 <meta itemprop="keywords" content="Android,JNI," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="JNI中的引用"/>
 <meta name="twitter:description" content="前言
@@ -149,7 +149,7 @@
             <a href="/categories/android/"> Android </a>
             <a href="/categories/jni/"> JNI </a>
             </div>
-          <span class="more-meta"> 约 1180 字 </span>
+          <span class="more-meta"> 约 1173 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -182,7 +182,7 @@
 <h2 id="局部引用">局部引用</h2>
 <p>我们平时和局部引用打交道是最多的，比如我们经常在函数中使用的 <code>NewStringUTF(&quot;hello,world&quot;)</code> ，这就是一个局部引用。</p>
 <p>局部引用只有在函数的作用域内才有效，函数执行完成之后会自动释放，所以即便没有手动释放也没有关系。</p>
-<p>但是在创建过多局部引用就有可能导致内存溢出或引用表溢出，这种情况大多出现在有循环的代码中。所以最好我们在使用完之后主动调用 <code>DeleteLocalRef</code> 来手动释放。</p>
+<p>但是创建过多局部引用就有可能导致内存溢出或引用表溢出，这种情况大多出现在有循环的代码中。所以最好我们在使用完之后主动调用 <code>DeleteLocalRef</code> 来手动释放。</p>
 <h3 id="pushlocalframe-and-poplocalframe">PushLocalFrame &amp; PopLocalFrame</h3>
 <p>有时候我们需要创建许多对象，但是一个一个的手动释放又非常麻烦，为了解决这个问题 <code>JNI</code> 提供了 <code>PushLocalFrame</code> 与 <code>PopLocalFrame</code> 来解决这个问题。</p>
 <p>它们是配套使用的，需要成对出现。如下所示</p>
@@ -233,7 +233,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这样 <code>jstr1</code> 就会在父帧中重新被创建一个新的引用，所以其实 <code>jstr1</code> 还是会失效。只不过重新创建了一个新的引用。</p>
+</div><p>这样 <code>jstr1</code> 就会在父帧中被重新创建，所以其实 <code>jstr1</code> 还是会失效。只不过重新创建了一个新的引用。</p>
 <h3 id="ensurelocalcapacity">EnsureLocalCapacity</h3>
 <p>在 <code>JNI</code> 规范中指出， <code>JVM</code> 要确保每个 <code>Native</code> 方法至少可以创建 16 个局部引用，所以我们平时开发一般是够用的，但是就是会碰到极个别情况下超过 16 的，这时候就需要使用 <code>EnsureLocalCapacity</code> 来确保是否能够创建足够的局部引用。</p>
 <div class="highlight"><div class="chroma">
@@ -278,7 +278,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这里需要注意判断两个 <code>Java</code> 对象是不是同一个，需要用 <code>isSameObject</code> ，而不是用 <code>==</code> 判断。</p>
+</div><p>这里需要注意判断两个 <code>Java</code> 对象是不是同一个，需要用 <code>IsSameObject</code> ，而不是用 <code>==</code> 判断。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
