@@ -16,8 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="devbins" /><meta name="description" content="Photo by Gary Chan on Unsplash
-前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+<meta name="author" content="devbins" /><meta name="description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
 但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
 虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
@@ -44,8 +43,7 @@
 
 
 <meta property="og:title" content="Java 垃圾回收机制" />
-<meta property="og:description" content="Photo by Gary Chan on Unsplash
-前言
+<meta property="og:description" content="前言
 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
 但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
 虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。" />
@@ -55,17 +53,15 @@
 <meta property="article:modified_time" content="2020-04-13T00:00:00&#43;08:00" />
 
 <meta itemprop="name" content="Java 垃圾回收机制">
-<meta itemprop="description" content="Photo by Gary Chan on Unsplash
-前言
+<meta itemprop="description" content="前言
 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
 但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
 虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。"><meta itemprop="datePublished" content="2020-04-13T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-13T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="2163">
+<meta itemprop="wordCount" content="2157">
 <meta itemprop="keywords" content="Java,GC,JVM," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Java 垃圾回收机制"/>
-<meta name="twitter:description" content="Photo by Gary Chan on Unsplash
-前言
+<meta name="twitter:description" content="前言
 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
 但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
 虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。"/>
@@ -154,7 +150,7 @@
             <a href="/categories/gc/"> GC </a>
             <a href="/categories/jvm/"> JVM </a>
             </div>
-          <span class="more-meta"> 约 2163 字 </span>
+          <span class="more-meta"> 约 2157 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -192,8 +188,7 @@
   </div>
 </div>
     <div class="post-content">
-      <p>Photo by Gary Chan on Unsplash</p>
-<h2 id="前言">前言</h2>
+      <h2 id="前言">前言</h2>
 <p>之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。</p>
 <p>但我们很少像 C/C++ 一样去自己管理，释放内存，这其中就要归功于 <code>Java GC</code> ，它在背后默默的工作着。</p>
 <p>虽然 <code>Java GC</code> 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。</p>
