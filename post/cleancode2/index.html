@@ -16,7 +16,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="devbins" /><meta name="description" content="前言 太依赖检测工具 要对代码进行整改就需要知道哪里有问题，知道了问题所在，才能对代码进行整改。 现在有许多工具都可以对代码进行检测，比如静态扫描" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+<meta name="author" content="devbins" /><meta name="description" content="前言 在关于代码质量整改的思考中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。
+本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
 
@@ -40,19 +42,25 @@
 
 
 <meta property="og:title" content="代码质量的思考" />
-<meta property="og:description" content="前言 太依赖检测工具 要对代码进行整改就需要知道哪里有问题，知道了问题所在，才能对代码进行整改。 现在有许多工具都可以对代码进行检测，比如静态扫描" />
+<meta property="og:description" content="前言
+在关于代码质量整改的思考中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。
+本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.githu.io/post/cleancode2/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-10T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2021-04-10T00:00:00&#43;08:00" />
 
 <meta itemprop="name" content="代码质量的思考">
-<meta itemprop="description" content="前言 太依赖检测工具 要对代码进行整改就需要知道哪里有问题，知道了问题所在，才能对代码进行整改。 现在有许多工具都可以对代码进行检测，比如静态扫描"><meta itemprop="datePublished" content="2021-04-10T00:00:00&#43;08:00" />
+<meta itemprop="description" content="前言
+在关于代码质量整改的思考中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。
+本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。"><meta itemprop="datePublished" content="2021-04-10T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-04-10T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="1913">
+<meta itemprop="wordCount" content="2160">
 <meta itemprop="keywords" content="随想," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="代码质量的思考"/>
-<meta name="twitter:description" content="前言 太依赖检测工具 要对代码进行整改就需要知道哪里有问题，知道了问题所在，才能对代码进行整改。 现在有许多工具都可以对代码进行检测，比如静态扫描"/>
+<meta name="twitter:description" content="前言
+在关于代码质量整改的思考中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。
+本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -136,8 +144,8 @@
         <div class="post-category">
             <a href="/categories/cleancode/"> cleancode </a>
             </div>
-          <span class="more-meta"> 约 1913 字 </span>
-          <span class="more-meta"> 预计阅读 4 分钟 </span>
+          <span class="more-meta"> 约 2160 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
     </header>
@@ -171,12 +179,14 @@
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
+<p>在<a href="https://devbins.github.io/post/cleancode/">关于代码质量整改的思考</a>中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。</p>
+<p>本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。</p>
 <h2 id="太依赖检测工具">太依赖检测工具</h2>
 <p>要对代码进行整改就需要知道哪里有问题，知道了问题所在，才能对代码进行整改。</p>
 <p>现在有许多工具都可以对代码进行检测，比如静态扫描工具 <code>SonarQube</code> ，还有一些企业自研的代码扫描工具。</p>
 <p>这些工具都挺好的，对我们代码的质量都挺有帮助的。</p>
 <p>但是我们不能全靠这些工具，毕竟工具是死的，只会严格的按照规则给你提示。不能根据上下文给出合理的建议，虽然大部分时间它是对的。</p>
-<p>正如我在<a href="https://devbins.github.io/post/cleancode/">关于代码质量整改的思考</a>中提到的就是属于太依赖检测工具，没有对问题的本质进行思考，喜欢钻检测工具的空子，又或者太听话，失去了独立思考的能力，整改过头了。</p>
+<p>正如我在<a href="https://devbins.github.io/post/cleancode/">关于代码质量整改的思考</a>中提到的就是属于太依赖检测工具，没有对问题的本质进行思考，容易钻检测工具的空子，又或者太听话，失去了独立思考的能力，整改过头了。</p>
 <h2 id="检测工具检测不到的">检测工具检测不到的</h2>
 <p>有一类问题是静态扫描工具检测不到的，但是在 <code>IDE</code> 中却是会提示你这里代码写的有问题。</p>
 <p>比如在C++中的构造函数中调用虚函数，这时候 <code>IDE</code> 是会有高亮警告提示的，但是往往我们没有在意忽略了 <code>IDE</code> 的提示。</p>
@@ -216,7 +226,8 @@
 <p><code>Android</code> 中 <code>Native</code> 层会传递一个对象的指针到 <code>Java</code> 层，然后在使用的时候把指针传递回 <code>Native</code> 层，这样就能很方便的在 <code>Java</code> 层调用 <code>Native</code> 层的对象。在没看源码之前，我是往万万想不到的。</p>
 <p>所以如果你对一个技术不知道怎么写，最好的办法是从一个优秀的代码中模仿，这样即使差也不会差到哪里去。</p>
 <h2 id="总结">总结</h2>
-
+<p>本篇文章，我们从代码检测工具入手，分析了我们太依赖检测工具，从而整改代码，有时候只是整改了表象，没有去思考这写代码为什么存在问题。下一步应该如何整改。并且指出了代码检测工具检测不出的代码质量问题。</p>
+<p>接着我尝试从自己观察到的角度，分析了代码质量差的原因，最后给出了参考意见如何写出高质量的代码。</p>
     </div>
 
     <div class="post-copyright">
