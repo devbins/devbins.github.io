@@ -16,7 +16,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="devbins" /><meta name="description" content="前言 在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。 今天就来聊一聊 SystemServer 。 Zygote 先来回顾一下 Zygote 启动 SystemServer 的代码在哪里 /frameworks/base/core/java/com/android/internal/os/ZygoteInit.java 1 2 3 4 5 6 7 8 9 10 11" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+<meta name="author" content="devbins" /><meta name="description" content="前言 在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。
+今天就来聊一聊 SystemServer 。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
 
@@ -40,19 +42,25 @@
 
 
 <meta property="og:title" content="SystemServer" />
-<meta property="og:description" content="前言 在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。 今天就来聊一聊 SystemServer 。 Zygote 先来回顾一下 Zygote 启动 SystemServer 的代码在哪里 /frameworks/base/core/java/com/android/internal/os/ZygoteInit.java 1 2 3 4 5 6 7 8 9 10 11" />
+<meta property="og:description" content="前言
+在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。
+今天就来聊一聊 SystemServer 。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.githu.io/post/systemserver/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-11T00:00:00&#43;08:00" />
 <meta property="article:modified_time" content="2021-04-11T00:00:00&#43;08:00" />
 
 <meta itemprop="name" content="SystemServer">
-<meta itemprop="description" content="前言 在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。 今天就来聊一聊 SystemServer 。 Zygote 先来回顾一下 Zygote 启动 SystemServer 的代码在哪里 /frameworks/base/core/java/com/android/internal/os/ZygoteInit.java 1 2 3 4 5 6 7 8 9 10 11"><meta itemprop="datePublished" content="2021-04-11T00:00:00&#43;08:00" />
+<meta itemprop="description" content="前言
+在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。
+今天就来聊一聊 SystemServer 。"><meta itemprop="datePublished" content="2021-04-11T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-04-11T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="4477">
+<meta itemprop="wordCount" content="4528">
 <meta itemprop="keywords" content="Framework,SystemServer," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="SystemServer"/>
-<meta name="twitter:description" content="前言 在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。 今天就来聊一聊 SystemServer 。 Zygote 先来回顾一下 Zygote 启动 SystemServer 的代码在哪里 /frameworks/base/core/java/com/android/internal/os/ZygoteInit.java 1 2 3 4 5 6 7 8 9 10 11"/>
+<meta name="twitter:description" content="前言
+在 Zygote 这篇文章中，我们提到 Zygote 会创建 SystemServer 进程，当时我们没有去了解。
+今天就来聊一聊 SystemServer 。"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -136,8 +144,8 @@
         <div class="post-category">
             <a href="/categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 4477 字 </span>
-          <span class="more-meta"> 预计阅读 9 分钟 </span>
+          <span class="more-meta"> 约 4528 字 </span>
+          <span class="more-meta"> 预计阅读 10 分钟 </span>
         
       </div>
     </header>
@@ -331,7 +339,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>从 <code>args</code> 中，我们能看出来 <code>system server</code> 的 <code>uid=1000</code> ， <code>gid=1000</code> ，进程名为 <code>system_server</code> ，这里要注意最后一个参数 <code>com.android.server.SystemServer</code> 在后边会用到。</p>
-<p>在参数准备好之后，会调用了 <code>Zygote.forkSystemServer</code> 从而创建了 <code>SystemServer</code> 进程。跟进去看下是如何创建的</p>
+<p>在参数准备好之后，会调用 <code>Zygote.forkSystemServer</code> 从而创建了 <code>SystemServer</code> 进程。跟进去看下是如何创建的</p>
 <h3 id="forksystemserver">forkSystemServer</h3>
 <p><code>/frameworks/base/core/java/com/android/internal/os/Zygote.java</code></p>
 <div class="highlight"><div class="chroma">
@@ -434,7 +442,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>在 <code>nativeForkSystemServer</code> 中调用了 <code>ForkCommon</code> 创建子进程，然后在进程中调用 <code>SpecializeCommon</code> 。</p>
-<p><code>Zygote</code> 进程会检测 <code>SystemServer</code> 是否死亡，如果死亡则重启 <code>Zygote</code> 。生死与共。</p>
+<p><code>Zygote</code> 进程会检测 <code>SystemServer</code> 是否死亡，如果死亡则重启 <code>Zygote</code> ，生死与共。</p>
 <h4 id="forkcommon">ForkCommon</h4>
 <p><code>/frameworks/base/core/jni/com_android_internal_os_Zygote.cpp</code></p>
 <div class="highlight"><div class="chroma">
@@ -1478,7 +1486,7 @@
 <li>检测时间，比1970早，那就改成1970，不能比这个更早了。</li>
 <li>设置语言</li>
 <li>设置虚拟机运行库路径为 <code>persist.sys.dalvik.vm.lib.2</code></li>
-<li>设置虚拟机参数，清楚内存上限，设置利用率等</li>
+<li>设置虚拟机参数，清除内存上限，设置利用率等</li>
 <li>设置Binder 线程为前台优先级</li>
 <li>创建Looper</li>
 <li>加载 <code>libandroid_servers.so</code></li>
@@ -1521,6 +1529,9 @@
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">ActivityThread</span> <span class="nf">systemMain</span><span class="o">()</span> <span class="o">{</span>
@@ -1528,21 +1539,13 @@
     <span class="n">thread</span><span class="o">.</span><span class="na">attach</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
     <span class="k">return</span> <span class="n">thread</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ActivityThread</span><span class="o">()</span> <span class="o">{</span>
+<span class="n">ActivityThread</span><span class="o">()</span> <span class="o">{</span>
     <span class="n">mResourcesManager</span> <span class="o">=</span> <span class="n">ResourcesManager</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p>调用 <code>attatch</code> ，和普通应用的创建类似。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1594,7 +1597,8 @@
 </span><span class="c1"></span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="startbootstrapservices">startBootstrapServices</h3>
+</div><p>创建 <code>Instrumentation</code> 、 <code>ContextImpl</code> 、 <code>Application</code> 和应用进程创建类似。都是同一个套路，这样大家理解起来也容易。</p>
+<h3 id="startbootstrapservices">startBootstrapServices</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1945,7 +1949,6 @@
 <li><a href="https://www.jianshu.com/p/99e0b480666a">Android进程系列第四篇&mdash;SystemServer进程的启动流程 - 简书</a></li>
 <li>《Android进阶解密》</li>
 </ul>
-
     </div>
 
     <div class="post-copyright">
