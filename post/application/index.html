@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Application 启动流程 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 在 Zygote 这篇文章中提到， Zygote 在收到创建新进程的请求之后，会创建新的进程，当时没有继续往下探索了，今天来探索一下 Application 是如何创建的。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.82.1 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.githu.io/post/application/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.696f9b9a939ab31cd22ca2f361be7755912b70519c7db241696a8ff42c8b26bc.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Application 启动流程" />
+<meta property="og:description" content="前言
+在 Zygote 这篇文章中提到， Zygote 在收到创建新进程的请求之后，会创建新的进程，当时没有继续往下探索了，今天来探索一下 Application 是如何创建的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.githu.io/post/application/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-05-03T00:00:00&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-03T00:00:00&#43;08:00" />
+
+<meta itemprop="name" content="Application 启动流程">
+<meta itemprop="description" content="前言
+在 Zygote 这篇文章中提到， Zygote 在收到创建新进程的请求之后，会创建新的进程，当时没有继续往下探索了，今天来探索一下 Application 是如何创建的。"><meta itemprop="datePublished" content="2021-05-03T00:00:00&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-03T00:00:00&#43;08:00" />
+<meta itemprop="wordCount" content="1811">
+<meta itemprop="keywords" content="Framework,AMS," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Application 启动流程"/>
+<meta name="twitter:description" content="前言
+在 Zygote 这篇文章中提到， Zygote 在收到创建新进程的请求之后，会创建新的进程，当时没有继续往下探索了，今天来探索一下 Application 是如何创建的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Application 启动流程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-05-03 </span>
+        <div class="post-category">
+            <a href="/categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 1811 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#application-的创建">Application 的创建</a>
+      <ul>
+        <li><a href="#activitythread">ActivityThread</a></li>
+        <li><a href="#attach">attach</a></li>
+        <li><a href="#ams-dot-attachapplication">AMS.attachApplication</a></li>
+        <li><a href="#bindapplication">bindApplication</a></li>
+        <li><a href="#handlebindapplication">handleBindApplication</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在 <a href="http://localhost:1313/post/zygote/#forksystemserver">Zygote</a> 这篇文章中提到， <code>Zygote</code> 在收到创建新进程的请求之后，会创建新的进程，当时没有继续往下探索了，今天来探索一下 <code>Application</code> 是如何创建的。</p>
+<h2 id="application-的创建">Application 的创建</h2>
+<p>做 <code>Android</code> 开发的都知道，程序的入口是 <code>ActivityThread</code> 中的 <code>main</code> 方法，我们从这里入手，去探究 <code>Application</code> 的启动流程。</p>
+<h3 id="activitythread">ActivityThread</h3>
+<p><code>/frameworks/base/core/java/android/app/ActivityThread.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 准备 main looper
+</span><span class="c1"></span>    <span class="n">Looper</span><span class="o">.</span><span class="na">prepareMainLooper</span><span class="o">();</span>
+    <span class="c1">// 创建 ActivityThread
+</span><span class="c1"></span>    <span class="n">ActivityThread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ActivityThread</span><span class="o">();</span>
+    <span class="c1">// 告诉AMS 我启动好了
+</span><span class="c1"></span>    <span class="n">thread</span><span class="o">.</span><span class="na">attach</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="n">startSeq</span><span class="o">);</span>
+    <span class="c1">// 开启事件循环
+</span><span class="c1"></span>    <span class="n">Looper</span><span class="o">.</span><span class="na">loop</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>main</code> 方法中主要的逻辑都在 <code>attach</code> 中</p>
+<h3 id="attach">attach</h3>
+<p><code>/frameworks/base/core/java/android/app/ActivityThread.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="n">ApplicationThread</span> <span class="n">mAppThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ApplicationThread</span><span class="o">();</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">attach</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">system</span><span class="o">,</span> <span class="kt">long</span> <span class="n">startSeq</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">sCurrentActivityThread</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="n">mSystemThread</span> <span class="o">=</span> <span class="n">system</span><span class="o">;</span>
+    <span class="c1">// 应用走这个分支
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(!</span><span class="n">system</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 设置RuntimeInit.mApplicationObject
+</span><span class="c1"></span>        <span class="n">RuntimeInit</span><span class="o">.</span><span class="na">setApplicationObject</span><span class="o">(</span><span class="n">mAppThread</span><span class="o">.</span><span class="na">asBinder</span><span class="o">());</span>
+        <span class="kd">final</span> <span class="n">IActivityManager</span> <span class="n">mgr</span> <span class="o">=</span> <span class="n">ActivityManager</span><span class="o">.</span><span class="na">getService</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 和 AMS 通信，告诉AMS 我启动了
+</span><span class="c1"></span>            <span class="n">mgr</span><span class="o">.</span><span class="na">attachApplication</span><span class="o">(</span><span class="n">mAppThread</span><span class="o">,</span> <span class="n">startSeq</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RemoteException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="n">ex</span><span class="o">.</span><span class="na">rethrowFromSystemServer</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="c1">// ...
+</span><span class="c1"></span>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="c1">// ...
+</span><span class="c1"></span>    <span class="o">}</span>
+    <span class="c1">// ...
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>mAppThread</code> 是 <code>ApplicationThread</code> 类型，它是 <code>Binder</code> 对象，代表了新创建的 <code>App</code> 。</p>
+<p><code>IActivityManager</code> 则是 <code>AMS</code> 的代理对象。这里不去深究，我们重点关注流程。</p>
+<p>通过 <code>IActivityManager</code> 的 <code>attachApplication</code> 告诉 <code>AMS</code> 我（新App）创建好了。</p>
+<h3 id="ams-dot-attachapplication">AMS.attachApplication</h3>
+<p><code>/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">attachApplication</span><span class="o">(</span><span class="n">IApplicationThread</span> <span class="n">thread</span><span class="o">,</span> <span class="kt">long</span> <span class="n">startSeq</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">callingPid</span> <span class="o">=</span> <span class="n">Binder</span><span class="o">.</span><span class="na">getCallingPid</span><span class="o">();</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">callingUid</span> <span class="o">=</span> <span class="n">Binder</span><span class="o">.</span><span class="na">getCallingUid</span><span class="o">();</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">origId</span> <span class="o">=</span> <span class="n">Binder</span><span class="o">.</span><span class="na">clearCallingIdentity</span><span class="o">();</span>
+        <span class="n">attachApplicationLocked</span><span class="o">(</span><span class="n">thread</span><span class="o">,</span> <span class="n">callingPid</span><span class="o">,</span> <span class="n">callingUid</span><span class="o">,</span> <span class="n">startSeq</span><span class="o">);</span>
+        <span class="n">Binder</span><span class="o">.</span><span class="na">restoreCallingIdentity</span><span class="o">(</span><span class="n">origId</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>AMS</code> 在收到应用创建好的消息后调用 <code>attachApplicationLocked</code></p>
+<h4 id="attachapplicationlocked">attachApplicationLocked</h4>
+<p><code>/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="nf">attachApplicationLocked</span><span class="o">(</span><span class="n">IApplicationThread</span> <span class="n">thread</span><span class="o">,</span>
+        <span class="kt">int</span> <span class="n">pid</span><span class="o">,</span> <span class="kt">int</span> <span class="n">callingUid</span><span class="o">,</span> <span class="kt">long</span> <span class="n">startSeq</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="n">ProcessRecord</span> <span class="n">app</span><span class="o">;</span>
+    <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">SystemClock</span><span class="o">.</span><span class="na">uptimeMillis</span><span class="o">();</span>
+    <span class="kt">long</span> <span class="n">bindApplicationTimeMillis</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">pid</span> <span class="o">!=</span> <span class="n">MY_PID</span> <span class="o">&amp;&amp;</span> <span class="n">pid</span> <span class="o">&gt;=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mPidsSelfLocked</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="n">mPidsSelfLocked</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">pid</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">app</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">startUid</span> <span class="o">!=</span> <span class="n">callingUid</span> <span class="o">||</span> <span class="n">app</span><span class="o">.</span><span class="na">startSeq</span> <span class="o">!=</span> <span class="n">startSeq</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">processName</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="kd">final</span> <span class="n">ProcessRecord</span> <span class="n">pending</span> <span class="o">=</span> <span class="n">mProcessList</span><span class="o">.</span><span class="na">mPendingStarts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">startSeq</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">pending</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">processName</span> <span class="o">=</span> <span class="n">pending</span><span class="o">.</span><span class="na">processName</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;attachApplicationLocked process:&#34;</span> <span class="o">+</span> <span class="n">processName</span>
+                    <span class="o">+</span> <span class="s">&#34; startSeq:&#34;</span> <span class="o">+</span> <span class="n">startSeq</span>
+                    <span class="o">+</span> <span class="s">&#34; pid:&#34;</span> <span class="o">+</span> <span class="n">pid</span>
+                    <span class="o">+</span> <span class="s">&#34; belongs to another existing app:&#34;</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">processName</span>
+                    <span class="o">+</span> <span class="s">&#34; startSeq:&#34;</span> <span class="o">+</span> <span class="n">app</span><span class="o">.</span><span class="na">startSeq</span><span class="o">;</span>
+            <span class="n">cleanUpApplicationRecordLocked</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">,</span>
+                        <span class="kc">true</span> <span class="cm">/*replacingPid*/</span><span class="o">);</span>
+            <span class="n">mPidsSelfLocked</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+    <span class="n">thread</span><span class="o">.</span><span class="na">bindApplication</span><span class="o">(</span><span class="n">processName</span><span class="o">,</span> <span class="n">appInfo</span><span class="o">,</span> <span class="n">providers</span><span class="o">,</span>
+                           <span class="n">instr2</span><span class="o">.</span><span class="na">mClass</span><span class="o">,</span>
+                           <span class="n">profilerInfo</span><span class="o">,</span> <span class="n">instr2</span><span class="o">.</span><span class="na">mArguments</span><span class="o">,</span>
+                           <span class="n">instr2</span><span class="o">.</span><span class="na">mWatcher</span><span class="o">,</span>
+                           <span class="n">instr2</span><span class="o">.</span><span class="na">mUiAutomationConnection</span><span class="o">,</span> <span class="n">testMode</span><span class="o">,</span>
+                           <span class="n">mBinderTransactionTrackingEnabled</span><span class="o">,</span> <span class="n">enableTrackAllocation</span><span class="o">,</span>
+                           <span class="n">isRestrictedBackupMode</span> <span class="o">||</span> <span class="o">!</span><span class="n">normalMode</span><span class="o">,</span> <span class="n">app</span><span class="o">.</span><span class="na">isPersistent</span><span class="o">(),</span>
+                           <span class="k">new</span> <span class="n">Configuration</span><span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">getWindowProcessController</span><span class="o">().</span><span class="na">getConfiguration</span><span class="o">()),</span>
+                           <span class="n">app</span><span class="o">.</span><span class="na">compat</span><span class="o">,</span> <span class="n">getCommonServicesLocked</span><span class="o">(</span><span class="n">app</span><span class="o">.</span><span class="na">isolated</span><span class="o">),</span>
+                           <span class="n">mCoreSettingsObserver</span><span class="o">.</span><span class="na">getCoreSettingsLocked</span><span class="o">(),</span>
+                           <span class="n">buildSerial</span><span class="o">,</span> <span class="n">autofillOptions</span><span class="o">,</span> <span class="n">contentCaptureOptions</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里的 <code>IApplicationThread</code> 就是我们之前的 <code>ApplicationThread</code> 。</p>
+<p>所以最后又通过 <code>IApplicationThread</code> 调回到新创建的应用程序中。</p>
+<h3 id="bindapplication">bindApplication</h3>
+<p><code>/frameworks/base/core/java/android/app/ActivityThread.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">bindApplication</span><span class="o">(</span><span class="n">String</span> <span class="n">processName</span><span class="o">,</span> <span class="n">ApplicationInfo</span> <span class="n">appInfo</span><span class="o">,</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">ProviderInfo</span><span class="o">&gt;</span> <span class="n">providers</span><span class="o">,</span> <span class="n">ComponentName</span> <span class="n">instrumentationName</span><span class="o">,</span>
+        <span class="n">ProfilerInfo</span> <span class="n">profilerInfo</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">instrumentationArgs</span><span class="o">,</span>
+        <span class="n">IInstrumentationWatcher</span> <span class="n">instrumentationWatcher</span><span class="o">,</span>
+        <span class="n">IUiAutomationConnection</span> <span class="n">instrumentationUiConnection</span><span class="o">,</span> <span class="kt">int</span> <span class="n">debugMode</span><span class="o">,</span>
+        <span class="kt">boolean</span> <span class="n">enableBinderTracking</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">trackAllocation</span><span class="o">,</span>
+        <span class="kt">boolean</span> <span class="n">isRestrictedBackupMode</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">persistent</span><span class="o">,</span> <span class="n">Configuration</span> <span class="n">config</span><span class="o">,</span>
+        <span class="n">CompatibilityInfo</span> <span class="n">compatInfo</span><span class="o">,</span> <span class="n">Map</span> <span class="n">services</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">coreSettings</span><span class="o">,</span>
+        <span class="n">String</span> <span class="n">buildSerial</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">autofillCompatibilityEnabled</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">services</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Test code to make sure the app could see the passed-in services.
+</span><span class="c1"></span>            <span class="k">for</span> <span class="o">(</span><span class="n">Object</span> <span class="n">oname</span> <span class="o">:</span> <span class="n">services</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">services</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">oname</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">continue</span><span class="o">;</span> <span class="c1">// AM just passed in a null service.
+</span><span class="c1"></span>                <span class="o">}</span>
+                <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">oname</span><span class="o">;</span>
+
+                <span class="c1">// See b/79378449 about the following exemption.
+</span><span class="c1"></span>                <span class="k">switch</span> <span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="s">&#34;package&#34;</span><span class="o">:</span>
+                    <span class="k">case</span> <span class="n">Context</span><span class="o">.</span><span class="na">WINDOW_SERVICE</span><span class="o">:</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">ServiceManager</span><span class="o">.</span><span class="na">getService</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">Log</span><span class="o">.</span><span class="na">wtf</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Service &#34;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#34; should be accessible by this app&#34;</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Setup the service cache in the ServiceManager
+</span><span class="c1"></span>        <span class="n">ServiceManager</span><span class="o">.</span><span class="na">initServiceCache</span><span class="o">(</span><span class="n">services</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">setCoreSettings</span><span class="o">(</span><span class="n">coreSettings</span><span class="o">);</span>
+
+    <span class="n">AppBindData</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AppBindData</span><span class="o">();</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">processName</span> <span class="o">=</span> <span class="n">processName</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">appInfo</span> <span class="o">=</span> <span class="n">appInfo</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">providers</span> <span class="o">=</span> <span class="n">providers</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">instrumentationName</span> <span class="o">=</span> <span class="n">instrumentationName</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">instrumentationArgs</span> <span class="o">=</span> <span class="n">instrumentationArgs</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">instrumentationWatcher</span> <span class="o">=</span> <span class="n">instrumentationWatcher</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">instrumentationUiAutomationConnection</span> <span class="o">=</span> <span class="n">instrumentationUiConnection</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">debugMode</span> <span class="o">=</span> <span class="n">debugMode</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">enableBinderTracking</span> <span class="o">=</span> <span class="n">enableBinderTracking</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">trackAllocation</span> <span class="o">=</span> <span class="n">trackAllocation</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">restrictedBackupMode</span> <span class="o">=</span> <span class="n">isRestrictedBackupMode</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">persistent</span> <span class="o">=</span> <span class="n">persistent</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">compatInfo</span> <span class="o">=</span> <span class="n">compatInfo</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">initProfilerInfo</span> <span class="o">=</span> <span class="n">profilerInfo</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">buildSerial</span> <span class="o">=</span> <span class="n">buildSerial</span><span class="o">;</span>
+    <span class="n">data</span><span class="o">.</span><span class="na">autofillCompatibilityEnabled</span> <span class="o">=</span> <span class="n">autofillCompatibilityEnabled</span><span class="o">;</span>
+    <span class="n">sendMessage</span><span class="o">(</span><span class="n">H</span><span class="o">.</span><span class="na">BIND_APPLICATION</span><span class="o">,</span> <span class="n">data</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">what</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">BIND_APPLICATION</span><span class="o">:</span>
+            <span class="n">AppBindData</span> <span class="n">data</span> <span class="o">=</span> <span class="o">(</span><span class="n">AppBindData</span><span class="o">)</span><span class="n">msg</span><span class="o">.</span><span class="na">obj</span><span class="o">;</span>
+            <span class="n">handleBindApplication</span><span class="o">(</span><span class="n">data</span><span class="o">);</span>
+            <span class="k">break</span><span class="o">;</span>
+            <span class="c1">// ...
+</span><span class="c1"></span>    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>bindApplication</code> 中通过 <code>Handler</code> 机制把消息交给 <code>handleBindApplication</code> 处理。</p>
+<h3 id="handlebindapplication">handleBindApplication</h3>
+<p><code>/frameworks/base/core/java/android/app/ActivityThread.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">handleBindApplication</span><span class="o">(</span><span class="n">AppBindData</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="na">info</span> <span class="o">=</span> <span class="n">getPackageInfoNoCheck</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">appInfo</span><span class="o">,</span> <span class="n">data</span><span class="o">.</span><span class="na">compatInfo</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="n">ContextImpl</span> <span class="n">appContext</span> <span class="o">=</span> <span class="n">ContextImpl</span><span class="o">.</span><span class="na">createAppContext</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">data</span><span class="o">.</span><span class="na">info</span><span class="o">);</span>
+    <span class="c1">// ...
+</span><span class="c1"></span>
+    <span class="n">Application</span> <span class="n">app</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">info</span><span class="o">.</span><span class="na">makeApplication</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">restrictedBackupMode</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="n">mInstrumentation</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">instrumentationArgs</span><span class="o">);</span> <span class="c1">// 空实现
+</span><span class="c1"></span>        <span class="n">mInstrumentation</span><span class="o">.</span><span class="na">callApplicationOnCreate</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">data</span><span class="o">.</span><span class="na">appInfo</span><span class="o">.</span><span class="na">targetSdkVersion</span> <span class="o">&lt;</span> <span class="n">Build</span><span class="o">.</span><span class="na">VERSION_CODES</span><span class="o">.</span><span class="na">O_MR1</span>
+                <span class="o">||</span> <span class="n">StrictMode</span><span class="o">.</span><span class="na">getThreadPolicy</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">writesAllowedPolicy</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">StrictMode</span><span class="o">.</span><span class="na">setThreadPolicy</span><span class="o">(</span><span class="n">savedPolicy</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>handleBindApplication</code> 中会获取 <code>LoadedApk</code> 、创建 <code>ContextImpl</code> 、通过反射创建 <code>Application</code> 并调用其 <code>onCreate</code> 方法。我们一一来看一下。</p>
+<h4 id="getpackageinfonocheck">getPackageInfoNoCheck</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="n">LoadedApk</span> <span class="nf">getPackageInfoNoCheck</span><span class="o">(</span><span class="n">ApplicationInfo</span> <span class="n">ai</span><span class="o">,</span>
+                                             <span class="n">CompatibilityInfo</span> <span class="n">compatInfo</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">getPackageInfo</span><span class="o">(</span><span class="n">ai</span><span class="o">,</span> <span class="n">compatInfo</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="n">LoadedApk</span> <span class="nf">getPackageInfo</span><span class="o">(</span><span class="n">ApplicationInfo</span> <span class="n">aInfo</span><span class="o">,</span> <span class="n">CompatibilityInfo</span> <span class="n">compatInfo</span><span class="o">,</span>
+                                 <span class="n">ClassLoader</span> <span class="n">baseLoader</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">securityViolation</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">includeCode</span><span class="o">,</span>
+                                 <span class="kt">boolean</span> <span class="n">registerPackage</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">differentUser</span> <span class="o">=</span> <span class="o">(</span><span class="n">UserHandle</span><span class="o">.</span><span class="na">myUserId</span><span class="o">()</span> <span class="o">!=</span> <span class="n">UserHandle</span><span class="o">.</span><span class="na">getUserId</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">uid</span><span class="o">));</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mResourcesManager</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">LoadedApk</span><span class="o">&gt;</span> <span class="n">ref</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">differentUser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">includeCode</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">mPackages</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">packageName</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">mResourcePackages</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">packageName</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">LoadedApk</span> <span class="n">packageInfo</span> <span class="o">=</span> <span class="n">ref</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">ref</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">packageInfo</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">(</span><span class="n">packageInfo</span><span class="o">.</span><span class="na">mResources</span> <span class="o">!=</span> <span class="kc">null</span>
+                                  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">packageInfo</span><span class="o">.</span><span class="na">mResources</span><span class="o">.</span><span class="na">getAssets</span><span class="o">().</span><span class="na">isUpToDate</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">packageInfo</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="n">LoadedApk</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">aInfo</span><span class="o">,</span> <span class="n">compatInfo</span><span class="o">,</span> <span class="n">baseLoader</span><span class="o">,</span>
+                              <span class="n">securityViolation</span><span class="o">,</span> <span class="n">includeCode</span> <span class="o">&amp;&amp;</span>
+                              <span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">flags</span><span class="o">&amp;</span><span class="n">ApplicationInfo</span><span class="o">.</span><span class="na">FLAG_HAS_CODE</span><span class="o">)</span> <span class="o">!=</span> <span class="n">0</span><span class="o">,</span> <span class="n">registerPackage</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">mSystemThread</span> <span class="o">&amp;&amp;</span> <span class="s">&#34;android&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">packageName</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">packageInfo</span><span class="o">.</span><span class="na">installSystemApplicationInfo</span><span class="o">(</span><span class="n">aInfo</span><span class="o">,</span>
+                                                         <span class="n">getSystemContext</span><span class="o">().</span><span class="na">mPackageInfo</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">());</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">differentUser</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">includeCode</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mPackages</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">packageName</span><span class="o">,</span>
+                              <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">LoadedApk</span><span class="o">&gt;(</span><span class="n">packageInfo</span><span class="o">));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">mResourcePackages</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">aInfo</span><span class="o">.</span><span class="na">packageName</span><span class="o">,</span>
+                                      <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">LoadedApk</span><span class="o">&gt;(</span><span class="n">packageInfo</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">packageInfo</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>创建一个唯一的 <code>LoadedApk</code> ，并放入 <code>mPackages</code> 中。</p>
+<h4 id="createappcontext">createAppContext</h4>
+<p><code>/frameworks/base/core/java/android/app/ContextImpl.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">ContextImpl</span> <span class="nf">createAppContext</span><span class="o">(</span><span class="n">ActivityThread</span> <span class="n">mainThread</span><span class="o">,</span> <span class="n">LoadedApk</span> <span class="n">packageInfo</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">packageInfo</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;packageInfo&#34;</span><span class="o">);</span>
+    <span class="n">ContextImpl</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ContextImpl</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">mainThread</span><span class="o">,</span> <span class="n">packageInfo</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">0</span><span class="o">,</span>
+            <span class="kc">null</span><span class="o">);</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">setResources</span><span class="o">(</span><span class="n">packageInfo</span><span class="o">.</span><span class="na">getResources</span><span class="o">());</span>
+    <span class="k">return</span> <span class="n">context</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="nf">ContextImpl</span><span class="o">(</span><span class="nd">@Nullable</span> <span class="n">ContextImpl</span> <span class="n">container</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">ActivityThread</span> <span class="n">mainThread</span><span class="o">,</span>
+        <span class="nd">@NonNull</span> <span class="n">LoadedApk</span> <span class="n">packageInfo</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">String</span> <span class="n">splitName</span><span class="o">,</span>
+        <span class="nd">@Nullable</span> <span class="n">IBinder</span> <span class="n">activityToken</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">UserHandle</span> <span class="n">user</span><span class="o">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="o">,</span>
+        <span class="nd">@Nullable</span> <span class="n">ClassLoader</span> <span class="n">classLoader</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mOuterContext</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+
+    <span class="c1">// ...
+</span><span class="c1"></span>
+    <span class="n">mMainThread</span> <span class="o">=</span> <span class="n">mainThread</span><span class="o">;</span>
+    <span class="n">mActivityToken</span> <span class="o">=</span> <span class="n">activityToken</span><span class="o">;</span>
+
+    <span class="n">mPackageInfo</span> <span class="o">=</span> <span class="n">packageInfo</span><span class="o">;</span>
+    <span class="n">mSplitName</span> <span class="o">=</span> <span class="n">splitName</span><span class="o">;</span>
+    <span class="n">mClassLoader</span> <span class="o">=</span> <span class="n">classLoader</span><span class="o">;</span>
+    <span class="n">mResourcesManager</span> <span class="o">=</span> <span class="n">ResourcesManager</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+    <span class="n">mBasePackageName</span> <span class="o">=</span> <span class="n">packageInfo</span><span class="o">.</span><span class="na">mPackageName</span><span class="o">;</span>
+    <span class="n">ApplicationInfo</span> <span class="n">ainfo</span> <span class="o">=</span> <span class="n">packageInfo</span><span class="o">.</span><span class="na">getApplicationInfo</span><span class="o">();</span>
+    <span class="c1">// ..
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一通赋值，没啥好说的。</p>
+<h4 id="makeapplication">makeApplication</h4>
+<p><code>/frameworks/base/core/java/android/app/LoadedApk.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Application</span> <span class="nf">makeApplication</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">forceDefaultAppClass</span><span class="o">,</span>
+        <span class="n">Instrumentation</span> <span class="n">instrumentation</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mApplication</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mApplication</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">Application</span> <span class="n">app</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="n">String</span> <span class="n">appClass</span> <span class="o">=</span> <span class="n">mApplicationInfo</span><span class="o">.</span><span class="na">className</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">forceDefaultAppClass</span> <span class="o">||</span> <span class="o">(</span><span class="n">appClass</span> <span class="o">==</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">appClass</span> <span class="o">=</span> <span class="s">&#34;android.app.Application&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="c1">// 获取 ClassLoader
+</span><span class="c1"></span>        <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span> <span class="n">cl</span> <span class="o">=</span> <span class="n">getClassLoader</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">mPackageName</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;android&#34;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">initializeJavaContextClassLoader</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">ContextImpl</span> <span class="n">appContext</span> <span class="o">=</span> <span class="n">ContextImpl</span><span class="o">.</span><span class="na">createAppContext</span><span class="o">(</span><span class="n">mActivityThread</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="c1">// 创建 Application
+</span><span class="c1"></span>        <span class="n">app</span> <span class="o">=</span> <span class="n">mActivityThread</span><span class="o">.</span><span class="na">mInstrumentation</span><span class="o">.</span><span class="na">newApplication</span><span class="o">(</span>
+                <span class="n">cl</span><span class="o">,</span> <span class="n">appClass</span><span class="o">,</span> <span class="n">appContext</span><span class="o">);</span>
+        <span class="n">appContext</span><span class="o">.</span><span class="na">setOuterContext</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">mActivityThread</span><span class="o">.</span><span class="na">mInstrumentation</span><span class="o">.</span><span class="na">onException</span><span class="o">(</span><span class="n">app</span><span class="o">,</span> <span class="n">e</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span>
+                <span class="s">&#34;Unable to instantiate application &#34;</span> <span class="o">+</span> <span class="n">appClass</span>
+                <span class="o">+</span> <span class="s">&#34;: &#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">toString</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">mActivityThread</span><span class="o">.</span><span class="na">mAllApplications</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">app</span><span class="o">);</span>
+    <span class="n">mApplication</span> <span class="o">=</span> <span class="n">app</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">app</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><!-- raw HTML omitted -->
+<ul>
+<li>
+<p>newApplication</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Application</span> <span class="nf">newApplication</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">cl</span><span class="o">,</span> <span class="n">String</span> <span class="n">className</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="n">InstantiationException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">,</span>
+        <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+    <span class="n">Application</span> <span class="n">app</span> <span class="o">=</span> <span class="n">getFactory</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getPackageName</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">instantiateApplication</span><span class="o">(</span><span class="n">cl</span><span class="o">,</span> <span class="n">className</span><span class="o">);</span>
+    <span class="n">app</span><span class="o">.</span><span class="na">attach</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">app</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="n">AppComponentFactory</span> <span class="nf">getFactory</span><span class="o">(</span><span class="n">String</span> <span class="n">pkg</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">pkg</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">AppComponentFactory</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mThread</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">AppComponentFactory</span><span class="o">.</span><span class="na">DEFAULT</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">LoadedApk</span> <span class="n">apk</span> <span class="o">=</span> <span class="n">mThread</span><span class="o">.</span><span class="na">peekPackageInfo</span><span class="o">(</span><span class="n">pkg</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">apk</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="n">apk</span> <span class="o">=</span> <span class="n">mThread</span><span class="o">.</span><span class="na">getSystemContext</span><span class="o">().</span><span class="na">mPackageInfo</span><span class="o">;</span>
+    <span class="k">return</span> <span class="n">apk</span><span class="o">.</span><span class="na">getAppFactory</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>创建 <code>Application</code> 然后调用其 <code>attach</code> 方法。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>instantiateApplication</p>
+<p><code>/frameworks/base/core/java/android/app/AppComponentFactory.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nd">@NonNull</span> <span class="n">Application</span> <span class="nf">instantiateApplication</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">ClassLoader</span> <span class="n">cl</span><span class="o">,</span>
+        <span class="nd">@NonNull</span> <span class="n">String</span> <span class="n">className</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="n">InstantiationException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">,</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">Application</span><span class="o">)</span> <span class="n">cl</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">className</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过反射创建 <code>Application</code> 。</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>attach</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">final</span> <span class="kt">void</span> <span class="nf">attach</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">attachBaseContext</span><span class="o">(</span><span class="n">context</span><span class="o">);</span> <span class="c1">// 赋值给 mBase
+</span><span class="c1"></span>    <span class="n">mLoadedApk</span> <span class="o">=</span> <span class="n">ContextImpl</span><span class="o">.</span><span class="na">getImpl</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">mPackageInfo</span><span class="o">;</span> <span class="c1">// 获取 LoadedApk
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>attach</code> 中做了两件事，把 <code>ContextImpl</code> 赋值给 <code>mBase</code> ，获取 <code>LoadedApk</code> 保存起来。</p>
+</li>
+</ul>
+<h4 id="callapplicationoncreate">callApplicationOnCreate</h4>
+<p><code>/frameworks/base/core/java/android/app/Instrumentation.java</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">callApplicationOnCreate</span><span class="o">(</span><span class="n">Application</span> <span class="n">app</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">app</span><span class="o">.</span><span class="na">onCreate</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>最后在这里调用了 <code>Application</code> 的 <code>onCreate</code> 方法，如果你有在 <code>AndroidManifest.xml</code> 中配置，则会调用自定义的 <code>Application</code> 的 <code>onCreate</code> 方法。</p>
+<h2 id="总结">总结</h2>
+<p>画个时序图，梳理一下 <code>Application</code> 的启动流程。</p>
+<figure>
+    <img src="/images/framework/app_launch.png"/> 
+</figure>
+
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://gityuan.com/2017/04/02/android-application/">理解Application创建过程 - Gityuan博客 | 袁辉辉的技术博客</a></li>
+<li><a href="https://www.jianshu.com/p/03ec8203919e">Android Application 启动流程分析及其源码调用探究 - 简书</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-03
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/framework/">Framework</a>
+          <a href="/tags/ams/">AMS</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/magit/">
+            <span class="next-text nav-default">Magit 使用技巧</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.githu.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
