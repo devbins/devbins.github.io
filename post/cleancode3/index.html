@@ -49,7 +49,7 @@
 <meta itemprop="name" content="代码整改思考之架构">
 <meta itemprop="description" content="前言 之前的几篇文章，我们都是从微观入手，去思考代码中存在的问题，但是往往忽略了，从架构上去发现问题。 这样导致了就算许多细节改的再好，似乎还是"><meta itemprop="datePublished" content="2021-04-18T00:00:00&#43;08:00" />
 <meta itemprop="dateModified" content="2021-04-18T00:00:00&#43;08:00" />
-<meta itemprop="wordCount" content="3681">
+<meta itemprop="wordCount" content="3602">
 <meta itemprop="keywords" content="随想," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="代码整改思考之架构"/>
 <meta name="twitter:description" content="前言 之前的几篇文章，我们都是从微观入手，去思考代码中存在的问题，但是往往忽略了，从架构上去发现问题。 这样导致了就算许多细节改的再好，似乎还是"/>
@@ -136,7 +136,7 @@
         <div class="post-category">
             <a href="/categories/cleancode/"> cleancode </a>
             </div>
-          <span class="more-meta"> 约 3681 字 </span>
+          <span class="more-meta"> 约 3602 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
         
       </div>
@@ -225,8 +225,8 @@
 <p>我们虽然也有对类进行一定的划分，但是经手的人多了，各种划分方式也就有了。</p>
 <p>比较常见的就是按业务功能划分和按层划分。</p>
 <h4 id="按层划分">按层划分</h4>
-<p>比如LoginActivity、RegisterActivity、MainActivity，这些Activity划分到一块。</p>
-<p>按层划分使得业务功能内聚不够，当 <code>Activity</code> 多达几十个的时候，找起来也是十分的不麻烦，而且不相关的类也会被放到一块。比如 RegisterActivity、MainActivity就被分到一个包下面了。</p>
+<p>比如 <code>LoginActivity</code> 、 <code>RegisterActivity</code> 、 <code>MainActivity</code> ，这些 <code>Activity</code> 划分到一块。</p>
+<p>按层划分使得业务功能内聚不够，当 <code>Activity</code> 多达几十个的时候，找起来也是十分的不麻烦，而且不相关的类也会被放到一块。比如 <code>RegisterActivity</code> 、 <code>MainActivity</code> 就被分到一个包下面了。</p>
 <h4 id="按业务功能划分">按业务功能划分</h4>
 <p>比如把登录的相关业务划分到一个包里，像LoginActivity、LoginViewModel、LoginModel这些都会放到一个包里。</p>
 <p>按业务功能划分可以让一个小功能相关的类放到一块，在写代码的时候只要关心这几个类就行，高内聚。</p>
@@ -268,7 +268,7 @@
 <p>这句话的不知道是谁说的，虽然不能说绝对正确，但是还是有一定的道理。</p>
 <p>分层之所以能解决问题是因为它把问题给简化了，分开治理，把一个大的复杂的问题，分成若干个小的问题。这样解决起来简单，一个个小问题解决了，累积起来就是一个大问题，甚至不是简单的 1 + 1 = 2 而是大于 2 。</p>
 <p>除了简化问题外，它还把小问题与小问题之间的耦合度降低了，它们之间的沟通简单，并且是稳定的，层与层之间的变化不会相互影响，每个层只要考虑自己就行，可以做到极致的优化。</p>
-<p>著名的分层协议有 OSI 七层参考模型（上层依赖下层，层与层之间通过接口进行弱耦合）、冯诺依曼计算机体系、JVM（位于字节码与操作系统之间，使得一次编写到处运行成为可能）、Android架构体系等等。</p>
+<p>著名的分层协议有 <code>OSI</code> 七层参考模型（上层依赖下层，层与层之间通过接口进行弱耦合）、冯诺依曼计算机体系、 <code>JVM</code> （位于字节码与操作系统之间，使得一次编写到处运行成为可能）、 <code>Android</code> 架构体系等等。</p>
 <p>我们的应用分层主要参考 <code>JetPack MVVM</code> 分为 <code>Model</code> 、 <code>View</code> 、 <code>ViewModel</code> ，毕竟这也是 <code>Android</code> 推荐的主流架构。</p>
 <h2 id="给我的启示">给我的启示</h2>
 <p>不仅要关注代码的细节，还要从整体架构上有所关注。</p>
