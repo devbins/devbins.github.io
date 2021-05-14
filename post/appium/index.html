@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.82.1 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/appium/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.696f9b9a939ab31cd22ca2f361be7755912b70519c7db241696a8ff42c8b26bc.css" rel="stylesheet">
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -195,69 +195,57 @@
 安装位置这里需要记一下，等下用来配置环境变量，如果你和图上选择的路径的不一样，在设置环境变量时请跟着修改。
 <img src="/images/appium/java_path.png" alt=""></p>
 <p>由于 <code>JDK</code> 中包含了 <code>JRE</code> 所以这里直接取消，不在进行安装，安装也是可以的。</p>
-<figure>
-    <img src="/images/appium/jre.png"/> 
+<figure><img src="/images/appium/jre.png"/>
 </figure>
 
 <h3 id="配置环境变量">配置环境变量</h3>
 <p>接下来进行 <code>Java</code> 的环境变量配置。在计算机中右键-&gt;属性</p>
-<figure>
-    <img src="/images/appium/property.png"/> 
+<figure><img src="/images/appium/property.png"/>
 </figure>
 
 <p>选择高级系统设置</p>
-<figure>
-    <img src="/images/appium/setting.png"/> 
+<figure><img src="/images/appium/setting.png"/>
 </figure>
 
 <p>点击环境变量</p>
-<figure>
-    <img src="/images/appium/env.png"/> 
+<figure><img src="/images/appium/env.png"/>
 </figure>
 
 <p>点击新建</p>
-<figure>
-    <img src="/images/appium/newenv.png"/> 
+<figure><img src="/images/appium/newenv.png"/>
 </figure>
 
 <p>变量名输入（变量名要大写） <code>JAVA_HOME</code>,变量值输入刚才安装的路径，如果改过安装路径，请选择正确的安装路径。我这里是 <code>C:\Java</code> ，输入完后点击确定保存。</p>
-<figure>
-    <img src="/images/appium/java_home.png"/> 
+<figure><img src="/images/appium/java_home.png"/>
 </figure>
 
 <p>和上一步一样，点击新建。设置变量名为 <code>Path</code> ,变量值为 <code>%JAVA_HOME%\bin</code> 。 其中 <code>%%</code> 的意思是引用变量的值，所以这里 <code>Path</code> 其实是 <code>C:\Java\bin</code></p>
-<figure>
-    <img src="/images/appium/java.png"/> 
+<figure><img src="/images/appium/java.png"/>
 </figure>
 
 <h2 id="android-环境搭建">Android 环境搭建</h2>
 <p>点击下载<a href="https://dl.google.com/dl/android/studio/install/3.1.2.0/android-studio-ide-173.4720617-windows.exe">AndroidStudio</a>，下载完成后运行安装程序。
 点击下一步，出现选择安装路径。和安装 <code>Java</code> 一样选择一个不带有特殊字符和中文的路径。</p>
-<figure>
-    <img src="/images/appium/androidstudio.png"/> 
+<figure><img src="/images/appium/androidstudio.png"/>
 </figure>
 
 <p>选择自定义安装</p>
-<figure>
-    <img src="/images/appium/custome.png"/> 
+<figure><img src="/images/appium/custome.png"/>
 </figure>
 
 <p>选择 <code>SDK</code> 安装路径，也是需要记住安装路径，用于配置环境变量。</p>
-<figure>
-    <img src="/images/appium/sdk.png"/> 
+<figure><img src="/images/appium/sdk.png"/>
 </figure>
 
 <h3 id="配置环境变量">配置环境变量</h3>
 <p>配置 <code>ANDROID_HOME</code> ，和 <code>Java</code> 配置环境变量在同一个地方。不过这次的变量名是 <code>ANDROID_HOME</code> ，变量值是刚刚 <code>SDK</code> 的安装路径。
 右键计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量-&gt;新建</p>
-<figure>
-    <img src="/images/appium/android_home.png"/> 
+<figure><img src="/images/appium/android_home.png"/>
 </figure>
 
 <p>除了配置 <code>ANDROID_HOME</code> 还需要把 <code>adb</code> 加入 <code>Path</code> 中，这样才能调试设备。</p>
 <p>在环境变量中选择 <code>Path</code> 点击编辑，加入 <code>;%ANDROID_HOME%\platform-tools</code> ，注意前面有一个 <code>;</code> 环境变量有多个可以使用 <code>;</code> 分隔。最后 <code>Path</code> 为 <code>%JAVA_HOME%\bin;%ANDROID_HOME%\platform-tools</code></p>
-<figure>
-    <img src="/images/appium/add_path.png"/> 
+<figure><img src="/images/appium/add_path.png"/>
 </figure>
 
 <h2 id="nodejs-的安装">Nodejs 的安装</h2>
@@ -274,25 +262,21 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 </div><h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
 <p><code>appium-doctor</code> 是一个用来检查 <code>appium</code> 环境是否安装并配置好的工具，让我们来检测一下上面的步骤都成功了没有。
 点击屏幕左下角，在搜索框中输入 <code>cmd</code> 回车</p>
-<figure>
-    <img src="/images/appium/cmd.png"/> 
+<figure><img src="/images/appium/cmd.png"/>
 </figure>
 
 <p>在打开的窗口中输入 <code>npm install -g appium-doctor</code></p>
-<figure>
-    <img src="/images/appium/install_appium_doctor.png"/> 
+<figure><img src="/images/appium/install_appium_doctor.png"/>
 </figure>
 
 <p>安装好之后，输入 <code>appium-doctor</code> 来查看环境是否配置成功。</p>
-<figure>
-    <img src="/images/appium/appium_doctor.png"/> 
+<figure><img src="/images/appium/appium_doctor.png"/>
 </figure>
 
 <h2 id="appium-安装">appium 安装</h2>
 <p>点击<a href="https://github.com/appium/appium-desktop/releases/download/v1.6.1/appium-desktop-setup-1.6.1.exe">Appium</a>下载，点击安装。没了。
 运行起来看看。</p>
-<figure>
-    <img src="/images/appium/appium.png"/> 
+<figure><img src="/images/appium/appium.png"/>
 </figure>
 
 <h2 id="一个小例子">一个小例子</h2>
@@ -301,8 +285,7 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 打开终端
 <img src="/images/appium/anaconda_prompt.png" alt="">
 输入 <code>pip install Appium-Python-Client</code></p>
-<figure>
-    <img src="/images/appium/appium_python_client.png"/> 
+<figure><img src="/images/appium/appium_python_client.png"/>
 </figure>
 
 <ul>
@@ -385,8 +368,7 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 </code></pre></td></tr></table>
 </div>
 </div><p>看看效果，还不错</p>
-<figure>
-    <img src="/images/appium/screenshot.gif"/> 
+<figure><img src="/images/appium/screenshot.gif"/>
 </figure>
 
 <h2 id="踩过的坑">踩过的坑</h2>
