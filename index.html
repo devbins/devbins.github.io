@@ -126,6 +126,33 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/http2/">HTTP/2</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-06-02 </span>
+      <div class="post-category">
+          <a href="/categories/http/"> HTTP </a>
+          <a href="/categories/%E7%BD%91%E7%BB%9C/"> 网络 </a>
+          </div>
+        <span class="more-meta"> 约 2563 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>最近被问到 <code>HTTP/2</code> 有什么特点，我只答了个多路复用，当时脑子还想到了二进制分帧和头部压缩，我以为是 <code>HTTP/3</code> 的就没答上来。</p>
+<p>由于 <code>HTTP/2</code> 普及率不高，而且最近 IETF 将 QUIC 发布为 RFC9000，这意味着 <code>HTTP/3</code> 即将到来。所以很有可能会跳过 <code>HTTP/2</code> 直接进入 <code>HTTP/3</code> ，所以对 <code>HTTP/2</code> 没有了解太多。</p>
+<p>不过既然被问到了那就好好学一下 <code>HTTP/2</code> 。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/http2/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/aidl_short/">探秘 AIDL 为什么不支持 short</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2021-05-30 </span>
@@ -306,29 +333,6 @@
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/cleancode3/">代码整改思考之架构</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-04-18 </span>
-      <div class="post-category">
-          <a href="/categories/cleancode/"> cleancode </a>
-          </div>
-        <span class="more-meta"> 约 3602 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      前言 之前的几篇文章，我们都是从微观入手，去思考代码中存在的问题，但是往往忽略了，从架构上去发现问题。 这样导致了就算许多细节改的再好，似乎还是
-    </div>
-    <div class="read-more">
-      <a href="/post/cleancode3/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/systemserver/">SystemServer</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2021-04-11 </span>
@@ -354,25 +358,27 @@
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/cleancode2/">代码质量的思考</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/">JNI中的引用</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-04-10 </span>
+      <span class="post-time"> 2021-03-28 </span>
       <div class="post-category">
-          <a href="/categories/cleancode/"> cleancode </a>
+          <a href="/categories/android/"> Android </a>
+          <a href="/categories/jni/"> JNI </a>
           </div>
-        <span class="more-meta"> 约 2168 字 </span>
-        <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span class="more-meta"> 约 1173 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
       <h2 id="前言">前言</h2>
-<p>在<a href="https://devbins.github.io/post/cleancode/">关于代码质量整改的思考</a>中我反思了代码整改的本质，以及整改过程中走的弯路。探讨了哪些需要改的，哪些又不需要改的。</p>
-<p>本文将自己这些日子整改中的思考做一次反思，尝试给出一些代码质量不高的原因，以及一些改进办法。</p>
+<p>平时写 <code>Java</code> 代码对创建的对象，我们很少会去关心怎么手动释放内存，大多数时候都有 <code>GC</code> 去帮我们回收。</p>
+<p>然而在 <code>JNI</code> 中，几乎都是 <code>C/C++</code> 的代码，它们是没有 <code>GC</code> 的，所以对内存的使用就需要格外小心了。</p>
+<p>因此在 <code>JNI</code> 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。</p>
     </div>
     <div class="read-more">
-      <a href="/post/cleancode2/" class="read-more-link">阅读更多</a>
+      <a href="/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
