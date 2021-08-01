@@ -24,19 +24,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/rxlifecycle/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -45,13 +45,13 @@
 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/rxlifecycle/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2019-07-27T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2019-07-27T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2019-07-27T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-07-27T00:00:00+08:00" />
 
 <meta itemprop="name" content="RxLifecycle 原理解析">
 <meta itemprop="description" content="介绍
-从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。"><meta itemprop="datePublished" content="2019-07-27T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2019-07-27T00:00:00&#43;08:00" />
+从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。"><meta itemprop="datePublished" content="2019-07-27T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2019-07-27T00:00:00+08:00" />
 <meta itemprop="wordCount" content="1765">
 <meta itemprop="keywords" content="Android," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="RxLifecycle 原理解析"/>
@@ -71,7 +71,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -81,15 +81,15 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -102,7 +102,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -112,15 +112,15 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -138,7 +138,7 @@
       <div class="post-meta">
         <span class="post-time"> 2019-07-27 </span>
         <div class="post-category">
-            <a href="/categories/android/"> Android </a>
+            <a href="../../categories/android/"> Android </a>
             </div>
           <span class="more-meta"> 约 1765 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
@@ -170,7 +170,7 @@
 <h2 id="添加依赖">添加依赖</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -179,7 +179,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39;</span>
 
 <span class="c1">// If you want to bind to Android-specific lifecycles
 </span><span class="c1"></span><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39;</span>
@@ -191,7 +191,7 @@
 </div><h2 id="基本使用">基本使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -202,7 +202,7 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">RxAppCompatActivity</span><span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">RxAppCompatActivity</span><span class="o">{</span>
   <span class="nd">@Override</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
     <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
@@ -216,7 +216,7 @@
 </div><p>或者</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -227,7 +227,7 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">RxAppCompatActivity</span><span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyActivity</span> <span class="kd">extends</span> <span class="n">RxAppCompatActivity</span><span class="o">{</span>
   <span class="nd">@Override</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onResume</span><span class="o">()</span> <span class="o">{</span>
     <span class="kd">super</span><span class="o">.</span><span class="na">onResume</span><span class="o">();</span>
@@ -244,7 +244,7 @@
 <p>就从 <code>bindToLifecycle</code> 看起吧</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -313,7 +313,7 @@
 </span><span class="lnt">67
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">RxAppCompatActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">LifecycleProvider</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">RxAppCompatActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">LifecycleProvider</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="kd">final</span> <span class="n">BehaviorSubject</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="n">lifecycleSubject</span> <span class="o">=</span> <span class="n">BehaviorSubject</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
 
@@ -387,7 +387,7 @@
 <p>接着来看 <code>RxLifecycleAndroid.bindActivity</code> 里做了什么</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -419,7 +419,7 @@
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 1.
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 1.
 </span><span class="c1"></span><span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">bindActivity</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="kd">final</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="n">lifecycle</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="n">bind</span><span class="o">(</span><span class="n">lifecycle</span><span class="o">,</span> <span class="n">ACTIVITY_LIFECYCLE</span><span class="o">);</span>
 <span class="o">}</span>
@@ -456,7 +456,7 @@
 <h2 id="activity-lifecycle">ACTIVITY_LIFECYCLE</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -480,7 +480,7 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">,</span> <span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="n">ACTIVITY_LIFECYCLE</span> <span class="o">=</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">,</span> <span class="n">ActivityEvent</span><span class="o">&gt;</span> <span class="n">ACTIVITY_LIFECYCLE</span> <span class="o">=</span>
       <span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">,</span> <span class="n">ActivityEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
               <span class="nd">@Override</span>
               <span class="kd">public</span> <span class="n">ActivityEvent</span> <span class="nf">apply</span><span class="o">(</span><span class="n">ActivityEvent</span> <span class="n">lastEvent</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
@@ -539,7 +539,7 @@
 <h2 id="lifecycletransformer">LifecycleTransformer</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -560,7 +560,7 @@
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">ObservableTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;,</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">ObservableTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;,</span>
                                            <span class="n">FlowableTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;,</span>
                                            <span class="n">SingleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;,</span>
                                            <span class="n">MaybeTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;,</span>
@@ -587,7 +587,7 @@
 <h2 id="binduntilevent">bindUntilEvent</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -620,7 +620,7 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">R</span><span class="o">&gt;</span> <span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">bindUntilEvent</span><span class="o">(</span><span class="nd">@Nonnull</span> <span class="kd">final</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="n">lifecycle</span><span class="o">,</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">R</span><span class="o">&gt;</span> <span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">bindUntilEvent</span><span class="o">(</span><span class="nd">@Nonnull</span> <span class="kd">final</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span> <span class="n">lifecycle</span><span class="o">,</span>
                                                             <span class="nd">@Nonnull</span> <span class="kd">final</span> <span class="n">R</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">checkNotNull</span><span class="o">(</span><span class="n">lifecycle</span><span class="o">,</span> <span class="s">&#34;lifecycle == null&#34;</span><span class="o">);</span>
     <span class="n">checkNotNull</span><span class="o">(</span><span class="n">event</span><span class="o">,</span> <span class="s">&#34;event == null&#34;</span><span class="o">);</span>
@@ -681,15 +681,15 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/android/">Android</a>
+          <a href="../../tags/android/">Android</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/dockerfile/">
+        <a class="prev" href="../../post/dockerfile/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Dockerfile</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/hugo/">
+        <a class="next" href="../../post/hugo/">
             <span class="next-text nav-default">使用 hugo 搭建网站</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -746,7 +746,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 

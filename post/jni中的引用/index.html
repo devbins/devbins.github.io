@@ -26,19 +26,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -49,15 +49,15 @@
 因此在 JNI 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-03-28T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2021-03-28T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2021-03-28T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-03-28T00:00:00+08:00" />
 
 <meta itemprop="name" content="JNI中的引用">
 <meta itemprop="description" content="前言
 平时写 Java 代码对创建的对象，我们很少会去关心怎么手动释放内存，大多数时候都有 GC 去帮我们回收。
 然而在 JNI 中，几乎都是 C/C&#43;&#43; 的代码，它们是没有 GC 的，所以对内存的使用就需要格外小心了。
-因此在 JNI 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。"><meta itemprop="datePublished" content="2021-03-28T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2021-03-28T00:00:00&#43;08:00" />
+因此在 JNI 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。"><meta itemprop="datePublished" content="2021-03-28T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2021-03-28T00:00:00+08:00" />
 <meta itemprop="wordCount" content="1173">
 <meta itemprop="keywords" content="Android,JNI," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="JNI中的引用"/>
@@ -79,7 +79,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -89,15 +89,15 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -110,7 +110,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -120,15 +120,15 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -146,8 +146,8 @@
       <div class="post-meta">
         <span class="post-time"> 2021-03-28 </span>
         <div class="post-category">
-            <a href="/categories/android/"> Android </a>
-            <a href="/categories/jni/"> JNI </a>
+            <a href="../../categories/android/"> Android </a>
+            <a href="../../categories/jni/"> JNI </a>
             </div>
           <span class="more-meta"> 约 1173 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
@@ -188,7 +188,7 @@
 <p>它们是配套使用的，需要成对出现。如下所示</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -198,7 +198,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
     <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
     <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
@@ -213,7 +213,7 @@
 <p><code>JNI</code> 提供的 <code>PopLocalFrame</code> 其实是有一个参数的， <code>jobject PopLocalFrame(jobject result);</code> 我们把需要保留的局部引用放到 <code>result</code> 中就可以了，上面的例子中我们传入 <code>NULL</code> 表示不需要返回到之前的栈帧中。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -223,7 +223,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jstring</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jstring</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
     <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
     <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
@@ -238,14 +238,14 @@
 <p>在 <code>JNI</code> 规范中指出， <code>JVM</code> 要确保每个 <code>Native</code> 方法至少可以创建 16 个局部引用，所以我们平时开发一般是够用的，但是就是会碰到极个别情况下超过 16 的，这时候就需要使用 <code>EnsureLocalCapacity</code> 来确保是否能够创建足够的局部引用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">EnsureLocalCapacity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">==</span>  <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">EnsureLocalCapacity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">==</span>  <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span>  <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">jstring</span>  <span class="n">jstr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello, world&#34;</span><span class="p">);</span>
     <span class="p">}</span>
@@ -260,7 +260,7 @@
 <p>为了解决这个问题， <code>JNI</code> 提供了 <code>NewGlobalRef</code> 把局部引用转为全局引用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -269,7 +269,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jobject</span> <span class="n">g_callback</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jobject</span> <span class="n">g_callback</span><span class="p">;</span>
 
 <span class="k">extern</span> <span class="s">&#34;C&#34;</span> <span class="n">JNIEXPORT</span> <span class="kt">void</span> <span class="n">JNICALL</span>
 <span class="n">AddListener</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
@@ -281,14 +281,14 @@
 </div><p>这里需要注意判断两个 <code>Java</code> 对象是不是同一个，需要用 <code>IsSameObject</code> ，而不是用 <code>==</code> 判断。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_callback</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_callback</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// 对象是同一个
 </span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="c1">// 对象不是同一个
@@ -301,14 +301,14 @@
 <p>弱全局引用使用 <code>env-&gt;NewWeakGlobalRef(callback)</code> 进行初始化，使用 <code>env-&gt;DeleteWeakGlobalRef</code> 来删除全局弱引用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_weakCallback</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_weakCallback</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// 对象未被释放
 </span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="c1">// 对象已经被释放了
@@ -345,16 +345,16 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/android/">Android</a>
-          <a href="/tags/jni/">JNI</a>
+          <a href="../../tags/android/">Android</a>
+          <a href="../../tags/jni/">JNI</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/systemserver/">
+        <a class="prev" href="../../post/systemserver/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">SystemServer</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/localsocket/">
+        <a class="next" href="../../post/localsocket/">
             <span class="next-text nav-default">Zygote 是怎么使用 LocalSocket 进行进程间通信的</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -411,7 +411,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 

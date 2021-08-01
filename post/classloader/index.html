@@ -24,19 +24,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/classloader/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -45,13 +45,13 @@
 上一篇我们了解了字节码的结构，这些字节码文件都是什么时候被加载到内存中的，今天就来聊聊类加载。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/classloader/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-04-21T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2020-04-21T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2020-04-21T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-04-21T00:00:00+08:00" />
 
 <meta itemprop="name" content="ClassLoader">
 <meta itemprop="description" content="前言
-上一篇我们了解了字节码的结构，这些字节码文件都是什么时候被加载到内存中的，今天就来聊聊类加载。"><meta itemprop="datePublished" content="2020-04-21T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2020-04-21T00:00:00&#43;08:00" />
+上一篇我们了解了字节码的结构，这些字节码文件都是什么时候被加载到内存中的，今天就来聊聊类加载。"><meta itemprop="datePublished" content="2020-04-21T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2020-04-21T00:00:00+08:00" />
 <meta itemprop="wordCount" content="1854">
 <meta itemprop="keywords" content="JVM,Java," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ClassLoader"/>
@@ -71,7 +71,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -81,15 +81,15 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -102,7 +102,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -112,15 +112,15 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -138,8 +138,8 @@
       <div class="post-meta">
         <span class="post-time"> 2020-04-21 </span>
         <div class="post-category">
-            <a href="/categories/jvm/"> JVM </a>
-            <a href="/categories/java/"> Java </a>
+            <a href="../../categories/jvm/"> JVM </a>
+            <a href="../../categories/java/"> Java </a>
             </div>
           <span class="more-meta"> 约 1854 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
@@ -194,7 +194,7 @@
 <h3 id="appclassloader">AppClassLoader</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -209,7 +209,7 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">AppClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">AppClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">var0</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
         <span class="kd">final</span> <span class="n">String</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">);</span>
@@ -229,10 +229,10 @@
 <p>通过如下代码查看 <code>java.class.path</code> 的具体路径</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">));</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>最后只会输出一个 <code>.</code> 也就是当前文件路径。</p>
@@ -240,7 +240,7 @@
 <p><code>ExtClassLoader</code> 在 1.9 之后改名为 <code>PlatformClassLoader</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -281,7 +281,7 @@
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">ExtClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">ExtClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="nf">getExtClassLoader</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
         <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var0</span> <span class="o">=</span> <span class="n">getExtDirs</span><span class="o">();</span>
 
@@ -326,16 +326,16 @@
 同样我们原来查看一下 <code>java.ext.dirs</code> 的路径</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">));</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>输出如下内容</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -343,7 +343,7 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">/Users/test/Library/Java/Extensions
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">/Users/test/Library/Java/Extensions
 /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext
 /Library/Java/Extensions
 /Network/Library/Java/Extensions
@@ -357,16 +357,16 @@
 同样我们原来查看一下 <code>sun.boot.class.path</code> 的路径</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;sun.boot.class.path&#34;</span><span class="o">));</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;sun.boot.class.path&#34;</span><span class="o">));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>输出如下内容</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -376,7 +376,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/resources.jar
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/resources.jar
 /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/rt.jar
 /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/sunrsasign.jar
 /Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jsse.jar
@@ -391,7 +391,7 @@
 <p><code>Java</code> 中通过 <strong>双亲委派机制</strong> 来加载类的。如下所示</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -418,7 +418,7 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span>
     <span class="kd">throws</span> <span class="n">ClassNotFoundException</span>
 <span class="o">{</span>
     <span class="c1">// First, check if the class has already been loaded
@@ -452,7 +452,7 @@
 <p>我们来看看 <code>AppClassLoader</code> 中的 <code>parent</code> 是怎么来的</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -509,7 +509,7 @@
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">Launcher</span><span class="o">()</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">Launcher</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="n">var1</span><span class="o">;</span>
         <span class="k">try</span> <span class="o">{</span>
             <span class="n">var1</span> <span class="o">=</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">.</span><span class="na">getExtClassLoader</span><span class="o">();</span>
@@ -571,13 +571,13 @@
 <h3 id="extclassloader-中的-parent">ExtClassLoader 中的 parent</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">ExtClassLoader</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">ExtClassLoader</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
     <span class="kd">super</span><span class="o">(</span><span class="n">getExtURLs</span><span class="o">(</span><span class="n">var1</span><span class="o">),</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="kc">null</span><span class="o">,</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">factory</span><span class="o">);</span>
     <span class="n">SharedSecrets</span><span class="o">.</span><span class="na">getJavaNetAccess</span><span class="o">().</span><span class="na">getURLClassPath</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">initLookupCache</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 <span class="o">}</span>
@@ -592,7 +592,7 @@
 <p><code>PathClassLoader</code> 一般用来加载系统 <code>APK</code> 和已经被安装到手机上的 <code>APK</code> 中的 <code>dex</code> 文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -609,7 +609,7 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PathClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PathClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
@@ -631,14 +631,14 @@
 <p><code>DexClassLoader</code> 可以加载特定路径下的 <code>dex</code> 文件，这就给热修复创造了条件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DexClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DexClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="nf">DexClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">optimizedDirectory</span><span class="o">,</span><span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
     <span class="o">}</span>
@@ -677,16 +677,16 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/jvm/">JVM</a>
-          <a href="/tags/java/">Java</a>
+          <a href="../../tags/jvm/">JVM</a>
+          <a href="../../tags/java/">Java</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/https/">
+        <a class="prev" href="../../post/https/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">HTTPS 原理</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/class/">
+        <a class="next" href="../../post/class/">
             <span class="next-text nav-default">Java Class 探秘</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -743,7 +743,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 

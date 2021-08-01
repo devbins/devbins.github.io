@@ -26,19 +26,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gc/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -49,15 +49,15 @@
 虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/gc/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-04-13T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2020-04-13T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2020-04-13T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-04-13T00:00:00+08:00" />
 
 <meta itemprop="name" content="Java 垃圾回收机制">
 <meta itemprop="description" content="前言
 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
 但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
-虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。"><meta itemprop="datePublished" content="2020-04-13T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2020-04-13T00:00:00&#43;08:00" />
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。"><meta itemprop="datePublished" content="2020-04-13T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2020-04-13T00:00:00+08:00" />
 <meta itemprop="wordCount" content="2157">
 <meta itemprop="keywords" content="Java,GC,JVM," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Java 垃圾回收机制"/>
@@ -79,7 +79,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -89,15 +89,15 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -110,7 +110,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -120,15 +120,15 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -146,9 +146,9 @@
       <div class="post-meta">
         <span class="post-time"> 2020-04-13 </span>
         <div class="post-category">
-            <a href="/categories/java/"> Java </a>
-            <a href="/categories/gc/"> GC </a>
-            <a href="/categories/jvm/"> JVM </a>
+            <a href="../../categories/java/"> Java </a>
+            <a href="../../categories/gc/"> GC </a>
+            <a href="../../categories/jvm/"> JVM </a>
             </div>
           <span class="more-meta"> 约 2157 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
@@ -243,7 +243,7 @@
 <h3 id="年轻代">年轻代</h3>
 <p><code>JVM</code> 会把新建的对象放到老年代，新生代对象朝生夕死，一次回收就会70%~95%，回收率很高，一般采用复制算法。</p>
 <p>年轻代还可以继续细分，如下图所示
-<img src="/images/jvm/heap.png" alt="">
+<img src="../../images/jvm/heap.png" alt="">
 年轻代分为 <code>Eden</code> 、 <code>Survivor0</code> 、 <code>Survivor1</code> ，他们的比例为8:1:1。</p>
 <p>新创建的对象首先分配在 <code>Eden</code> 中，第一次 <code>GC</code> 会把 <code>Eden</code> 中的存活对象复制到 <code>Survivor0</code> 并清空 <code>Eden</code> 。</p>
 <p>第二次当 <code>Eden</code> 满的时候会把 <code>Eden</code> 、 <code>Survivor0</code> 中的存活对象复制到 <code>Survivor1</code> 中并清空 <code>Eden</code> 和 <code>Survivor0</code> 。如此反复15次对象都没有被回收的话，就会把对象转移到老年代中。</p>
@@ -282,17 +282,17 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/java/">Java</a>
-          <a href="/tags/gc/">GC</a>
-          <a href="/tags/jvm/">JVM</a>
+          <a href="../../tags/java/">Java</a>
+          <a href="../../tags/gc/">GC</a>
+          <a href="../../tags/jvm/">JVM</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/class/">
+        <a class="prev" href="../../post/class/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Java Class 探秘</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/gitflow/">
+        <a class="next" href="../../post/gitflow/">
             <span class="next-text nav-default">在 Emacs 中使用 Git Flow</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -349,7 +349,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 

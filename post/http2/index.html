@@ -26,19 +26,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/http2/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -49,15 +49,15 @@
 不过既然被问到了那就好好学一下 HTTP/2 。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/http2/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-06-02T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2021-06-02T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2021-06-02T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-06-02T00:00:00+08:00" />
 
 <meta itemprop="name" content="HTTP/2">
 <meta itemprop="description" content="前言
 最近被问到 HTTP/2 有什么特点，我只答了个多路复用，当时脑子还想到了二进制分帧和头部压缩，我以为是 HTTP/3 的就没答上来。
 由于 HTTP/2 普及率不高，而且最近 IETF 将 QUIC 发布为 RFC9000，这意味着 HTTP/3 即将到来。所以很有可能会跳过 HTTP/2 直接进入 HTTP/3 ，所以对 HTTP/2 没有了解太多。
-不过既然被问到了那就好好学一下 HTTP/2 。"><meta itemprop="datePublished" content="2021-06-02T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-02T00:00:00&#43;08:00" />
+不过既然被问到了那就好好学一下 HTTP/2 。"><meta itemprop="datePublished" content="2021-06-02T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2021-06-02T00:00:00+08:00" />
 <meta itemprop="wordCount" content="2563">
 <meta itemprop="keywords" content="HTTP," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="HTTP/2"/>
@@ -79,7 +79,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -89,15 +89,15 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -110,7 +110,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -120,15 +120,15 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -146,8 +146,8 @@
       <div class="post-meta">
         <span class="post-time"> 2021-06-02 </span>
         <div class="post-category">
-            <a href="/categories/http/"> HTTP </a>
-            <a href="/categories/%E7%BD%91%E7%BB%9C/"> 网络 </a>
+            <a href="../../categories/http/"> HTTP </a>
+            <a href="../../categories/%E7%BD%91%E7%BB%9C/"> 网络 </a>
             </div>
           <span class="more-meta"> 约 2563 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
@@ -273,7 +273,7 @@
 <p>但是从 HTTP/2 开始，把纯文本改成了二进制格式，这样改的好处是便于计算机解析，不容易出现歧义。比如空格、大小写、空白字符等，这些在不同的人看来是有可能出现歧义的，有些空白字符肉眼还识别不出来。</p>
 <p>所以改成二进制后，实现变简单了，体积更小，速度更快。</p>
 <p>我们来看下二进制的结构，如下所示，图片来自 <a href="https://time.geekbang.org/column/article/113481">31 | 时代之风（下）：HTTP/2内核剖析</a>
-<img src="/images/http2/frame_struct.png" alt="">
+<img src="../../images/http2/frame_struct.png" alt="">
 这里的 <code>HEADER</code> 与 <code>HTTP/1</code> 中的不是同一个， <code>HTTP/2</code> 把头字段放到 <code>DATA</code> 帧中，通过标志位来区分。而 <code>HTTP/1</code> 中是通过换行符来区分头部和实体。</p>
 <p>从上面的图中可以看出，已经完全没有了 <code>Header+Body</code> 的结构，有的都是一个个二进制帧。</p>
 <p>由于这里也有 <code>Header</code> ，容易和 <code>HTTP/1.x</code> 的 <code>Header</code> 搞混，需要注意一下。它们不是一个东西， <code>HTTP/2</code> 是放在二进制帧中，它不会保存请求头的东西，请求头的内容被放在 <code>Payload</code> 中。</p>
@@ -293,7 +293,7 @@
 <p>也就是在同一个TCP连接上可以发送多个请求，而不用每次都创建一个新的连接，这就是我们通常说的多路复用。</p>
 <p>这些流在请求和响应之间没有顺序关系，不会要求排队等待，所以就不会出现队头阻塞的问题了。</p>
 <p>画个图，方便理解，图片来自 <a href="https://time.geekbang.org/column/article/112036">30 | 时代之风（上）：HTTP/2特性概览</a>
-<img src="/images/http2/stream.png" alt=""></p>
+<img src="../../images/http2/stream.png" alt=""></p>
 <p>在 <code>HTTP/2</code> 中服务器不再是完全的被动接受请求，还可以主动向客户端发送消息，这被成为服务器推送。</p>
 <h2 id="怎么标识http-2">怎么标识HTTP/2</h2>
 <p>之前提到 <code>HTTP/2</code> 为了兼容 <code>HTTP/1.x</code> 在协议名上还是使用的 <code>http</code> ，这样如何确认双方需要使用 <code>HTTP/2</code> 通信呢，不像 <code>https</code> 有一个明确 <code>s</code> 。</p>
@@ -301,10 +301,10 @@
 <p>它的内容如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n
 </code></pre></td></tr></table>
 </div>
 </div><p>服务器收到这个字符串就知道客户端想要的是 <code>HTTP/2</code> 协议。</p>
@@ -315,7 +315,7 @@
 <p><code>HTTP/2</code> 还要求 <code>TLS</code> 的版本必须是 <code>1.2</code> 以上的，必须支持前向安全和 <code>SNI</code> 。去掉了一些弱密码套件，比如 <code>DES</code> 、 <code>RC4</code> 、 <code>CBC</code> 等。</p>
 <h2 id="协议栈">协议栈</h2>
 <p>通过一张图看看 <code>HTTP/1</code> 、 <code>HTTPS</code> 、 <code>HTTP/2</code> 协议栈的区别，图片来自<a href="https://time.geekbang.org/column/article/112036">30 | 时代之风（上）：HTTP/2特性概览</a>
-<img src="/images/http2/protocol_stack.png" alt=""></p>
+<img src="../../images/http2/protocol_stack.png" alt=""></p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://time.geekbang.org/column/article/112036">30 | 时代之风（上）：HTTP/2特性概览</a></li>
@@ -345,15 +345,15 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/http/">HTTP</a>
+          <a href="../../tags/http/">HTTP</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/conan/">
+        <a class="prev" href="../../post/conan/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">C/C&#43;&#43; 包依赖管理</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/aidl_short/">
+        <a class="next" href="../../post/aidl_short/">
             <span class="next-text nav-default">探秘 AIDL 为什么不支持 short</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -410,7 +410,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 

@@ -25,19 +25,19 @@
 
 
 
-<meta name="generator" content="Hugo 0.84.0 with theme even" />
+<meta name="generator" content="Hugo 0.86.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/retrofit/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -48,15 +48,15 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/retrofit/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2018-12-02T00:00:00&#43;08:00" />
-<meta property="article:modified_time" content="2018-12-02T00:00:00&#43;08:00" />
+<meta property="article:published_time" content="2018-12-02T00:00:00+08:00" />
+<meta property="article:modified_time" content="2018-12-02T00:00:00+08:00" />
 
 <meta itemprop="name" content="Retrofit 源码解析">
 <meta itemprop="description" content="
 Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。
-"><meta itemprop="datePublished" content="2018-12-02T00:00:00&#43;08:00" />
-<meta itemprop="dateModified" content="2018-12-02T00:00:00&#43;08:00" />
+"><meta itemprop="datePublished" content="2018-12-02T00:00:00+08:00" />
+<meta itemprop="dateModified" content="2018-12-02T00:00:00+08:00" />
 <meta itemprop="wordCount" content="2895">
 <meta itemprop="keywords" content="Retrofit,RESTful," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Retrofit 源码解析"/>
@@ -78,7 +78,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">devbins</a>
+    <a href="../../" class="logo">devbins</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -88,15 +88,15 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
+    <a href="../../">
         <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
+      </a><a href="../../post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
+      </a><a href="../../tags/">
         <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
+      </a><a href="../../categories/">
         <li class="mobile-menu-item">Categories</li>
-      </a><a href="/about/">
+      </a><a href="../../about/">
         <li class="mobile-menu-item">About</li>
       </a>
   </ul>
@@ -109,7 +109,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">devbins</a>
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
@@ -119,15 +119,15 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
+        <a class="menu-item-link" href="../../">Home</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
+        <a class="menu-item-link" href="../../post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="../../tags/">Tags</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+        <a class="menu-item-link" href="../../categories/">Categories</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/about/">About</a>
+        <a class="menu-item-link" href="../../about/">About</a>
       </li>
   </ul>
 </nav>
@@ -145,8 +145,8 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
       <div class="post-meta">
         <span class="post-time"> 2018-12-02 </span>
         <div class="post-category">
-            <a href="/categories/android/"> Android </a>
-            <a href="/categories/http/"> HTTP </a>
+            <a href="../../categories/android/"> Android </a>
+            <a href="../../categories/http/"> HTTP </a>
             </div>
           <span class="more-meta"> 约 2895 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
@@ -192,7 +192,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p>我们先从官方的例子中了解一下怎么使用，相信对于 Android 开发者来说，使用已经非常熟练了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -205,7 +205,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GitHubService</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GitHubService</span> <span class="o">{</span>
   <span class="nd">@GET</span><span class="o">(</span><span class="s">&#34;users/{user}/repos&#34;</span><span class="o">)</span>
   <span class="n">Call</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Repo</span><span class="o">&gt;&gt;</span> <span class="nf">listRepos</span><span class="o">(</span><span class="nd">@Path</span><span class="o">(</span><span class="s">&#34;user&#34;</span><span class="o">)</span> <span class="n">String</span> <span class="n">user</span><span class="o">);</span>
 <span class="o">}</span>
@@ -224,7 +224,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p><code>Retrofit</code> 使用建造者模式创建 API，我们从 <code>Retrofit.build</code> 开始分析</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -258,7 +258,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Retrofit</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Retrofit</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">baseUrl</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Base URL required.&#34;</span><span class="o">);</span>
   <span class="o">}</span>
@@ -296,7 +296,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p>接下来设置 <code>callbackExecutor</code> ，如果没有设置则会调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ， <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> 。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -316,7 +316,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">Android</span> <span class="kd">extends</span> <span class="n">Platform</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">Android</span> <span class="kd">extends</span> <span class="n">Platform</span> <span class="o">{</span>
   <span class="nd">@Override</span> <span class="kd">public</span> <span class="n">Executor</span> <span class="nf">defaultCallbackExecutor</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="n">MainThreadExecutor</span><span class="o">();</span>
   <span class="o">}</span>
@@ -350,7 +350,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -373,7 +373,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">create</span><span class="o">(</span><span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">create</span><span class="o">(</span><span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
 
   <span class="o">...</span>
 
@@ -401,7 +401,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p>接下来我们来看最有料的 <code>loadServiceMethod</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -416,7 +416,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">loadServiceMethod</span><span class="o">(</span><span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">loadServiceMethod</span><span class="o">(</span><span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">serviceMethodCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">method</span><span class="o">);</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 
@@ -435,7 +435,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <h3 id="parseannotations">parseAnnotations</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -444,7 +444,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ServiceMethod</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ServiceMethod</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">RequestFactory</span> <span class="n">requestFactory</span> <span class="o">=</span> <span class="n">RequestFactory</span><span class="o">.</span><span class="na">parseAnnotations</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">);</span>
 
   <span class="c1">// 省略一些检查判断...
@@ -456,7 +456,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </div><p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -485,7 +485,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">RequestFactory</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">RequestFactory</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="k">new</span> <span class="n">Builder</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
 <span class="o">}</span>
 
@@ -517,7 +517,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </div><p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -529,7 +529,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">HttpServiceMethod</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">RequestFactory</span> <span class="n">requestFactory</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">HttpServiceMethod</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">parseAnnotations</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">RequestFactory</span> <span class="n">requestFactory</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">callAdapter</span> <span class="o">=</span> <span class="n">createCallAdapter</span><span class="o">(</span><span class="n">retrofit</span><span class="o">,</span> <span class="n">method</span><span class="o">);</span>
   <span class="n">Type</span> <span class="n">responseType</span> <span class="o">=</span> <span class="n">callAdapter</span><span class="o">.</span><span class="na">responseType</span><span class="o">();</span>
 
@@ -546,7 +546,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <h3 id="createcalladapter">createCallAdapter</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -572,7 +572,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">createCallAdapter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">,</span> <span class="n">ReturnT</span><span class="o">&gt;</span> <span class="nf">createCallAdapter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">Type</span> <span class="n">returnType</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getGenericReturnType</span><span class="o">();</span>
   <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotations</span><span class="o">();</span>
   <span class="c1">// 省略部分代码
@@ -602,7 +602,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <h3 id="createresponseconverter">createResponseConverter</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -636,7 +636,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">&gt;</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="o">,</span> <span class="n">ResponseT</span><span class="o">&gt;</span> <span class="nf">createResponseConverter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Type</span> <span class="n">responseType</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">&gt;</span> <span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="o">,</span> <span class="n">ResponseT</span><span class="o">&gt;</span> <span class="nf">createResponseConverter</span><span class="o">(</span><span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Type</span> <span class="n">responseType</span><span class="o">)</span> <span class="o">{</span>
   <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotations</span><span class="o">();</span>
   <span class="k">try</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">retrofit</span><span class="o">.</span><span class="na">responseBodyConverter</span><span class="o">(</span><span class="n">responseType</span><span class="o">,</span> <span class="n">annotations</span><span class="o">);</span>
@@ -676,14 +676,14 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p><code>loadServiceMethod</code> 最后返回的是 <code>HttpServiceMethod</code> ，所以最后调用的 <code>invoke</code> ，是 <code>HttpServiceMethod</code> 的 <code>invoke</code> 。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// HttpServiceMethod
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="c1">// HttpServiceMethod
 </span><span class="c1"></span><span class="nd">@Override</span> <span class="n">ReturnT</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">return</span> <span class="n">callAdapter</span><span class="o">.</span><span class="na">adapt</span><span class="o">(</span>
       <span class="k">new</span> <span class="n">OkHttpCall</span><span class="o">&lt;&gt;(</span><span class="n">requestFactory</span><span class="o">,</span> <span class="n">args</span><span class="o">,</span> <span class="n">callFactory</span><span class="o">,</span> <span class="n">responseConverter</span><span class="o">));</span>
@@ -693,7 +693,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </div><p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -711,7 +711,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="n">CallAdapter</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">get</span><span class="o">(</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="nd">@Nullable</span> <span class="n">CallAdapter</span><span class="o">&lt;?,</span> <span class="o">?&gt;</span> <span class="n">get</span><span class="o">(</span>
     <span class="n">Type</span> <span class="n">returnType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">Retrofit</span> <span class="n">retrofit</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">getRawType</span><span class="o">(</span><span class="n">returnType</span><span class="o">)</span> <span class="o">!=</span> <span class="n">Call</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
@@ -740,7 +740,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <h2 id="执行请求">执行请求</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -777,7 +777,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">ExecutorCallbackCall</span><span class="o">(</span><span class="n">Executor</span> <span class="n">callbackExecutor</span><span class="o">,</span> <span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">ExecutorCallbackCall</span><span class="o">(</span><span class="n">Executor</span> <span class="n">callbackExecutor</span><span class="o">,</span> <span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">delegate</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">this</span><span class="o">.</span><span class="na">callbackExecutor</span> <span class="o">=</span> <span class="n">callbackExecutor</span><span class="o">;</span>
   <span class="k">this</span><span class="o">.</span><span class="na">delegate</span> <span class="o">=</span> <span class="n">delegate</span><span class="o">;</span>
 <span class="o">}</span>
@@ -820,7 +820,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <p>接下来我们来看看 <code>OkHttpCall</code> 代码如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -871,7 +871,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">49
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enqueue</span><span class="o">(</span><span class="kd">final</span> <span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">// ...
 </span><span class="c1"></span>
   <span class="k">try</span> <span class="o">{</span>
@@ -926,7 +926,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 <h2 id="解析请求结果">解析请求结果</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -941,7 +941,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseResponse</span><span class="o">(</span><span class="n">okhttp3</span><span class="o">.</span><span class="na">Response</span> <span class="n">rawResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">parseResponse</span><span class="o">(</span><span class="n">okhttp3</span><span class="o">.</span><span class="na">Response</span> <span class="n">rawResponse</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
 
   <span class="c1">// ...
 </span><span class="c1"></span>  <span class="k">try</span> <span class="o">{</span>
@@ -993,16 +993,16 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/retrofit/">Retrofit</a>
-          <a href="/tags/restful/">RESTful</a>
+          <a href="../../tags/retrofit/">Retrofit</a>
+          <a href="../../tags/restful/">RESTful</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/hugo/">
+        <a class="prev" href="../../post/hugo/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">使用 hugo 搭建网站</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/mu4e/">
+        <a class="next" href="../../post/mu4e/">
             <span class="next-text nav-default">在 Emacs 中用 mu4e 来收邮件</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
@@ -1059,7 +1059,7 @@ Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以�
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 
