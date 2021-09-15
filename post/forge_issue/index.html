@@ -49,7 +49,7 @@
 <meta itemprop="name" content="使用Forge管理GitHub Issue">
 <meta itemprop="description" content="前言 在上一篇中，我聊到了在 Emacs 中使用 Forge 管理 GitHub Pull Request ，今天来讲一讲怎么管理 GitHub Issue 。 使用 Forge 是集成在 Magit 中的，所以可以在 Magit Status buffer 中使用 @ 打开 Forge 菜单，这是使用"><meta itemprop="datePublished" content="2021-09-13T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-09-13T00:00:00+00:00" />
-<meta itemprop="wordCount" content="930">
+<meta itemprop="wordCount" content="966">
 <meta itemprop="keywords" content="Git,Forge,Issue,GitHub," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="使用Forge管理GitHub Issue"/>
 <meta name="twitter:description" content="前言 在上一篇中，我聊到了在 Emacs 中使用 Forge 管理 GitHub Pull Request ，今天来讲一讲怎么管理 GitHub Issue 。 使用 Forge 是集成在 Magit 中的，所以可以在 Magit Status buffer 中使用 @ 打开 Forge 菜单，这是使用"/>
@@ -136,7 +136,7 @@
         <div class="post-category">
             <a href="../../categories/magit/"> Magit </a>
             </div>
-          <span class="more-meta"> 约 930 字 </span>
+          <span class="more-meta"> 约 966 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -172,8 +172,8 @@
 <p>在使用之前需要让 <code>Froge</code> 识别到你的仓库，所以使用之前要通过 <code>Forge</code> 菜单把仓库管理起来。</p>
 <p>使用 <code>@</code> 打开 <code>menu</code> 之后，按下 <code>a</code> ，默认会把当前仓库的远程 <code>URL</code> 加入 <code>Forge</code> 数据库。</p>
 <h3 id="拉取topics">拉取topics</h3>
-<p>先来解释一个 <code>topics</code> ，它包括了 <code>Pull Request</code> 和 <code>Issue</code> 。</p>
-<p>在 <code>Forge</code> 中使用快捷简  <code>@ f f</code> 来拉取所有的 <code>Pull Request</code> 和 <code>Issue</code> 。</p>
+<p>先来解释一下 <code>topics</code> ，它包括了 <code>Pull Request</code> 和 <code>Issue</code> 。</p>
+<p>在 <code>Forge</code> 中使用快快捷键  <code>@ f f</code> 来拉取所有的 <code>Pull Request</code> 和 <code>Issue</code> 。</p>
 <p>拉取成功之后你就会在 <code>Magit Status buffer</code> 中看到 <code>Pull Request</code> 和 <code>Issue</code> 这两个标题。
 <img src="../../images/magit/topics.png" alt=""></p>
 <h3 id="查看-issues-列表">查看 Issues 列表</h3>
@@ -200,15 +200,18 @@ Refers #1
 </div>
 </div><p>使用 <code>#数字</code> 可以关联对应的 <code>Issue</code> ，编写完成后使用 <code>C-c C-c</code> 来完成创建， <code>Forge</code> 会自动把 <code>Issue</code> 推到 <code>GitHub</code> 。</p>
 <h3 id="编辑-issue">编辑 Issue</h3>
-<p>我们创建好 <code>Issue</code> 之后发现有些地方写的不对，需要更改，这时候就需要按下回车键进入 <code>Issue</code> 详情页，然后才能进行更改。
-<img src="../../images/magit/Issue_detail.png" alt=""></p>
+<p>我们创建好 <code>Issue</code> 之后发现有些地方写的不对，需要更改，这时候就需要按下回车键进入 <code>Issue</code> 详情页，然后才能进行更改。</p>
+<p>编辑 <code>Issue</code> 主要编辑 <code>Title</code> 、 <code>State</code> 、 <code>Label</code> 、 <code>Assignees</code> 和 <code>comment</code> ，我们一一说明如何操作。</p>
+<figure><img src="../../images/magit/Issue_detail.png"/>
+</figure>
+
 <h4 id="创建-comment">创建 comment</h4>
 <p>在 <code>Issue</code> 详情也可以通过 <code>C-c C-n</code> 来创建 <code>comment</code> ，这里也是支持 <code>markdown</code> ，使用 <code>C-c C-c</code> 完成编写，如果你不想要了，使用 <code>C-c C-k</code> 取消这次编写即可。</p>
 <h4 id="删除-commnet">删除 Commnet</h4>
 <p>如果你发现有一条 <code>comment</code> 你不想要了可以使用 <code>C-c C-k</code> 来删除这条 <code>comment</code> 。似乎在 <code>GitHub</code> 上好像还没有删除这个功能。</p>
 <h4 id="编辑label">编辑Label</h4>
 <p>讲完了如何创建、删除和评论 <code>Issue</code> ，接下来讲设置 <code>Issue</code> 的 <code>Label</code> 。</p>
-<p>同样要进入 <code>Issue</code> 详情页，我们把光标移动到 <code>Label</code> 上，按下 <code>C-c C-e</code> ，然后在 <code>minibuffer</code> 中输入标签，可以使用 <code>TAB</code> 补全。</p>
+<p>同样要进入 <code>Issue</code> 详情页，我们把光标移动到 <code>Label</code> 上，按下 <code>C-c C-e</code> ，然后在 <code>minibuffer</code> 中输入标签，可以使用 <code>TAB</code> 补全。多个用 <code>，</code> 分割。</p>
 <p>常用标签有 <code>bug</code> 、 <code>documentation</code> 、 <code>duplicate</code> 、 <code>enhancement</code> 、 <code>good first Issue</code> 、 <code>help wanted</code> 、 <code>invalid</code> 、 <code>question</code> 这些，你也可以自定义。</p>
 <figure><img src="../../images/magit/edit_label.png"/>
 </figure>
