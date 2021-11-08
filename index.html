@@ -126,6 +126,34 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="./post/git_prune/">Git 清理 fetch 失败占用的磁盘空间</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-11-08 </span>
+      <div class="post-category">
+          <a href="./categories/git/"> Git </a>
+          </div>
+        <span class="more-meta"> 约 181 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>最近在下载 <code>chromium</code> 源码，下载完之后需要切换到指定的分支，这时候使用 <code>git fetch</code> 进行切换，但是不是一次就能成功。</p>
+<p>所以需要不断执行 <code>git fetch</code> ，但是随着执行的次数增多，我发现磁盘的空间却越来越少。</p>
+<p>也就是 <code>git fetch</code> 失败后占用了磁盘空间并没有释放。</p>
+<p>在查找资料后发现使用 <code>git prune</code> 可以解决这个问题。</p>
+<p><code>git prune</code> 会删除没有使用的 <code>hash</code> 文件，由于我们这边 <code>fetch</code> 失败了，所以这些文件是没有使用的。</p>
+<p>执行之后磁盘瞬间释放70G空间。</p>
+    </div>
+    <div class="read-more">
+      <a href="./post/git_prune/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="./post/cronet/">Android Cronet 构建</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2021-11-06 </span>
@@ -344,33 +372,6 @@
     </div>
     <div class="read-more">
       <a href="./post/conan/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="./post/http2/">HTTP/2</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-06-02 </span>
-      <div class="post-category">
-          <a href="./categories/http/"> HTTP </a>
-          <a href="./categories/%E7%BD%91%E7%BB%9C/"> 网络 </a>
-          </div>
-        <span class="more-meta"> 约 2563 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>最近被问到 <code>HTTP/2</code> 有什么特点，我只答了个多路复用，当时脑子还想到了二进制分帧和头部压缩，我以为是 <code>HTTP/3</code> 的就没答上来。</p>
-<p>由于 <code>HTTP/2</code> 普及率不高，而且最近 IETF 将 QUIC 发布为 RFC9000，这意味着 <code>HTTP/3</code> 即将到来。所以很有可能会跳过 <code>HTTP/2</code> 直接进入 <code>HTTP/3</code> ，所以对 <code>HTTP/2</code> 没有了解太多。</p>
-<p>不过既然被问到了那就好好学一下 <code>HTTP/2</code> 。</p>
-    </div>
-    <div class="read-more">
-      <a href="./post/http2/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
