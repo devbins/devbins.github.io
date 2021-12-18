@@ -1,1198 +1,885 @@
 <!DOCTYPE html>
-<html lang="zn-Hans">
-  <head>
+<html lang="zh-cn">
+<head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
-  <meta name="author" content="bingomacs">
-  <meta name="description" content="简介">
-  
-  <meta property="og:title" content="LiveData" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LiveData - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="简介" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.91.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/livedata/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="LiveData" />
 <meta property="og:description" content="简介" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://bingomacs.github.io/post/livedata/" />
-<meta property="article:published_time" content="2019-09-01T00:00:00+08:00" />
-<meta property="article:modified_time" content="2019-09-01T00:00:00+08:00" />
+<meta property="og:url" content="http://devbins.github.io/post/livedata/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-09-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-01T00:00:00+00:00" />
 
+<meta itemprop="name" content="LiveData">
+<meta itemprop="description" content="简介"><meta itemprop="datePublished" content="2019-09-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2019-09-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2278">
+<meta itemprop="keywords" content="Jetpack," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LiveData"/>
+<meta name="twitter:description" content="简介"/>
 
-  <title>
-  
-       LiveData | bingomacs 
-  
-  </title>
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
-  <link rel="canonical" href="https://bingomacs.github.io/post/livedata/">
-
-  
-  
-
-  
-  <link href="https://bingomacs.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
-  <link href="https://bingomacs.github.io/css/font.css" rel="stylesheet"> 
-    
-  
-  <link href="https://bingomacs.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
-  <link href="https://bingomacs.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
-  <link href="https://bingomacs.github.io/css/main.css" rel="stylesheet">
-
-
-  
-  <link rel="shortcut icon"
-  
-      href="https://bingomacs.github.io/images/fav.jpg"
-  
-  >
-
-
-  
-  
-
-  <style type="text/css">
-      @media (min-width: 800px) and (max-width: 850px) {
-              .navbar:not(.top-nav-collapse) {
-                  background: #1C2331!important;
-              }
-          }
-  </style>
-
-
-  
-    
-    <link rel="stylesheet" href="https://bingomacs.github.io/js/vendors/katex/katex.min.css">
-  
-  
-
-  
-    
-    <link rel="stylesheet" href="https://bingomacs.github.io/css/vendors/highlight/github-gist.css">
-  
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 </head>
-
-  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
-  
-    
-
-    
-      
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-    <div class="container">
-
-      
-      <a class="navbar-brand" href="https://bingomacs.github.io">
-          
-        <img class="avatar" src="https://bingomacs.github.io/images/fav.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
-        
-        <strong> bingomacs</strong>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
       </a>
-
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        
-        <ul class="navbar-nav mr-auto ">
-          <li class="nav-item ">
-            <a class="nav-link" href="https://bingomacs.github.io">Home</a>
-          </li>
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/post/" >归档  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/categories/" >分类  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/tags/" >标签  </a>
-            </li>
-          
-             
-            <li class="nav-item ">
-              <a class="nav-link" href="https://bingomacs.github.io/about/" >关于  </a>
-            </li>
-          
-          
-        </ul>
-
-      </div>
-
-    </div>
-  </nav>
-  
- 
-      
- 
-
-
-
-
-
-
-<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
-
-  
-  
-  
-
-  
-  <div class="carousel-inner" role="listbox">
-    
-      
-
-        
-        <div class="carousel-item active">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides/brett.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-              
-              
-              
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//bryan.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-      
-
-        
-        <div class="carousel-item">
-          <div class="view" style="background-image: url('https://bingomacs.github.io/images/slides//paul.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-            
-            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
-
-            
-
-            </div>
-            
-
-          </div>
-        </div>
-        
-      
-    
-
-  
-  </div>
-  
-
-  
-  <div class="carousel-content text-center white-text wow fadeIn">
-    <div class="row mx-0 headfont mt-3 pt-4">
-      
-      <div class="col-12 col-sm-5 align-middle">
-        <a href="https://bingomacs.github.io">
-          
-            <img class="pull-right avatar avatar-md" src="https://bingomacs.github.io/images/avatar.jpg" alt="" >
-          
-        </a>
-      </div>
-      
-      <div class="col-12 col-sm-7 text-left pl-2">
-        <a href="https://bingomacs.github.io">
-          <h1 class="mb-2 h1" style="font-weight: 300;" >
-            <strong>bingomacs</strong>
-          </h1>
-        </a>
-        
-
-             
-        <div class="mt-2" style="font-size: 1rem; color: white;">
-            
-              <a href="//github.com/bingomacs" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
-            
-            
-
-            
-
-            
-
-            
-
-            
-    
-            
-    
-        
-            
-                <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
-            
-    
-            
-
-            
-        </div>
-      </div>
-    </div>
-  </div>
-  
-
-  
-  
-  
-
-</div>
-  
-    
-
-    
-  
-  <main class="post-main-wrapper">
-    
-    
-    <div class="row">
-
-      
-
-      
-      <div class="col-md-10">
-      
-
-        
-        <div class="z-depth-1  post-wrapper white-bg single-post">
-
-          <div class="post-header text-center" >
-  <ul class="post-meta li-x">
-    
-      
-        <li><a href="https://bingomacs.github.io/categories/android"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Android </a></li>
-      
-        <li><a href="https://bingomacs.github.io/categories/jetpack"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> Jetpack </a></li>
-      
-    
-    
   </ul>
 
-  <div class="px-4 post-heading">LiveData</div>
-
-  <ul class="post-meta li-x mt-1">
-    
-      <li>Sep 1, 2019</li>
-    
-
-    
-      <li class="middot"></li>
-      <li>5 minutes read</li>
-    
-  </ul>
-  
-    <div class="view">
-      <img src="https://bingomacs.github.io/images/" />
-    </div>
   
 
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
 </div>
 
 
 
-          <div class="post-content markdown">
-            <h2 id="简介">简介</h2>
 
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LiveData</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-09-01 </span>
+        <div class="post-category">
+            <a href="../../categories/android/"> Android </a>
+            <a href="../../categories/jetpack/"> Jetpack </a>
+            </div>
+          <span class="more-meta"> 约 2278 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#使用">使用</a>
+      <ul>
+        <li><a href="#添加依赖">添加依赖</a></li>
+        <li><a href="#使用">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#observe">observe</a></li>
+    <li><a href="#lifecycleboundobserver">LifecycleBoundObserver</a></li>
+    <li><a href="#lifecycle-dot-state">Lifecycle.State</a></li>
+    <li><a href="#dispatchingvalue">dispatchingValue</a></li>
+    <li><a href="#considernotify">considerNotify</a></li>
+    <li><a href="#setvalue">setValue</a></li>
+    <li><a href="#postvalue">postValue</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="简介">简介</h2>
 <h2 id="使用">使用</h2>
-
 <h3 id="添加依赖">添加依赖</h3>
-
-<pre><code class="language-java">
-</code></pre>
-
-<h3 id="使用-1">使用</h3>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java">
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用">使用</h3>
 <h2 id="observe">observe</h2>
-
-<pre><code class="language-java">/**
- * Adds the given observer to the observers list within the lifespan of the given
- * owner. The events are dispatched on the main thread. If LiveData already has data
- * set, it will be delivered to the observer.
- * &lt;p&gt;
- * The observer will only receive events if the owner is in {@link Lifecycle.State#STARTED}
- * or {@link Lifecycle.State#RESUMED} state (active).
- * &lt;p&gt;
- * If the owner moves to the {@link Lifecycle.State#DESTROYED} state, the observer will
- * automatically be removed.
- * &lt;p&gt;
- * When data changes while the {@code owner} is not active, it will not receive any updates.
- * If it becomes active again, it will receive the last available data automatically.
- * &lt;p&gt;
- * LiveData keeps a strong reference to the observer and the owner as long as the
- * given LifecycleOwner is not destroyed. When it is destroyed, LiveData removes references to
- * the observer &amp;amp; the owner.
- * &lt;p&gt;
- * If the given owner is already in {@link Lifecycle.State#DESTROYED} state, LiveData
- * ignores the call.
- * &lt;p&gt;
- * If the given owner, observer tuple is already in the list, the call is ignored.
- * If the observer is already in the list with another owner, LiveData throws an
- * {@link IllegalArgumentException}.
- *
- * @param owner    The LifecycleOwner which controls the observer
- * @param observer The observer that will receive the events
- */
-@MainThread
-public void observe(@NonNull LifecycleOwner owner, @NonNull Observer&lt;? super T&gt; observer) {
-  assertMainThread(&quot;observe&quot;);
-  // 当前状态是 DESTROYED 直接返回
-  if (owner.getLifecycle().getCurrentState() == DESTROYED) {
-    // ignore
-    return;
-  }
-  // 用 LifecycleBoundObserver 包装了 LifecycleOwner 和 Observer
-  LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);
-  ObserverWrapper existing = mObservers.putIfAbsent(observer, wrapper);
-  if (existing != null &amp;&amp; !existing.isAttachedTo(owner)) {
-    throw new IllegalArgumentException(&quot;Cannot add the same observer&quot;
-                                       + &quot; with different lifecycles&quot;);
-  }
-  if (existing != null) {
-    return;
-  }
-  owner.getLifecycle().addObserver(wrapper);
-}
-</code></pre>
-
-<p><code>observe</code> 做了什么其实注释已经说的很清楚了，来看一下。</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * Adds the given observer to the observers list within the lifespan of the given
+</span><span class="cm"> * owner. The events are dispatched on the main thread. If LiveData already has data
+</span><span class="cm"> * set, it will be delivered to the observer.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * The observer will only receive events if the owner is in {@link Lifecycle.State#STARTED}
+</span><span class="cm"> * or {@link Lifecycle.State#RESUMED} state (active).
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * If the owner moves to the {@link Lifecycle.State#DESTROYED} state, the observer will
+</span><span class="cm"> * automatically be removed.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * When data changes while the {@code owner} is not active, it will not receive any updates.
+</span><span class="cm"> * If it becomes active again, it will receive the last available data automatically.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * LiveData keeps a strong reference to the observer and the owner as long as the
+</span><span class="cm"> * given LifecycleOwner is not destroyed. When it is destroyed, LiveData removes references to
+</span><span class="cm"> * the observer &amp;amp; the owner.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * If the given owner is already in {@link Lifecycle.State#DESTROYED} state, LiveData
+</span><span class="cm"> * ignores the call.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * If the given owner, observer tuple is already in the list, the call is ignored.
+</span><span class="cm"> * If the observer is already in the list with another owner, LiveData throws an
+</span><span class="cm"> * {@link IllegalArgumentException}.
+</span><span class="cm"> *
+</span><span class="cm"> * @param owner    The LifecycleOwner which controls the observer
+</span><span class="cm"> * @param observer The observer that will receive the events
+</span><span class="cm"> */</span>
+<span class="nd">@MainThread</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">observe</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">LifecycleOwner</span> <span class="n">owner</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">assertMainThread</span><span class="o">(</span><span class="s">&#34;observe&#34;</span><span class="o">);</span>
+  <span class="c1">// 当前状态是 DESTROYED 直接返回
+</span><span class="c1"></span>  <span class="k">if</span> <span class="o">(</span><span class="n">owner</span><span class="o">.</span><span class="na">getLifecycle</span><span class="o">().</span><span class="na">getCurrentState</span><span class="o">()</span> <span class="o">==</span> <span class="n">DESTROYED</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// ignore
+</span><span class="c1"></span>    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="c1">// 用 LifecycleBoundObserver 包装了 LifecycleOwner 和 Observer
+</span><span class="c1"></span>  <span class="n">LifecycleBoundObserver</span> <span class="n">wrapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LifecycleBoundObserver</span><span class="o">(</span><span class="n">owner</span><span class="o">,</span> <span class="n">observer</span><span class="o">);</span>
+  <span class="n">ObserverWrapper</span> <span class="n">existing</span> <span class="o">=</span> <span class="n">mObservers</span><span class="o">.</span><span class="na">putIfAbsent</span><span class="o">(</span><span class="n">observer</span><span class="o">,</span> <span class="n">wrapper</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">existing</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">existing</span><span class="o">.</span><span class="na">isAttachedTo</span><span class="o">(</span><span class="n">owner</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;Cannot add the same observer&#34;</span>
+                                       <span class="o">+</span> <span class="s">&#34; with different lifecycles&#34;</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">existing</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">owner</span><span class="o">.</span><span class="na">getLifecycle</span><span class="o">().</span><span class="na">addObserver</span><span class="o">(</span><span class="n">wrapper</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>observe</code> 做了什么其实注释已经说的很清楚了，来看一下。</p>
 <ol>
-<li>在 <code>LifecycleOwner</code> 的生命周期内，把 <code>Observer</code> 加入到 <code>observers</code> 列表中。事件将会在主线程收到，如果 <code>LiveData</code> 有数据了，将会通知 <code>Observer</code> 。<a id="orgc3bdc29"></a></li>
-<li><code>Observer</code> 只有在 <code>Active</code> 才会收到通知，=Active= 指的是 <code>Lifecycle.State</code> 的值为 <code>STARTED</code> 或者 <code>RESUMED</code> 。<a id="orge7ad36f"></a></li>
-<li><code>Observer</code> 会在 <code>Lifecycle.State</code> 为 <code>DESTROYED</code> 时候自动被移除。<a id="orgc10b9ce"></a></li>
-<li><code>Observer</code> 在非激活状态下不会收到更新，再次回到激活转态会收到最新的数据。<a id="orgee422bf"></a></li>
-<li><code>LiveData</code> 会持有 <code>Observer</code> 的强引用，直到 <code>LifecycleOwner</code> 的状态为 <code>DESTROYED</code> 。<a id="orga98db38"></a></li>
-<li><code>LiveData</code> 会忽略这次调用如果 <code>LifecycleOwner</code> 已经处于 <code>DESTROYED</code> 状态。也就是不会监听事件，就当做什么都没发生。这点直接在上面代码就能验证了。<a id="orgb92a975"></a></li>
-<li><code>LiveData</code> 会忽略这次调用在 <code>LifecycleOwner</code> 和 <code>Observer</code> 已经在列表中的情况。这一点也能在上面代码可以验证。<a id="org2e6d1b4"></a></li>
-<li>如果两次 <code>LifecycleOwner</code> 不一样则会抛异常。这一点也是在上面代码可以验证。<a id="org45e1445"></a></li>
+<li>在 <code>LifecycleOwner</code> 的生命周期内，把 <code>Observer</code> 加入到 <code>observers</code> 列表中。事件将会在主线程收到，如果 <code>LiveData</code> 有数据了，将会通知 <code>Observer</code> 。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>Observer</code> 只有在 <code>Active</code> 才会收到通知，=Active= 指的是 <code>Lifecycle.State</code> 的值为 <code>STARTED</code> 或者 <code>RESUMED</code> 。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>Observer</code> 会在 <code>Lifecycle.State</code> 为 <code>DESTROYED</code> 时候自动被移除。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>Observer</code> 在非激活状态下不会收到更新，再次回到激活转态会收到最新的数据。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>LiveData</code> 会持有 <code>Observer</code> 的强引用，直到 <code>LifecycleOwner</code> 的状态为 <code>DESTROYED</code> 。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>LiveData</code> 会忽略这次调用如果 <code>LifecycleOwner</code> 已经处于 <code>DESTROYED</code> 状态。也就是不会监听事件，就当做什么都没发生。这点直接在上面代码就能验证了。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li><code>LiveData</code> 会忽略这次调用在 <code>LifecycleOwner</code> 和 <code>Observer</code> 已经在列表中的情况。这一点也能在上面代码可以验证。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+<li>如果两次 <code>LifecycleOwner</code> 不一样则会抛异常。这一点也是在上面代码可以验证。<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
 </ol>
-
 <p>接下来从源码来看看这些功能怎么实现的。</p>
-
 <p>上面的代码我们主要关注 <code>LifecycleBoundObserver wrapper = new LifecycleBoundObserver(owner, observer);</code> ，这里把 <code>LifecycleOwner</code> 和 <code>Observer</code> 用 <code>LifecycleBoundObserver</code> 包装了一下。来看一下里面有什么门道。</p>
-
 <h2 id="lifecycleboundobserver">LifecycleBoundObserver</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">LifecycleBoundObserver</span> <span class="kd">extends</span> <span class="n">ObserverWrapper</span> <span class="kd">implements</span> <span class="n">GenericLifecycleObserver</span> <span class="o">{</span>
+        <span class="nd">@NonNull</span>
+        <span class="kd">final</span> <span class="n">LifecycleOwner</span> <span class="n">mOwner</span><span class="o">;</span>
 
-<pre><code class="language-java">class LifecycleBoundObserver extends ObserverWrapper implements GenericLifecycleObserver {
-        @NonNull
-        final LifecycleOwner mOwner;
+        <span class="n">LifecycleBoundObserver</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">LifecycleOwner</span> <span class="n">owner</span><span class="o">,</span> <span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">observer</span><span class="o">);</span>
+            <span class="n">mOwner</span> <span class="o">=</span> <span class="n">owner</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        LifecycleBoundObserver(@NonNull LifecycleOwner owner, Observer&lt;? super T&gt; observer) {
-            super(observer);
-            mOwner = owner;
-        }
+        <span class="nd">@Override</span>
+        <span class="kt">boolean</span> <span class="nf">shouldBeActive</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">mOwner</span><span class="o">.</span><span class="na">getLifecycle</span><span class="o">().</span><span class="na">getCurrentState</span><span class="o">().</span><span class="na">isAtLeast</span><span class="o">(</span><span class="n">STARTED</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        @Override
-        boolean shouldBeActive() {
-            return mOwner.getLifecycle().getCurrentState().isAtLeast(STARTED);
-        }
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStateChanged</span><span class="o">(</span><span class="n">LifecycleOwner</span> <span class="n">source</span><span class="o">,</span> <span class="n">Lifecycle</span><span class="o">.</span><span class="na">Event</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mOwner</span><span class="o">.</span><span class="na">getLifecycle</span><span class="o">().</span><span class="na">getCurrentState</span><span class="o">()</span> <span class="o">==</span> <span class="n">DESTROYED</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">removeObserver</span><span class="o">(</span><span class="n">mObserver</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">activeStateChanged</span><span class="o">(</span><span class="n">shouldBeActive</span><span class="o">());</span>
+        <span class="o">}</span>
 
-        @Override
-        public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
-            if (mOwner.getLifecycle().getCurrentState() == DESTROYED) {
-                removeObserver(mObserver);
-                return;
-            }
-            activeStateChanged(shouldBeActive());
-        }
+        <span class="nd">@Override</span>
+        <span class="kt">boolean</span> <span class="nf">isAttachedTo</span><span class="o">(</span><span class="n">LifecycleOwner</span> <span class="n">owner</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">mOwner</span> <span class="o">==</span> <span class="n">owner</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        @Override
-        boolean isAttachedTo(LifecycleOwner owner) {
-            return mOwner == owner;
-        }
+        <span class="nd">@Override</span>
+        <span class="kt">void</span> <span class="nf">detachObserver</span><span class="o">()</span> <span class="o">{</span>
+            <span class="n">mOwner</span><span class="o">.</span><span class="na">getLifecycle</span><span class="o">().</span><span class="na">removeObserver</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+<span class="o">}</span>
 
-        @Override
-        void detachObserver() {
-            mOwner.getLifecycle().removeObserver(this);
-        }
-}
+<span class="kd">private</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">ObserverWrapper</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">mObserver</span><span class="o">;</span>
+        <span class="kt">boolean</span> <span class="n">mActive</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">mLastVersion</span> <span class="o">=</span> <span class="n">START_VERSION</span><span class="o">;</span>
 
-private abstract class ObserverWrapper {
-        final Observer&lt;? super T&gt; mObserver;
-        boolean mActive;
-        int mLastVersion = START_VERSION;
+        <span class="n">ObserverWrapper</span><span class="o">(</span><span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mObserver</span> <span class="o">=</span> <span class="n">observer</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        ObserverWrapper(Observer&lt;? super T&gt; observer) {
-            mObserver = observer;
-        }
+        <span class="kd">abstract</span> <span class="kt">boolean</span> <span class="nf">shouldBeActive</span><span class="o">();</span>
 
-        abstract boolean shouldBeActive();
+        <span class="kt">boolean</span> <span class="nf">isAttachedTo</span><span class="o">(</span><span class="n">LifecycleOwner</span> <span class="n">owner</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
 
-        boolean isAttachedTo(LifecycleOwner owner) {
-            return false;
-        }
+        <span class="kt">void</span> <span class="nf">detachObserver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="o">}</span>
 
-        void detachObserver() {
-        }
-
-        void activeStateChanged(boolean newActive) {
-            if (newActive == mActive) {
-                return;
-            }
-            // immediately set active state, so we'd never dispatch anything to inactive
-            // owner
-            mActive = newActive;
-            boolean wasInactive = LiveData.this.mActiveCount == 0;
-            LiveData.this.mActiveCount += mActive ? 1 : -1;
-            if (wasInactive &amp;&amp; mActive) {
-                onActive();
-            }
-            if (LiveData.this.mActiveCount == 0 &amp;&amp; !mActive) {
-                onInactive();
-            }
-            if (mActive) {
-                dispatchingValue(this);
-            }
-        }
-}
-</code></pre>
-
-<p><code>LifecycleBoundObserver</code> 继承 <code>ObserverWrapper</code> 实现了 <code>GenericLifecycleObserver</code> 。 <code>GenericLifecycleObserver</code> 是 <code>Lifecycle</code> 中的接口，里面只有一个方法 <code>onStateChanged</code> 。这个方法会在生命周期状态改变时被调用，所以这就是为什么生命周期发生改变 <code>LiveData</code> 可以监听到的原因。 关于 <code>Lifecycle</code> 这里简单提一下，有兴趣的可以查找相关资料。</p>
-
+        <span class="kt">void</span> <span class="nf">activeStateChanged</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">newActive</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">newActive</span> <span class="o">==</span> <span class="n">mActive</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// immediately set active state, so we&#39;d never dispatch anything to inactive
+</span><span class="c1"></span>            <span class="c1">// owner
+</span><span class="c1"></span>            <span class="n">mActive</span> <span class="o">=</span> <span class="n">newActive</span><span class="o">;</span>
+            <span class="kt">boolean</span> <span class="n">wasInactive</span> <span class="o">=</span> <span class="n">LiveData</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">mActiveCount</span> <span class="o">==</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">LiveData</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">mActiveCount</span> <span class="o">+=</span> <span class="n">mActive</span> <span class="o">?</span> <span class="n">1</span> <span class="o">:</span> <span class="o">-</span><span class="n">1</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">wasInactive</span> <span class="o">&amp;&amp;</span> <span class="n">mActive</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">onActive</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">LiveData</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">mActiveCount</span> <span class="o">==</span> <span class="n">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mActive</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">onInactive</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mActive</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dispatchingValue</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>LifecycleBoundObserver</code> 继承 <code>ObserverWrapper</code> 实现了 <code>GenericLifecycleObserver</code> 。 <code>GenericLifecycleObserver</code> 是 <code>Lifecycle</code> 中的接口，里面只有一个方法 <code>onStateChanged</code> 。这个方法会在生命周期状态改变时被调用，所以这就是为什么生命周期发生改变 <code>LiveData</code> 可以监听到的原因。 关于 <code>Lifecycle</code> 这里简单提一下，有兴趣的可以查找相关资料。</p>
 <p>再来看 <code>onStateChanged</code> ，可以看到这里首先会判断 <code>LifecycleOwner</code> 的当前状态，如果当前状态是 <code>DESTROYED</code> ，会移除 <code>Observer</code> 。到这里就可以解释注释的第<a href="#orgc10b9ce">3</a>点了。</p>
-
 <p>接下来通过 <code>shouldBeActive</code> 判断 <code>LifecycleOwner</code> 的当前状态是不是 <code>STARTED</code> 之后的。天真的我以为只要是生命周期 <code>STARTED</code> 之后的都会收到通知，但是点进去看，发现并不是如此。因为 <code>LifecycleOwner</code> 的 <code>State</code> 的顺序并不是照着生命周期的顺序来的。</p>
-
 <h2 id="lifecycle-dot-state">Lifecycle.State</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">enum</span> <span class="n">State</span> <span class="o">{</span>
+        <span class="n">DESTROYED</span><span class="o">,</span>
+        <span class="n">INITIALIZED</span><span class="o">,</span>
+        <span class="n">CREATED</span><span class="o">,</span>
+        <span class="n">STARTED</span><span class="o">,</span>
+        <span class="n">RESUMED</span><span class="o">;</span>
 
-<pre><code class="language-java">public enum State {
-        DESTROYED,
-        INITIALIZED,
-        CREATED,
-        STARTED,
-        RESUMED;
-
-        public boolean isAtLeast(@NonNull State state) {
-            return compareTo(state) &gt;= 0;
-        }
-}
-</code></pre>
-
-<p>所以在 <code>isAtLeast</code> 中会比较两个 <code>State</code> 的是不是 <code>&gt;=0</code> ，也就是只有 <code>STARTED</code> 和 <code>RESUMED</code> 才满足条件。这也解释了为什么只有在激活转态才会收到通知，也就是第<a href="#orge7ad36f">2</a>点了。</p>
-
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isAtLeast</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">State</span> <span class="n">state</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">compareTo</span><span class="o">(</span><span class="n">state</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>所以在 <code>isAtLeast</code> 中会比较两个 <code>State</code> 的是不是 <code>&gt;=0</code> ，也就是只有 <code>STARTED</code> 和 <code>RESUMED</code> 才满足条件。这也解释了为什么只有在激活转态才会收到通知，也就是第<a href="#orge7ad36f">2</a>点了。</p>
 <p><code>shouldBeActive</code> 的返回值会传递给 <code>activeStateChanged</code> ，在 <code>activeStateChanged</code> 里最后面调用了 <code>dispatchingValue</code> ，并把自己传进去了。</p>
-
 <h2 id="dispatchingvalue">dispatchingValue</h2>
-
-<pre><code class="language-java">void dispatchingValue(@Nullable ObserverWrapper initiator) {
-  if (mDispatchingValue) {
-    mDispatchInvalidated = true;
-    return;
-  }
-  mDispatchingValue = true;
-  do {
-    mDispatchInvalidated = false;
-    if (initiator != null) {
-      considerNotify(initiator);
-      initiator = null;
-    } else {
-      for (Iterator&lt;Map.Entry&lt;Observer&lt;? super T&gt;, ObserverWrapper&gt;&gt; iterator =
-               mObservers.iteratorWithAdditions(); iterator.hasNext(); ) {
-        considerNotify(iterator.next().getValue());
-        if (mDispatchInvalidated) {
-          break;
-        }
-      }
-    }
-  } while (mDispatchInvalidated);
-  mDispatchingValue = false;
-}
-</code></pre>
-
-<p>由于 <code>initiator</code> 不为空，所以直接调用了 <code>considerNotify</code> 。这里其实只会通知跟当前 <code>LifecycleOwner</code> 绑定的 <code>Observer</code> 。</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">dispatchingValue</span><span class="o">(</span><span class="nd">@Nullable</span> <span class="n">ObserverWrapper</span> <span class="n">initiator</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">mDispatchingValue</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mDispatchInvalidated</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">mDispatchingValue</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+  <span class="k">do</span> <span class="o">{</span>
+    <span class="n">mDispatchInvalidated</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">initiator</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">considerNotify</span><span class="o">(</span><span class="n">initiator</span><span class="o">);</span>
+      <span class="n">initiator</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;,</span> <span class="n">ObserverWrapper</span><span class="o">&gt;&gt;</span> <span class="n">iterator</span> <span class="o">=</span>
+               <span class="n">mObservers</span><span class="o">.</span><span class="na">iteratorWithAdditions</span><span class="o">();</span> <span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">();</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">considerNotify</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">().</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mDispatchInvalidated</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="n">mDispatchInvalidated</span><span class="o">);</span>
+  <span class="n">mDispatchingValue</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由于 <code>initiator</code> 不为空，所以直接调用了 <code>considerNotify</code> 。这里其实只会通知跟当前 <code>LifecycleOwner</code> 绑定的 <code>Observer</code> 。</p>
 <h2 id="considernotify">considerNotify</h2>
-
-<pre><code class="language-java">private void considerNotify(ObserverWrapper observer) {
-  if (!observer.mActive) {
-    return;
-  }
-  // Check latest state b4 dispatch. Maybe it changed state but we didn't get the event yet.
-  //
-  // we still first check observer.active to keep it as the entrance for events. So even if
-  // the observer moved to an active state, if we've not received that event, we better not
-  // notify for a more predictable notification order.
-  if (!observer.shouldBeActive()) {
-    observer.activeStateChanged(false);
-    return;
-  }
-  if (observer.mLastVersion &gt;= mVersion) {
-    return;
-  }
-  observer.mLastVersion = mVersion;
-  //noinspection unchecked
-  observer.mObserver.onChanged((T) mData);
-}
-</code></pre>
-
-<p>在 <code>considerNotify</code> 中先检查了是不是在 <code>Active</code> 状态，如果不是就直接返回。再次检查 <code>LifecycleOwner</code> 的状态是不是在激活状态，不是就调用 <code>activeStateChanged</code> 把 <code>false</code> 传递进去。在 <code>activeStateChanged</code> 会改变 <code>mActive</code> 的值。</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">considerNotify</span><span class="o">(</span><span class="n">ObserverWrapper</span> <span class="n">observer</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">observer</span><span class="o">.</span><span class="na">mActive</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="c1">// Check latest state b4 dispatch. Maybe it changed state but we didn&#39;t get the event yet.
+</span><span class="c1"></span>  <span class="c1">//
+</span><span class="c1"></span>  <span class="c1">// we still first check observer.active to keep it as the entrance for events. So even if
+</span><span class="c1"></span>  <span class="c1">// the observer moved to an active state, if we&#39;ve not received that event, we better not
+</span><span class="c1"></span>  <span class="c1">// notify for a more predictable notification order.
+</span><span class="c1"></span>  <span class="k">if</span> <span class="o">(!</span><span class="n">observer</span><span class="o">.</span><span class="na">shouldBeActive</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">observer</span><span class="o">.</span><span class="na">activeStateChanged</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">observer</span><span class="o">.</span><span class="na">mLastVersion</span> <span class="o">&gt;=</span> <span class="n">mVersion</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">observer</span><span class="o">.</span><span class="na">mLastVersion</span> <span class="o">=</span> <span class="n">mVersion</span><span class="o">;</span>
+  <span class="c1">//noinspection unchecked
+</span><span class="c1"></span>  <span class="n">observer</span><span class="o">.</span><span class="na">mObserver</span><span class="o">.</span><span class="na">onChanged</span><span class="o">((</span><span class="n">T</span><span class="o">)</span> <span class="n">mData</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>considerNotify</code> 中先检查了是不是在 <code>Active</code> 状态，如果不是就直接返回。再次检查 <code>LifecycleOwner</code> 的状态是不是在激活状态，不是就调用 <code>activeStateChanged</code> 把 <code>false</code> 传递进去。在 <code>activeStateChanged</code> 会改变 <code>mActive</code> 的值。</p>
 <p>接下来会判断 <code>mLastVersion</code> 的值是不是大于等于 <code>mVersion</code> 的值，如果是就直接返回，本次事件结束了。这就可以确保只会将最新的数据发给 <code>Observer</code> ，不会重复发送。</p>
-
 <p>这里有个疑问 <code>mLastVersion</code> 和 <code>mVersion</code> 是什么时候改变的？往下看。</p>
-
 <h2 id="setvalue">setValue</h2>
-
-<pre><code class="language-java">/**
- * Sets the value. If there are active observers, the value will be dispatched to them.
- * &lt;p&gt;
- * This method must be called from the main thread. If you need set a value from a background
- * thread, you can use {@link #postValue(Object)}
- *
- * @param value The new value
- */
-@MainThread
-protected void setValue(T value) {
-  assertMainThread(&quot;setValue&quot;);
-  mVersion++;
-  mData = value;
-  dispatchingValue(null);
-}
-</code></pre>
-
-<p>可以看到 <code>setValue</code> 只能在主线程调用， <code>mVersion</code> 在这里加了 <code>1</code> ，所以结合上面讲的，只有通过 <code>setValue</code> 才会被 <code>Observer</code> 接收到。最后一句调用了刚刚分析过的 <code>dispatchingValue</code> ，唯一不同的是传入的参数是 <code>null</code> 。</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * Sets the value. If there are active observers, the value will be dispatched to them.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * This method must be called from the main thread. If you need set a value from a background
+</span><span class="cm"> * thread, you can use {@link #postValue(Object)}
+</span><span class="cm"> *
+</span><span class="cm"> * @param value The new value
+</span><span class="cm"> */</span>
+<span class="nd">@MainThread</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">setValue</span><span class="o">(</span><span class="n">T</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">assertMainThread</span><span class="o">(</span><span class="s">&#34;setValue&#34;</span><span class="o">);</span>
+  <span class="n">mVersion</span><span class="o">++;</span>
+  <span class="n">mData</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+  <span class="n">dispatchingValue</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到 <code>setValue</code> 只能在主线程调用， <code>mVersion</code> 在这里加了 <code>1</code> ，所以结合上面讲的，只有通过 <code>setValue</code> 才会被 <code>Observer</code> 接收到。最后一句调用了刚刚分析过的 <code>dispatchingValue</code> ，唯一不同的是传入的参数是 <code>null</code> 。</p>
 <p>在参数为 <code>null</code> 情况下会进入到 <code>else</code></p>
-
-<pre><code class="language-java">for (Iterator&lt;Map.Entry&lt;Observer&lt;? super T&gt;, ObserverWrapper&gt;&gt; iterator =
-         mObservers.iteratorWithAdditions(); iterator.hasNext(); ) {
-  considerNotify(iterator.next().getValue());
-  if (mDispatchInvalidated) {
-    break;
-  }
-}
-</code></pre>
-
-<p>这里遍历有的 <code>Observer</code> ，然后调用 <code>considerNotify</code> ，就是刚刚讲过的，会判断每个与 <code>Observer</code> 绑定的 <code>LifecycleOwner</code> 状态来决定要不要发送数据。</p>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">Observer</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">T</span><span class="o">&gt;,</span> <span class="n">ObserverWrapper</span><span class="o">&gt;&gt;</span> <span class="n">iterator</span> <span class="o">=</span>
+         <span class="n">mObservers</span><span class="o">.</span><span class="na">iteratorWithAdditions</span><span class="o">();</span> <span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">();</span> <span class="o">)</span> <span class="o">{</span>
+  <span class="n">considerNotify</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">().</span><span class="na">getValue</span><span class="o">());</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">mDispatchInvalidated</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">break</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里遍历有的 <code>Observer</code> ，然后调用 <code>considerNotify</code> ，就是刚刚讲过的，会判断每个与 <code>Observer</code> 绑定的 <code>LifecycleOwner</code> 状态来决定要不要发送数据。</p>
 <h2 id="postvalue">postValue</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * Posts a task to a main thread to set the given value. So if you have a following code
+</span><span class="cm"> * executed in the main thread:
+</span><span class="cm"> * &lt;pre class=&#34;prettyprint&#34;&gt;
+</span><span class="cm"> * liveData.postValue(&#34;a&#34;);
+</span><span class="cm"> * liveData.setValue(&#34;b&#34;);
+</span><span class="cm"> * &lt;/pre&gt;
+</span><span class="cm"> * The value &#34;b&#34; would be set at first and later the main thread would override it with
+</span><span class="cm"> * the value &#34;a&#34;.
+</span><span class="cm"> * &lt;p&gt;
+</span><span class="cm"> * If you called this method multiple times before a main thread executed a posted task, only
+</span><span class="cm"> * the last value would be dispatched.
+</span><span class="cm"> *
+</span><span class="cm"> * @param value The new value
+</span><span class="cm"> */</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">postValue</span><span class="o">(</span><span class="n">T</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kt">boolean</span> <span class="n">postTask</span><span class="o">;</span>
+  <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mDataLock</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">postTask</span> <span class="o">=</span> <span class="n">mPendingData</span> <span class="o">==</span> <span class="n">NOT_SET</span><span class="o">;</span>
+    <span class="n">mPendingData</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">postTask</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">ArchTaskExecutor</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">postToMainThread</span><span class="o">(</span><span class="n">mPostValueRunnable</span><span class="o">);</span>
+<span class="o">}</span>
 
-<pre><code class="language-java">/**
- * Posts a task to a main thread to set the given value. So if you have a following code
- * executed in the main thread:
- * &lt;pre class=&quot;prettyprint&quot;&gt;
- * liveData.postValue(&quot;a&quot;);
- * liveData.setValue(&quot;b&quot;);
- * &lt;/pre&gt;
- * The value &quot;b&quot; would be set at first and later the main thread would override it with
- * the value &quot;a&quot;.
- * &lt;p&gt;
- * If you called this method multiple times before a main thread executed a posted task, only
- * the last value would be dispatched.
- *
- * @param value The new value
- */
-protected void postValue(T value) {
-  boolean postTask;
-  synchronized (mDataLock) {
-    postTask = mPendingData == NOT_SET;
-    mPendingData = value;
-  }
-  if (!postTask) {
-    return;
-  }
-  ArchTaskExecutor.getInstance().postToMainThread(mPostValueRunnable);
-}
-
-private final Runnable mPostValueRunnable = new Runnable() {
-    @Override
-    public void run() {
-      Object newValue;
-      synchronized (mDataLock) {
-        newValue = mPendingData;
-        mPendingData = NOT_SET;
-      }
-      //noinspection unchecked
-      setValue((T) newValue);
-    }
-  };
-</code></pre>
-
-<p>在 <code>postValue</code> 里最后还是调用了 <code>setValue</code> ，而 <code>setValue</code> 只能在主线程调用，所以 <code>mPostValueRunnable</code> 是通过 <code>postToMainThread</code> 发送到主线程执行的。我们追踪一下</p>
-
-<pre><code class="language-java">@Override
-public void postToMainThread(Runnable runnable) {
-  if (mMainHandler == null) {
-    synchronized (mLock) {
-      if (mMainHandler == null) {
-        mMainHandler = new Handler(Looper.getMainLooper());
-      }
-    }
-  }
-  //noinspection ConstantConditions
-  mMainHandler.post(runnable);
-}
-</code></pre>
-
-<p><code>postToMainThread</code> 其实是通过 <code>Handler</code> 来达到切换到主线程执行的。</p>
-
+<span class="kd">private</span> <span class="kd">final</span> <span class="n">Runnable</span> <span class="n">mPostValueRunnable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+      <span class="n">Object</span> <span class="n">newValue</span><span class="o">;</span>
+      <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mDataLock</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">newValue</span> <span class="o">=</span> <span class="n">mPendingData</span><span class="o">;</span>
+        <span class="n">mPendingData</span> <span class="o">=</span> <span class="n">NOT_SET</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="c1">//noinspection unchecked
+</span><span class="c1"></span>      <span class="n">setValue</span><span class="o">((</span><span class="n">T</span><span class="o">)</span> <span class="n">newValue</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>postValue</code> 里最后还是调用了 <code>setValue</code> ，而 <code>setValue</code> 只能在主线程调用，所以 <code>mPostValueRunnable</code> 是通过 <code>postToMainThread</code> 发送到主线程执行的。我们追踪一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">postToMainThread</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">runnable</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">mMainHandler</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mLock</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">mMainHandler</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mMainHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">(</span><span class="n">Looper</span><span class="o">.</span><span class="na">getMainLooper</span><span class="o">());</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="c1">//noinspection ConstantConditions
+</span><span class="c1"></span>  <span class="n">mMainHandler</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="n">runnable</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>postToMainThread</code> 其实是通过 <code>Handler</code> 来达到切换到主线程执行的。</p>
 <h2 id="总结">总结</h2>
-
 <h2 id="参考">参考</h2>
-
 <ol>
 <li><a href="https://mp.weixin.qq.com/s/glbd3mzU%5FcUPGAlJMlQ5Hg">【AAC 系列三】深入理解架构组件：LiveData</a></li>
 <li><a href="https://juejin.im/post/5c25753af265da61561f5335">Android 官方架构组件 LiveData: 观察者模式领域二三事 - 掘金</a></li>
 </ol>
-          </div>
-
-          
-          <div class="row">
-            <div class="col-md-8">
-            
-              <div class="mb-5">
-                
-<div class="li-x div-x post-meta">
-  <li class="pr-0"><a href="https://bingomacs.github.io/tags/"><i class="fas fa-tags"></i></a></li>
-  <div class="tags-sm">
-    
-      <li><a href="https://bingomacs.github.io/tags/jetpack" role="button">Jetpack </a></li>
-      
-    
-  </div>
-</div>
-              </div>
-            
-            </div>
-            
-          </div>
-          
-
-          
-          
-
-
-          
-          <div>
-    <ul class="post-copyright">
-        <li class="post-copyright-author">
-            <strong>本文作者： </strong>bingomacs</li>
-        <li class="post-copyright-link">
-            <strong>本文链接：</strong>
-            <a href="https://bingomacs.github.io/post/livedata/" title="LiveData">LiveData</a>
-        </li>
-        <li class="post-copyright-license">
-            <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
-    </ul>
-
-</div>
-
-
-          
-          <div class="row pt-3 np">
-            <div class="col-md-6">
-              
-                <a href=https://bingomacs.github.io/post/dockerfile/ class="post-meta">Previous
-                  <div class="pt-2 pb-5 d-flex">
-                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
-                    <span>Dockerfile</span>
-                  </div>
-                </a>
-              
-            </div>
-            
-            <div class="col-md-6 text-right" >
-              
-            </div>
-          </div>
-
-          
-
-        </div>
-        
-
-      </div>
-      
-
-      
-	
-	
-	
-	
-		
-		
-		
-	
-
-		
-		<div class="col-md-2 pl-0">
-
-			
-			<div id="page-scrollspy" class="toc-nav">
-				
-				<ul class="nav nav-pills ml-0">
-					
-					<li class="nav-item pb-3 text-center">
-						<span class="font-weight-bold mb-2">- CATALOG - </span>
-					</li>
-
-					
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e7%ae%80%e4%bb%8b">
-												 简介
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%bd%bf%e7%94%a8">
-												 使用
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%b7%bb%e5%8a%a0%e4%be%9d%e8%b5%96">
-												 添加依赖
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e4%bd%bf%e7%94%a8-1">
-												 使用
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#observe">
-												 observe
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#lifecycleboundobserver">
-												 LifecycleBoundObserver
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#lifecycle-dot-state">
-												 Lifecycle.State
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#dispatchingvalue">
-												 dispatchingValue
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#considernotify">
-												 considerNotify
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#setvalue">
-												 setValue
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#postvalue">
-												 postValue
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e6%80%bb%e7%bb%93">
-												 总结
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-						
-						
-							
-								
-								
-									<ul class="nav">
-								
-								
-
-										<li class="nav-item">
-						 					<a class="nav-link" href="#%e5%8f%82%e8%80%83">
-												 参考
-											</a>
-										</li>
-						 
-								
-								
-									</ul>
-								
-							
-						
-				 
-
-				</ul>
-			</div>
-			
-
-		</div>
-		
-	
-
     </div>
-    
 
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<div id="gitalk-container"></div>
-<script type="text/javascript">
-    const gitalk = new Gitalk({
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-09-01
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/jetpack/">Jetpack</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/uml/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">UML类图</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/dockerfile/">
+            <span class="next-text nav-default">Dockerfile</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2019-09-01 00:00:00 \u002b0000 UTC',
+        title: 'LiveData',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
-        repo: "bingomacs.github.io",
-        owner: 'bingomacs',
-        admin: ["bingomacs"],
-        id: location.pathname, 
-        distractionFreeMode:  false  
-    })
-
-    gitalk.render('gitalk-container')
-</script>
-
-
-
-
-  </main>
-  
-
-
-
-    
-
-<footer class="page-footer text-center font-small mt-4 wow fadeIn">
-
-
-  
-  <div class="pb-2 mt-5 pt-5">
-    
-      <a href="//github.com/bingomacs " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-    
-        <a href="mailto:binshengh@gmail.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
-    
-
-    
-
-    
-
-  </div>
-  
-
-  
-  <div class="copyright py-4">
-    
-      <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/binsheng/AllinOne.git' target="_blank">AllinOne</a> by <a href='https://github.com/binsheng' target="_blank">binsheng</a>  </span>
-  </div>
-  
-
-</footer>
-
-
-    
-
-
-
-
-
-
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/popper.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/holder.min.js"></script>
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
-
-<script type="text/javascript" src="https://bingomacs.github.io/js/vendors/mdb/mdb.min.js"></script>
-
-<script type="text/javascript" src="https://bingomacs.github.io/js/main.js"></script>
-
-
-
-  
-  <script src="https://bingomacs.github.io/js/vendors/highlight.pack.js"> </script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
- 
-  <script src="https://bingomacs.github.io/js/vendors/katex/katex.min.js"> </script>
-  <script src="https://bingomacs.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
-
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          renderMathInElement(document.body);
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
       });
-  </script>
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
 
-
-
-
-
-
-
-
-<script type="text/javascript">
   
-  new WOW().init();
-</script>
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
 
 
 
 
-  </body>
+
+
+
+
+</body>
 </html>
