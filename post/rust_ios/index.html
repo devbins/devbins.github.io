@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>用 Rust 开发 iOS - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
+所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.91.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rust_ios/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="用 Rust 开发 iOS" />
+<meta property="og:description" content="前言
+Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
+所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.github.io/post/rust_ios/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-18T00:00:00+00:00" />
+
+<meta itemprop="name" content="用 Rust 开发 iOS">
+<meta itemprop="description" content="前言
+Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
+所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。"><meta itemprop="datePublished" content="2021-12-18T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-18T00:00:00+00:00" />
+<meta itemprop="wordCount" content="949">
+<meta itemprop="keywords" content="Rust,iOS," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="用 Rust 开发 iOS"/>
+<meta name="twitter:description" content="前言
+Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
+所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">用 Rust 开发 iOS</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-18 </span>
+        <div class="post-category">
+            <a href="../../categories/rust/"> Rust </a>
+            <a href="../../categories/ios/"> iOS </a>
+            </div>
+          <span class="more-meta"> 约 949 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#添加ios支持">添加iOS支持</a></li>
+    <li><a href="#创建-rust-库">创建 rust 库</a></li>
+    <li><a href="#配置导出的库名">配置导出的库名</a></li>
+    <li><a href="#编写rust代码">编写rust代码</a></li>
+    <li><a href="#lipo与cbindgen">lipo与cbindgen</a></li>
+    <li><a href="#编译">编译</a></li>
+    <li><a href="#使用">使用</a>
+      <ul>
+        <li><a href="#拷贝静态库和头文件">拷贝静态库和头文件</a></li>
+        <li><a href="#添加调用的代码">添加调用的代码</a></li>
+        <li><a href="#运行">运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p><code>Rust</code> 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。</p>
+<p>所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 <code>Rust</code> 在 <code>iOS</code> 上的探索。</p>
+<p>本文默认你已经安装好了 <code>Rust</code> ，如果没有安装好可以参考<a href="https://devbins.github.io/post/rust%E5%AE%89%E8%A3%85/">Rust 环境搭建</a></p>
+<h2 id="添加ios支持">添加iOS支持</h2>
+<p><code>rust</code> 默认安装的是你本机的系统和架构，如果我们需要编译成 <code>iOS</code> 也能使用的，需要添加对 <code>iOS</code> 的支持，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rustup target add aarch64-apple-ios x86_64-apple-ios
+</code></pre></td></tr></table>
+</div>
+</div><p>这里只给出了 <code>ARM64</code> 和 <code>x86_64</code> 的，它们分别针对的是苹果64位处理器和模拟器。</p>
+<p>如果你想支持旧版的也可以把较老的架构也装上，分别是 <code>armv7-apple-ios</code> 、 <code>armv7s-apple-ios</code> 、 <code>i386-apple-ios</code></p>
+<h2 id="创建-rust-库">创建 rust 库</h2>
+<p>接下来我们需要创建 <code>rust</code> 库工程，用于存放 <code>rust</code> 代码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ cargo new rilib --lib
+     Created library <span class="sb">`</span>rilib<span class="sb">`</span> package
+</code></pre></td></tr></table>
+</div>
+</div><p><code>--lib</code> 表示创建一个库，而不是可执行程序。</p>
+<h2 id="配置导出的库名">配置导出的库名</h2>
+<p>在项目的 <code>Cargo.toml</code> 中加入如下代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>lib<span class="o">]</span>
+<span class="nv">name</span> <span class="o">=</span> <span class="s2">&#34;rilib&#34;</span>
+crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;staticlib&#34;</span>, <span class="s2">&#34;cdylib&#34;</span><span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>name</code> 表示库的名字</p>
+<p><code>crate-type</code> 表示用来创建静态库还是动态库，这里两个都配置了。</p>
+<h2 id="编写rust代码">编写rust代码</h2>
+<p>在 <code>src/lib.rs</code> 中加入如下代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">ffi</span>::<span class="p">{</span><span class="n">CStr</span><span class="p">,</span><span class="w"> </span><span class="n">CString</span><span class="p">},</span><span class="w">
+</span><span class="w">    </span><span class="n">os</span>::<span class="n">raw</span>::<span class="n">c_char</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">};</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">fromCString</span><span class="p">(</span><span class="n">cstr</span>: <span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">c_char</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">c_char</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CStr</span>::<span class="n">from_ptr</span><span class="p">(</span><span class="n">cstr</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">r_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="n">c_str</span><span class="p">.</span><span class="n">to_str</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="nb">Ok</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w">
+</span><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&#34;Err c&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="p">};</span><span class="w">
+</span><span class="w">    </span><span class="n">CString</span>::<span class="n">new</span><span class="p">(</span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;Rust String: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">r_str</span><span class="p">))</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">unwrap</span><span class="p">()</span><span class="w">
+</span><span class="w">        </span><span class="p">.</span><span class="n">into_raw</span><span class="p">()</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>代码很简单，给传进来的字符串前面添加 <code>Rust String:</code></p>
+<h2 id="lipo与cbindgen">lipo与cbindgen</h2>
+<p>代码写好了，我们还需要两个工具，使用如下命令安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cargo install cargo-lipo cbindgen
+</code></pre></td></tr></table>
+</div>
+</div><p><code>cargo-lipo</code> 是用来编译 <code>universal iOS</code> 二进制包</p>
+<p><code>cbindgen</code> 则是根据 <code>rust</code> 文件生成对应的 <code>C/C++</code> 头文件。</p>
+<h2 id="编译">编译</h2>
+<p>我们先用 <code>cbindgen</code> 生成对于的头文件，然后进行编译出静态库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cbindgen src/lib.rs -l c &gt; rilib.h <span class="c1"># 生成对应的头文件</span>
+cargo lipo --release               <span class="c1"># 编译静态库</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>编译好的文件在 <code>target/universal/release/librilib.a</code> ，头文件在项目的根目录</p>
+<p>生成的 <code>rilib.h</code> 内容如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">char</span> <span class="o">*</span><span class="nf">fromCString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cstr</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="使用">使用</h2>
+<h3 id="拷贝静态库和头文件">拷贝静态库和头文件</h3>
+<p>首先通过 <code>Xcode</code> 创建一个工程，创建好工程后，把 <code>librilib.a</code> 和 <code>rilib.h</code> 拖进 <code>Xcode</code> 中，除此之外还需要对它们进行配置
+<img src="../../images/rust_ios/ios_search_path.png" alt="">
+在 <code>Build Settings</code> 中的搜索框中输入 <code>library se</code> 找到 <code>Library Search Paths</code> 双击之后，点击 + 号，把 <code>librilib.a</code> 所在的目录加进入，我这里就是 <code>${PROJECT_DIR}/rustDemo</code>
+<img src="../../images/rust_ios/ios_bridge.png" alt="">
+设置好库文件的搜索路径之后还要设置头文件的路径，同样在搜索框中输入 <code>bridging</code> ，然后找到 <code>Objective-C Bridging Header</code> 把 <code>rilib.h</code> 加入其中，我这里就是 <code>${PROJECT_DIR}/rustDemo/rilib.h</code></p>
+<h3 id="添加调用的代码">添加调用的代码</h3>
+<p>配置好库文件和头文件之后我们就可以使用了，在 <code>ContentView.swift</code> 中加入如下代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="nc">SwiftUI</span>
+
+<span class="kd">struct</span> <span class="nc">ContentView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+        <span class="c1">// 这里调用了Rust的函数，把iOS传进去了</span>
+        <span class="kd">let</span> <span class="nv">r_str</span> <span class="p">=</span> <span class="n">fromCString</span><span class="p">(</span><span class="s">&#34;iOS&#34;</span><span class="p">)</span>
+        <span class="n">Text</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">cString</span><span class="p">:</span> <span class="n">r_str</span><span class="p">!))</span>
+            <span class="p">.</span><span class="n">padding</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="nc">ContentView_Previews</span><span class="p">:</span> <span class="n">PreviewProvider</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+        <span class="n">ContentView</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在这里把 <code>rust</code> 返回的字符串显示在了 <code>Text</code> 中</p>
+<h3 id="运行">运行</h3>
+<p>运行结果如下，正确的显示在屏幕上</p>
+<figure><img src="../../images/rust_ios/run.png"/>
+</figure>
+
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://robertohuertas.com/2019/10/27/rust-for-android-ios-flutter/">Rust once and share it with Android, iOS and Flutter | Roberto Huertas</a></li>
+<li><a href="https://medium.com/visly/rust-on-ios-39f799b3c1dd">Rust on iOS. You may have heard of rust, it’s a… | by Emil Sjölander | Visly | Medium</a></li>
+<li><a href="https://mozilla.github.io/firefox-browser-architecture/experiments/2017-09-06-rust-on-ios.html">Building and Deploying a Rust library on iOS</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-12-18
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/rust/">Rust</a>
+          <a href="../../tags/ios/">iOS</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/cocoapods/">
+            <span class="next-text nav-default">CocoaPods 安装</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-12-18 00:00:00 \u002b0000 UTC',
+        title: '用 Rust 开发 iOS',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
