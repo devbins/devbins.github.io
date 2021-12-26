@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Rust For Android - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 继上一篇用 Rust 开发 iOS 开发折腾之后，我又折腾起 Android 了。
+最开始我是先从 Android 上下手的，不过一直没成功，直到最近才成功了。
+本文默认你已经把 Rust 安装好了。注意需要使用 stable channel ，我之前使用的是 nightly 所以一直失败。
+nightly chaneel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。
+直到我换了一台电脑试了一下，居然成功了，才发现使用的 chaneel 是不一样的。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.91.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rust_android/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Rust For Android" />
+<meta property="og:description" content="前言
+继上一篇用 Rust 开发 iOS 开发折腾之后，我又折腾起 Android 了。
+最开始我是先从 Android 上下手的，不过一直没成功，直到最近才成功了。
+本文默认你已经把 Rust 安装好了。注意需要使用 stable  channel ，我之前使用的是 nightly 所以一直失败。
+nightly chaneel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。
+直到我换了一台电脑试了一下，居然成功了，才发现使用的 chaneel 是不一样的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.github.io/post/rust_android/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-23T00:00:00+00:00" />
+
+<meta itemprop="name" content="Rust For Android">
+<meta itemprop="description" content="前言
+继上一篇用 Rust 开发 iOS 开发折腾之后，我又折腾起 Android 了。
+最开始我是先从 Android 上下手的，不过一直没成功，直到最近才成功了。
+本文默认你已经把 Rust 安装好了。注意需要使用 stable  channel ，我之前使用的是 nightly 所以一直失败。
+nightly chaneel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。
+直到我换了一台电脑试了一下，居然成功了，才发现使用的 chaneel 是不一样的。"><meta itemprop="datePublished" content="2021-12-23T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-23T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1080">
+<meta itemprop="keywords" content="Rust,Android," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rust For Android"/>
+<meta name="twitter:description" content="前言
+继上一篇用 Rust 开发 iOS 开发折腾之后，我又折腾起 Android 了。
+最开始我是先从 Android 上下手的，不过一直没成功，直到最近才成功了。
+本文默认你已经把 Rust 安装好了。注意需要使用 stable  channel ，我之前使用的是 nightly 所以一直失败。
+nightly chaneel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。
+直到我换了一台电脑试了一下，居然成功了，才发现使用的 chaneel 是不一样的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Rust For Android</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-23 </span>
+        <div class="post-category">
+            <a href="../../categories/rust/"> Rust </a>
+            <a href="../../categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 1080 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#添加架构支持">添加架构支持</a></li>
+    <li><a href="#新建一个android工程配置rust插件">新建一个Android工程配置rust插件</a></li>
+    <li><a href="#创建rust库">创建Rust库</a></li>
+    <li><a href="#添加jni依赖">添加JNI依赖</a></li>
+    <li><a href="#编写kotlin代码">编写Kotlin代码</a></li>
+    <li><a href="#编写rust代码">编写Rust代码</a></li>
+    <li><a href="#运行效果">运行效果</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>继上一篇<a href="https://devbins.github.io/post/rust%5Fios/">用 Rust 开发 iOS</a> 开发折腾之后，我又折腾起 <code>Android</code> 了。</p>
+<p>最开始我是先从 <code>Android</code> 上下手的，不过一直没成功，直到最近才成功了。</p>
+<p>本文默认你已经把 <code>Rust</code> 安装好了。注意需要使用 <code>stable</code>  <code>channel</code> ，我之前使用的是 <code>nightly</code> 所以一直失败。</p>
+<p><code>nightly chaneel</code> 会报 <code>dl_iterate_phdr can't find</code> 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。</p>
+<p>直到我换了一台电脑试了一下，居然成功了，才发现使用的 <code>chaneel</code> 是不一样的。</p>
+<h2 id="添加架构支持">添加架构支持</h2>
+<p>按照在 <code>iOS</code> 上的经验，这里需要添加对应架构的支持，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rustup target add aarch64-linux-android     <span class="c1"># arm64</span>
+rustup target add armv7-linux-androideabi   <span class="c1"># arm</span>
+rustup target add x86_64-linux-android      <span class="c1"># x86_64</span>
+rustup target add i686-linux-android        <span class="c1"># x86</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="新建一个android工程配置rust插件">新建一个Android工程配置rust插件</h2>
+<p>新建 <code>Android</code> 项目就不说了，这个例子会使用 <code>mozilla</code> 的插件来进行编译，所以需要说一说插件的配置。在项目的 <code>build.gradle</code> 中加入如下配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">buildscript</span> <span class="p">{</span>
+    <span class="n">repositories</span> <span class="p">{</span>
+        <span class="n">maven</span> <span class="p">{</span>
+            <span class="n">url</span> <span class="s2">&#34;https://plugins.gradle.org/m2/&#34;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">dependencies</span> <span class="p">{</span>
+        <span class="n">classpath</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">:</span><span class="n">plugin</span><span class="p">:</span><span class="m">0.9</span><span class="p">.</span><span class="m">0</span><span class="err">&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>接着在 <code>app</code> module 中的 <code>build.gradle</code> 中加入如下配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">plugins</span> <span class="p">{</span>
+    <span class="n">id</span> <span class="err">&#39;</span><span class="n">com</span><span class="p">.</span><span class="n">android</span><span class="p">.</span><span class="n">application</span><span class="err">&#39;</span>
+    <span class="n">id</span> <span class="err">&#39;</span><span class="n">kotlin</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span>
+    <span class="n">id</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span> <span class="c1">// 新添加的
+</span><span class="c1"></span><span class="p">}</span>
+
+
+<span class="c1">// 配置rust
+</span><span class="c1"></span><span class="n">cargo</span> <span class="p">{</span>
+    <span class="n">module</span> <span class="p">=</span> <span class="s2">&#34;./rust&#34;</span> <span class="c1">// 配置rust 所在的路径，也就是Cargo.toml所在的目录
+</span><span class="c1"></span>    <span class="n">targets</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;arm64&#34;</span><span class="p">]</span> <span class="c1">// 配置需要编译的架构
+</span><span class="c1"></span>    <span class="n">libname</span> <span class="p">=</span> <span class="s2">&#34;rust&#34;</span> <span class="c1">// 编译之后so的名字，这里需要和Cargo.toml 中lib.name一致
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="c1">// 自动编译rust库
+</span><span class="c1"></span><span class="n">afterEvaluate</span> <span class="p">{</span>
+    <span class="n">android</span><span class="p">.</span><span class="n">applicationVariants</span><span class="p">.</span><span class="n">all</span> <span class="p">{</span> <span class="n">variant</span> <span class="o">-&gt;</span>
+        <span class="n">def</span> <span class="n">productFlavor</span> <span class="p">=</span> <span class="s2">&#34;&#34;</span>
+        <span class="n">variant</span><span class="p">.</span><span class="n">productFlavors</span><span class="p">.</span><span class="n">each</span> <span class="p">{</span>
+            <span class="n">productFlavor</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">${it.name.capitalize()}</span><span class="s2">&#34;</span>
+        <span class="p">}</span>
+        <span class="n">def</span> <span class="n">buildType</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="si">${variant.buildType.name.capitalize()}</span><span class="s2">&#34;</span>
+        <span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;generate</span><span class="si">${productFlavor}${buildType}</span><span class="s2">Assets&#34;</span><span class="p">].</span><span class="n">dependsOn</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;cargoBuild&#34;</span><span class="p">])</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们现在还没有创建 <code>Rust</code> 的项目，这里先把配置都先写上来了。</p>
+<h2 id="创建rust库">创建Rust库</h2>
+<p><code>Android</code> 项目创建好之后，就可以创建 <code>Rust</code> 的库了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> MyApplication/app            <span class="c1"># 根据上面的配置我们的rust在app下</span>
+cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="添加jni依赖">添加JNI依赖</h2>
+<p>由于我们需要在 <code>Kotlin</code> 和 <code>Rust</code> 之间互相调用，所以还需要依赖 <code>jni</code> 这个 <code>crate</code> ，并且我们需要生成的是动态库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>dependencies<span class="o">]</span>
+<span class="nv">jni</span> <span class="o">=</span> <span class="s2">&#34;0.19.0&#34;</span>                  <span class="c1"># 添加jni依赖</span>
+
+<span class="o">[</span>lib<span class="o">]</span>
+<span class="nv">crate_type</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;dylib&#34;</span><span class="o">]</span>          <span class="c1"># dylib 表示的是动态库</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编写kotlin代码">编写Kotlin代码</h2>
+<p>从 <code>Kotlin</code> 中调用 <code>Rust</code> 代码和调用 <code>C/C++</code> 代码一样，先要把对应的 <code>so</code> 加载进来，并且需要把要调用的额函数声明为 <code>external</code> ， <code>Java</code> 就是 <code>native</code> 。</p>
+<p>接着就是调用了 <code>Rust</code> 函数了，然后把返回的字符串显示在 <code>TextView</code> 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="k">var</span> <span class="py">binding</span><span class="p">:</span> <span class="n">ActivityMainBinding</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+
+        <span class="n">binding</span> <span class="p">=</span> <span class="n">ActivityMainBinding</span><span class="p">.</span><span class="n">inflate</span><span class="p">(</span><span class="n">layoutInflater</span><span class="p">)</span>
+        <span class="n">setContentView</span><span class="p">(</span><span class="n">binding</span><span class="p">.</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="n">binding</span><span class="p">.</span><span class="n">sampleText</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">stringFromJNI</span><span class="p">()</span> <span class="c1">//显示从Rust中返回的字符串到TextView中
+</span><span class="c1"></span>    <span class="p">}</span>
+    <span class="k">external</span> <span class="k">fun</span> <span class="nf">stringFromJNI</span><span class="p">():</span> <span class="n">String</span>
+
+    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
+        <span class="k">init</span> <span class="p">{</span>
+            <span class="n">System</span><span class="p">.</span><span class="n">loadLibrary</span><span class="p">(</span><span class="s2">&#34;rust&#34;</span><span class="p">)</span> <span class="c1">//加载librust.so
+</span><span class="c1"></span>        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编写rust代码">编写Rust代码</h2>
+<p>上一步我们编写好了 <code>Kotlin</code> 代码，接下来就需要实现对于的 <code>Rust</code> 函数了。</p>
+<p>根据 <code>JNI</code> 静态绑定的规则， <code>Rust</code> 中的函数名需要使用 <code>Java_+包名_+类名_+函数名</code> 所以 <code>Kotlin</code> 中对应的 <code>Rust</code> 的函数名为 <code>Java_com_example_myapplication_MainActivity_stringFromJNI</code> 。</p>
+<p>我们需要函数名不被处理成别的这样才能被找到，所以需要加上 <code>#[no_mangle]</code> ，并且不采用 <code>snake_case</code> 进行命名，所以还要加上 <code>#[allow(non_snake_case)]</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="k">extern</span><span class="w"> </span><span class="k">crate</span><span class="w"> </span><span class="n">jni</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">objects</span>::<span class="p">{</span><span class="n">JObject</span><span class="p">};</span><span class="w">
+</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">sys</span>::<span class="n">jstring</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">JNIEnv</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
+</span><span class="w"></span><span class="cp">#[allow(non_snake_case)]</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">Java_com_example_myapplication_MainActivity_stringFromJNI</span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">env</span>: <span class="nc">JNIEnv</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">_</span>: <span class="nc">JObject</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">jstring</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="n">new_string</span><span class="p">(</span><span class="s">&#34;Hello Rust&#34;</span><span class="p">.</span><span class="n">to_owned</span><span class="p">()).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span><span class="w">    </span><span class="n">output</span><span class="p">.</span><span class="n">into_inner</span><span class="p">()</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="运行效果">运行效果</h2>
+<p>代码都编写完了，点击运行得到如下效果</p>
+<figure><img src="../../images/rust_android.png"/>
+</figure>
+
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/mozilla/rust-android-gradle">mozilla/rust-android-gradle</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/427611627">Android集成rust小记，原来这么简单 - 知乎</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-12-23
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/rust/">Rust</a>
+          <a href="../../tags/android/">Android</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/rust_ios/">
+            <span class="next-text nav-default">用 Rust 开发 iOS</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-12-23 00:00:00 \u002b0000 UTC',
+        title: 'Rust For Android',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
