@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/ocpp/" />
@@ -174,13 +174,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// NSString -&gt; std::string
-</span><span class="c1"></span><span class="n">NSString</span><span class="o">*</span> <span class="n">str</span> <span class="o">=</span> <span class="err">@</span><span class="s">&#34;oc string&#34;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">([</span><span class="n">str</span> <span class="n">UTF8String</span><span class="p">]);</span>
-
-<span class="c1">// std::string -&gt; NSString
-</span><span class="c1"></span><span class="n">NSString</span><span class="o">*</span> <span class="n">nstr</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithCString</span><span class="p">:</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span> <span class="nl">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">defaultCStringEncoding</span><span class="p">]];</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// NSString -&gt; std::string
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">NSString</span><span class="o">*</span> <span class="n">str</span> <span class="o">=</span> <span class="err">@</span><span class="s">&#34;oc string&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">([</span><span class="n">str</span> <span class="n">UTF8String</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// std::string -&gt; NSString
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">NSString</span><span class="o">*</span> <span class="n">nstr</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="nl">stringWithCString</span><span class="p">:</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">()</span> <span class="nl">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">defaultCStringEncoding</span><span class="p">]];</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="c-plus-plus-调用-oc-block">C++ 调用 OC Block</h2>
 <p>由于 <code>.cpp</code> 文件无法识别 <code>OC</code> 的代码， <code>.m</code> 文件无法识别 <code>C++</code> 的代码，所以这两者之间相互调用需要写在 <code>.mm</code> 的文件中，这样编译器才能识别。</p>
@@ -201,18 +201,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#import &lt;Foundation/Foundation.h&gt;
-</span><span class="cp"></span>
-<span class="c1">// 定义一个OC Block
-</span><span class="c1"></span><span class="k">typedef</span> <span class="nf">void</span><span class="p">(</span><span class="o">^</span><span class="n">OCBlock</span><span class="p">)();</span>
-
-<span class="err">@</span><span class="n">interface</span> <span class="nl">Ocpp</span> <span class="p">:</span> <span class="n">NSObject</span>
-
-<span class="c1">// 申明一个 OC 的初始化方法，用于传递 Block
-</span><span class="c1"></span><span class="o">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nl">InitBlock</span><span class="p">:</span> <span class="p">(</span><span class="n">OCBlock</span><span class="p">)</span><span class="n">block</span><span class="p">;</span>
-
-<span class="err">@</span><span class="n">end</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#import &lt;Foundation/Foundation.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 定义一个OC Block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">typedef</span> <span class="nf">void</span><span class="p">(</span><span class="o">^</span><span class="n">OCBlock</span><span class="p">)();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">@</span><span class="n">interface</span> <span class="nl">Ocpp</span> <span class="p">:</span> <span class="n">NSObject</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 申明一个 OC 的初始化方法，用于传递 Block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nl">InitBlock</span><span class="p">:</span> <span class="p">(</span><span class="n">OCBlock</span><span class="p">)</span><span class="n">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">@</span><span class="n">end</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>导入 <code>OC</code> 的头文件要使用 <code>#import</code> ， <code>C++</code> 的可以使用 <code>#include</code></p>
 <p>这里要注意 C++ 和 OC 混编一定要 <code>.mm</code> 的后缀，这样才能被识别。</p>
@@ -248,34 +248,34 @@
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#import &#34;InvokeBlock.h&#34;
-</span><span class="cp"></span>
-<span class="k">class</span> <span class="nc">InvokeBlock</span> <span class="p">{</span>
-
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">InvokeBlock</span><span class="p">(</span><span class="n">OCBlock</span> <span class="n">block</span><span class="p">)</span> <span class="o">:</span> <span class="n">block_</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="p">{}</span>
-
-    <span class="c1">// 调用 Block
-</span><span class="c1"></span>    <span class="kt">void</span> <span class="nf">invoke</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">block_</span><span class="p">();</span>
-    <span class="p">}</span>
-
-<span class="k">private</span><span class="o">:</span>
-    <span class="c1">// 保存Block
-</span><span class="c1"></span>    <span class="n">__strong</span> <span class="n">OCBlock</span> <span class="n">block_</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="err">@</span><span class="n">implementation</span> <span class="n">Ocpp</span>
-
-<span class="c1">// 定义 InitBlock，创建 InvokeBlock，并把block 传进去
-</span><span class="c1"></span><span class="o">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">InitBlock</span><span class="p">:</span> <span class="p">(</span><span class="n">OCBlock</span><span class="p">)</span><span class="n">block</span><span class="p">{</span>
-    <span class="n">InvokeBlock</span><span class="o">*</span> <span class="n">invokeBlock</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InvokeBlock</span><span class="p">(</span><span class="n">block</span><span class="p">);</span>
-    <span class="n">invokeBlock</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">();</span> <span class="c1">// 调用invoke用于回调block
-</span><span class="c1"></span>    <span class="k">delete</span> <span class="n">invokeBlock</span><span class="p">;</span> <span class="c1">// 用完释放
-</span><span class="c1"></span><span class="p">}</span>
-
-<span class="err">@</span><span class="n">end</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#import &#34;InvokeBlock.h&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">InvokeBlock</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">InvokeBlock</span><span class="p">(</span><span class="n">OCBlock</span> <span class="n">block</span><span class="p">)</span> <span class="o">:</span> <span class="n">block_</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 调用 Block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">invoke</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">block_</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 保存Block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">__strong</span> <span class="n">OCBlock</span> <span class="n">block_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">@</span><span class="n">implementation</span> <span class="n">Ocpp</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 定义 InitBlock，创建 InvokeBlock，并把block 传进去
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">InitBlock</span><span class="p">:</span> <span class="p">(</span><span class="n">OCBlock</span><span class="p">)</span><span class="n">block</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">InvokeBlock</span><span class="o">*</span> <span class="n">invokeBlock</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InvokeBlock</span><span class="p">(</span><span class="n">block</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">invokeBlock</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">();</span> <span class="c1">// 调用invoke用于回调block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">delete</span> <span class="n">invokeBlock</span><span class="p">;</span> <span class="c1">// 用完释放
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">@</span><span class="n">end</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>C++</code> 的代码要写在 <code>.mm</code> 中，不能写在头文件中，不然会报错。估计是识别不了。</p>
 <p>接着就可以在 <code>ViewController.m</code> 中使用了</p>
@@ -289,13 +289,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
-    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-    <span class="p">[</span><span class="n">Ocpp</span> <span class="nl">InitBlock</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s">&#34;block invoke from c++&#34;</span><span class="p">);</span>
-    <span class="p">}];</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">Ocpp</span> <span class="nl">InitBlock</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s">&#34;block invoke from c++&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行之后控制台就打印了 <code>block invok from c++</code> 。</p>
 <h2 id="参考">参考</h2>
@@ -406,7 +406,7 @@
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

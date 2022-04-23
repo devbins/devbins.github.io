@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/miwifipadavan/" />
@@ -180,8 +180,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.31.1 <span class="c1">#需要输入密码，密码就是开启 SSH 时获得的。</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh root@192.168.31.1 <span class="c1">#需要输入密码，密码就是开启 SSH 时获得的。</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输入密码登陆路由器，进行备份。备份的指令在下面。备份完后记得把 <code>/tmp/</code> 下的备份文件拷贝到电脑上或者其他地方。</p>
 <h3 id="备份-sn">备份 SN</h3>
@@ -202,20 +202,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /tmp
-mkdir rom
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd0 <span class="nv">of</span><span class="o">=</span>/tmp/rom/ALL.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd1 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bootloader.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd2 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Config.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd3 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Factory.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd4 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS1.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd5 <span class="nv">of</span><span class="o">=</span>/tmp/rom/rootfs.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd6 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS2.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd7 <span class="nv">of</span><span class="o">=</span>/tmp/rom/overlay.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd8 <span class="nv">of</span><span class="o">=</span>/tmp/rom/crash.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd9 <span class="nv">of</span><span class="o">=</span>/tmp/rom/reserved.bin
-dd <span class="k">if</span><span class="o">=</span>/dev/mtd10 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bdata.bin
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp
+</span></span><span class="line"><span class="cl">mkdir rom
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd0 <span class="nv">of</span><span class="o">=</span>/tmp/rom/ALL.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd1 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bootloader.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd2 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Config.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd3 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Factory.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd4 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS1.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd5 <span class="nv">of</span><span class="o">=</span>/tmp/rom/rootfs.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd6 <span class="nv">of</span><span class="o">=</span>/tmp/rom/OS2.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd7 <span class="nv">of</span><span class="o">=</span>/tmp/rom/overlay.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd8 <span class="nv">of</span><span class="o">=</span>/tmp/rom/crash.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd9 <span class="nv">of</span><span class="o">=</span>/tmp/rom/reserved.bin
+</span></span><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/mtd10 <span class="nv">of</span><span class="o">=</span>/tmp/rom/Bdata.bin
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="恢复-sn">恢复 SN</h3>
 <p>暂时用不到，如果出问题了会用到，做个记录。</p>
@@ -233,17 +233,17 @@ dd <span class="k">if</span><span class="o">=</span>/dev/mtd10 <span class="nv">
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mtd write /tmp/rom/Bootloader.bin Bootloader
-mtd write /tmp/rom/Config.bin Config
-mtd write /tmp/rom/Factory.bin Factory
-mtd write /tmp/rom/OS1.bin OS1
-mtd write /tmp/rom/rootfs.bin rootfs
-mtd write /tmp/rom/OS2.bin OS2
-mtd write /tmp/rom/overlay.bin overlay
-mtd write /tmp/rom/crash.bin crash
-mtd write /tmp/rom/reserved.bin reserved
-mtd write /tmp/rom/Bdata.bin Bdata
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mtd write /tmp/rom/Bootloader.bin Bootloader
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/Config.bin Config
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/Factory.bin Factory
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/OS1.bin OS1
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/rootfs.bin rootfs
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/OS2.bin OS2
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/overlay.bin overlay
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/crash.bin crash
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/reserved.bin reserved
+</span></span><span class="line"><span class="cl">mtd write /tmp/rom/Bdata.bin Bdata
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="刷入不死-uboot">刷入不死 uboot</h2>
 <p>在<a href="https://breed.hackpascal.net/">不死 uboot 下载列表</a>中找到 <code>breed-mt7620-xiaomi-mini.bin</code> ，并下载。
@@ -253,8 +253,8 @@ mtd write /tmp/rom/Bdata.bin Bdata
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">scp breed-mt7620-xiaomi-mini.bin root@192.168.31.1:/tmp/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">scp breed-mt7620-xiaomi-mini.bin root@192.168.31.1:/tmp/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>登录路由器开始刷 uboot</p>
 <div class="highlight"><div class="chroma">
@@ -264,10 +264,10 @@ mtd write /tmp/rom/Bdata.bin Bdata
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh root@192.168.31.1
-<span class="nb">cd</span> /tmp/
-mtd -r write breed-mt7620-xiaomi-mini.bin Bootloader
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh root@192.168.31.1
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/
+</span></span><span class="line"><span class="cl">mtd -r write breed-mt7620-xiaomi-mini.bin Bootloader
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>刷入成功后会重启，如果没有,那就手动重启。重启之后先断开电源，把电脑通过网线连上路由器（此时 WiFi 不能用），使用取卡针按住 <code>reset</code> 直到指示灯变为黄色闪烁后可松开。
 在电脑的浏览器中输入 <code>192.168.1.1</code> ，进入 Breed 控制台。</p>
@@ -399,7 +399,7 @@ mtd -r write breed-mt7620-xiaomi-mini.bin Bootloader
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

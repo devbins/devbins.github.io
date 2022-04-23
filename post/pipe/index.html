@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/pipe/" />
@@ -229,55 +229,55 @@
 </span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="kt">int</span>
-<span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">pipefd</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 定义两个描述符，用于接收 pipe 创建的读写描述符
-</span><span class="c1"></span>    <span class="n">pid_t</span> <span class="n">cpid</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">buf</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Usage: %s &lt;string&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">pipefd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 创建描述符，保存到 pipefd 中
-</span><span class="c1"></span>        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;pipe&#34;</span><span class="p">);</span>
-        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="n">cpid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span> <span class="c1">// 创建子进程
-</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;fork&#34;</span><span class="p">);</span>
-        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关掉子进程中的写描述符         /* Close unused write end */
-</span><span class="c1"></span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// 从管道中读取数据，直到没有内容
-</span><span class="c1"></span>            <span class="n">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-        <span class="n">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-        <span class="n">_exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
-
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 关掉父进程中的读描述符
-</span><span class="c1"></span>        <span class="n">write</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">strlen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span> <span class="c1">// 往写描述符中写入 argv[1]
-</span><span class="c1"></span>        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关闭写描述符
-</span><span class="c1"></span>        <span class="n">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>                <span class="cm">/* Wait for child */</span>
-        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">pipefd</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 定义两个描述符，用于接收 pipe 创建的读写描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">pid_t</span> <span class="n">cpid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Usage: %s &lt;string&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">pipefd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 创建描述符，保存到 pipefd 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;pipe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">cpid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span> <span class="c1">// 创建子进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;fork&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关掉子进程中的写描述符         /* Close unused write end */
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// 从管道中读取数据，直到没有内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 关掉父进程中的读描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">write</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">strlen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span> <span class="c1">// 往写描述符中写入 argv[1]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关闭写描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>                <span class="cm">/* Wait for child */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>管道有以下两种局限性</p>
 <ol>
@@ -331,39 +331,39 @@
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">Looper</span><span class="o">::</span><span class="n">Looper</span><span class="p">(</span><span class="kt">bool</span> <span class="n">allowNonCallbacks</span><span class="p">)</span> <span class="o">:</span>
-    <span class="n">mAllowNonCallbacks</span><span class="p">(</span><span class="n">allowNonCallbacks</span><span class="p">),</span> <span class="n">mSendingMessage</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
-    <span class="n">mResponseIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">mNextMessageUptime</span><span class="p">(</span><span class="n">LLONG_MAX</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">wakeFds</span><span class="p">);</span> <span class="c1">// 创建管道
-</span><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create wake pipe.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
-
-    <span class="n">mWakeReadPipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="n">mWakeWritePipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-
-    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
-    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake read pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
-                        <span class="n">errno</span><span class="p">);</span>
-
-    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
-    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake write pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
-                        <span class="n">errno</span><span class="p">);</span>
-
-    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-
-    <span class="c1">// Allocate the epoll instance and register the wake pipe.
-</span><span class="c1"></span>    <span class="n">mEpollFd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="n">EPOLL_SIZE_HINT</span><span class="p">);</span> <span class="c1">// 创建 epoll 描述符
-</span><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create epoll instance.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
-
-    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
-    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">epoll_event</span><span class="p">));</span> <span class="c1">// zero out unused members of data field union
-</span><span class="c1"></span>    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
-    <span class="n">eventItem</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">mWakeReadPipeFd</span><span class="p">;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">);</span> <span class="c1">// 监听读管道中的事件
-</span><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not add wake read pipe to epoll instance.  errno=%d&#34;</span><span class="p">,</span>
-                        <span class="n">errno</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Looper</span><span class="o">::</span><span class="n">Looper</span><span class="p">(</span><span class="kt">bool</span> <span class="n">allowNonCallbacks</span><span class="p">)</span> <span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mAllowNonCallbacks</span><span class="p">(</span><span class="n">allowNonCallbacks</span><span class="p">),</span> <span class="n">mSendingMessage</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponseIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">mNextMessageUptime</span><span class="p">(</span><span class="n">LLONG_MAX</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">wakeFds</span><span class="p">);</span> <span class="c1">// 创建管道
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create wake pipe.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mWakeReadPipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mWakeWritePipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake read pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake write pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Allocate the epoll instance and register the wake pipe.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mEpollFd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="n">EPOLL_SIZE_HINT</span><span class="p">);</span> <span class="c1">// 创建 epoll 描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create epoll instance.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">epoll_event</span><span class="p">));</span> <span class="c1">// zero out unused members of data field union
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">eventItem</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">mWakeReadPipeFd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">);</span> <span class="c1">// 监听读管道中的事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not add wake read pipe to epoll instance.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>Native</code> 层的 <code>Looper</code> 的构造方法中，会创建一个管道，这里和平时使用管道有点不一样，这里的管道并没有进行关闭操作。</p>
 <p>因为这里没有进行 <code>fork</code> 所以不会存在两个一模一样的管道， <code>fork</code> 出来的子进程和父进程是一模一样的。在 <code>Looper</code> 中如果你调用 <code>close</code> 关闭了其中一个，那么数据就无法流通了。</p>
@@ -386,19 +386,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">wake</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">ssize_t</span> <span class="n">nWrite</span><span class="p">;</span>
-    <span class="k">do</span> <span class="p">{</span>
-        <span class="n">nWrite</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="s">&#34;W&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 往写描述符中写入 W
-</span><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EAGAIN</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Could not write wake signal, errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">wake</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">nWrite</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nWrite</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="s">&#34;W&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 往写描述符中写入 W
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EAGAIN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Could not write wake signal, errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="什么时候从管道中读取数据">什么时候从管道中读取数据</h3>
 <p>在 <code>Looper</code> 中的 <code>loop</code> 有一个死循环，会一直调用 <code>queue.next</code> ，在 <code>next</code> 中会调用 <code>epoll_wait</code> 去检测是否管道中有事件发生，如过有事件发生则会调用 <code>awoken</code> ， <code>awoken</code> 则向管道中的读描述符读取数据，直到没有内容。管道中的数据读取完了就会开始处理消息，分发给对应的 <code>Handler</code> 。</p>
@@ -489,90 +489,90 @@
 </span><span class="lnt">83
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollInner</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
-
-    <span class="c1">//...
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
-    <span class="n">mResponses</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-    <span class="n">mResponseIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-
-    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">EPOLL_MAX_EVENTS</span><span class="p">];</span>
-    <span class="c1">// 检测监听的描述符中是否有事件
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
-
-    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
-
-    <span class="c1">// ...
-</span><span class="c1"></span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
-        <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeReadPipeFd</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断是否是读管道描述符
-</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 读取管道中所有的数据
-</span><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on wake read pipe.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_INPUT</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_OUTPUT</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
-                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
-                      <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="nl">Done</span><span class="p">:</span> <span class="p">;</span>
-
-        <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
-            <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
-                <span class="p">{</span> <span class="c1">// obtain handler
-</span><span class="c1"></span>                    <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
-                    <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
-                    <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-                    <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-                    <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
-
-                    <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-                <span class="p">}</span> <span class="c1">// release handler
-</span><span class="c1"></span>
-                <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
-                <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="c1">// The last message left at the head of the queue determines the next wakeup time.
-</span><span class="c1"></span>                <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span><span class="p">;</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Release lock.
-</span><span class="c1"></span>        <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
-        <span class="c1">// ...
-</span><span class="c1"></span>
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">awoken</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
-    <span class="n">ssize_t</span> <span class="n">nRead</span><span class="p">;</span>
-    <span class="k">do</span> <span class="p">{</span>
-        <span class="n">nRead</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span> <span class="c1">// 从管道中读取数据
-</span><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">((</span><span class="n">nRead</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="o">||</span> <span class="n">nRead</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollInner</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponses</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponseIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">EPOLL_MAX_EVENTS</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 检测监听的描述符中是否有事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeReadPipeFd</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断是否是读管道描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 读取管道中所有的数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on wake read pipe.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_INPUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_OUTPUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
+</span></span><span class="line"><span class="cl">                      <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nl">Done</span><span class="p">:</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span> <span class="c1">// obtain handler
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="c1">// release handler
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">                <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// The last message left at the head of the queue determines the next wakeup time.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// Release lock.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">awoken</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">nRead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nRead</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span> <span class="c1">// 从管道中读取数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">((</span><span class="n">nRead</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="o">||</span> <span class="n">nRead</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>epoll_wait</code> 在没有数据的时候会阻塞住，这时候进程会被挂起，不占用 <code>CPU</code> 资源。</p>
 <p><code>awoken</code> 会读取管道中的所有数据，直到管道中没有数据，这样就把管道中的事件消费了，等待下一次的事件到来。</p>
@@ -694,7 +694,7 @@
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

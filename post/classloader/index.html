@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/classloader/" />
@@ -209,20 +209,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">AppClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">var0</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="n">String</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">);</span>
-        <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">getClassPath</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
-        <span class="k">return</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="n">URL</span><span class="o">[]</span> <span class="n">var1x</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">URL</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">pathToURLs</span><span class="o">(</span><span class="n">var2</span><span class="o">);</span>
-                <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">(</span><span class="n">var1x</span><span class="o">,</span> <span class="n">var0</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">AppClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">var0</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">final</span> <span class="n">String</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">getClassPath</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">URL</span><span class="o">[]</span> <span class="n">var1x</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">URL</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">pathToURLs</span><span class="o">(</span><span class="n">var2</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">(</span><span class="n">var1x</span><span class="o">,</span> <span class="n">var0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">});</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>从上面的代码中可以发现， <code>AppClassLoader</code> 会加载 <code>java.class.path</code> 路径下的文件。也就是 <code>CLASS_PATH</code> 环境变量的值。</p>
 <p>我们自己写的代码以及第三方库都是由 <code>AppClassLoader</code> 加载的。</p>
@@ -232,8 +232,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">));</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">));</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>最后只会输出一个 <code>.</code> 也就是当前文件路径。</p>
 <h3 id="extclassloader">ExtClassLoader</h3>
@@ -281,46 +281,46 @@
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">ExtClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="nf">getExtClassLoader</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var0</span> <span class="o">=</span> <span class="n">getExtDirs</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="o">(</span><span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedExceptionAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
-                <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-                    <span class="kt">int</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">var0</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-
-                    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">var2</span> <span class="o">&lt;</span> <span class="n">var1</span><span class="o">;</span> <span class="o">++</span><span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="n">MetaIndex</span><span class="o">.</span><span class="na">registerDirectory</span><span class="o">(</span><span class="n">var0</span><span class="o">[</span><span class="n">var2</span><span class="o">]);</span>
-                    <span class="o">}</span>
-
-                    <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">(</span><span class="n">var0</span><span class="o">);</span>
-                <span class="o">}</span>
-            <span class="o">});</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">PrivilegedActionException</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="o">(</span><span class="n">IOException</span><span class="o">)</span><span class="n">var2</span><span class="o">.</span><span class="na">getException</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="n">File</span><span class="o">[]</span> <span class="nf">getExtDirs</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">String</span> <span class="n">var0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">);</span>
-        <span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">var0</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">StringTokenizer</span> <span class="n">var2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">var0</span><span class="o">,</span> <span class="n">File</span><span class="o">.</span><span class="na">pathSeparator</span><span class="o">);</span>
-            <span class="kt">int</span> <span class="n">var3</span> <span class="o">=</span> <span class="n">var2</span><span class="o">.</span><span class="na">countTokens</span><span class="o">();</span>
-            <span class="n">var1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">var3</span><span class="o">];</span>
-
-            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var4</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">var4</span> <span class="o">&lt;</span> <span class="n">var3</span><span class="o">;</span> <span class="o">++</span><span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">var1</span><span class="o">[</span><span class="n">var4</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">var2</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="n">var1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">];</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">var1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span> <span class="kd">class</span> <span class="nc">ExtClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="nf">getExtClassLoader</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var0</span> <span class="o">=</span> <span class="n">getExtDirs</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="o">(</span><span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedExceptionAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="kt">int</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">var0</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">var2</span> <span class="o">&lt;</span> <span class="n">var1</span><span class="o">;</span> <span class="o">++</span><span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">MetaIndex</span><span class="o">.</span><span class="na">registerDirectory</span><span class="o">(</span><span class="n">var0</span><span class="o">[</span><span class="n">var2</span><span class="o">]);</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">(</span><span class="n">var0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">});</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">PrivilegedActionException</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="o">(</span><span class="n">IOException</span><span class="o">)</span><span class="n">var2</span><span class="o">.</span><span class="na">getException</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="n">File</span><span class="o">[]</span> <span class="nf">getExtDirs</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">var0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">var0</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">StringTokenizer</span> <span class="n">var2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">var0</span><span class="o">,</span> <span class="n">File</span><span class="o">.</span><span class="na">pathSeparator</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">var3</span> <span class="o">=</span> <span class="n">var2</span><span class="o">.</span><span class="na">countTokens</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">var1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">var3</span><span class="o">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var4</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">var4</span> <span class="o">&lt;</span> <span class="n">var3</span><span class="o">;</span> <span class="o">++</span><span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">var1</span><span class="o">[</span><span class="n">var4</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">var2</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">var1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">];</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">var1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>ExtClassLoader</code> 和 <code>AppClassLoader</code> 类似，不同的地方是加载的路径不一样。 <code>ExtClassLoader</code> 加载的是 <code>java.ext.dirs</code> 环境变量的值。
 同样我们原来查看一下 <code>java.ext.dirs</code> 的路径</p>
@@ -329,8 +329,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">));</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.ext.dirs&#34;</span><span class="o">));</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出如下内容</p>
 <div class="highlight"><div class="chroma">
@@ -343,13 +343,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">/Users/test/Library/Java/Extensions
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext
-/Library/Java/Extensions
-/Network/Library/Java/Extensions
-/System/Library/Java/Extensions
-/usr/lib/java
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">/Users/test/Library/Java/Extensions
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext
+</span></span><span class="line"><span class="cl">/Library/Java/Extensions
+</span></span><span class="line"><span class="cl">/Network/Library/Java/Extensions
+</span></span><span class="line"><span class="cl">/System/Library/Java/Extensions
+</span></span><span class="line"><span class="cl">/usr/lib/java
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="bootstrapclassloader">BootstrapClassLoader</h3>
 <p><code>BootstrapClassLoader</code> 和 <code>ExtClassLoader</code> 、 <code>AppClassLoader</code> 不一样，它是 <code>C/C++</code> 编写的，是虚拟机的一部分。</p>
@@ -360,8 +360,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;sun.boot.class.path&#34;</span><span class="o">));</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;sun.boot.class.path&#34;</span><span class="o">));</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出如下内容</p>
 <div class="highlight"><div class="chroma">
@@ -376,15 +376,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/resources.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/rt.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/sunrsasign.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jsse.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jce.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/charsets.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jfr.jar
-/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/classes
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/resources.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/rt.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/sunrsasign.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jsse.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jce.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/charsets.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jfr.jar
+</span></span><span class="line"><span class="cl">/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/classes
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="双亲委派">双亲委派</h2>
 <p>经过上一小节的学习，我们知道在 <code>Java</code> 中有三种类加载器，这三个类加载器加载的都是不同路径下的。那么在具体加载类的时候是怎么决定用哪个类加载器加载的呢？</p>
@@ -418,32 +418,32 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span>
-    <span class="kd">throws</span> <span class="n">ClassNotFoundException</span>
-<span class="o">{</span>
-    <span class="c1">// First, check if the class has already been loaded
-</span><span class="c1"></span>    <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">findLoadedClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">c</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="n">c</span> <span class="o">=</span> <span class="n">findBootstrapClassOrNull</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// ClassNotFoundException thrown if class not found
-</span><span class="c1"></span>            <span class="c1">// from the non-null parent class loader
-</span><span class="c1"></span>        <span class="o">}</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// If still not found, then invoke findClass in order
-</span><span class="c1"></span>            <span class="c1">// to find the class.
-</span><span class="c1"></span>            <span class="n">c</span> <span class="o">=</span> <span class="n">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">throws</span> <span class="n">ClassNotFoundException</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// First, check if the class has already been loaded
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">findLoadedClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">c</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">c</span> <span class="o">=</span> <span class="n">findBootstrapClassOrNull</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// ClassNotFoundException thrown if class not found
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// from the non-null parent class loader
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// If still not found, then invoke findClass in order
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// to find the class.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">c</span> <span class="o">=</span> <span class="n">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>从 <code>loadClass</code> 中可以看出，先判断该类是否已经被加载了，如果加载了就直接返回。</p>
 <p>如果该类没有加载，就会看看有没有 <code>parent</code> ，如果有就委托给 <code>parent</code> ，最后 <code>parent</code> 中没有找到该类，则调用自己的 <code>findClass</code> 去加载。</p>
@@ -509,62 +509,62 @@
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">Launcher</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="n">var1</span><span class="o">;</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">var1</span> <span class="o">=</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">.</span><span class="na">getExtClassLoader</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">var10</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">InternalError</span><span class="o">(</span><span class="s">&#34;Could not create extension class loader&#34;</span><span class="o">,</span> <span class="n">var10</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">loader</span> <span class="o">=</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">.</span><span class="na">getAppClassLoader</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">var9</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">InternalError</span><span class="o">(</span><span class="s">&#34;Could not create application class loader&#34;</span><span class="o">,</span> <span class="n">var9</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="c1">// 省略代码
-</span><span class="c1"></span>
-<span class="o">}</span>
-
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">var0</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="kd">final</span> <span class="n">String</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">);</span>
-    <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">getClassPath</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
-    <span class="k">return</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">URL</span><span class="o">[]</span> <span class="n">var1x</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">URL</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">pathToURLs</span><span class="o">(</span><span class="n">var2</span><span class="o">);</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">(</span><span class="n">var1x</span><span class="o">,</span> <span class="n">var0</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">});</span>
-<span class="o">}</span>
-
-
-<span class="n">AppClassLoader</span><span class="o">(</span><span class="n">URL</span><span class="o">[]</span> <span class="n">var1</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">var1</span><span class="o">,</span> <span class="n">var2</span><span class="o">,</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">factory</span><span class="o">);</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">ucp</span><span class="o">.</span><span class="na">initLookupCache</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="c1">// URLClassLoader.java
-</span><span class="c1"></span><span class="kd">public</span> <span class="nf">URLClassLoader</span><span class="o">(</span><span class="n">URL</span><span class="o">[]</span> <span class="n">urls</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">,</span>
-                      <span class="n">URLStreamHandlerFactory</span> <span class="n">factory</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
-    <span class="c1">// 省略代码
-</span><span class="c1"></span><span class="o">}</span>
-
-<span class="c1">// SecureClassLoader.java
-</span><span class="c1"></span><span class="kd">protected</span> <span class="nf">SecureClassLoader</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
-    <span class="c1">// 省略代码
-</span><span class="c1"></span><span class="o">}</span>
-
-
-<span class="c1">// ClassLoader.java
-</span><span class="c1"></span><span class="kd">private</span> <span class="nf">ClassLoader</span><span class="o">(</span><span class="n">Void</span> <span class="n">unused</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">;</span>
-    <span class="c1">// 省略代码
-</span><span class="c1"></span><span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="nf">Launcher</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span> <span class="n">var1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">var1</span> <span class="o">=</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">ExtClassLoader</span><span class="o">.</span><span class="na">getExtClassLoader</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">var10</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">InternalError</span><span class="o">(</span><span class="s">&#34;Could not create extension class loader&#34;</span><span class="o">,</span> <span class="n">var10</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">this</span><span class="o">.</span><span class="na">loader</span> <span class="o">=</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">.</span><span class="na">getAppClassLoader</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">var9</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">InternalError</span><span class="o">(</span><span class="s">&#34;Could not create application class loader&#34;</span><span class="o">,</span> <span class="n">var9</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 省略代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">var0</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">final</span> <span class="n">String</span> <span class="n">var1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;java.class.path&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">var2</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">getClassPath</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">URL</span><span class="o">[]</span> <span class="n">var1x</span> <span class="o">=</span> <span class="n">var1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="k">new</span> <span class="n">URL</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">pathToURLs</span><span class="o">(</span><span class="n">var2</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">new</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">AppClassLoader</span><span class="o">(</span><span class="n">var1x</span><span class="o">,</span> <span class="n">var0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">});</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">AppClassLoader</span><span class="o">(</span><span class="n">URL</span><span class="o">[]</span> <span class="n">var1</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">super</span><span class="o">(</span><span class="n">var1</span><span class="o">,</span> <span class="n">var2</span><span class="o">,</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">factory</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">.</span><span class="na">ucp</span><span class="o">.</span><span class="na">initLookupCache</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// URLClassLoader.java
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">public</span> <span class="nf">URLClassLoader</span><span class="o">(</span><span class="n">URL</span><span class="o">[]</span> <span class="n">urls</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">URLStreamHandlerFactory</span> <span class="n">factory</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">super</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 省略代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// SecureClassLoader.java
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">protected</span> <span class="nf">SecureClassLoader</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">super</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 省略代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ClassLoader.java
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">private</span> <span class="nf">ClassLoader</span><span class="o">(</span><span class="n">Void</span> <span class="n">unused</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">.</span><span class="na">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 省略代码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>一路跟踪发现 <code>parent</code> 是 <code>ClassLoader</code> 中的一个成员变量，是在构造方法中传入的，在 <code>AppClassLoader</code> 的构造方法中传入一个 <code>ClassLoader</code> ，经过层层传递最后赋值给了 <code>parent</code> 。</p>
 <p>这个 <code>parent</code> 的来源是在 <code>getAppClassLoader</code> 传进去的，而这个 <code>ClassLoader</code> 就是 <code>Launcher.ExtClassLoader.getExtClassLoader();</code> 也就是 <code>AppClassLoader</code> 中的 <code>parent</code> 就是 <code>ExtClassLoader</code> 。</p>
@@ -577,11 +577,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">ExtClassLoader</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">getExtURLs</span><span class="o">(</span><span class="n">var1</span><span class="o">),</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="kc">null</span><span class="o">,</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">factory</span><span class="o">);</span>
-    <span class="n">SharedSecrets</span><span class="o">.</span><span class="na">getJavaNetAccess</span><span class="o">().</span><span class="na">getURLClassPath</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">initLookupCache</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="nf">ExtClassLoader</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">super</span><span class="o">(</span><span class="n">getExtURLs</span><span class="o">(</span><span class="n">var1</span><span class="o">),</span> <span class="o">(</span><span class="n">ClassLoader</span><span class="o">)</span><span class="kc">null</span><span class="o">,</span> <span class="n">Launcher</span><span class="o">.</span><span class="na">factory</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SharedSecrets</span><span class="o">.</span><span class="na">getJavaNetAccess</span><span class="o">().</span><span class="na">getURLClassPath</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">initLookupCache</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>ExtClassLoader</code> 中的 <code>parent</code> 赋值为 <code>null</code> 了。</p>
 <p>这也就解释了为什么为什么叫 <strong>双亲委派</strong> 了。也就是 <code>AppClassLoader</code> 会先委派给 <code>ExtClassLoader</code> ，而 <code>ExtClassLoader</code> 会委派给 <code>BootstrapClassLoader</code> ，如果委托方都没能成功加载，那就自己去加载。</p>
@@ -609,22 +609,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PathClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
-
-    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span><span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@libcore.api.CorePlatformApi</span>
-    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">,</span> <span class="n">ClassLoader</span><span class="o">[]</span> <span class="n">sharedLibraryLoaders</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">sharedLibraryLoaders</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PathClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span><span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nd">@libcore.api.CorePlatformApi</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">,</span> <span class="n">ClassLoader</span><span class="o">[]</span> <span class="n">sharedLibraryLoaders</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">sharedLibraryLoaders</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中 <code>dexPath</code> 就是加载的路径，可以包含多个，使用 <code>:</code> 分隔。 <code>librarySearchPath</code> 是 C/C++ native 库的路径</p>
 <h3 id="dexclassloader">DexClassLoader</h3>
@@ -638,12 +638,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DexClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nf">DexClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">optimizedDirectory</span><span class="o">,</span><span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DexClassLoader</span> <span class="kd">extends</span> <span class="n">BaseDexClassLoader</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="nf">DexClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">optimizedDirectory</span><span class="o">,</span><span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>dexPath</code> 和 <code>PathClassLoader</code> 中一样，也是加载路径，可以包含多个，用 <code>:</code> 分隔。</p>
 <p><code>optimizedDirectory</code> 用来缓存优化后的 <code>dex</code> 路径，这个从 API 26 就被废弃了。</p>
@@ -759,7 +759,7 @@
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

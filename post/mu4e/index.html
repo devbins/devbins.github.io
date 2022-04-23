@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/mu4e/" />
@@ -208,9 +208,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S offlineimap <span class="c1"># Arch</span>
-brew install offlineimap <span class="c1"># Mac</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S offlineimap <span class="c1"># Arch</span>
+</span></span><span class="line"><span class="cl">brew install offlineimap <span class="c1"># Mac</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="配置">配置</h3>
 <p><code>offlineimap</code> 安装好之后我们需要配置邮箱账号信息，这样 <code>offlineimap</code> 才知道我们要从哪里下载邮件，下载哪个账号的邮件。</p>
@@ -249,37 +249,37 @@ brew install offlineimap <span class="c1"># Mac</span>
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>general<span class="o">]</span>
-<span class="nv">accounts</span> <span class="o">=</span> <span class="m">126</span>
-<span class="nv">pythonfile</span> <span class="o">=</span> ~/.offlineimap.py
-<span class="nv">fsync</span> <span class="o">=</span> False
-
-<span class="o">[</span>Account 126<span class="o">]</span>
-<span class="nv">localrepository</span> <span class="o">=</span> 126-Local
-<span class="nv">remoterepository</span> <span class="o">=</span> 126-Remote
-
-<span class="o">[</span>Repository 126-Local<span class="o">]</span>
-<span class="nb">type</span> <span class="o">=</span> Maildir
-<span class="nv">localfolders</span> <span class="o">=</span> ~/mails/ <span class="c1"># 邮件保存的路径</span>
-<span class="nv">nametrans</span> <span class="o">=</span> lambda foldername: foldername.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
-
-<span class="o">[</span>Repository 126-Remote<span class="o">]</span>
-<span class="nv">sslcacertfile</span><span class="o">=</span>/etc/ssl/certs/ca-certificates.crt
-<span class="nv">maxconnections</span> <span class="o">=</span> <span class="m">2</span>
-<span class="nb">type</span> <span class="o">=</span> IMAP
-<span class="nv">auth</span> <span class="o">=</span> on
-<span class="nv">ssl</span> <span class="o">=</span> yes
-<span class="nv">remotehost</span> <span class="o">=</span> imap.126.com
-<span class="nv">remoteuser</span> <span class="o">=</span> 填写邮箱地址
-<span class="nv">remoteport</span> <span class="o">=</span> <span class="m">993</span>
-
-<span class="nv">remotepass</span> <span class="o">=</span> 填写密码，不是登录密码，而是授权码
-<span class="nv">nametrans</span> <span class="o">=</span> lambda folder: folder.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
-
-<span class="nv">folderfilter</span> <span class="o">=</span> lambda folder: folder in <span class="o">[</span><span class="s1">&#39;INBOX&#39;</span><span class="o">]</span>
-<span class="nv">keepalive</span> <span class="o">=</span> <span class="m">60</span>
-<span class="nv">holdconnectionopen</span> <span class="o">=</span> yes
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>general<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">accounts</span> <span class="o">=</span> <span class="m">126</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pythonfile</span> <span class="o">=</span> ~/.offlineimap.py
+</span></span><span class="line"><span class="cl"><span class="nv">fsync</span> <span class="o">=</span> False
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Account 126<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">localrepository</span> <span class="o">=</span> 126-Local
+</span></span><span class="line"><span class="cl"><span class="nv">remoterepository</span> <span class="o">=</span> 126-Remote
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Repository 126-Local<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> <span class="o">=</span> Maildir
+</span></span><span class="line"><span class="cl"><span class="nv">localfolders</span> <span class="o">=</span> ~/mails/ <span class="c1"># 邮件保存的路径</span>
+</span></span><span class="line"><span class="cl"><span class="nv">nametrans</span> <span class="o">=</span> lambda foldername: foldername.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Repository 126-Remote<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">sslcacertfile</span><span class="o">=</span>/etc/ssl/certs/ca-certificates.crt
+</span></span><span class="line"><span class="cl"><span class="nv">maxconnections</span> <span class="o">=</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> <span class="o">=</span> IMAP
+</span></span><span class="line"><span class="cl"><span class="nv">auth</span> <span class="o">=</span> on
+</span></span><span class="line"><span class="cl"><span class="nv">ssl</span> <span class="o">=</span> yes
+</span></span><span class="line"><span class="cl"><span class="nv">remotehost</span> <span class="o">=</span> imap.126.com
+</span></span><span class="line"><span class="cl"><span class="nv">remoteuser</span> <span class="o">=</span> 填写邮箱地址
+</span></span><span class="line"><span class="cl"><span class="nv">remoteport</span> <span class="o">=</span> <span class="m">993</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">remotepass</span> <span class="o">=</span> 填写密码，不是登录密码，而是授权码
+</span></span><span class="line"><span class="cl"><span class="nv">nametrans</span> <span class="o">=</span> lambda folder: folder.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">folderfilter</span> <span class="o">=</span> lambda folder: folder in <span class="o">[</span><span class="s1">&#39;INBOX&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">keepalive</span> <span class="o">=</span> <span class="m">60</span>
+</span></span><span class="line"><span class="cl"><span class="nv">holdconnectionopen</span> <span class="o">=</span> yes
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中 <code>offlineimap.py</code> 的作用是为了让中文正常显示而做转码用的，不然目录你会看到乱码。把下面的代码拷贝到 <code>~/.offlineimap.py</code> ，不需要改动。</p>
 <div class="highlight"><div class="chroma">
@@ -370,91 +370,91 @@ brew install offlineimap <span class="c1"># Mac</span>
 </span><span class="lnt">84
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env python2</span>
-
-<span class="kn">import</span> <span class="nn">binascii</span>
-<span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">_in</span><span class="p">:</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">-&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)))</span>
-        <span class="k">del</span> <span class="n">_in</span><span class="p">[:]</span>
-
-
-<span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">_in</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-        <span class="n">ordC</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x7e</span><span class="p">:</span>
-            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">:</span>
-            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;-&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-    <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-
-
-<span class="c1"># decoding</span>
-
-
-<span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;===&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
-            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decode</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
-            <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">elif</span> <span class="n">decode</span><span class="p">:</span>
-            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
-    <span class="n">bin_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-
-
-<span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;imap4-utf-7&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">StreamReader</span><span class="p">,</span> <span class="n">StreamWriter</span><span class="p">)</span>
-
-
-<span class="n">codecs</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">imap4_utf_7</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">binascii</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">codecs</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">_in</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">-&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">del</span> <span class="n">_in</span><span class="p">[:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_in</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ordC</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x7e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;-&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># decoding</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;===&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decode</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bin_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;imap4-utf-7&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">StreamReader</span><span class="p">,</span> <span class="n">StreamWriter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">codecs</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">imap4_utf_7</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>配置好了 <code>offlineimap</code> 就可以把邮件从服务器下载下来了，通过如下命令。</p>
 <div class="highlight"><div class="chroma">
@@ -462,8 +462,8 @@ brew install offlineimap <span class="c1"># Mac</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">offlineimap
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">offlineimap
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 Mac 中配置 ssl 需要额外安装一下 <code>openssl</code> 并且通过软连接放到正确的位置</p>
 <div class="highlight"><div class="chroma">
@@ -472,9 +472,9 @@ brew install offlineimap <span class="c1"># Mac</span>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">brew install openssl
-sudo ln -s /usr/local/etc/openssl/cert.pem /etc/ssl/certs/ca-certificates.crt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install openssl
+</span></span><span class="line"><span class="cl">sudo ln -s /usr/local/etc/openssl/cert.pem /etc/ssl/certs/ca-certificates.crt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="mu">mu</h2>
 <h3 id="安装">安装</h3>
@@ -485,9 +485,9 @@ sudo ln -s /usr/local/etc/openssl/cert.pem /etc/ssl/certs/ca-certificates.crt
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S mu <span class="c1"># Arch</span>
-brew install mu --with-Emacs <span class="c1"># Mac</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S mu <span class="c1"># Arch</span>
+</span></span><span class="line"><span class="cl">brew install mu --with-Emacs <span class="c1"># Mac</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="建立索引">建立索引</h3>
 <p>安装好之后使用 <code>mu</code> 对已经下载好的进行首次索引。</p>
@@ -496,8 +496,8 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mu index --rebuild --maildir<span class="o">=</span>~/mails <span class="c1"># 目录要根据自己目录修改</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mu index --rebuild --maildir<span class="o">=</span>~/mails <span class="c1"># 目录要根据自己目录修改</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="emacs-配置">Emacs 配置</h2>
 <h3 id="启用-mu4e-layer">启用 mu4e layer</h3>
@@ -510,11 +510,11 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">(mu4e :variables mu4e-installation-path &#34;/usr/share/Emacs/site-lisp&#34;
-      mu4e-enable-mode-line t
-      mu4e-enable-async-operations t
-      mu4e-enable-notifications t)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(mu4e :variables mu4e-installation-path &#34;/usr/share/Emacs/site-lisp&#34;
+</span></span><span class="line"><span class="cl">      mu4e-enable-mode-line t
+</span></span><span class="line"><span class="cl">      mu4e-enable-async-operations t
+</span></span><span class="line"><span class="cl">      mu4e-enable-notifications t)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="配置-mu4e">配置 mu4e</h3>
 <p>在 <code>user-config</code> 中增加 <code>mu4e</code> 配置</p>
@@ -538,23 +538,23 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">(with-eval-after-load &#39;mu4e-alert
-  ;; Enable Desktop notifications
-  (mu4e-alert-set-default-style &#39;notifier)) ; For linux
-
-;;; Set up some common mu4e variables
-(setq mu4e-maildir &#34;~/mails&#34;
-      mu4e-trash-folder &#34;/已删除&#34;
-      mu4e-refile-folder &#34;/Archive&#34;
-      mu4e-sent-folder &#34;/已发送&#34;
-      mu4e-drafts-folder &#34;/草稿箱&#34;
-      ;; sync email from imap server
-      mu4e-get-mail-command &#34;offlineimap&#34;
-      mu4e-update-interval 300
-      mu4e-compose-signature-auto-include nil
-      mu4e-view-show-images t
-      mu4e-view-show-addresses t)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(with-eval-after-load &#39;mu4e-alert
+</span></span><span class="line"><span class="cl">  ;; Enable Desktop notifications
+</span></span><span class="line"><span class="cl">  (mu4e-alert-set-default-style &#39;notifier)) ; For linux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">;;; Set up some common mu4e variables
+</span></span><span class="line"><span class="cl">(setq mu4e-maildir &#34;~/mails&#34;
+</span></span><span class="line"><span class="cl">      mu4e-trash-folder &#34;/已删除&#34;
+</span></span><span class="line"><span class="cl">      mu4e-refile-folder &#34;/Archive&#34;
+</span></span><span class="line"><span class="cl">      mu4e-sent-folder &#34;/已发送&#34;
+</span></span><span class="line"><span class="cl">      mu4e-drafts-folder &#34;/草稿箱&#34;
+</span></span><span class="line"><span class="cl">      ;; sync email from imap server
+</span></span><span class="line"><span class="cl">      mu4e-get-mail-command &#34;offlineimap&#34;
+</span></span><span class="line"><span class="cl">      mu4e-update-interval 300
+</span></span><span class="line"><span class="cl">      mu4e-compose-signature-auto-include nil
+</span></span><span class="line"><span class="cl">      mu4e-view-show-images t
+</span></span><span class="line"><span class="cl">      mu4e-view-show-addresses t)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="使用">使用</h2>
 <h3 id="打开-mu4e-使用快捷键-spc-a-m">打开 mu4e 使用快捷键 <code>SPC a M</code></h3>
@@ -695,7 +695,7 @@ brew install mu --with-Emacs <span class="c1"># Mac</span>
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/cronet_ios/" />
@@ -187,11 +187,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/depot_tools&#34;</span> <span class="c1"># 设置环境变量，可以写到 .bashrc 中，这样就不用每次都执行一遍</span>
-mkdir ~/chromium <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ~/chromium
-fetch --no-history ios
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/depot_tools&#34;</span> <span class="c1"># 设置环境变量，可以写到 .bashrc 中，这样就不用每次都执行一遍</span>
+</span></span><span class="line"><span class="cl">mkdir ~/chromium <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ~/chromium
+</span></span><span class="line"><span class="cl">fetch --no-history ios
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>最重要的是需要配置代理，一个好的代理能省非常多事情。</p>
 <h2 id="切换tag">切换tag</h2>
@@ -211,17 +211,17 @@ fetch --no-history ios
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git fetch origin 95.0.4638.50
-git checkout FETCH_HEAD
-git switch -c 95.0.4638.50
-<span class="nv">COMMIT_DATE</span><span class="o">=</span><span class="k">$(</span>git log -n <span class="m">1</span> --pretty<span class="o">=</span>format:%ci<span class="k">)</span>
-<span class="nb">cd</span> ~/depot_tools
-git checkout <span class="k">$(</span>git rev-list -n <span class="m">1</span> --before<span class="o">=</span><span class="s2">&#34;</span><span class="nv">$COMMIT_DATE</span><span class="s2">&#34;</span> main<span class="k">)</span>
-<span class="nb">export</span> <span class="nv">DEPOT_TOOLS_UPDATE</span><span class="o">=</span><span class="m">0</span>     <span class="c1"># 禁用 depot_tools 自动更新</span>
-<span class="nb">cd</span> ~/chromium/src
-git clean -ffd                  <span class="c1"># 清空git工作目录，以免发生冲突</span>
-gclient sync -D --force --reset --with_branch_heads
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git fetch origin 95.0.4638.50
+</span></span><span class="line"><span class="cl">git checkout FETCH_HEAD
+</span></span><span class="line"><span class="cl">git switch -c 95.0.4638.50
+</span></span><span class="line"><span class="cl"><span class="nv">COMMIT_DATE</span><span class="o">=</span><span class="k">$(</span>git log -n <span class="m">1</span> --pretty<span class="o">=</span>format:%ci<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/depot_tools
+</span></span><span class="line"><span class="cl">git checkout <span class="k">$(</span>git rev-list -n <span class="m">1</span> --before<span class="o">=</span><span class="s2">&#34;</span><span class="nv">$COMMIT_DATE</span><span class="s2">&#34;</span> main<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">DEPOT_TOOLS_UPDATE</span><span class="o">=</span><span class="m">0</span>     <span class="c1"># 禁用 depot_tools 自动更新</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">git clean -ffd                  <span class="c1"># 清空git工作目录，以免发生冲突</span>
+</span></span><span class="line"><span class="cl">gclient sync -D --force --reset --with_branch_heads
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在执行 <code>git fetch origin 95.0.4638.50</code> 的时候碰到一直下载不下来的问题，我在这里卡了一个星期。最后用下面这种办法解决的，仅供参考</p>
 <div class="highlight"><div class="chroma">
@@ -232,11 +232,11 @@ gclient sync -D --force --reset --with_branch_heads
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git fetch --unshallow
-git fetch origin 95.0.4638.50
-git checkout FETCH_HEAD
-git switch -c 95.0.4638.50
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git fetch --unshallow
+</span></span><span class="line"><span class="cl">git fetch origin 95.0.4638.50
+</span></span><span class="line"><span class="cl">git checkout FETCH_HEAD
+</span></span><span class="line"><span class="cl">git switch -c 95.0.4638.50
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>也就是多执行了一步 <code>git fetch --unshallow</code> ，接下来拉取 <code>95.0.4638.50</code> 就非常快了。</p>
 <h2 id="编译">编译</h2>
@@ -250,10 +250,10 @@ git switch -c 95.0.4638.50
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-./components/cronet/tools/cr_cronet.py gn -i -r
-ninja -C out/Release-iphoneos cronet_package
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">./components/cronet/tools/cr_cronet.py gn -i -r
+</span></span><span class="line"><span class="cl">ninja -C out/Release-iphoneos cronet_package
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>-i</code> 的意思就是 <code>iphoneos</code> ，也就是给真机使用的</li>
@@ -268,10 +268,10 @@ ninja -C out/Release-iphoneos cronet_package
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-./components/cronet/tools/cr_cronet.py gn -r
-ninja -C out/Release-iphonesimulator cronet_package
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">./components/cronet/tools/cr_cronet.py gn -r
+</span></span><span class="line"><span class="cl">ninja -C out/Release-iphonesimulator cronet_package
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>cr_cronet.py</code> 的时候不要加 <code>build</code> 参数，会碰到如下错误</p>
 <div class="highlight"><div class="chroma">
@@ -279,8 +279,8 @@ ninja -C out/Release-iphonesimulator cronet_package
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">Error: no mobile provisioning profile found for &#34;org.chromium.gtest.cronet-test&#34;.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Error: no mobile provisioning profile found for &#34;org.chromium.gtest.cronet-test&#34;.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="示例">示例</h2>
 <p>编译完之后，在 <code>out/Release-iphonesimulator</code> 目录下会有一个 <code>all.xcodeproj</code> 的文件，双击就可以使用 <code>Xcode</code> 打开了。</p>
@@ -315,32 +315,32 @@ ninja -C out/Release-iphonesimulator cronet_package
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span><span class="o">*</span><span class="p">)</span><span class="nv">application</span>
-    <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setUserAgent</span><span class="p">:</span><span class="s">@&#34;Dummy/1.0&#34;</span> <span class="nl">partial</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setQuicEnabled</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="n">start</span><span class="p">];</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">startNetLogToFile</span><span class="p">:[</span><span class="nb">self</span> <span class="n">currentNetLogFileName</span><span class="p">]</span> <span class="nl">logBytes</span><span class="p">:</span><span class="nb">NO</span><span class="p">];</span>
-
-  <span class="n">NSURLSessionConfiguration</span><span class="o">*</span> <span class="n">config</span> <span class="o">=</span>
-      <span class="p">[</span><span class="n">NSURLSessionConfiguration</span> <span class="n">ephemeralSessionConfiguration</span><span class="p">];</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">installIntoSessionConfiguration</span><span class="p">:</span><span class="n">config</span><span class="p">];</span>
-
-  <span class="n">NSString</span><span class="o">*</span> <span class="n">chromiumPrefix</span> <span class="o">=</span> <span class="s">@&#34;www.chromium.org&#34;</span><span class="p">;</span>
-  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setRequestFilterBlock</span><span class="p">:</span><span class="o">^</span><span class="kt">BOOL</span><span class="p">(</span><span class="n">NSURLRequest</span><span class="o">*</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">BOOL</span> <span class="n">isChromiumSite</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">request</span> <span class="n">URL</span><span class="p">]</span> <span class="n">host</span><span class="p">]</span> <span class="nl">hasPrefix</span><span class="p">:</span><span class="n">chromiumPrefix</span><span class="p">];</span>
-    <span class="k">return</span> <span class="o">!</span><span class="n">isChromiumSite</span><span class="p">;</span>
-  <span class="p">}];</span>
-
-  <span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
-  <span class="nb">self</span><span class="p">.</span><span class="n">viewController</span> <span class="o">=</span>
-      <span class="p">[[</span><span class="n">CronetConsumerViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithNibName</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">bundle</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-  <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">viewController</span><span class="p">;</span>
-  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
-
-  <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span><span class="o">*</span><span class="p">)</span><span class="nv">application</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span><span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setUserAgent</span><span class="p">:</span><span class="s">@&#34;Dummy/1.0&#34;</span> <span class="nl">partial</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setQuicEnabled</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="n">start</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">startNetLogToFile</span><span class="p">:[</span><span class="nb">self</span> <span class="n">currentNetLogFileName</span><span class="p">]</span> <span class="nl">logBytes</span><span class="p">:</span><span class="nb">NO</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">NSURLSessionConfiguration</span><span class="o">*</span> <span class="n">config</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="n">NSURLSessionConfiguration</span> <span class="n">ephemeralSessionConfiguration</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">installIntoSessionConfiguration</span><span class="p">:</span><span class="n">config</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">NSString</span><span class="o">*</span> <span class="n">chromiumPrefix</span> <span class="o">=</span> <span class="s">@&#34;www.chromium.org&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setRequestFilterBlock</span><span class="p">:</span><span class="o">^</span><span class="kt">BOOL</span><span class="p">(</span><span class="n">NSURLRequest</span><span class="o">*</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">BOOL</span> <span class="n">isChromiumSite</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">request</span> <span class="n">URL</span><span class="p">]</span> <span class="n">host</span><span class="p">]</span> <span class="nl">hasPrefix</span><span class="p">:</span><span class="n">chromiumPrefix</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">!</span><span class="n">isChromiumSite</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">self</span><span class="p">.</span><span class="n">viewController</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[[</span><span class="n">CronetConsumerViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithNibName</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">bundle</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">viewController</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">window</span> <span class="n">makeKeyAndVisible</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>由于 <code>cronet</code> 在 <code>iOS</code> 上会对网络请求进行 <code>HOOK</code> 所以之前该怎么用的就怎么用，接入成本就很低了。相比之下 <code>Android</code> 的接入成本就比较高了，因为大部分 <code>Android</code> 的网络请求会使用 <code>OkHttp</code> 或者 <code>Retrofit</code> 而不是 <code>HttpURLConnection</code> 。</p>
 <h2 id="使用">使用</h2>
@@ -365,14 +365,14 @@ ninja -C out/Release-iphonesimulator cronet_package
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="cp">#import &lt;Cronet/Cronet.h&gt;
-</span><span class="cp"></span><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
-    <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setUserAgent</span><span class="p">:</span><span class="s">@&#34;CronetDemo/1.0&#34;</span> <span class="nl">partial</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
-    <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setQuicEnabled</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
-    <span class="p">[</span><span class="n">Cronet</span> <span class="n">start</span><span class="p">];</span>
-    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="cp">#import &lt;Cronet/Cronet.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setUserAgent</span><span class="p">:</span><span class="s">@&#34;CronetDemo/1.0&#34;</span> <span class="nl">partial</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">Cronet</span> <span class="nl">setQuicEnabled</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">Cronet</span> <span class="n">start</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接着在 <code>ViewCrontroller.m</code> 中加入网络请求代码</p>
 <div class="highlight"><div class="chroma">
@@ -396,24 +396,24 @@ ninja -C out/Release-iphonesimulator cronet_package
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">viewDidLoad</span> <span class="p">{</span>
-    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-    <span class="p">[</span><span class="nb">self</span> <span class="n">loadRequest</span><span class="p">];</span>
-<span class="p">}</span>
-
-<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">loadRequest</span> <span class="p">{</span>
-    <span class="n">NSURL</span> <span class="o">*</span> <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="s">@&#34;https://httpbin.org/get&#34;</span><span class="p">];</span>
-
-    <span class="n">NSURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span><span class="p">];</span>
-    <span class="n">NSURLSession</span> <span class="o">*</span><span class="n">session</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURLSession</span> <span class="n">sharedSession</span><span class="p">];</span>
-
-    <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">dataTask</span> <span class="o">=</span> <span class="p">[</span><span class="n">session</span> <span class="nl">dataTaskWithRequest</span><span class="p">:</span> <span class="n">request</span> <span class="nl">completionHandler</span><span class="p">:</span> <span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">data</span><span class="p">,</span> <span class="n">NSURLResponse</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">response</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;response %@&#34;</span><span class="p">,</span> <span class="n">response</span><span class="p">);</span>
-    <span class="p">}];</span>
-
-    <span class="p">[</span><span class="n">dataTask</span> <span class="n">resume</span><span class="p">];</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-objc" data-lang="objc"><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">viewDidLoad</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="nb">self</span> <span class="n">loadRequest</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">loadRequest</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSURL</span> <span class="o">*</span> <span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="s">@&#34;https://httpbin.org/get&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">NSURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NSURLSession</span> <span class="o">*</span><span class="n">session</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURLSession</span> <span class="n">sharedSession</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">dataTask</span> <span class="o">=</span> <span class="p">[</span><span class="n">session</span> <span class="nl">dataTaskWithRequest</span><span class="p">:</span> <span class="n">request</span> <span class="nl">completionHandler</span><span class="p">:</span> <span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">data</span><span class="p">,</span> <span class="n">NSURLResponse</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">response</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span> <span class="n">_Nullable</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&#34;response %@&#34;</span><span class="p">,</span> <span class="n">response</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">dataTask</span> <span class="n">resume</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行之后就可以看到在控制台打印了请求的信息。</p>
 <h2 id="碰到的错误">碰到的错误</h2>
@@ -422,8 +422,8 @@ ninja -C out/Release-iphonesimulator cronet_package
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">xcode-select: error: tool <span class="s1">&#39;xcodebuild&#39;</span> requires Xcode, but active developer directory <span class="s1">&#39;/Library/Developer/CommandLineTools&#39;</span> is a <span class="nb">command</span> line tools instance
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">xcode-select: error: tool <span class="s1">&#39;xcodebuild&#39;</span> requires Xcode, but active developer directory <span class="s1">&#39;/Library/Developer/CommandLineTools&#39;</span> is a <span class="nb">command</span> line tools instance
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在终端中执行如下代之后解决</p>
 <div class="highlight"><div class="chroma">
@@ -431,8 +431,8 @@ ninja -C out/Release-iphonesimulator cronet_package
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -543,7 +543,7 @@ ninja -C out/Release-iphonesimulator cronet_package
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

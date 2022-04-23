@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gpg5/" />
@@ -189,19 +189,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">(use-package org-crypt
-  :ensure nil
-  :demand t
-  :config
-  ;; 在文件加密之前进行保存
-  (org-crypt-use-before-save-magic)
-  ;; 设置要加密的 TAG 为 crypt
-  (setq org-crypt-tag-matcher &#34;crypt&#34;
-        ;; 防止子 TAG 也为 crypt，进行再次加密
-        org-tags-exclude-from-inheritance (quote (&#34;crypt&#34;))
-        ;; 设置要使用加密的 GPG 账户
-        org-crypt-key &#34;test1&#34;))
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(use-package org-crypt
+</span></span><span class="line"><span class="cl">  :ensure nil
+</span></span><span class="line"><span class="cl">  :demand t
+</span></span><span class="line"><span class="cl">  :config
+</span></span><span class="line"><span class="cl">  ;; 在文件加密之前进行保存
+</span></span><span class="line"><span class="cl">  (org-crypt-use-before-save-magic)
+</span></span><span class="line"><span class="cl">  ;; 设置要加密的 TAG 为 crypt
+</span></span><span class="line"><span class="cl">  (setq org-crypt-tag-matcher &#34;crypt&#34;
+</span></span><span class="line"><span class="cl">        ;; 防止子 TAG 也为 crypt，进行再次加密
+</span></span><span class="line"><span class="cl">        org-tags-exclude-from-inheritance (quote (&#34;crypt&#34;))
+</span></span><span class="line"><span class="cl">        ;; 设置要使用加密的 GPG 账户
+</span></span><span class="line"><span class="cl">        org-crypt-key &#34;test1&#34;))
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="使用">使用</h2>
 <p>配置好 <code>Emacs</code> 后，我们创建一个 <code>test.org</code> 并为标题添加 <code>crypt</code> 的 <code>TAG</code> ，然后保存文件， <code>Emacs</code> 会自动把含有 <code>crypt</code> 的内容进行加密。
@@ -215,9 +215,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">pinentry</span>
-  <span class="nb">:hook</span><span class="p">(</span><span class="nv">after-init</span> <span class="o">.</span> <span class="nv">pinentry-start</span><span class="p">))</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">pinentry</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:hook</span><span class="p">(</span><span class="nv">after-init</span> <span class="o">.</span> <span class="nv">pinentry-start</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="碰到的问题">碰到的问题</h2>
 <p>如果你之前有使用过 <code>GPG</code> 很可能会碰到 <code>Error: (error &quot;Encrypt failed&quot;)</code> 这个错误，我找了半天，终于在 <a href="https://gpgtools.tenderapp.com/discussions/problems/15313-symmetric-file-encryption-with-emacs-again-please-describe-the-steps-leading-up-to-the-problem">Symmetric file encryption with emacs / Stable / Discussion Area - GPGTools Support</a> 这里找到了解决办法，折腾了好久。</p>
@@ -229,10 +229,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ ps ax <span class="p">|</span>grep gpg
-<span class="m">14650</span>   ??  Ss     0:00.33 gpg-agent --homedir /Users/test/.gnupg --use-standard-socket --daemon
-➜  ~ <span class="nb">kill</span> <span class="m">14650</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ ps ax <span class="p">|</span>grep gpg
+</span></span><span class="line"><span class="cl"><span class="m">14650</span>   ??  Ss     0:00.33 gpg-agent --homedir /Users/test/.gnupg --use-standard-socket --daemon
+</span></span><span class="line"><span class="cl">➜  ~ <span class="nb">kill</span> <span class="m">14650</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="总结">总结</h2>
 <p><code>GPG</code> 相关的内容，到这里就全部讲完了。</p>
@@ -345,7 +345,7 @@
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/rosfilesystem/" />
@@ -198,11 +198,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8.3</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">navigation</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">catkin</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">catkin_metapackage</span><span class="p">()</span> <span class="c"># 元功能包特有，用来告诉编译器这是一个元功能包
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8.3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">navigation</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">catkin</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">catkin_metapackage</span><span class="p">()</span> <span class="c"># 元功能包特有，用来告诉编译器这是一个元功能包
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>package.xml</code> 如下</p>
 <div class="highlight"><div class="chroma">
@@ -251,49 +251,49 @@
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
-<span class="cp">&lt;?xml-model href=&#34;http://download.ros.org/schema/package_format2.xsd&#34; schematypens=&#34;http://www.w3.org/2001/XMLSchema&#34;?&gt;</span>
-<span class="nt">&lt;package</span> <span class="na">format=</span><span class="s">&#34;2&#34;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;name&gt;</span>navigation<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.16.6<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;description&gt;</span>
-        A 2D navigation stack that takes in information from odometry, sensor
-        streams, and a goal pose and outputs safe velocity commands that are sent
-        to a mobile base.
-    <span class="nt">&lt;/description&gt;</span>
-    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;mfergs7@gmail.com&#34;</span><span class="nt">&gt;</span>Michael Ferguson<span class="nt">&lt;/maintainer&gt;</span>
-    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;davidvlu@gmail.com&#34;</span><span class="nt">&gt;</span>David V. Lu!!<span class="nt">&lt;/maintainer&gt;</span>
-    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;ahoy@fetchrobotics.com&#34;</span><span class="nt">&gt;</span>Aaron Hoy<span class="nt">&lt;/maintainer&gt;</span>
-    <span class="nt">&lt;author&gt;</span>contradict@gmail.com<span class="nt">&lt;/author&gt;</span>
-    <span class="nt">&lt;author&gt;</span>Eitan Marder-Eppstein<span class="nt">&lt;/author&gt;</span>
-    <span class="nt">&lt;license&gt;</span>BSD,LGPL,LGPL (amcl)<span class="nt">&lt;/license&gt;</span>
-    <span class="nt">&lt;url&gt;</span>http://wiki.ros.org/navigation<span class="nt">&lt;/url&gt;</span>
-
-    <span class="nt">&lt;buildtool_depend&gt;</span>catkin<span class="nt">&lt;/buildtool_depend&gt;</span>
-
-    <span class="nt">&lt;exec_depend&gt;</span>amcl<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>base_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>carrot_planner<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>clear_costmap_recovery<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>costmap_2d<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>dwa_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>fake_localization<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>global_planner<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>map_server<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>move_base<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>move_base_msgs<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>move_slow_and_clear<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>navfn<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>nav_core<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>rotate_recovery<span class="nt">&lt;/exec_depend&gt;</span>
-    <span class="nt">&lt;exec_depend&gt;</span>voxel_grid<span class="nt">&lt;/exec_depend&gt;</span>
-
-    <span class="c">&lt;!-- 元功能包固定写法 --&gt;</span>
-    <span class="nt">&lt;export&gt;</span>
-        <span class="nt">&lt;metapackage/&gt;</span>
-    <span class="nt">&lt;/export&gt;</span>
-<span class="nt">&lt;/package&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;?xml-model href=&#34;http://download.ros.org/schema/package_format2.xsd&#34; schematypens=&#34;http://www.w3.org/2001/XMLSchema&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;package</span> <span class="na">format=</span><span class="s">&#34;2&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>navigation<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.16.6<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>
+</span></span><span class="line"><span class="cl">        A 2D navigation stack that takes in information from odometry, sensor
+</span></span><span class="line"><span class="cl">        streams, and a goal pose and outputs safe velocity commands that are sent
+</span></span><span class="line"><span class="cl">        to a mobile base.
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;mfergs7@gmail.com&#34;</span><span class="nt">&gt;</span>Michael Ferguson<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;davidvlu@gmail.com&#34;</span><span class="nt">&gt;</span>David V. Lu!!<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;ahoy@fetchrobotics.com&#34;</span><span class="nt">&gt;</span>Aaron Hoy<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;author&gt;</span>contradict@gmail.com<span class="nt">&lt;/author&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;author&gt;</span>Eitan Marder-Eppstein<span class="nt">&lt;/author&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;license&gt;</span>BSD,LGPL,LGPL (amcl)<span class="nt">&lt;/license&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;url&gt;</span>http://wiki.ros.org/navigation<span class="nt">&lt;/url&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;buildtool_depend&gt;</span>catkin<span class="nt">&lt;/buildtool_depend&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>amcl<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>base_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>carrot_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>clear_costmap_recovery<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>costmap_2d<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>dwa_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>fake_localization<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>global_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>map_server<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_base<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_base_msgs<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_slow_and_clear<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>navfn<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>nav_core<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>rotate_recovery<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>voxel_grid<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- 元功能包固定写法 --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;export&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;metapackage/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/export&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/package&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>要注意在 <code>package.xml</code> 中需要用</p>
 <div class="highlight"><div class="chroma">
@@ -303,10 +303,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;export&gt;</span>
-        <span class="nt">&lt;metapackage/&gt;</span>
-<span class="nt">&lt;/export&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;export&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;metapackage/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/export&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>来指定是元功能包，这是固定写法。</p>
 <p>元功能包在老版本也叫 <code>stack</code> (功能包集)，都是一个意思。</p>
@@ -331,9 +331,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ rospack find roscpp
-/opt/ros/melodic/share/roscpp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack find roscpp
+</span></span><span class="line"><span class="cl">/opt/ros/melodic/share/roscpp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>除了查找 <code>package</code> 的位置，还可以通过 <code>rospack list</code> 列出所有的 <code>package</code></p>
 <div class="highlight"><div class="chroma">
@@ -355,22 +355,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ rospack list
-actionlib /opt/ros/melodic/share/actionlib
-actionlib_msgs /opt/ros/melodic/share/actionlib_msgs
-actionlib_tutorials /opt/ros/melodic/share/actionlib_tutorials
-angles /opt/ros/melodic/share/angles
-bond /opt/ros/melodic/share/bond
-bondcpp /opt/ros/melodic/share/bondcpp
-bondpy /opt/ros/melodic/share/bondpy
-camera_calibration /opt/ros/melodic/share/camera_calibration
-camera_calibration_parsers /opt/ros/melodic/share/camera_calibration_parsers
-camera_info_manager /opt/ros/melodic/share/camera_info_manager
-catkin /opt/ros/melodic/share/catkin
-class_loader /opt/ros/melodic/share/class_loader
-cmake_modules /opt/ros/melodic/share/cmake_modules
-...
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack list
+</span></span><span class="line"><span class="cl">actionlib /opt/ros/melodic/share/actionlib
+</span></span><span class="line"><span class="cl">actionlib_msgs /opt/ros/melodic/share/actionlib_msgs
+</span></span><span class="line"><span class="cl">actionlib_tutorials /opt/ros/melodic/share/actionlib_tutorials
+</span></span><span class="line"><span class="cl">angles /opt/ros/melodic/share/angles
+</span></span><span class="line"><span class="cl">bond /opt/ros/melodic/share/bond
+</span></span><span class="line"><span class="cl">bondcpp /opt/ros/melodic/share/bondcpp
+</span></span><span class="line"><span class="cl">bondpy /opt/ros/melodic/share/bondpy
+</span></span><span class="line"><span class="cl">camera_calibration /opt/ros/melodic/share/camera_calibration
+</span></span><span class="line"><span class="cl">camera_calibration_parsers /opt/ros/melodic/share/camera_calibration_parsers
+</span></span><span class="line"><span class="cl">camera_info_manager /opt/ros/melodic/share/camera_info_manager
+</span></span><span class="line"><span class="cl">catkin /opt/ros/melodic/share/catkin
+</span></span><span class="line"><span class="cl">class_loader /opt/ros/melodic/share/class_loader
+</span></span><span class="line"><span class="cl">cmake_modules /opt/ros/melodic/share/cmake_modules
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>rospack</code> 中还有一个比较常用的是，查看 <code>package</code> 的依赖</p>
 <div class="highlight"><div class="chroma">
@@ -396,26 +396,26 @@ cmake_modules /opt/ros/melodic/share/cmake_modules
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ rospack depends roscpp
-cpp_common
-rostime
-roscpp_traits
-roscpp_serialization
-catkin
-genmsg
-genpy
-message_runtime
-gencpp
-geneus
-gennodejs
-genlisp
-message_generation
-rosbuild
-rosconsole
-std_msgs
-rosgraph_msgs
-xmlrpcpp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack depends roscpp
+</span></span><span class="line"><span class="cl">cpp_common
+</span></span><span class="line"><span class="cl">rostime
+</span></span><span class="line"><span class="cl">roscpp_traits
+</span></span><span class="line"><span class="cl">roscpp_serialization
+</span></span><span class="line"><span class="cl">catkin
+</span></span><span class="line"><span class="cl">genmsg
+</span></span><span class="line"><span class="cl">genpy
+</span></span><span class="line"><span class="cl">message_runtime
+</span></span><span class="line"><span class="cl">gencpp
+</span></span><span class="line"><span class="cl">geneus
+</span></span><span class="line"><span class="cl">gennodejs
+</span></span><span class="line"><span class="cl">genlisp
+</span></span><span class="line"><span class="cl">message_generation
+</span></span><span class="line"><span class="cl">rosbuild
+</span></span><span class="line"><span class="cl">rosconsole
+</span></span><span class="line"><span class="cl">std_msgs
+</span></span><span class="line"><span class="cl">rosgraph_msgs
+</span></span><span class="line"><span class="cl">xmlrpcpp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>上面列出来的是比较常用的，更多的用法可以通过 <code>rospack help</code> 来查看</p>
 <h3 id="roscd">roscd</h3>
@@ -429,12 +429,12 @@ xmlrpcpp
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ <span class="nb">pwd</span>
-/home/test
-➜  ~ roscd roscpp
-➜  <span class="nb">pwd</span>
-/opt/ros/melodic/share/roscpp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ <span class="nb">pwd</span>
+</span></span><span class="line"><span class="cl">/home/test
+</span></span><span class="line"><span class="cl">➜  ~ roscd roscpp
+</span></span><span class="line"><span class="cl">➜  <span class="nb">pwd</span>
+</span></span><span class="line"><span class="cl">/opt/ros/melodic/share/roscpp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当然你用 <code>cd</code> 也是可以进入到 <code>roscpp</code> 目录的，只是比较麻烦而已。</p>
 <h3 id="rosls">rosls</h3>
@@ -445,9 +445,9 @@ xmlrpcpp
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜ rosls roscpp
-cmake  msg  package.xml  rosbuild  srv
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜ rosls roscpp
+</span></span><span class="line"><span class="cl">cmake  msg  package.xml  rosbuild  srv
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="总结">总结</h2>
 <p>了解 <code>ROS</code> 架构和文件系统对于初学者来说是十分有必要的，你会知道 <code>ROS</code> 是怎么划分它们的，不同的文件存放在哪里，我需要的功能去哪里找，怎么快速定位它们。</p>
@@ -561,7 +561,7 @@ cmake  msg  package.xml  rosbuild  srv
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

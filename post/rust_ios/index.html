@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/rust_ios/" />
@@ -187,8 +187,8 @@ Rust 是近几年特别火的语言，之前学过几次，每次学完之后就
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rustup target add aarch64-apple-ios x86_64-apple-ios
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup target add aarch64-apple-ios x86_64-apple-ios
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里只给出了 <code>ARM64</code> 和 <code>x86_64</code> 的，它们分别针对的是苹果64位处理器和模拟器。</p>
 <p>如果你想支持旧版的也可以把较老的架构也装上，分别是 <code>armv7-apple-ios</code> 、 <code>armv7s-apple-ios</code> 、 <code>i386-apple-ios</code></p>
@@ -200,9 +200,9 @@ Rust 是近几年特别火的语言，之前学过几次，每次学完之后就
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ cargo new rilib --lib
-     Created library <span class="sb">`</span>rilib<span class="sb">`</span> package
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ cargo new rilib --lib
+</span></span><span class="line"><span class="cl">     Created library <span class="sb">`</span>rilib<span class="sb">`</span> package
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>--lib</code> 表示创建一个库，而不是可执行程序。</p>
 <h2 id="配置导出的库名">配置导出的库名</h2>
@@ -214,10 +214,10 @@ Rust 是近几年特别火的语言，之前学过几次，每次学完之后就
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>lib<span class="o">]</span>
-<span class="nv">name</span> <span class="o">=</span> <span class="s2">&#34;rilib&#34;</span>
-crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;staticlib&#34;</span>, <span class="s2">&#34;cdylib&#34;</span><span class="o">]</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>lib<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span> <span class="o">=</span> <span class="s2">&#34;rilib&#34;</span>
+</span></span><span class="line"><span class="cl">crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;staticlib&#34;</span>, <span class="s2">&#34;cdylib&#34;</span><span class="o">]</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>name</code> 表示库的名字</p>
 <p><code>crate-type</code> 表示用来创建静态库还是动态库，这里两个都配置了。</p>
@@ -243,23 +243,23 @@ crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#3
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="p">{</span><span class="w">
-</span><span class="w">    </span><span class="n">ffi</span>::<span class="p">{</span><span class="n">CStr</span><span class="p">,</span><span class="w"> </span><span class="n">CString</span><span class="p">},</span><span class="w">
-</span><span class="w">    </span><span class="n">os</span>::<span class="n">raw</span>::<span class="n">c_char</span><span class="p">,</span><span class="w">
-</span><span class="w"></span><span class="p">};</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
-</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">fromCString</span><span class="p">(</span><span class="n">cstr</span>: <span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">c_char</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">c_char</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CStr</span>::<span class="n">from_ptr</span><span class="p">(</span><span class="n">cstr</span><span class="p">);</span><span class="w">
-</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">r_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="n">c_str</span><span class="p">.</span><span class="n">to_str</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span><span class="w">        </span><span class="nb">Ok</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w">
-</span><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&#34;Err c&#34;</span><span class="p">,</span><span class="w">
-</span><span class="w">    </span><span class="p">};</span><span class="w">
-</span><span class="w">    </span><span class="n">CString</span>::<span class="n">new</span><span class="p">(</span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;Rust String: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">r_str</span><span class="p">))</span><span class="w">
-</span><span class="w">        </span><span class="p">.</span><span class="n">unwrap</span><span class="p">()</span><span class="w">
-</span><span class="w">        </span><span class="p">.</span><span class="n">into_raw</span><span class="p">()</span><span class="w">
-</span><span class="w"></span><span class="p">}</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ffi</span>::<span class="p">{</span><span class="n">CStr</span><span class="p">,</span><span class="w"> </span><span class="n">CString</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">os</span>::<span class="n">raw</span>::<span class="n">c_char</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">fromCString</span><span class="p">(</span><span class="n">cstr</span>: <span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">c_char</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">c_char</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CStr</span>::<span class="n">from_ptr</span><span class="p">(</span><span class="n">cstr</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">r_str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="n">c_str</span><span class="p">.</span><span class="n">to_str</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Ok</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&#34;Err c&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CString</span>::<span class="n">new</span><span class="p">(</span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;Rust String: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">r_str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">unwrap</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">into_raw</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>代码很简单，给传进来的字符串前面添加 <code>Rust String:</code></p>
 <h2 id="lipo与cbindgen">lipo与cbindgen</h2>
@@ -269,8 +269,8 @@ crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#3
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cargo install cargo-lipo cbindgen
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cargo install cargo-lipo cbindgen
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>cargo-lipo</code> 是用来编译 <code>universal iOS</code> 二进制包</p>
 <p><code>cbindgen</code> 则是根据 <code>rust</code> 文件生成对应的 <code>C/C++</code> 头文件。</p>
@@ -282,9 +282,9 @@ crate-type <span class="o">=</span> <span class="o">[</span><span class="s2">&#3
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cbindgen src/lib.rs -l c &gt; rilib.h <span class="c1"># 生成对应的头文件</span>
-cargo lipo --release               <span class="c1"># 编译静态库</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cbindgen src/lib.rs -l c &gt; rilib.h <span class="c1"># 生成对应的头文件</span>
+</span></span><span class="line"><span class="cl">cargo lipo --release               <span class="c1"># 编译静态库</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译好的文件在 <code>target/universal/release/librilib.a</code> ，头文件在项目的根目录</p>
 <p>生成的 <code>rilib.h</code> 内容如下</p>
@@ -298,13 +298,13 @@ cargo lipo --release               <span class="c1"># 编译静态库</span>
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="kt">char</span> <span class="o">*</span><span class="nf">fromCString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cstr</span><span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdbool.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="o">*</span><span class="nf">fromCString</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cstr</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="使用">使用</h2>
 <h3 id="拷贝静态库和头文件">拷贝静态库和头文件</h3>
@@ -335,23 +335,23 @@ cargo lipo --release               <span class="c1"># 编译静态库</span>
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="nc">SwiftUI</span>
-
-<span class="kd">struct</span> <span class="nc">ContentView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-        <span class="c1">// 这里调用了Rust的函数，把iOS传进去了</span>
-        <span class="kd">let</span> <span class="nv">r_str</span> <span class="p">=</span> <span class="n">fromCString</span><span class="p">(</span><span class="s">&#34;iOS&#34;</span><span class="p">)</span>
-        <span class="n">Text</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">cString</span><span class="p">:</span> <span class="n">r_str</span><span class="p">!))</span>
-            <span class="p">.</span><span class="n">padding</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">struct</span> <span class="nc">ContentView_Previews</span><span class="p">:</span> <span class="n">PreviewProvider</span> <span class="p">{</span>
-    <span class="kd">static</span> <span class="kd">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
-        <span class="n">ContentView</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-swift" data-lang="swift"><span class="line"><span class="cl"><span class="kd">import</span> <span class="nc">SwiftUI</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">ContentView</span><span class="p">:</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 这里调用了Rust的函数，把iOS传进去了</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nv">r_str</span> <span class="p">=</span> <span class="n">fromCString</span><span class="p">(</span><span class="s">&#34;iOS&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Text</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">cString</span><span class="p">:</span> <span class="n">r_str</span><span class="p">!))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="n">padding</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">struct</span> <span class="nc">ContentView_Previews</span><span class="p">:</span> <span class="n">PreviewProvider</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="n">some</span> <span class="n">View</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ContentView</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这里把 <code>rust</code> 返回的字符串显示在了 <code>Text</code> 中</p>
 <h3 id="运行">运行</h3>
@@ -469,7 +469,7 @@ cargo lipo --release               <span class="c1"># 编译静态库</span>
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

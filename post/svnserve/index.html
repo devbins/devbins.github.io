@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/svnserve/" />
@@ -67,7 +67,7 @@ sudo apt install subversion
 
 "><meta itemprop="datePublished" content="2018-10-28T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2018-10-28T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1135">
+<meta itemprop="wordCount" content="1134">
 <meta itemprop="keywords" content="SVN," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Linux 下 svn 服务搭建"/>
 <meta name="twitter:description" content="安装
@@ -163,7 +163,7 @@ sudo apt install subversion
         <div class="post-category">
             <a href="../../categories/svn/"> SVN </a>
             </div>
-          <span class="more-meta"> 约 1135 字 </span>
+          <span class="more-meta"> 约 1134 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -199,8 +199,8 @@ sudo apt install subversion
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo apt install subversion
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install subversion
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="创建仓库">创建仓库</h2>
 <div class="highlight"><div class="chroma">
@@ -208,8 +208,8 @@ sudo apt install subversion
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo svnadmin create ~/svn/project
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/svn/project
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="配置">配置</h2>
 <p>svn 的配置在仓库根目录下的 <code>conf</code> 文件夹中</p>
@@ -221,11 +221,11 @@ sudo apt install subversion
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">shtotal 12K
--rw-rw-r--. <span class="m">1</span> cent cent 1.1K Oct <span class="m">30</span> 07:55 authz
--rw-rw-r--. <span class="m">1</span> cent cent  <span class="m">309</span> Oct <span class="m">30</span> 07:55 passwd
--rw-rw-r--. <span class="m">1</span> cent cent 3.1K Oct <span class="m">30</span> 07:55 svnserve.conf
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shtotal 12K
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent 1.1K Oct <span class="m">30</span> 07:55 authz
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent  <span class="m">309</span> Oct <span class="m">30</span> 07:55 passwd
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent 3.1K Oct <span class="m">30</span> 07:55 svnserve.conf
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="passwd">passwd</h3>
 <p><code>passwd</code> 是配置用户名和密码的文件</p>
@@ -239,12 +239,12 @@ sudo apt install subversion
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>users<span class="o">]</span>
-<span class="c1"># harry = harryssecret</span>
-<span class="c1"># sally = sallyssecret</span>
-<span class="nv">test1</span> <span class="o">=</span> test1 <span class="c1">#增加一个账号为 test1 密码为 test1 的用户</span>
-<span class="nv">test2</span> <span class="o">=</span> test2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>users<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry = harryssecret</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># sally = sallyssecret</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test1</span> <span class="o">=</span> test1 <span class="c1">#增加一个账号为 test1 密码为 test1 的用户</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test2</span> <span class="o">=</span> test2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="authz">authz</h3>
 <p><code>authz</code> 是配置用户组及对应版本库的权限</p>
@@ -275,33 +275,31 @@ sudo apt install subversion
 </span><span class="lnt">20
 </span><span class="lnt">21
 </span><span class="lnt">22
-</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>groups<span class="o">]</span>
-<span class="c1"># harry_and_sally = harry,sally</span>
-<span class="c1"># harry_sally_and_joe = harry,sally,&amp;joe</span>
-<span class="nv">dev</span> <span class="o">=</span> test1,test2 <span class="c1"># 增加一个 dev 的用户组，组员有 test1 和 test2</span>
-
-<span class="c1"># [/foo/bar]</span>
-<span class="c1"># harry = rw</span>
-<span class="c1"># &amp;joe = r</span>
-<span class="c1"># * =</span>
-
-<span class="c1"># [repository:/baz/fuz]</span>
-<span class="c1"># @harry_and_sally = rw</span>
-<span class="c1"># * = r</span>
-
-<span class="o">[</span>/<span class="o">]</span> <span class="c1"># 版本库的根目录</span>
-@dev <span class="o">=</span> rw <span class="c1"># 用户组的权限</span>
-
-<span class="o">[</span>test:/<span class="o">]</span> <span class="c1"># 名为 test 的版本库</span>
-<span class="nv">test1</span> <span class="o">=</span> rw  <span class="c1"># 账号为 test1 对 test 版本库的权限</span>
-
-<span class="o">[</span>test:/public<span class="o">]</span> <span class="c1"># 名为 test 版本库下 public 目录的权限</span>
-<span class="nv">test2</span> <span class="o">=</span> r <span class="c1"># test2 对 版本库 test 下 public 目录的权限</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>groups<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry_and_sally = harry,sally</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry_sally_and_joe = harry,sally,&amp;joe</span>
+</span></span><span class="line"><span class="cl"><span class="nv">dev</span> <span class="o">=</span> test1,test2 <span class="c1"># 增加一个 dev 的用户组，组员有 test1 和 test2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># [/foo/bar]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry = rw</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &amp;joe = r</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># * =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># [repository:/baz/fuz]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># @harry_and_sally = rw</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># * = r</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>/<span class="o">]</span> <span class="c1"># 版本库的根目录</span>
+</span></span><span class="line"><span class="cl">@dev <span class="o">=</span> rw <span class="c1"># 用户组的权限</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>test:/<span class="o">]</span> <span class="c1"># 名为 test 的版本库</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test1</span> <span class="o">=</span> rw  <span class="c1"># 账号为 test1 对 test 版本库的权限</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>test:/public<span class="o">]</span> <span class="c1"># 名为 test 版本库下 public 目录的权限</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test2</span> <span class="o">=</span> r <span class="c1"># test2 对 版本库 test 下 public 目录的权限</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="svnserve-dot-conf">svnserve.conf</h3>
 <p><code>svnserve.conf</code> 是用来设置用户密码配置文件所在的路径，和用户权限配置文件所在的路径，主要有以下 4 个配置</p>
@@ -320,11 +318,11 @@ sudo apt install subversion
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">anon-access <span class="o">=</span> none
-auth-access <span class="o">=</span> write
-password-db <span class="o">=</span> passwd
-authz-db <span class="o">=</span> authz
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">anon-access <span class="o">=</span> none
+</span></span><span class="line"><span class="cl">auth-access <span class="o">=</span> write
+</span></span><span class="line"><span class="cl">password-db <span class="o">=</span> passwd
+</span></span><span class="line"><span class="cl">authz-db <span class="o">=</span> authz
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="删除仓库">删除仓库</h2>
 <div class="highlight"><div class="chroma">
@@ -332,8 +330,8 @@ authz-db <span class="o">=</span> authz
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rm -rf ~/svn/project
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rm -rf ~/svn/project
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="启动服务">启动服务</h2>
 <div class="highlight"><div class="chroma">
@@ -341,8 +339,8 @@ authz-db <span class="o">=</span> authz
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">svnserve -d -r ~/svn/project
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnserve -d -r ~/svn/project
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>svn 默认端口号是 3690，可以通过 <code>--listen-port xxx</code> 来指定特定的端口</p>
 <p>-d 表示后台运行</p>
@@ -358,11 +356,11 @@ authz-db <span class="o">=</span> authz
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo svnadmin create ~/project1
-sudo svnadmin create ~/project2
-svnserve -d -r ~/project1
-svnserve -d -r ~/project2 --listen-port <span class="m">3691</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/project1
+</span></span><span class="line"><span class="cl">sudo svnadmin create ~/project2
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/project1
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/project2 --listen-port <span class="m">3691</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>除了上面的做法，还有一种做法是把所有的仓库存放在同一个目录下，统一管理。这样就可以通过一个端口来管理所有的版本库了，不过需要注意的是这些仓库需要放在同一个目录下。</p>
 <div class="highlight"><div class="chroma">
@@ -372,10 +370,10 @@ svnserve -d -r ~/project2 --listen-port <span class="m">3691</span>
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo svnadmin create ~/svn/project1
-sudo svnadmin create ~/svn/project2
-svnserve -d -r ~/svn/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/svn/project1
+</span></span><span class="line"><span class="cl">sudo svnadmin create ~/svn/project2
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/svn/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="版本库的备份">版本库的备份</h2>
 <p>随着开发不断进行，版本库的版本号一直在增加，内容也在不断增多，占用的空间也越来越大，这时候我们可以通过备份来丢弃掉前面的一些版本，以此达到精简版本的目的。</p>
@@ -386,8 +384,8 @@ svnserve -d -r ~/svn/
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">svnadmin dump ~/svn/project -r 3:10 &gt; ~/dump
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnadmin dump ~/svn/project -r 3:10 &gt; ~/dump
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="版本库的导入">版本库的导入</h2>
 <p>版本库备份之后，我们还要把它导入到一个新的仓库中使用。</p>
@@ -398,8 +396,8 @@ svnserve -d -r ~/svn/
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">svnadmin load ~/svn/project &lt; ~/dump
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnadmin load ~/svn/project &lt; ~/dump
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -505,7 +503,7 @@ svnserve -d -r ~/svn/
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

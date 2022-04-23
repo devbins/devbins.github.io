@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/cronet/" />
@@ -195,9 +195,9 @@ Cronet 是 Chromium 浏览器中用于网络请求的库，支持 HTTP1/2 、 SP
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/depot_tools&#34;</span> <span class="c1"># 设置环境变量，可以写到 .bashrc 中，这样就不用每次都执行一遍</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/depot_tools&#34;</span> <span class="c1"># 设置环境变量，可以写到 .bashrc 中，这样就不用每次都执行一遍</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果到了这一步没有出现问题，就可以进行下一步，如果下载不下来，需要配置 <code>git</code> 代理</p>
 <p><code>depot_tools</code> 下载好了，就可以下载 <code>Chromium</code> 的源码了，这就要用到 <code>depot_tools</code> 中的 <code>fetch</code> 工具了</p>
@@ -207,9 +207,9 @@ Cronet 是 Chromium 浏览器中用于网络请求的库，支持 HTTP1/2 、 SP
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir ~/chromium <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ~/chromium
-fetch --nohooks --no-history android
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ~/chromium <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ~/chromium
+</span></span><span class="line"><span class="cl">fetch --nohooks --no-history android
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>--no-history</code> 可以忽略历史，加快下载</p>
 <p><code>--nohooks</code> 会在 <code>fetch</code> 结束后帮你执行下载一些依赖的二进制。</p>
@@ -222,9 +222,9 @@ fetch --nohooks --no-history android
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-./build/install-build-deps-android.sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">./build/install-build-deps-android.sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="编译">编译</h2>
 <h3 id="debug-版本">Debug 版本</h3>
@@ -235,10 +235,10 @@ fetch --nohooks --no-history android
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-./components/cronet/tools/cr_cronet.py gn --out_dir<span class="o">=</span>out/Cronet
-ninja -C out/Cronet cronet_package
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">./components/cronet/tools/cr_cronet.py gn --out_dir<span class="o">=</span>out/Cronet
+</span></span><span class="line"><span class="cl">ninja -C out/Cronet cronet_package
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译一遍大概在30分钟的样子，还不算很久</p>
 <h3 id="release-版本">Release 版本</h3>
@@ -249,10 +249,10 @@ ninja -C out/Cronet cronet_package
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-./components/cronet/tools/cr_cronet.py gn --release
-ninja -C out/Release cronet_package
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">./components/cronet/tools/cr_cronet.py gn --release
+</span></span><span class="line"><span class="cl">ninja -C out/Release cronet_package
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="指定编译的cpu架构">指定编译的CPU架构</h3>
 <p>在进行编译的时候默认是 <code>ARMv7</code> 32位，如果你需要指定编译的CPU架构，需要在 <code>chromium/src/out/Cronet/args.gn</code> 中设置CPU的架构</p>
@@ -261,8 +261,8 @@ ninja -C out/Release cronet_package
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">target_cpu</span><span class="o">=</span><span class="s2">&#34;arm64&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">target_cpu</span><span class="o">=</span><span class="s2">&#34;arm64&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通常有以下几个值</p>
 <ul>
@@ -338,65 +338,65 @@ ninja -C out/Release cronet_package
 </span><span class="lnt">58
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="n">ByteArrayOutputStream</span> <span class="n">mBytesReceived</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ByteArrayOutputStream</span><span class="o">();</span>
-<span class="kd">private</span> <span class="n">WritableByteChannel</span> <span class="n">mReceiveChannel</span> <span class="o">=</span> <span class="n">Channels</span><span class="o">.</span><span class="na">newChannel</span><span class="o">(</span><span class="n">mBytesReceived</span><span class="o">);</span>
-
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cronetRequest</span><span class="o">()</span> <span class="o">{</span>
-    <span class="n">ExecutorService</span> <span class="n">executorService</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="n">4</span><span class="o">);</span>
-    <span class="n">CronetEngine</span> <span class="n">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CronetEngine</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">setStoragePath</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getFilesDir</span><span class="o">().</span><span class="na">getAbsolutePath</span><span class="o">())</span>
-        <span class="o">.</span><span class="na">enableHttpCache</span><span class="o">(</span><span class="n">CronetEngine</span><span class="o">.</span><span class="na">Builder</span><span class="o">.</span><span class="na">HTTP_CACHE_DISK_NO_HTTP</span><span class="o">,</span> <span class="n">100</span> <span class="o">*</span> <span class="n">1024</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">enableHttp2</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">enableQuic</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">enableBrotli</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-    <span class="n">engine</span><span class="o">.</span><span class="na">newUrlRequestBuilder</span><span class="o">(</span><span class="s">&#34;https://httpbin.org/get&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">UrlRequest</span><span class="o">.</span><span class="na">Callback</span><span class="o">()</span> <span class="o">{</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRedirectReceived</span><span class="o">(</span>
-                <span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">String</span> <span class="n">newLocationUrl</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;onRedirectReceived&#34;</span><span class="o">);</span>
-            <span class="n">request</span><span class="o">.</span><span class="na">followRedirect</span><span class="o">();</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onResponseStarted</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Response Started&#34;</span><span class="o">);</span>
-            <span class="n">request</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">ByteBuffer</span><span class="o">.</span><span class="na">allocateDirect</span><span class="o">(</span><span class="n">64</span> <span class="o">*</span> <span class="n">1024</span><span class="o">));</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReadCompleted</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">ByteBuffer</span> <span class="n">byteBuffer</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">byteBuffer</span><span class="o">.</span><span class="na">flip</span><span class="o">();</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;onReadCompleted&#34;</span><span class="o">);</span>
-
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">mReceiveChannel</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">byteBuffer</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;IOException during ByteBuffer read. Details: &#34;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-            <span class="o">}</span>
-            <span class="n">byteBuffer</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
-            <span class="n">request</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">byteBuffer</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSucceeded</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Request Completed, status code is &#34;</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="na">getHttpStatusCode</span><span class="o">()</span>
-                    <span class="o">+</span> <span class="s">&#34;, total received bytes is &#34;</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="na">getReceivedByteCount</span><span class="o">());</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">mBytesReceived</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailed</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">CronetException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;****** onFailed, error is: &#34;</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-
-            <span class="k">if</span> <span class="o">(</span><span class="n">mHttpCallback</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-                <span class="n">mHttpCallback</span><span class="o">.</span><span class="na">onResponse</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpRequestAdapter</span><span class="o">(</span><span class="n">request</span><span class="o">),</span>
-                        <span class="n">info</span><span class="o">.</span><span class="na">getHttpStatusCode</span><span class="o">(),</span> <span class="k">new</span> <span class="n">HttpResponseAdaptor</span><span class="o">(</span><span class="n">info</span><span class="o">,</span> <span class="kc">null</span><span class="o">));</span>
-        <span class="o">}</span>
-    <span class="o">},</span> <span class="n">executorService</span><span class="o">).</span><span class="na">build</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span> <span class="n">ByteArrayOutputStream</span> <span class="n">mBytesReceived</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ByteArrayOutputStream</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="n">WritableByteChannel</span> <span class="n">mReceiveChannel</span> <span class="o">=</span> <span class="n">Channels</span><span class="o">.</span><span class="na">newChannel</span><span class="o">(</span><span class="n">mBytesReceived</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">cronetRequest</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ExecutorService</span> <span class="n">executorService</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="n">4</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CronetEngine</span> <span class="n">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CronetEngine</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">setStoragePath</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getFilesDir</span><span class="o">().</span><span class="na">getAbsolutePath</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">enableHttpCache</span><span class="o">(</span><span class="n">CronetEngine</span><span class="o">.</span><span class="na">Builder</span><span class="o">.</span><span class="na">HTTP_CACHE_DISK_NO_HTTP</span><span class="o">,</span> <span class="n">100</span> <span class="o">*</span> <span class="n">1024</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">enableHttp2</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">enableQuic</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">enableBrotli</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">engine</span><span class="o">.</span><span class="na">newUrlRequestBuilder</span><span class="o">(</span><span class="s">&#34;https://httpbin.org/get&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">UrlRequest</span><span class="o">.</span><span class="na">Callback</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRedirectReceived</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">String</span> <span class="n">newLocationUrl</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;onRedirectReceived&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">request</span><span class="o">.</span><span class="na">followRedirect</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onResponseStarted</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Response Started&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">request</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">ByteBuffer</span><span class="o">.</span><span class="na">allocateDirect</span><span class="o">(</span><span class="n">64</span> <span class="o">*</span> <span class="n">1024</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onReadCompleted</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">ByteBuffer</span> <span class="n">byteBuffer</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">byteBuffer</span><span class="o">.</span><span class="na">flip</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;onReadCompleted&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mReceiveChannel</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">byteBuffer</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;IOException during ByteBuffer read. Details: &#34;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">byteBuffer</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">request</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">byteBuffer</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSucceeded</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Request Completed, status code is &#34;</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="na">getHttpStatusCode</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">+</span> <span class="s">&#34;, total received bytes is &#34;</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="na">getReceivedByteCount</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">mBytesReceived</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailed</span><span class="o">(</span><span class="n">UrlRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">UrlResponseInfo</span> <span class="n">info</span><span class="o">,</span> <span class="n">CronetException</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;****** onFailed, error is: &#34;</span> <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">mHttpCallback</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mHttpCallback</span><span class="o">.</span><span class="na">onResponse</span><span class="o">(</span><span class="k">new</span> <span class="n">HttpRequestAdapter</span><span class="o">(</span><span class="n">request</span><span class="o">),</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">info</span><span class="o">.</span><span class="na">getHttpStatusCode</span><span class="o">(),</span> <span class="k">new</span> <span class="n">HttpResponseAdaptor</span><span class="o">(</span><span class="n">info</span><span class="o">,</span> <span class="kc">null</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">},</span> <span class="n">executorService</span><span class="o">).</span><span class="na">build</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>运行之后就可以在控制台看到输出结果了</p>
 <p>如果你碰到 <code>java.lang.UnstatisfiedLinkError: dlopen failed: library &quot;libcronet.95.0.4638.50.so&quot; not found</code> 需要在 <code>app/build.gradle</code> 中加入如下配置</p>
@@ -411,14 +411,14 @@ ninja -C out/Release cronet_package
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">android</span> <span class="p">{</span>
-    <span class="n">defaultConfig</span> <span class="p">{</span>
-        <span class="n">ndk</span> <span class="p">{</span>
-            <span class="n">abiFilters</span> <span class="err">&#39;</span><span class="n">armeabi</span><span class="p">-</span><span class="n">v7a</span><span class="err">&#39;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="n">android</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">defaultConfig</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ndk</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">abiFilters</span> <span class="err">&#39;</span><span class="n">armeabi</span><span class="p">-</span><span class="n">v7a</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="切换到指定的tag">切换到指定的tag</h2>
 <p>由于 <code>chromium</code> 的代码随时都可能更新，所以我们希望可以在一个稳定的tag上进行开发，这就需要把源码切换到指定的tag上，并且需要把 <code>depot_tools</code> 也切换到匹配的版本上。</p>
@@ -431,10 +431,10 @@ ninja -C out/Release cronet_package
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-git fetch origin 95.0.4638.50
-git checkout 95.0.4638.50
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">git fetch origin 95.0.4638.50
+</span></span><span class="line"><span class="cl">git checkout 95.0.4638.50
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="获取匹配的-depot-tools">获取匹配的 depot_tools</h3>
 <p><code>chromium</code> 切换之后，我们需要把 <code>depot_tools</code> 也切换到对应的版本上，可以通过如下命令</p>
@@ -446,11 +446,11 @@ git checkout 95.0.4638.50
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/chromium/src
-<span class="nv">COMMIT_DATE</span><span class="o">=</span><span class="k">$(</span>git log -n <span class="m">1</span> --pretty<span class="o">=</span>format:%ci<span class="k">)</span>
-<span class="nb">cd</span> ~/depot_tools
-git checkout <span class="k">$(</span>git rev-list -n <span class="m">1</span> --before<span class="o">=</span><span class="s2">&#34;</span><span class="nv">$COMMIT_DATE</span><span class="s2">&#34;</span> main<span class="k">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl"><span class="nv">COMMIT_DATE</span><span class="o">=</span><span class="k">$(</span>git log -n <span class="m">1</span> --pretty<span class="o">=</span>format:%ci<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/depot_tools
+</span></span><span class="line"><span class="cl">git checkout <span class="k">$(</span>git rev-list -n <span class="m">1</span> --before<span class="o">=</span><span class="s2">&#34;</span><span class="nv">$COMMIT_DATE</span><span class="s2">&#34;</span> main<span class="k">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="同步依赖">同步依赖</h3>
 <p><code>depot_tools</code> 切换好之后，需要把依赖也同步到对应的版本。</p>
@@ -463,11 +463,11 @@ git checkout <span class="k">$(</span>git rev-list -n <span class="m">1</span> -
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">DEPOT_TOOLS_UPDATE</span><span class="o">=</span><span class="m">0</span>     <span class="c1"># 禁用 depot_tools 自动更新</span>
-<span class="nb">cd</span> ~/chromium/src
-git clean -ffd                  <span class="c1"># 清空git工作目录，以免发生冲突</span>
-gclient sync -D --force --reset --with_branch_heads
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">DEPOT_TOOLS_UPDATE</span><span class="o">=</span><span class="m">0</span>     <span class="c1"># 禁用 depot_tools 自动更新</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/chromium/src
+</span></span><span class="line"><span class="cl">git clean -ffd                  <span class="c1"># 清空git工作目录，以免发生冲突</span>
+</span></span><span class="line"><span class="cl">gclient sync -D --force --reset --with_branch_heads
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="碰到的错误">碰到的错误</h2>
 <h3 id="failed-gen-components-cronet-android-generate-javadoc-dot-zip">FAILED: gen/components/cronet/android/generate_javadoc.zip</h3>
@@ -484,16 +484,16 @@ gclient sync -D --force --reset --with_branch_heads
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">FAILED: gen/components/cronet/android/generate_javadoc.zip
-python3 ../../components/cronet/tools/generate_javadoc.py --output-dir cronet
---input-dir ../../components/cronet --overview-file cronet/README.html
---readme-file ../../components/cronet/README.md
---depfile gen/components/cronet/android/generate_javadoc.d
---zip-file gen/components/cronet/android/generate_javadoc.zip
---android-sdk-jar ../../third_party/android_sdk/public/platforms/android-31/android.jar
---support-annotations-jar lib.java/third_party/androidx/androidx_annotation_annotation.jar
---input-src-jar cronet/cronet_api-src.jar
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">FAILED: gen/components/cronet/android/generate_javadoc.zip
+</span></span><span class="line"><span class="cl">python3 ../../components/cronet/tools/generate_javadoc.py --output-dir cronet
+</span></span><span class="line"><span class="cl">--input-dir ../../components/cronet --overview-file cronet/README.html
+</span></span><span class="line"><span class="cl">--readme-file ../../components/cronet/README.md
+</span></span><span class="line"><span class="cl">--depfile gen/components/cronet/android/generate_javadoc.d
+</span></span><span class="line"><span class="cl">--zip-file gen/components/cronet/android/generate_javadoc.zip
+</span></span><span class="line"><span class="cl">--android-sdk-jar ../../third_party/android_sdk/public/platforms/android-31/android.jar
+</span></span><span class="line"><span class="cl">--support-annotations-jar lib.java/third_party/androidx/androidx_annotation_annotation.jar
+</span></span><span class="line"><span class="cl">--input-src-jar cronet/cronet_api-src.jar
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该问题是没有安装 <code>JDK</code> 导致的，所以只需要安装一下 <code>JDK</code> 就可以解决了</p>
 <div class="highlight"><div class="chroma">
@@ -501,8 +501,8 @@ python3 ../../components/cronet/tools/generate_javadoc.py --output-dir cronet
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo apt install openjdk-8-jdk
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install openjdk-8-jdk
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -612,7 +612,7 @@ python3 ../../components/cronet/tools/generate_javadoc.py --output-dir cronet
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

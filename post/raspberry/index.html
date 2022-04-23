@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/raspberry/" />
@@ -202,8 +202,8 @@ Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh pi@ip <span class="c1"># ip 就是上一步获取到的</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh pi@ip <span class="c1"># ip 就是上一步获取到的</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果你直接这样连接恐怕是连不上的。最新的 Raspbian 镜像默认禁用了 SSH 服务。开启 SSH 很简单只要在 SD 卡的根目录建立一个 <code>ssh</code> 的文件夹就行了。
 <img src="../../images/pi/raspssh.png" alt="">
@@ -213,8 +213,8 @@ Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh pi@raspberrypi.local
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh pi@raspberrypi.local
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在实际使用过程中， <code>arp -a</code> 和 <code>ssh pi@raspberrypi.local</code> 都不是很好用，最方便的还是在路由器下查看 IP</p>
 <h2 id="配置-wifi">配置 WIFI</h2>
@@ -229,13 +229,13 @@ Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">network</span><span class="o">={</span>
-<span class="nv">ssid</span><span class="o">=</span><span class="s2">&#34;WIFINAME&#34;</span> <span class="c1"># WIFI 的名字</span>
-<span class="nv">psk</span><span class="o">=</span><span class="s2">&#34;password&#34;</span> <span class="c1"># WIFI 的密码</span>
-<span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK <span class="c1"># 加密类型，照着写好了，一般不用改。如果想看的话，用手机连上该 WIFI 详细里面的安全性就指的是这个。</span>
-<span class="nv">priority</span><span class="o">=</span><span class="m">1</span> <span class="c1"># 连接的优先级，数值越大，优先级越高。</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">network</span><span class="o">={</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ssid</span><span class="o">=</span><span class="s2">&#34;WIFINAME&#34;</span> <span class="c1"># WIFI 的名字</span>
+</span></span><span class="line"><span class="cl"><span class="nv">psk</span><span class="o">=</span><span class="s2">&#34;password&#34;</span> <span class="c1"># WIFI 的密码</span>
+</span></span><span class="line"><span class="cl"><span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK <span class="c1"># 加密类型，照着写好了，一般不用改。如果想看的话，用手机连上该 WIFI 详细里面的安全性就指的是这个。</span>
+</span></span><span class="line"><span class="cl"><span class="nv">priority</span><span class="o">=</span><span class="m">1</span> <span class="c1"># 连接的优先级，数值越大，优先级越高。</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>写好保存，重启生效</p>
 <h2 id="配置国内镜像">配置国内镜像</h2>
@@ -247,10 +247,10 @@ Raspberry Pi(中文名为“树莓派”,简写为 RPi，(或者 RasPi / RPI)是
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo sed -i <span class="s1">&#39;s|//archive.raspberrypi.org|//mirrors.ustc.edu.cn/archive.raspberrypi.org|g&#39;</span> /etc/apt/sources.list.d/raspi.list
-sudo sed -i <span class="s1">&#39;s|mirrordirector.raspbian.org|mirrors.ustc.edu.cn/raspbian|g&#39;</span> /etc/apt/sources.list
-sudo sed -i <span class="s1">&#39;s|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g&#39;</span> /etc/apt/sources.list
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo sed -i <span class="s1">&#39;s|//archive.raspberrypi.org|//mirrors.ustc.edu.cn/archive.raspberrypi.org|g&#39;</span> /etc/apt/sources.list.d/raspi.list
+</span></span><span class="line"><span class="cl">sudo sed -i <span class="s1">&#39;s|mirrordirector.raspbian.org|mirrors.ustc.edu.cn/raspbian|g&#39;</span> /etc/apt/sources.list
+</span></span><span class="line"><span class="cl">sudo sed -i <span class="s1">&#39;s|archive.raspbian.org|mirrors.ustc.edu.cn/raspbian|g&#39;</span> /etc/apt/sources.list
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -361,7 +361,7 @@ sudo sed -i <span class="s1">&#39;s|archive.raspbian.org|mirrors.ustc.edu.cn/ras
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

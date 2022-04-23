@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gtest/" />
@@ -55,7 +55,7 @@
 使用 C/C&#43;&#43; 开发的项目，在进行测试的时候，要么自己写一些简单的例子进行测试，要么使用第三方框架。自己写简单的例子对于大项目来说效率就不高，而且输出的结果就不是很专业，不能得到一个测试报告。
 所以我们有必要选择一个比较好的测试框架来对代码进行测试，今天要介绍的就是谷歌的测试框架 google/googletest: GoogleTest - Google Testing and Mocking Framework"><meta itemprop="datePublished" content="2021-08-15T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-08-15T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1126">
+<meta itemprop="wordCount" content="1125">
 <meta itemprop="keywords" content="Test," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Google Test 框架"/>
 <meta name="twitter:description" content="前言
@@ -144,7 +144,7 @@
         <div class="post-category">
             <a href="../../categories/c/c&#43;&#43;/"> c/c&#43;&#43; </a>
             </div>
-          <span class="more-meta"> 约 1126 字 </span>
+          <span class="more-meta"> 约 1125 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -193,12 +193,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone https://github.com/google/googletest.git
-<span class="nb">cd</span> googletest
-mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake ..
-make
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/google/googletest.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> googletest
+</span></span><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">make
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译生成的库文件在 <code>lib</code> 目录下，有了它和头文件就可以集成到项目中使用了。</p>
 <h3 id="编译samples">编译samples</h3>
@@ -208,8 +208,8 @@ make
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cmake .. -Dgtest_build_samples<span class="o">=</span>ON
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmake .. -Dgtest_build_samples<span class="o">=</span>ON
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译好的二进制文件在 <code>googletest</code> 文件夹下，我们执行一个 <code>sample1_unittest</code> 看看效果</p>
 <div class="highlight"><div class="chroma">
@@ -217,8 +217,8 @@ make
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">./googletest/sample1_unittest
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./googletest/sample1_unittest
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -247,35 +247,33 @@ make
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
-</span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">Running main() from ~/git/googletest/googletest/src/gtest_main.cc
-[==========] Running 6 tests from 2 test suites.
-[----------] Global test environment set-up.
-[----------] 3 tests from FactorialTest
-[ RUN      ] FactorialTest.Negative
-[       OK ] FactorialTest.Negative (0 ms)
-[ RUN      ] FactorialTest.Zero
-[       OK ] FactorialTest.Zero (0 ms)
-[ RUN      ] FactorialTest.Positive
-[       OK ] FactorialTest.Positive (0 ms)
-[----------] 3 tests from FactorialTest (0 ms total)
-
-[----------] 3 tests from IsPrimeTest
-[ RUN      ] IsPrimeTest.Negative
-[       OK ] IsPrimeTest.Negative (0 ms)
-[ RUN      ] IsPrimeTest.Trivial
-[       OK ] IsPrimeTest.Trivial (0 ms)
-[ RUN      ] IsPrimeTest.Positive
-[       OK ] IsPrimeTest.Positive (0 ms)
-[----------] 3 tests from IsPrimeTest (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 6 tests from 2 test suites ran. (0 ms total)
-[  PASSED  ] 6 tests.
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Running main() from ~/git/googletest/googletest/src/gtest_main.cc
+</span></span><span class="line"><span class="cl">[==========] Running 6 tests from 2 test suites.
+</span></span><span class="line"><span class="cl">[----------] Global test environment set-up.
+</span></span><span class="line"><span class="cl">[----------] 3 tests from FactorialTest
+</span></span><span class="line"><span class="cl">[ RUN      ] FactorialTest.Negative
+</span></span><span class="line"><span class="cl">[       OK ] FactorialTest.Negative (0 ms)
+</span></span><span class="line"><span class="cl">[ RUN      ] FactorialTest.Zero
+</span></span><span class="line"><span class="cl">[       OK ] FactorialTest.Zero (0 ms)
+</span></span><span class="line"><span class="cl">[ RUN      ] FactorialTest.Positive
+</span></span><span class="line"><span class="cl">[       OK ] FactorialTest.Positive (0 ms)
+</span></span><span class="line"><span class="cl">[----------] 3 tests from FactorialTest (0 ms total)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[----------] 3 tests from IsPrimeTest
+</span></span><span class="line"><span class="cl">[ RUN      ] IsPrimeTest.Negative
+</span></span><span class="line"><span class="cl">[       OK ] IsPrimeTest.Negative (0 ms)
+</span></span><span class="line"><span class="cl">[ RUN      ] IsPrimeTest.Trivial
+</span></span><span class="line"><span class="cl">[       OK ] IsPrimeTest.Trivial (0 ms)
+</span></span><span class="line"><span class="cl">[ RUN      ] IsPrimeTest.Positive
+</span></span><span class="line"><span class="cl">[       OK ] IsPrimeTest.Positive (0 ms)
+</span></span><span class="line"><span class="cl">[----------] 3 tests from IsPrimeTest (0 ms total)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[----------] Global test environment tear-down
+</span></span><span class="line"><span class="cl">[==========] 6 tests from 2 test suites ran. (0 ms total)
+</span></span><span class="line"><span class="cl">[  PASSED  ] 6 tests.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出的结果很专业，并且对于通过和不通过是有颜色区分的，这里使用文本就看不出来了，大家可以自己尝试一下。</p>
 <h2 id="集成到自己的项目中使用">集成到自己的项目中使用</h2>
@@ -291,13 +289,13 @@ make
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir <span class="nb">test</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="nb">test</span>
-mkdir src include libs
-touch CMakeLists.txt
-cp -r googletest/googletest/include/* include
-cp -r build/lib/* libs
-<span class="nb">cd</span> src <span class="o">&amp;&amp;</span> touch main.cpp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir <span class="nb">test</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">mkdir src include libs
+</span></span><span class="line"><span class="cl">touch CMakeLists.txt
+</span></span><span class="line"><span class="cl">cp -r googletest/googletest/include/* include
+</span></span><span class="line"><span class="cl">cp -r build/lib/* libs
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> src <span class="o">&amp;&amp;</span> touch main.cpp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="结构">结构</h3>
 <p>创建好后，我们来看一下结构</p>
@@ -341,43 +339,43 @@ cp -r build/lib/* libs
 </span><span class="lnt">36
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">.
-├── CMakeLists.txt
-├── include
-│   └── gtest
-│       ├── gtest-death-test.h
-│       ├── gtest-matchers.h
-│       ├── gtest-message.h
-│       ├── gtest-param-test.h
-│       ├── gtest-printers.h
-│       ├── gtest-spi.h
-│       ├── gtest-test-part.h
-│       ├── gtest-typed-test.h
-│       ├── gtest.h
-│       ├── gtest_pred_impl.h
-│       ├── gtest_prod.h
-│       └── internal
-│           ├── custom
-│           │   ├── README.md
-│           │   ├── gtest-port.h
-│           │   ├── gtest-printers.h
-│           │   └── gtest.h
-│           ├── gtest-death-test-internal.h
-│           ├── gtest-filepath.h
-│           ├── gtest-internal.h
-│           ├── gtest-param-util.h
-│           ├── gtest-port-arch.h
-│           ├── gtest-port.h
-│           ├── gtest-string.h
-│           └── gtest-type-util.h
-├── libs
-│   ├── libgmock.a
-│   ├── libgmock_main.a
-│   ├── libgtest.a
-│   └── libgtest_main.a
-└── src
-    └── main.cpp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt
+</span></span><span class="line"><span class="cl">├── include
+</span></span><span class="line"><span class="cl">│   └── gtest
+</span></span><span class="line"><span class="cl">│       ├── gtest-death-test.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-matchers.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-message.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-param-test.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-printers.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-spi.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-test-part.h
+</span></span><span class="line"><span class="cl">│       ├── gtest-typed-test.h
+</span></span><span class="line"><span class="cl">│       ├── gtest.h
+</span></span><span class="line"><span class="cl">│       ├── gtest_pred_impl.h
+</span></span><span class="line"><span class="cl">│       ├── gtest_prod.h
+</span></span><span class="line"><span class="cl">│       └── internal
+</span></span><span class="line"><span class="cl">│           ├── custom
+</span></span><span class="line"><span class="cl">│           │   ├── README.md
+</span></span><span class="line"><span class="cl">│           │   ├── gtest-port.h
+</span></span><span class="line"><span class="cl">│           │   ├── gtest-printers.h
+</span></span><span class="line"><span class="cl">│           │   └── gtest.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-death-test-internal.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-filepath.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-internal.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-param-util.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-port-arch.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-port.h
+</span></span><span class="line"><span class="cl">│           ├── gtest-string.h
+</span></span><span class="line"><span class="cl">│           └── gtest-type-util.h
+</span></span><span class="line"><span class="cl">├── libs
+</span></span><span class="line"><span class="cl">│   ├── libgmock.a
+</span></span><span class="line"><span class="cl">│   ├── libgmock_main.a
+</span></span><span class="line"><span class="cl">│   ├── libgtest.a
+</span></span><span class="line"><span class="cl">│   └── libgtest_main.a
+</span></span><span class="line"><span class="cl">└── src
+</span></span><span class="line"><span class="cl">    └── main.cpp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="编写cmakelists-dot-txt">编写CMakeLists.txt</h3>
 <div class="highlight"><div class="chroma">
@@ -399,22 +397,22 @@ cp -r build/lib/* libs
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_require</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8.12</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/main.cpp</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="s">googletest</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">googletest</span> <span class="s">PROPERTIES</span> <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/libs/libgtest.a</span><span class="p">)</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test</span> <span class="s">googletest</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_require</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8.12</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">test</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">test</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_library</span><span class="p">(</span><span class="s">googletest</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">googletest</span> <span class="s">PROPERTIES</span> <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/libs/libgtest.a</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test</span> <span class="s">googletest</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="编写测试文件">编写测试文件</h3>
 <div class="highlight"><div class="chroma">
@@ -438,24 +436,24 @@ cp -r build/lib/* libs
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="cp">#include</span> <span class="cpf">&lt;gtest/gtest.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="n">TEST</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">add</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;start test&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleTest</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">RUN_ALL_TESTS</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gtest/gtest.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">add</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;start test&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleTest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">RUN_ALL_TESTS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="执行">执行</h3>
 <div class="highlight"><div class="chroma">
@@ -465,10 +463,10 @@ cp -r build/lib/* libs
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake ..
-./test
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">./test
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行的结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -486,18 +484,18 @@ cmake ..
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">start test
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from test
-[ RUN      ] test.add
-[       OK ] test.add (0 ms)
-[----------] 1 test from test (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">start test
+</span></span><span class="line"><span class="cl">[==========] Running 1 test from 1 test suite.
+</span></span><span class="line"><span class="cl">[----------] Global test environment set-up.
+</span></span><span class="line"><span class="cl">[----------] 1 test from test
+</span></span><span class="line"><span class="cl">[ RUN      ] test.add
+</span></span><span class="line"><span class="cl">[       OK ] test.add (0 ms)
+</span></span><span class="line"><span class="cl">[----------] 1 test from test (0 ms total)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[----------] Global test environment tear-down
+</span></span><span class="line"><span class="cl">[==========] 1 test from 1 test suite ran. (0 ms total)
+</span></span><span class="line"><span class="cl">[  PASSED  ] 1 test.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="总结">总结</h2>
 <p>使用谷歌测试框架进行测试还是非常方便的。</p>
@@ -609,7 +607,7 @@ cmake ..
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

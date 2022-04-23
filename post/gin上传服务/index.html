@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gin%E4%B8%8A%E4%BC%A0%E6%9C%8D%E5%8A%A1/" />
@@ -172,11 +172,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir ginupload <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ginupload
-go mod init ginupload
-go get -u github.com/gin-gonic/gin
-touch main.go
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ginupload <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ginupload
+</span></span><span class="line"><span class="cl">go mod init ginupload
+</span></span><span class="line"><span class="cl">go get -u github.com/gin-gonic/gin
+</span></span><span class="line"><span class="cl">touch main.go
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们创建一个 <code>ginupload</code> 的目录用来存放代码，并且使用 <code>go mod</code> 来管理依赖。</p>
 <p>接着通过 <code>go get</code> 把 <code>gin</code> 作为第三方依赖加入到项目中，然后创建了 <code>main.go</code> 用于写代码。</p>
@@ -197,19 +197,19 @@ touch main.go
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-    <span class="nx">router</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">FormFile</span><span class="p">(</span><span class="s">&#34;file&#34;</span><span class="p">)</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
-
-        <span class="nx">c</span><span class="p">.</span><span class="nf">SaveUploadedFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;./&#34;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
-
-        <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;&#39;%s&#39; uploaded!&#34;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">))</span>
-    <span class="p">})</span>
-    <span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">FormFile</span><span class="p">(</span><span class="s">&#34;file&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">c</span><span class="p">.</span><span class="nf">SaveUploadedFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;./&#34;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;&#39;%s&#39; uploaded!&#34;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到用 <code>Gin</code> 来实现文件上传服务的代码非常简单。我们使用 <code>curl</code> 来测试一下</p>
 <div class="highlight"><div class="chroma">
@@ -219,10 +219,10 @@ touch main.go
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">curl -X POST http://localhost:8080/upload <span class="se">\
-</span><span class="se"></span>  -F <span class="s2">&#34;file=@/tmp/upload.go&#34;</span> <span class="se">\
-</span><span class="se"></span>  -H <span class="s2">&#34;Content-Type: multipart/form-data&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -X POST http://localhost:8080/upload <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -F <span class="s2">&#34;file=@/tmp/upload.go&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -H <span class="s2">&#34;Content-Type: multipart/form-data&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行完之后在当前目录下就可以看到 <code>upload.go</code> 这个文件了。</p>
 <h2 id="多文件">多文件</h2>
@@ -246,22 +246,22 @@ touch main.go
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-    <span class="nx">router</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">form</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">MultipartForm</span><span class="p">()</span>
-        <span class="nx">files</span> <span class="o">:=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">File</span><span class="p">[</span><span class="s">&#34;files&#34;</span><span class="p">]</span>
-
-        <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">file</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">files</span> <span class="p">{</span>
-            <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
-
-            <span class="nx">c</span><span class="p">.</span><span class="nf">SaveUploadedFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;./&#34;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%d files uploaded!&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">files</span><span class="p">)))</span>
-    <span class="p">})</span>
-    <span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">form</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">MultipartForm</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">files</span> <span class="o">:=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">File</span><span class="p">[</span><span class="s">&#34;files&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">file</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">files</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nx">c</span><span class="p">.</span><span class="nf">SaveUploadedFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;./&#34;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">.</span><span class="nx">Filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%d files uploaded!&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">files</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>多文件的上传和单文件的区别不大，简单的几行代码就实现了文件上传的功能。</p>
 <p>同样使用 <code>curl</code> 来测试文件上传的功能</p>
@@ -273,11 +273,11 @@ touch main.go
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">curl -X POST http://localhost:8080/upload <span class="se">\
-</span><span class="se"></span>  -F <span class="s2">&#34;files=@/tmp/test1.zip&#34;</span> <span class="se">\
-</span><span class="se"></span>  -F <span class="s2">&#34;files=@/tmp/test2.zip&#34;</span> <span class="se">\
-</span><span class="se"></span>  -H <span class="s2">&#34;Content-Type: multipart/form-data&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -X POST http://localhost:8080/upload <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -F <span class="s2">&#34;files=@/tmp/test1.zip&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -F <span class="s2">&#34;files=@/tmp/test2.zip&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -H <span class="s2">&#34;Content-Type: multipart/form-data&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>不出问题在当前目录中就会多出 <code>test1.zip</code> 和 <code>test2.zip</code> 这两个文件。</p>
 <h2 id="限制文件大小">限制文件大小</h2>
@@ -288,9 +288,9 @@ touch main.go
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-<span class="nx">router</span><span class="p">.</span><span class="nx">MaxMultipartMemory</span> <span class="p">=</span> <span class="mi">8</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nx">MaxMultipartMemory</span> <span class="p">=</span> <span class="mi">8</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>MaxMultipartMemory</code> 来配置文件上传的大小限制，默认是32M。</p>
 <h2 id="文件下载服务">文件下载服务</h2>
@@ -306,14 +306,14 @@ touch main.go
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-
-    <span class="nx">router</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/local/file&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">c</span><span class="p">.</span><span class="nf">File</span><span class="p">(</span><span class="s">&#34;local/file.go&#34;</span><span class="p">)</span>
-    <span class="p">})</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">router</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/local/file&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">c</span><span class="p">.</span><span class="nf">File</span><span class="p">(</span><span class="s">&#34;local/file.go&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>Gin</code> 提供的文件服务，可以让我们非常方便的进行控制，甚至是动态文件，比默认的有更多的定制化玩法。</p>
 <h2 id="总结">总结</h2>
@@ -348,7 +348,11 @@ touch main.go
           <a href="../../tags/gin/">Gin</a>
           </div>
       <nav class="post-nav">
-        
+        <a class="prev" href="../../post/ref/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">对比Rust引用与C&#43;&#43;引用</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         <a class="next" href="../../post/go%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/">
             <span class="next-text nav-default">go实现文件上传/下载服务</span>
             <span class="next-text nav-mobile">下一篇</span>
@@ -422,7 +426,7 @@ touch main.go
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

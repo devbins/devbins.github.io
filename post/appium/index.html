@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/appium/" />
@@ -256,8 +256,8 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">npm config <span class="nb">set</span> registry http://registry.cnpmjs.org
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm config <span class="nb">set</span> registry http://registry.cnpmjs.org
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="appium-doctor-的安装">appium-doctor 的安装</h2>
 <p><code>appium-doctor</code> 是一个用来检查 <code>appium</code> 环境是否安装并配置好的工具，让我们来检测一下上面的步骤都成功了没有。
@@ -332,40 +332,40 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
-<span class="kn">from</span> <span class="nn">appium</span> <span class="kn">import</span> <span class="n">webdriver</span>
-
-<span class="k">class</span> <span class="nc">Calc</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">desired_caps</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;platformName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Android&#39;</span>
-        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;deviceName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Android Emulator&#39;</span>
-        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;appPackage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;com.android.calculator2&#39;</span>
-        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;appActivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.Calculator&#39;</span>
-        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Remote</span><span class="p">(</span><span class="s1">&#39;http://127.0.0.1:4723/wd/hub&#39;</span><span class="p">,</span><span class="n">desired_caps</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">test_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/digit_1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/op_add&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/digit_2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/eq&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">()</span><span class="o">.</span><span class="n">loadTestsFromTestCase</span><span class="p">(</span><span class="n">Calc</span><span class="p">)</span>
-    <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">unittest</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">appium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Calc</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;platformName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Android&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;deviceName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Android Emulator&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;appPackage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;com.android.calculator2&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;appActivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.Calculator&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Remote</span><span class="p">(</span><span class="s1">&#39;http://127.0.0.1:4723/wd/hub&#39;</span><span class="p">,</span><span class="n">desired_caps</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">test_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/digit_1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/op_add&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/digit_2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s1">&#39;com.android.calculator2:id/eq&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">suite</span> <span class="o">=</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestLoader</span><span class="p">()</span><span class="o">.</span><span class="n">loadTestsFromTestCase</span><span class="p">(</span><span class="n">Calc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">unittest</span><span class="o">.</span><span class="n">TextTestRunner</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">suite</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>看看效果，还不错</p>
 <figure><img src="../../images/appium/screenshot.gif"/>
@@ -380,8 +380,8 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">desired_caps</span><span class="p">[</span><span class="s1">&#39;noReset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="测试函数要以-test-开头">测试函数要以 <code>test</code> 开头</h3>
 <p>跟着官方的例子自己写了一个试试，但是发现还是太年轻，调了好久都没用，最后想起了 <code>Go</code> 语言里测试函数是要以 <code>test</code> 开头的，于是试了一下就通了。</p>
@@ -496,7 +496,7 @@ Nodejs 带有 npm 包管理工具，由于镜像在国外，访问很慢，这�
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/git%E7%AE%A1%E7%90%86svn/" />
@@ -192,8 +192,8 @@ Git 中有一个神奇的功能，他可以让你用 Git 来管理 SVN。两个�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn clone svn://127.0.0.1 <span class="nb">test</span> -T trunk -b branches -t tags
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn clone svn://127.0.0.1 <span class="nb">test</span> -T trunk -b branches -t tags
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果你在 <code>Linux</code> 下输入这条命令，会报以下错误，在 <code>macOS</code> 上面没碰到</p>
 <div class="highlight"><div class="chroma">
@@ -207,14 +207,14 @@ Git 中有一个神奇的功能，他可以让你用 Git 来管理 SVN。两个�
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">$ git svn
-git: <span class="s1">&#39;svn&#39;</span> is not a git command. See <span class="s1">&#39;git --help&#39;</span>.
-
-The most similar commands are
-fsck
-mv
-show
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ git svn
+</span></span><span class="line"><span class="cl">git: <span class="s1">&#39;svn&#39;</span> is not a git command. See <span class="s1">&#39;git --help&#39;</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The most similar commands are
+</span></span><span class="line"><span class="cl">fsck
+</span></span><span class="line"><span class="cl">mv
+</span></span><span class="line"><span class="cl">show
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>一开始我以为我安装的版本太旧了不支持 <code>git svn</code> ，于是升级到最新。升级之后我再次尝试，得到的结果还是一样，历史总是惊人的相似。
 开始查资料，这次比较幸运，一查就中。提示中说了 <code>git svn</code> 不是 <code>git</code> 的命令，给了几个相似的命令也不是。解决方法就是安装 <code>git svn</code> 。</p>
@@ -223,8 +223,8 @@ show
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo apt install git-svn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install git-svn
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>再次执行 <code>clone</code> 输入账号和密码就可以正常使用了， <code>svn</code> 上的东西就会被 <code>clone</code> 到本地的 <code>test</code> 目录下。这时候就可以把 <code>git</code> 当成 <code>svn</code> 客户端来使用。</p>
 <p>其实 <code>git svn clone</code> 是 <code>git svn init</code> 和 <code>git svn fetch</code> 两个命令的组合。
@@ -234,8 +234,8 @@ show
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn clone svn://127.0.0.1 <span class="nb">test</span> -s
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn clone svn://127.0.0.1 <span class="nb">test</span> -s
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="把文件加入版本控制">把文件加入版本控制</h3>
 <p>在 <code>clone</code> 了 <code>svn</code> 的项目之后，就可以使用 <code>git</code> 命令来管理 <code>svn</code> 项目。</p>
@@ -245,9 +245,9 @@ show
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">touch README.md
-git add README.md
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">touch README.md
+</span></span><span class="line"><span class="cl">git add README.md
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="提交代码">提交代码</h3>
 <p><code>git</code> 是一个分布式版本控制系统，这和 <code>svn</code> 是不一样的。 <code>svn</code> 在没有网络的情况下是没法提交代码的，而使用了 <code>git svn</code> 后就可以享受到分布式版本控制的好处，可以在本地进行提交变更。向本地提交变更和 <code>git</code> 原来的使用方式一样，使用 <code>git commit</code> 就行了。</p>
@@ -256,8 +256,8 @@ git add README.md
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git commit -m <span class="s2">&#34;add README.md&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git commit -m <span class="s2">&#34;add README.md&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里需要注意一点，这里的提交是指提交到本地，没有更新到服务器，如果这时候磁盘损坏，你这次的更新是找不回来的。</p>
 <h3 id="从-svn-拉取更新">从 <code>svn</code> 拉取更新</h3>
@@ -268,8 +268,8 @@ git add README.md
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn rebase
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn rebase
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>git svn rebase</code> 虽好用，但是还不能适应所有场景。比如：你本地更改了某个文件，没有提交这个更新，此时你想从 <code>svn</code> 上更新，这时候使用 <code>git svn rebase</code> 是不行的。因为 <code>git svn rebase</code> 需要保证工作目录是干净的,你改动了就已经不干净了。所以在拉取更新之前最好做一次临时提交（commit）或者暂存（stash），不然引起冲突时命令会停止。</p>
 <p>除了使用 <code>git svn rebase</code> 来同步上游更新外还可以手动从上游更新到本地</p>
@@ -279,9 +279,9 @@ git add README.md
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn fetch
-git merge git-svn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn fetch
+</span></span><span class="line"><span class="cl">git merge git-svn
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>git svn fetch</code> 来拉取 <code>svn</code> 上的内容到本地，它不会 <code>merge</code> 到当前分支，通常需要我们手动去合并。而使用 <code>git svn rebase</code> 不需要我们手动合并。</p>
 <h3 id="向-svn-推送更新">向 <code>svn</code> 推送更新</h3>
@@ -291,8 +291,8 @@ git merge git-svn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn dcommit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn dcommit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里需要注意一点， <code>git</code> 在往服务器推送之前，需要更新到上游最新提交，不然是无法合并的，而 <code>git svn</code> 只需要有冲突的时候才需要这样做。当有人更新了一个 <code>A</code> 的文件并推送到了服务器，这时候你更新了 <code>B</code> 文件，使用 <code>git svn dcommit</code> 是可以正常工作的。这和 <code>svn</code> 的做法是类似的，如果是 <code>git</code> 的话，你先要同步上游更新，然后才能向服务器推送更新。</p>
 <p>假如在 <code>git</code> 下使用 <code>commit</code> 向本地提交了多次，这时候使用 <code>git svn dcommit</code> 会把本地提交的多次更新，依次向 <code>svn</code> 服务器推送。也就说你使用 <code>git commit</code> 向本地提交了多次更新，在使用 <code>git svn dcommit</code> 之后 <code>svn</code> 里的 log 就会有多次更新。</p>
@@ -308,8 +308,8 @@ git merge git-svn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn create-ignore
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn create-ignore
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>它会自动创建 <code>.gitignore</code> 文件，并把 <code>svn</code> 中的 <code>ignore</code> 拷贝到 <code>git</code> 中。</p>
 <div class="highlight"><div class="chroma">
@@ -317,8 +317,8 @@ git merge git-svn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git svn show-ignore &gt; .git/info/exclude
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git svn show-ignore &gt; .git/info/exclude
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="log">log</h3>
 <p>在 <code>git</code> 中我们查看 log，可以使用 <code>git log</code> 来查看。对于熟悉 <code>svn</code> 的同学可能习惯了 <code>svn</code> 的显示风格，可以使用 <code>git svn log</code> 显示 <code>svn</code> 风格的 log。在 <code>svn</code> 中查看 log 是需要连上网络不能离线的，但是用 <code>git svn log</code> 是可以在没有网络的情况下查看 log 的，这一点似乎增强了 <code>svn</code> 的功能。</p>
@@ -429,7 +429,7 @@ git merge git-svn
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

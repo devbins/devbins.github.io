@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/archlinux/" />
@@ -213,8 +213,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">lsblk
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lsblk
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>U 盘的格式如 <code>/dev/sdb</code> 这样的，不要带上数字。</p>
 <p>找到之后使用 <code>dd</code> (Linux 下制作)来制作启动 U 盘， <code>if</code> 后面跟 <code>archlinux</code> 的镜像路径， <code>of</code> 跟 U 盘的路径，把 <code>sdx</code> 换成对应的设备，下同。</p>
@@ -223,8 +223,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>/path/to/archlinux.iso <span class="nv">of</span><span class="o">=</span>/dev/sdx <span class="nv">status</span><span class="o">=</span>progress <span class="o">&amp;&amp;</span> sync
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>/path/to/archlinux.iso <span class="nv">of</span><span class="o">=</span>/dev/sdx <span class="nv">status</span><span class="o">=</span>progress <span class="o">&amp;&amp;</span> sync
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="联网">联网</h2>
 <p>重启电脑，选择从 U 盘启动。
@@ -235,8 +235,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ping www.baidu.com
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ping www.baidu.com
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="有线连接">有线连接</h3>
 <div class="highlight"><div class="chroma">
@@ -244,8 +244,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">dhcpcd
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dhcpcd
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="wifi-连接">WiFi 连接</h3>
 <div class="highlight"><div class="chroma">
@@ -253,8 +253,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">wifi-menu
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wifi-menu
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="更新系统时间">更新系统时间</h2>
 <p>先来更新一下时间，确保时间是准确的。</p>
@@ -263,8 +263,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">timedatectl set-ntp <span class="nb">true</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">timedatectl set-ntp <span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="分区">分区</h2>
 <p>装系统很重要的一步就是分区，使用 <code>fdisk</code> 来建立分区。</p>
@@ -273,8 +273,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">fdisk /dev/sdx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">fdisk /dev/sdx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>按 <code>n</code> 创建一个新分区， <code>p</code> 创建主分区。
 这里创建 4 个分区</p>
@@ -297,11 +297,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkfs.vfat -F32 /dev/sdx1
-mkswap /dev/sdx2
-mkfs.ext4 /dev/sdx3
-mkfs.ext4 /dev/sdx4
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkfs.vfat -F32 /dev/sdx1
+</span></span><span class="line"><span class="cl">mkswap /dev/sdx2
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sdx3
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sdx4
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="挂载分区">挂载分区</h2>
 <p>分区格式化完成之后，把格式化好的分区挂载到 <code>/mnt</code> 下，我们的新系统会安装到这里。</p>
@@ -314,12 +314,12 @@ mkfs.ext4 /dev/sdx4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mount /dev/sdx3 /mnt <span class="c1">#先挂载根分区，不然后面的没法挂载，根分区是一切的开始。</span>
-mkdir /mnt/boot
-mount /dev/sdx1 /mnt/boot
-mkidr /mnt/home
-mount /dev/sdx4 /mnt/home
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mount /dev/sdx3 /mnt <span class="c1">#先挂载根分区，不然后面的没法挂载，根分区是一切的开始。</span>
+</span></span><span class="line"><span class="cl">mkdir /mnt/boot
+</span></span><span class="line"><span class="cl">mount /dev/sdx1 /mnt/boot
+</span></span><span class="line"><span class="cl">mkidr /mnt/home
+</span></span><span class="line"><span class="cl">mount /dev/sdx4 /mnt/home
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>swap 分区不需要挂载，但是要开启</p>
 <div class="highlight"><div class="chroma">
@@ -327,8 +327,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">swapon /dev/sdx2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">swapon /dev/sdx2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="选择合适的软件源">选择合适的软件源</h2>
 <p>选择一个快速的软件源，可以节约下载的时间，没必要浪费时间在这里等待。更改软件源在 <code>/etc/pacman.d/mirrorlist</code> 你可以使用 vi 打开，找到</p>
@@ -338,9 +338,9 @@ mount /dev/sdx4 /mnt/home
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## China</span>
-<span class="nv">Server</span> <span class="o">=</span> http://mirrors.ustc.edu.cn/archlinux/<span class="nv">$repo</span>/os/<span class="nv">$arch</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">## China</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Server</span> <span class="o">=</span> http://mirrors.ustc.edu.cn/archlinux/<span class="nv">$repo</span>/os/<span class="nv">$arch</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>放到文件的最开头，并更新</p>
 <div class="highlight"><div class="chroma">
@@ -348,8 +348,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pacman -Syy
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -Syy
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="安装">安装</h2>
 <p>做了这么多，可以开始安装系统了，输入如下指令</p>
@@ -358,8 +358,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pacstrap -i /mnt base base-devel vim
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -i /mnt base base-devel vim
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="生成文件系统信息">生成文件系统信息</h2>
 <div class="highlight"><div class="chroma">
@@ -367,8 +367,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看生成的 <code>fstab</code></p>
 <div class="highlight"><div class="chroma">
@@ -376,8 +376,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cat /mnt/etc/fstab
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /mnt/etc/fstab
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="配置">配置</h2>
 <h3 id="进入到新系统">进入到新系统</h3>
@@ -387,8 +387,8 @@ mount /dev/sdx4 /mnt/home
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">arch-chroot /mnt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">arch-chroot /mnt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="设置时区">设置时区</h3>
 <p>这里没什么好说的，设置时区</p>
@@ -398,9 +398,9 @@ mount /dev/sdx4 /mnt/home
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span><span class="line"><span class="cl">hwclock --systohc
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="本地化">本地化</h3>
 <p>编辑 <code>/etc/locale.gen</code> 把 <code>en_US.UTF-8 UTF-8</code> 与 <code>zh_CN.UTF-8 UTF-8</code> 注释去掉（移除行首的 #）</p>
@@ -410,9 +410,9 @@ hwclock --systohc
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTF-8
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">en_US.UTF-8 UTF-8
+</span></span><span class="line"><span class="cl">zh_CN.UTF-8 UTF-8
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>locale-gen</code> 生成 locale 信息</p>
 <p>设置系统语言
@@ -422,8 +422,8 @@ zh_CN.UTF-8 UTF-8
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="主机名">主机名</h3>
 <p>编辑 <code>/etc/hostname</code> ,其中 <code>hostname</code> 随意，写什么无所谓。</p>
@@ -432,8 +432,8 @@ zh_CN.UTF-8 UTF-8
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">hostname
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hostname
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加到 <code>/etc/hosts</code> ,第三行的 <code>hostname</code> 改为上一步写的。</p>
 <div class="highlight"><div class="chroma">
@@ -443,10 +443,10 @@ zh_CN.UTF-8 UTF-8
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">127.0.0.1	localhost
-::1	    	localhost
-127.0.1.1	hostname.localdomain	hostname
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1	localhost
+</span></span><span class="line"><span class="cl">::1	    	localhost
+</span></span><span class="line"><span class="cl">127.0.1.1	hostname.localdomain	hostname
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="配置网络">配置网络</h3>
 <p>这里要配置一下，不然系统装完了，重启发现没法上网就很尴尬</p>
@@ -458,11 +458,11 @@ zh_CN.UTF-8 UTF-8
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 安装必要的软件包</span>
-pacman -S wpa_supplicant dialog network-manager-applet networmanager
-systemctl <span class="nb">enable</span> dhcpcd.service
-systemctl <span class="nb">enable</span> NetworkManager
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装必要的软件包</span>
+</span></span><span class="line"><span class="cl">pacman -S wpa_supplicant dialog network-manager-applet networmanager
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> dhcpcd.service
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> NetworkManager
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="设置-root-密码">设置 root 密码</h3>
 <p>更改 <code>root</code> 密码，有些操作需要在 <code>root</code> 下操作。</p>
@@ -471,8 +471,8 @@ systemctl <span class="nb">enable</span> NetworkManager
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">passwd
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">passwd
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="创建用户">创建用户</h3>
 <p>为新系统创建一个用户， <code>root</code> 的权限太高了，建个普通用户在合适不过。</p>
@@ -481,8 +481,8 @@ systemctl <span class="nb">enable</span> NetworkManager
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">useradd -m -G wheel -s /bin/bash arch
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">useradd -m -G wheel -s /bin/bash arch
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>为用户添加 <code>sudo</code> , 输入 <code>visudo</code></p>
 <div class="highlight"><div class="chroma">
@@ -490,8 +490,8 @@ systemctl <span class="nb">enable</span> NetworkManager
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">wheel <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> ALL <span class="c1"># 找到这行，把行首的 #去掉</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wheel <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> ALL <span class="c1"># 找到这行，把行首的 #去掉</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="配置-grub-进行开机引导">配置 GRUB 进行开机引导</h3>
 <p>配置开机引导，如果不做这一步，开机后没法进入系统。</p>
@@ -502,10 +502,10 @@ systemctl <span class="nb">enable</span> NetworkManager
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pacman -S grub
-grub-install /dev/sdx
-grub-mkconfig -o /boot/grub/grub.cfg
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -S grub
+</span></span><span class="line"><span class="cl">grub-install /dev/sdx
+</span></span><span class="line"><span class="cl">grub-mkconfig -o /boot/grub/grub.cfg
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="重启">重启</h2>
 <p>安装好了，重启看看效果。别忘了把 U 盘弹出。</p>
@@ -516,10 +516,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">exit</span>
-umount -R /mnt
-reboot
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">umount -R /mnt
+</span></span><span class="line"><span class="cl">reboot
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="桌面">桌面</h2>
 <p>新系统是没有桌面环境的，有一个好看的桌面还是非常重要的。</p>
@@ -530,8 +530,8 @@ reboot
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xorg
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xorg
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="显示管理器--display-manager">显示管理器(Display Manager)</h3>
 <p>装好了桌面环境后，我们还需要一个用来管理桌面的管理器，不然你需要手动启动它。</p>
@@ -541,9 +541,9 @@ reboot
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S lightdm lightdm-gtk-greeter
-sudo systemctl <span class="nb">enable</span> lightdm <span class="c1"># 开机自启动</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S lightdm lightdm-gtk-greeter
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> lightdm <span class="c1"># 开机自启动</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>装好了 <code>lightdm</code> 之后需要配置一下。编辑 <code>/etc/lightdm/lightdm.conf</code></p>
 <div class="highlight"><div class="chroma">
@@ -553,10 +553,10 @@ sudo systemctl <span class="nb">enable</span> lightdm <span class="c1"># 开机�
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>Seat:*<span class="o">]</span>
-...
-greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># 如果你装了 deepin 可以改为 lightdm-deepin-greeter</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>Seat:*<span class="o">]</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># 如果你装了 deepin 可以改为 lightdm-deepin-greeter</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>有哪些 <code>greeter-session</code> 可以通过如下命令来查看。</p>
 <div class="highlight"><div class="chroma">
@@ -564,8 +564,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ls -l /usr/share/xgreeters/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -l /usr/share/xgreeters/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="deepin">deepin</h3>
 <p>deepin 是深度科技开发桌面系统，有着漂亮的界面，如果你需要使用 <code>QQ</code> ， <code>微信</code> 等软件，deepin 桌面是一个不错的选择。</p>
@@ -574,8 +574,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S deepin deepin-extra
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S deepin deepin-extra
+</span></span></code></pre></td></tr></table>
 </div>
 </div><figure><img src="../../images/arch/arch_deepin.jpg"/>
 </figure>
@@ -587,8 +587,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
+</span></span></code></pre></td></tr></table>
 </div>
 </div><figure><img src="../../images/arch/arch_kde.jpg"/>
 </figure>
@@ -601,8 +601,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-intel
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-intel
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="amd">AMD</h4>
 <div class="highlight"><div class="chroma">
@@ -610,8 +610,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-amdgpu
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-amdgpu
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="ati">ATI</h4>
 <div class="highlight"><div class="chroma">
@@ -619,8 +619,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-ati
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-ati
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nvidia">NVIDIA</h4>
 <div class="highlight"><div class="chroma">
@@ -628,8 +628,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S xf86-video-nv
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-nv
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="安装声卡驱动">安装声卡驱动</h3>
 <p>安装声卡，听听歌还是不错的。</p>
@@ -638,8 +638,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pacman -S alsa-utils alsa-oss
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -S alsa-utils alsa-oss
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行 <code>alsamixer</code> 取消静音</p>
 <h3 id="字体">字体</h3>
@@ -649,8 +649,8 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -760,7 +760,7 @@ greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># �
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

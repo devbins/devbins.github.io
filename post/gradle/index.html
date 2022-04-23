@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gradle/" />
@@ -205,13 +205,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── gradlew
-└── gradlew.bat
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gradle
+</span></span><span class="line"><span class="cl">│   └── wrapper
+</span></span><span class="line"><span class="cl">│       ├── gradle-wrapper.jar
+</span></span><span class="line"><span class="cl">│       └── gradle-wrapper.properties
+</span></span><span class="line"><span class="cl">├── gradlew
+</span></span><span class="line"><span class="cl">└── gradlew.bat
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="gradlew">gradlew</h3>
 <p><code>gradlew</code> 其实就是一个脚本文件，用来执行相应的 <code>task(后面会介绍)</code> 。</p>
@@ -231,12 +231,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">distributionBase</span><span class="o">=</span>GRADLE_USER_HOME
-<span class="nv">distributionPath</span><span class="o">=</span>wrapper/dists
-<span class="nv">zipStoreBase</span><span class="o">=</span>GRADLE_USER_HOME
-<span class="nv">zipStorePath</span><span class="o">=</span>wrapper/dists
-<span class="nv">distributionUrl</span><span class="o">=</span>https<span class="se">\:</span>//services.gradle.org/distributions/gradle-5.6.4-all.zip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">distributionBase</span><span class="o">=</span>GRADLE_USER_HOME
+</span></span><span class="line"><span class="cl"><span class="nv">distributionPath</span><span class="o">=</span>wrapper/dists
+</span></span><span class="line"><span class="cl"><span class="nv">zipStoreBase</span><span class="o">=</span>GRADLE_USER_HOME
+</span></span><span class="line"><span class="cl"><span class="nv">zipStorePath</span><span class="o">=</span>wrapper/dists
+</span></span><span class="line"><span class="cl"><span class="nv">distributionUrl</span><span class="o">=</span>https<span class="se">\:</span>//services.gradle.org/distributions/gradle-5.6.4-all.zip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="生命周期">生命周期</h2>
 <p>在 <code>Gradle</code> 中会在不同阶段做不同事情，也就是 <code>Gradle</code> 有自己的生命周期，分为初始化、配置、执行。</p>
@@ -267,21 +267,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="c1">// 初始化阶段完成的回调
-</span><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">beforeEvaluate</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;初始化完成&#34;</span>
-<span class="o">}</span>
-
-<span class="c1">// 配置阶段完成后的回调
-</span><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">afterEvaluate</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;配置完成&#34;</span>
-<span class="o">}</span>
-
-<span class="c1">// gradle 执行完毕后的监听回调
-</span><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">gradle</span><span class="o">.</span><span class="na">buildFinished</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;任务执行完成&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 初始化阶段完成的回调
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">beforeEvaluate</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;初始化完成&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 配置阶段完成后的回调
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">afterEvaluate</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;配置完成&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// gradle 执行完毕后的监听回调
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">this</span><span class="o">.</span><span class="na">gradle</span><span class="o">.</span><span class="na">buildFinished</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;任务执行完成&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="project">Project</h2>
 <p>前面提到在 <code>settings.gralde</code> 中使用 <code>include</code> 关键字引入的项目都会创建一个 <code>project</code> 。 <code>gralde</code> 为我们提供了许多 <code>API</code> 来操作 <code>project</code> 。</p>
@@ -296,13 +296,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="c1">// 获取所有 project
-</span><span class="c1"></span><span class="kt">def</span> <span class="n">projects</span> <span class="o">=</span> <span class="n">getAllprojects</span><span class="o">()</span>
-
-<span class="n">projects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;Project name is: ${it.name}&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 获取所有 project
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">def</span> <span class="n">projects</span> <span class="o">=</span> <span class="n">getAllprojects</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">projects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;Project name is: ${it.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出如下所示</p>
 <div class="highlight"><div class="chroma">
@@ -312,10 +312,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">Project name is: Gradle
-Project name is: app
-Project name is: groovy
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Project name is: Gradle
+</span></span><span class="line"><span class="cl">Project name is: app
+</span></span><span class="line"><span class="cl">Project name is: groovy
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到当前工程下有三个 <code>Project</code> 。其实在项目的 <code>build.gralde</code> 也有对所有项目进行配置的相关代码，来看一下</p>
 <div class="highlight"><div class="chroma">
@@ -329,14 +329,14 @@ Project name is: groovy
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">allprojects</span> <span class="o">{</span>
-
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">allprojects</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这里为所有的项目都配置了仓库，这样我们依赖第三方的项目才知道要到哪里去下载。</p>
 <p>这里可以直接使用 <code>allprojects</code> 是因为 <code>groovy</code> 会为默认为字段加上 <code>getter/setter</code> 。</p>
@@ -348,10 +348,10 @@ Project name is: groovy
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">subprojects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;sub project name is: ${it.name}&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">subprojects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;sub project name is: ${it.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -360,9 +360,9 @@ Project name is: groovy
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sub project name is: app
-sub project name is: groovy
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sub project name is: app
+</span></span><span class="line"><span class="cl">sub project name is: groovy
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到比之前少了 <code>Gradle</code> 的 <code>Project</code> ，这是因为 <code>Gradle</code> 是 <code>Root Project</code> 。</p>
 <h3 id="获取父-project">获取父 Project</h3>
@@ -373,10 +373,10 @@ sub project name is: groovy
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">subprojects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;the sub project ${it.name} parent name is: ${it.parent.name}&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">subprojects</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;the sub project ${it.name} parent name is: ${it.parent.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -385,9 +385,9 @@ sub project name is: groovy
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">the sub project app parent name is: Gradle
-the sub project groovy parent name is: Gradle
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the sub project app parent name is: Gradle
+</span></span><span class="line"><span class="cl">the sub project groovy parent name is: Gradle
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到 <code>app</code> 和 <code>groovy</code> 的 <code>parent</code> 都是 <code>Gradle</code> 。如果当前项目时根项目的话会返回 <code>null</code> 。</p>
 <h3 id="获取-root-project">获取 Root Project</h3>
@@ -396,8 +396,8 @@ the sub project groovy parent name is: Gradle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">println</span> <span class="s2">&#34;the root project name is: ${rootProject.name}&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the root project name is: ${rootProject.name}&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -405,8 +405,8 @@ the sub project groovy parent name is: Gradle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">the root project name is: Gradle
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the root project name is: Gradle
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="获取指定的-project">获取指定的 Project</h3>
 <div class="highlight"><div class="chroma">
@@ -416,10 +416,10 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">project</span><span class="o">(</span><span class="s1">&#39;app&#39;</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;current project name is: ${it.name}&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">project</span><span class="o">(</span><span class="s1">&#39;app&#39;</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;current project name is: ${it.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -427,8 +427,8 @@ the sub project groovy parent name is: Gradle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">current project name is: app
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">current project name is: app
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过指定 <code>project</code> 的名字我们就可以获取指定的 <code>Project</code> 。</p>
 <h3 id="扩展属性">扩展属性</h3>
@@ -443,12 +443,12 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">ext</span> <span class="o">{</span>
-    <span class="n">android</span> <span class="o">=</span> <span class="o">[</span>
-        <span class="nl">compileSdkVersion:</span> <span class="mi">29</span>
-    <span class="o">]</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">ext</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">android</span> <span class="o">=</span> <span class="o">[</span>
+</span></span><span class="line"><span class="cl">        <span class="nl">compileSdkVersion:</span> <span class="mi">29</span>
+</span></span><span class="line"><span class="cl">    <span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后我们就可以在别的模块中使用了，比如在 <code>app</code> 模块的 <code>build.config</code> 中可以这么用</p>
 <div class="highlight"><div class="chroma">
@@ -462,14 +462,14 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.application&#39;</span>
-<span class="n">apply</span> <span class="nl">from:</span> <span class="s2">&#34;config.gradle&#34;</span>
-
-<span class="n">android</span> <span class="o">{</span>
-    <span class="n">compileSdkVersion</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">android</span><span class="o">[</span><span class="s2">&#34;compileSdkVersion&#34;</span><span class="o">]</span>
-
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.application&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">apply</span> <span class="nl">from:</span> <span class="s2">&#34;config.gradle&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">android</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">compileSdkVersion</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">android</span><span class="o">[</span><span class="s2">&#34;compileSdkVersion&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这样如果我们有很多模块，就可以统一配置为一个，避免了硬编码。这样不会因为要升级 <code>sdk</code> 的版本，把所有的模块都改一遍。</p>
 <p>除了可以在 <code>gralde</code> 文件中设置，还可以在 <code>gralde.properties</code> 中设置，不过在 <code>gralde.properties</code> 中设置的类型需要强制转换成需要的类型。</p>
@@ -478,8 +478,8 @@ the sub project groovy parent name is: Gradle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">compileSdkVersion</span><span class="o">=</span><span class="mi">29</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">compileSdkVersion</span><span class="o">=</span><span class="mi">29</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在使用的时候可以通过 <code>hasProperty('compileSdkVersion')</code> 来判断是否有这个属性，有的话可以通过 <code>compileSdkVersion.toInteger</code> 来把类型装换为需要的类型。</p>
 <h3 id="文件操作">文件操作</h3>
@@ -493,13 +493,13 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="c1">// 获取根路径
-</span><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the root dir is: ${rootDir}&#34;</span>
-<span class="c1">// 获取项目路径
-</span><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the project dir is: ${projectDir}&#34;</span>
-<span class="c1">// 获取 build 路径
-</span><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the build dir is: ${buildDir}&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 获取根路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the root dir is: ${rootDir}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取项目路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the project dir is: ${projectDir}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取 build 路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">println</span> <span class="s2">&#34;the build dir is: ${buildDir}&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出结果如下</p>
 <div class="highlight"><div class="chroma">
@@ -509,10 +509,10 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">the</span> <span class="n">root</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span>
-<span class="n">the</span> <span class="n">project</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span>
-<span class="n">the</span> <span class="n">build</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span><span class="o">/</span><span class="n">build</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">the</span> <span class="n">root</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span>
+</span></span><span class="line"><span class="cl"><span class="n">the</span> <span class="n">project</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span>
+</span></span><span class="line"><span class="cl"><span class="n">the</span> <span class="n">build</span> <span class="n">dir</span> <span class="nl">is:</span> <span class="s">/Users/</span><span class="n">devbins</span><span class="s">/Desktop/</span><span class="n">Gradle</span><span class="o">/</span><span class="n">build</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>拷贝文件</p>
 <div class="highlight"><div class="chroma">
@@ -523,11 +523,11 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">copy</span> <span class="o">{</span>
-    <span class="n">from</span> <span class="nf">file</span><span class="o">(</span><span class="s1">&#39;build.gralde&#39;</span><span class="o">)</span>
-    <span class="n">into</span> <span class="n">buildDir</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">copy</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">from</span> <span class="nf">file</span><span class="o">(</span><span class="s1">&#39;build.gralde&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">into</span> <span class="n">buildDir</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过 <code>copy</code> 闭包实现拷贝文件非常方便</p>
 <h2 id="task">Task</h2>
@@ -548,18 +548,18 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">task</span> <span class="n">gradle</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s1">&#39;hello gradle&#39;</span>
-
-    <span class="n">doLast</span> <span class="o">{</span>
-        <span class="n">println</span> <span class="s1">&#39;do last&#39;</span>
-    <span class="o">}</span>
-
-    <span class="n">doFirst</span> <span class="o">{</span>
-        <span class="n">println</span> <span class="s1">&#39;do first&#39;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">task</span> <span class="n">gradle</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s1">&#39;hello gradle&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doLast</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s1">&#39;do last&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">doFirst</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s1">&#39;do first&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>Task</code> 中，除了在 <code>doLast</code> 和 <code>doFirst</code> 中的代码，其余的代码都是在配置阶段执行的。
 除了上面这种方式用来定义 <code>Task</code> ，下面这几种也是可以的</p>
@@ -580,20 +580,20 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">task</span> <span class="nf">task1</span><span class="o">(</span><span class="nl">group:</span> <span class="s2">&#34;gradle&#34;</span><span class="o">,</span> <span class="s2">&#34;description&#34;</span><span class="o">:</span> <span class="s2">&#34;gradle1 task&#34;</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s1">&#39;a gradle task&#39;</span>
-<span class="o">}</span>
-
-<span class="k">this</span><span class="o">.</span><span class="na">tasks</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;task2&#39;</span><span class="o">,</span> <span class="nl">group:</span><span class="s2">&#34;gradle&#34;</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">println</span> <span class="s2">&#34;gradle2&#34;</span>
-<span class="o">}</span>
-
-<span class="c1">// 方法一
-</span><span class="c1"></span><span class="n">task</span> <span class="nf">task3</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="o">[</span><span class="n">task1</span><span class="o">,</span> <span class="n">task2</span><span class="o">])</span> <span class="o">{</span>
-    <span class="n">setGroup</span><span class="o">(</span><span class="s2">&#34;gradle&#34;</span><span class="o">)</span>
-    <span class="n">setDescription</span><span class="o">(</span><span class="s2">&#34;gradle3 task&#34;</span><span class="o">)</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">task</span> <span class="nf">task1</span><span class="o">(</span><span class="nl">group:</span> <span class="s2">&#34;gradle&#34;</span><span class="o">,</span> <span class="s2">&#34;description&#34;</span><span class="o">:</span> <span class="s2">&#34;gradle1 task&#34;</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s1">&#39;a gradle task&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">this</span><span class="o">.</span><span class="na">tasks</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;task2&#39;</span><span class="o">,</span> <span class="nl">group:</span><span class="s2">&#34;gradle&#34;</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;gradle2&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 方法一
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">task</span> <span class="nf">task3</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="o">[</span><span class="n">task1</span><span class="o">,</span> <span class="n">task2</span><span class="o">])</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">setGroup</span><span class="o">(</span><span class="s2">&#34;gradle&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">setDescription</span><span class="o">(</span><span class="s2">&#34;gradle3 task&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="task-依赖">Task 依赖</h3>
 <p><code>Gradle</code> 中有非常多 <code>Task</code> ，有些需要在某一个 <code>Task</code> 执行之后再执行特定的 <code>Task</code> ，这样就会形成一个依赖，我们可以通过手动来指定这些依赖。</p>
@@ -608,14 +608,14 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="c1">// 方法一
-</span><span class="c1"></span><span class="n">task</span> <span class="nf">task4</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="o">[</span><span class="n">task1</span><span class="o">,</span> <span class="n">task2</span><span class="o">])</span> <span class="o">{</span>
-    <span class="n">dependsOn</span> <span class="n">task1</span>
-<span class="o">}</span>
-
-<span class="c1">// 方法二
-</span><span class="c1"></span><span class="n">task4</span><span class="o">.</span><span class="na">dependsOn</span><span class="o">(</span><span class="n">task1</span><span class="o">,</span><span class="n">task5</span><span class="o">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 方法一
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">task</span> <span class="nf">task4</span><span class="o">(</span><span class="nl">dependsOn:</span> <span class="o">[</span><span class="n">task1</span><span class="o">,</span> <span class="n">task2</span><span class="o">])</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dependsOn</span> <span class="n">task1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 方法二
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">task4</span><span class="o">.</span><span class="na">dependsOn</span><span class="o">(</span><span class="n">task1</span><span class="o">,</span><span class="n">task5</span><span class="o">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="执行顺序">执行顺序</h3>
 <p>除了上面依赖的方式可以决定 <code>Task</code> 的调用顺序，还可以通过 <code>mustRunAfter</code> 来设置调用的顺序</p>
@@ -635,19 +635,19 @@ the sub project groovy parent name is: Gradle
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">task</span> <span class="n">task5</span> <span class="o">{</span>
-    <span class="n">doLast</span> <span class="o">{</span>
-        <span class="n">println</span> <span class="s1">&#39;task5&#39;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="n">task</span> <span class="n">task6</span> <span class="o">{</span>
-    <span class="n">mustRunAfter</span> <span class="s2">&#34;task5&#34;</span>
-    <span class="n">doLast</span> <span class="o">{</span>
-        <span class="n">println</span> <span class="s1">&#39;task6&#39;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">task</span> <span class="n">task5</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">doLast</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s1">&#39;task5&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">task</span> <span class="n">task6</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mustRunAfter</span> <span class="s2">&#34;task5&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">doLast</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s1">&#39;task6&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="总结">总结</h2>
 <p>今天我们了解了 <code>Gradle</code> 的目录结构、生命周期、 <code>Project</code> 还有创建 <code>Task</code> ，有了这些基础后，就不会再认为 <code>Gradle</code> 只是个配置文件了。</p>
@@ -760,7 +760,7 @@ the sub project groovy parent name is: Gradle
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

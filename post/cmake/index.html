@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/cmake/" />
@@ -186,11 +186,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake ..
-make
-make install
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">make install
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这个例子中，我们建了一个 <code>build</code> 文件夹用于执行 <code>cmake</code> 指令，这种做法叫做外部编译(out-of-source-build)。注意 <code>cmake ..</code> 这后边有个 <code>..</code> 这是用于告诉 <code>CMAKE</code> <code>CMakeLists.txt</code> 在哪个文件夹下。</p>
 <p>这样做有一个好处就是不会污染源码，因为在执行 <code>cmake</code> 的过程中会产生一些临时文件、缓存文件、日志文件等，如果都和源码放在一起就非常的乱，会影响到代码的阅读。</p>
@@ -207,10 +207,10 @@ make install
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12</span><span class="p">)</span> <span class="c"># 设置 CMake 的版本
-</span><span class="c"></span><span class="nb">project</span><span class="p">(</span><span class="s">Demo</span><span class="p">)</span> <span class="c"># 设置项目名
-</span><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span> <span class="c"># 编译成可执行文件，参与编译的源文件为 main.cpp
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12</span><span class="p">)</span> <span class="c"># 设置 CMake 的版本
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">project</span><span class="p">(</span><span class="s">Demo</span><span class="p">)</span> <span class="c"># 设置项目名
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span> <span class="c"># 编译成可执行文件，参与编译的源文件为 main.cpp
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>CMAKE</code> 的最小配置需要你设置 <code>CMAKE</code> 的最小版本号，为项目取一个名字，编译成可执行文件(或者库)并指定需要参与编译的源文件。</p>
 <p>编写好了 <code>CMakeLists.txt</code> 就可以通过上一小节的知识进行构建了，但还需要准备一个 <code>main.cpp</code> 文件就行了。</p>
@@ -222,9 +222,9 @@ make install
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">name</span> <span class="s">cmake</span><span class="p">)</span> <span class="c"># 把 cmake 赋值给 name
-</span><span class="c"></span><span class="nb">message</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span><span class="p">)</span> <span class="c"># 打印 name 的值
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">name</span> <span class="s">cmake</span><span class="p">)</span> <span class="c"># 把 cmake 赋值给 name
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">message</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span><span class="p">)</span> <span class="c"># 打印 name 的值
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>设置变量挺简单的，在使用的时候通过 <code>${}</code> 来引用，我们可以用 <code>message</code> 来打印变量的值。</p>
 <p>变量区分大小写</p>
@@ -266,10 +266,10 @@ make install
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># 设置构建类型为 Debug，也可以设置为 Release
-</span><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Debug</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 设置构建类型为 Debug，也可以设置为 Release
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Debug</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>除了在 <code>CMakeLists.txt</code> 中指定编译类型，还可以通过命令行来指定，如下所示</p>
 <div class="highlight"><div class="chroma">
@@ -277,8 +277,8 @@ make install
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">cmake .. -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmake .. -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中 <code>-D</code> 表示定义变量并赋值，可以理解为 <code>definition</code></p>
 <h3 id="编译成库">编译成库</h3>
@@ -293,13 +293,13 @@ make install
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_library</span><span class="p">(</span><span class="c"># 设置库的名字
-</span><span class="c"></span>  <span class="s">native-lib</span>
-  <span class="c"># 设置库为动态库还是静态库，SHARED动态库，STATIC 静态库
-</span><span class="c"></span>  <span class="s">SHARED</span>
-  <span class="c"># 参与编译的源文件
-</span><span class="c"></span>  <span class="s">native-lib.cpp</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="c"># 设置库的名字
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>  <span class="s">native-lib</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 设置库为动态库还是静态库，SHARED动态库，STATIC 静态库
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>  <span class="s">SHARED</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 参与编译的源文件
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>  <span class="s">native-lib.cpp</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>编译成库文件使用 <code>add_library</code> 函数，需要指定库的名字并且要指定是动态库还是静态库，最后就是指定需要参与编译的源文件了。</p>
 <h3 id="添加第三方库">添加第三方库</h3>
@@ -311,10 +311,10 @@ make install
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">add_library</span><span class="p">(</span><span class="s">glfw</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">glfw</span> <span class="s">PROPERTIES</span> <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/lib/libglfw3.so</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">glfw</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">glfw</span> <span class="s">PROPERTIES</span> <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/lib/libglfw3.so</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加第三方库和编译第三方库一样使用 <code>add_library</code> 函数，不一样的是第三库使用的是导入的形式，不需要使用源码再进行编译一遍。</p>
 <p>不过第三方库需要指定 <code>so</code> 的位置，使用 <code>set_target_properties</code> 来指定导入路径这个属性。</p>
@@ -326,8 +326,8 @@ make install
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>include_directories</code> 相当于 <code>g++</code> 选项中的 <code>-I</code> 参数。</p>
 <h3 id="一次性添加所有源文件">一次性添加所有源文件</h3>
@@ -339,10 +339,10 @@ make install
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s">.</span> <span class="s">SRC_LIST</span><span class="p">)</span>  <span class="c"># 查找当前目录下的所有源文件，放到 SRC_LIST 中
-</span><span class="c"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s">.</span> <span class="s">SRC_LIST</span><span class="p">)</span>  <span class="c"># 查找当前目录下的所有源文件，放到 SRC_LIST 中
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">PROJECT_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SRC_LIST</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>需要注意的是 <code>aux_source_directory</code> 不会遍历子目录</p>
 <h3 id="查找系统库">查找系统库</h3>
@@ -354,10 +354,10 @@ make install
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="c"># 查找 log 库，把找到的库放到 log-lib 这个变量中
-</span><span class="c"></span><span class="nb">find_library</span><span class="p">(</span><span class="s">log-lib</span> <span class="s">log</span><span class="p">)</span><span class="err">
-</span><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">native-lib</span> <span class="o">${</span><span class="nv">log-lib</span><span class="o">}</span><span class="p">)</span> <span class="c"># 别忘了要链接到需要使用的库里边
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 查找 log 库，把找到的库放到 log-lib 这个变量中
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">find_library</span><span class="p">(</span><span class="s">log-lib</span> <span class="s">log</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">native-lib</span> <span class="o">${</span><span class="nv">log-lib</span><span class="o">}</span><span class="p">)</span> <span class="c"># 别忘了要链接到需要使用的库里边
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <h3 id="cmake-tutorial-cmake-3-dot-19-dot-1-documentation"><a href="https://cmake.org/cmake/help/latest/guide/tutorial/index.html">CMake Tutorial — CMake 3.19.1 Documentation</a></h3>
@@ -467,7 +467,7 @@ make install
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

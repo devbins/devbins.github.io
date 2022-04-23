@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/parallel/" />
@@ -185,14 +185,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">make<span class="o">[</span>3<span class="o">]</span>: *** <span class="o">[</span>scripts/Makefile.build:281: /usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/super.o<span class="o">]</span> Error <span class="m">1</span>
-make<span class="o">[</span>2<span class="o">]</span>: *** <span class="o">[</span>Makefile:1626: _module_/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs<span class="o">]</span> Error <span class="m">2</span>
-make<span class="o">[</span>1<span class="o">]</span>: *** <span class="o">[</span>/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/Makefile.v26:13: all<span class="o">]</span> Error <span class="m">2</span>
-make: *** <span class="o">[</span>Makefile.kmods:52: compile<span class="o">]</span> Error <span class="m">2</span>
-Error: could not build kernel modules
-Error during report about failed installation of parallels tools.
-Error: failed to install Parallels Guest Tools!
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">make<span class="o">[</span>3<span class="o">]</span>: *** <span class="o">[</span>scripts/Makefile.build:281: /usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/super.o<span class="o">]</span> Error <span class="m">1</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>2<span class="o">]</span>: *** <span class="o">[</span>Makefile:1626: _module_/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs<span class="o">]</span> Error <span class="m">2</span>
+</span></span><span class="line"><span class="cl">make<span class="o">[</span>1<span class="o">]</span>: *** <span class="o">[</span>/usr/lib/parallels-tools/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/Makefile.v26:13: all<span class="o">]</span> Error <span class="m">2</span>
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile.kmods:52: compile<span class="o">]</span> Error <span class="m">2</span>
+</span></span><span class="line"><span class="cl">Error: could not build kernel modules
+</span></span><span class="line"><span class="cl">Error during report about failed installation of parallels tools.
+</span></span><span class="line"><span class="cl">Error: failed to install Parallels Guest Tools!
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>从提示中得到的消息是不能构建内核模块，于是我猜测是内核版本比较新，所以构建失败了。我打开之前装好了 <code>Parallels Desktop tools</code> 的虚拟机，查看一下内核，发现旧的内核版本为 <code>Linux 4.19.79-1</code> 而我最新下载的内核是 <code>Linux 5.3.6-1</code> 。抱着试一试的心理，发现有效，记录一下。</p>
 <h2 id="安装低版本内核">安装低版本内核</h2>
@@ -312,7 +312,7 @@ Error: failed to install Parallels Guest Tools!
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

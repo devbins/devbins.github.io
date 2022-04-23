@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" />
@@ -54,7 +54,7 @@
 苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
 "><meta itemprop="datePublished" content="2018-01-07T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2018-01-07T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2307">
+<meta itemprop="wordCount" content="2306">
 <meta itemprop="keywords" content="RaspberryPi,Yeelight," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Siri 帮我开灯"/>
 <meta name="twitter:description" content="
@@ -143,7 +143,7 @@
         <div class="post-category">
             <a href="../../categories/iot/"> IOT </a>
             </div>
-          <span class="more-meta"> 约 2307 字 </span>
+          <span class="more-meta"> 约 2306 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -212,8 +212,8 @@ Yeelight 台灯的设置就这些，没有了。</p>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ssh pi@192.168.1.x <span class="c1">#这里换成你自己的 IP，回车后输入密码</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh pi@192.168.1.x <span class="c1">#这里换成你自己的 IP，回车后输入密码</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接下来安装 Node.js</p>
 <div class="highlight"><div class="chroma">
@@ -223,10 +223,10 @@ Yeelight 台灯的设置就这些，没有了。</p>
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">curl -sL https://deb.nodesource.com/setup_9.x <span class="p">|</span> sudo -E bash -
-sudo apt-get install -y nodejs
-node -v <span class="c1"># 查看一下是否安装成功，成功会输出类似 v9.x.x</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sL https://deb.nodesource.com/setup_9.x <span class="p">|</span> sudo -E bash -
+</span></span><span class="line"><span class="cl">sudo apt-get install -y nodejs
+</span></span><span class="line"><span class="cl">node -v <span class="c1"># 查看一下是否安装成功，成功会输出类似 v9.x.x</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入 <code>vi .npmrc</code>
 按下 <code>i</code> 后输入下面内容</p>
@@ -235,8 +235,8 @@ node -v <span class="c1"># 查看一下是否安装成功，成功会输出类�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">registry</span> <span class="o">=</span> https://registry.npm.taobao.org
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">registry</span> <span class="o">=</span> https://registry.npm.taobao.org
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>输好后按下 <code>ESC（一般在 F1 旁边）</code> ,输入 <code>:</code> ,接着按下 <code>wq</code> 回车。</p>
 <p>不做这一步也是可以的，但是国内速度可能会稍慢。</p>
@@ -248,9 +248,9 @@ node -v <span class="c1"># 查看一下是否安装成功，成功会输出类�
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install libavahi-compat-libdnssd-dev
-sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get install libavahi-compat-libdnssd-dev
+</span></span><span class="line"><span class="cl">sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="安装-yeelight-插件">安装 Yeelight 插件</h3>
 <p>装好了 homebridge 还需要装上插件才能使用对应的智能设备，这里我使用的 Yeelight 台灯，所以还要安装 homebridge-yeelight 这个插件。</p>
@@ -259,8 +259,8 @@ sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo npm install -g homebridge-yeelight
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo npm install -g homebridge-yeelight
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="插件配置">插件配置</h3>
 <p>插件装好了之后，我们需要配置一下让 homebridge 识别我们。</p>
@@ -270,9 +270,9 @@ sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ~/.homebridge  <span class="c1"># 没有的话手动创建，使用 mkdir ~/.homebridge</span>
-vi config.json
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/.homebridge  <span class="c1"># 没有的话手动创建，使用 mkdir ~/.homebridge</span>
+</span></span><span class="line"><span class="cl">vi config.json
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>打开文件之后按下 <code>i</code> 键，复制下面的内容到里面。</p>
 <div class="highlight"><div class="chroma">
@@ -294,22 +294,22 @@ vi config.json
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="p">{</span>
-	<span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Homebridge&#34;</span><span class="p">,</span>
-	<span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;CC:22:3D:E3:CE:30&#34;</span><span class="p">,</span>
-	<span class="nt">&#34;port&#34;</span><span class="p">:</span> <span class="mi">51826</span><span class="p">,</span>
-	<span class="nt">&#34;pin&#34;</span><span class="p">:</span> <span class="s2">&#34;031-45-154&#34;</span>
-  <span class="p">},</span>
-
-  <span class="nt">&#34;platforms&#34;</span><span class="p">:</span> <span class="p">[</span>
-	<span class="p">{</span>
-	  <span class="nt">&#34;platform&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span><span class="p">,</span>
-	  <span class="nt">&#34;name&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span>
-	<span class="p">}</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Homebridge&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;CC:22:3D:E3:CE:30&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;port&#34;</span><span class="p">:</span> <span class="mi">51826</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;pin&#34;</span><span class="p">:</span> <span class="s2">&#34;031-45-154&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;platforms&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="nt">&#34;platform&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	  <span class="nt">&#34;name&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>写好之后按下 <code>ESC</code> ，输入 <code>:</code> 后再输入 <code>wq</code> 回车，该操作会保存文件并退出 <code>vi</code> 回到终端。解释一下上面 bridge 中的配置</p>
 <ul>
@@ -326,8 +326,8 @@ vi config.json
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">homebridge
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">homebridge
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img src="../../images/siri/homebridge.png" alt="">
 会看到一个二维码和我们刚刚配置的 pin（图中红色方框中的），二维码暂时用不到，pin 会在接下来用到。到这里树莓派上的操作都完成了。</p>
@@ -356,8 +356,8 @@ vi config.json
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">which homebridge
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">which homebridge
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果输出不是 <code>/usr/bin/homebridge</code> ，那么你需要把下面拷贝第 13 行的 <code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code> 改为 <code>cmd =&quot;DEBUG=* 刚刚输出的东西&quot;</code> 。</p>
 <h3 id="制作启动脚本">制作启动脚本</h3>
@@ -366,215 +366,213 @@ vi config.json
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo vi /etc/init.d/homebridge
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo vi /etc/init.d/homebridge
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>按下键盘上 <code>i</code> ，把下面的内容拷贝进去</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
+</span><span class="lnt">98
+</span><span class="lnt">99
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
-</span><span class="cp"></span><span class="c1">### BEGIN INIT INFO</span>
-<span class="c1"># Provides: homebridge</span>
-<span class="c1"># Required-Start:    $network $remote_fs $syslog</span>
-<span class="c1"># Required-Stop:     $remote_fs $syslog</span>
-<span class="c1"># Default-Start:     2 3 4 5</span>
-<span class="c1"># Default-Stop:      0 1 6</span>
-<span class="c1"># Short-Description: Start daemon at boot time</span>
-<span class="c1"># Description:       Enable service provided by daemon.</span>
-<span class="c1">### END INIT INFO</span>
-
-<span class="nv">dir</span><span class="o">=</span><span class="s2">&#34;/home/pi&#34;</span>
-<span class="nv">cmd</span><span class="o">=</span><span class="s2">&#34;DEBUG=* /usr/bin/homebridge&#34;</span>
-<span class="nv">user</span><span class="o">=</span><span class="s2">&#34;pi&#34;</span>
-
-<span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span>
-<span class="nv">pid_file</span><span class="o">=</span><span class="s2">&#34;/var/run/</span><span class="nv">$name</span><span class="s2">.pid&#34;</span>
-<span class="nv">stdout_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.log&#34;</span>
-<span class="nv">stderr_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.err&#34;</span>
-
-get_pid<span class="o">()</span> <span class="o">{</span>
-	cat <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
-<span class="o">}</span>
-
-is_running<span class="o">()</span> <span class="o">{</span>
-	<span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> ps -p <span class="sb">`</span>get_pid<span class="sb">`</span> &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-<span class="o">}</span>
-
-<span class="k">case</span> <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> in
-	start<span class="o">)</span>
-		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Already started&#34;</span>
-		<span class="k">else</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Starting </span><span class="nv">$name</span><span class="s2">&#34;</span>
-			<span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$dir</span><span class="s2">&#34;</span>
-			<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-				sudo <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
-			<span class="k">else</span>
-				sudo -u <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
-			<span class="k">fi</span>
-			<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
-			<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
-				<span class="nb">echo</span> <span class="s2">&#34;Unable to start, see </span><span class="nv">$stdout_log</span><span class="s2"> and </span><span class="nv">$stderr_log</span><span class="s2">&#34;</span>
-				<span class="nb">exit</span> <span class="m">1</span>
-			<span class="k">fi</span>
-		<span class="k">fi</span>
-		<span class="p">;;</span>
-	stop<span class="o">)</span>
-		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-			<span class="nb">echo</span> -n <span class="s2">&#34;Stopping </span><span class="nv">$name</span><span class="s2">..&#34;</span>
-			<span class="nb">kill</span> <span class="sb">`</span>get_pid<span class="sb">`</span>
-			<span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span>
-					 <span class="c1"># for i in `seq 10`</span>
-			<span class="k">do</span>
-				<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
-					<span class="nb">break</span>
-				<span class="k">fi</span>
-
-				<span class="nb">echo</span> -n <span class="s2">&#34;.&#34;</span>
-				sleep <span class="m">1</span>
-			<span class="k">done</span>
-			<span class="nb">echo</span>
-
-			<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-				<span class="nb">echo</span> <span class="s2">&#34;Not stopped; may still be shutting down or shutdown may have failed&#34;</span>
-				<span class="nb">exit</span> <span class="m">1</span>
-			<span class="k">else</span>
-				<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
-				<span class="k">if</span> <span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-					rm <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
-				<span class="k">fi</span>
-			<span class="k">fi</span>
-		<span class="k">else</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Not running&#34;</span>
-		<span class="k">fi</span>
-		<span class="p">;;</span>
-	restart<span class="o">)</span>
-		<span class="nv">$0</span> stop
-		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Unable to stop, will not attempt to start&#34;</span>
-			<span class="nb">exit</span> <span class="m">1</span>
-		<span class="k">fi</span>
-		<span class="nv">$0</span> start
-		<span class="p">;;</span>
-	status<span class="o">)</span>
-		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Running&#34;</span>
-		<span class="k">else</span>
-			<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
-			<span class="nb">exit</span> <span class="m">1</span>
-		<span class="k">fi</span>
-		<span class="p">;;</span>
-	*<span class="o">)</span>
-		<span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}&#34;</span>
-		<span class="nb">exit</span> <span class="m">1</span>
-		<span class="p">;;</span>
-<span class="k">esac</span>
-
-<span class="nb">exit</span> <span class="m">0</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">### BEGIN INIT INFO</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Provides: homebridge</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Required-Start:    $network $remote_fs $syslog</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Required-Stop:     $remote_fs $syslog</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Default-Start:     2 3 4 5</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Default-Stop:      0 1 6</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Short-Description: Start daemon at boot time</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Description:       Enable service provided by daemon.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">### END INIT INFO</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">dir</span><span class="o">=</span><span class="s2">&#34;/home/pi&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">cmd</span><span class="o">=</span><span class="s2">&#34;DEBUG=* /usr/bin/homebridge&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">user</span><span class="o">=</span><span class="s2">&#34;pi&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pid_file</span><span class="o">=</span><span class="s2">&#34;/var/run/</span><span class="nv">$name</span><span class="s2">.pid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">stdout_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.log&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">stderr_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.err&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">get_pid<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">	cat <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">is_running<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">	<span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> ps -p <span class="sb">`</span>get_pid<span class="sb">`</span> &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> in
+</span></span><span class="line"><span class="cl">	start<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Already started&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Starting </span><span class="nv">$name</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$dir</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				sudo <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">else</span>
+</span></span><span class="line"><span class="cl">				sudo -u <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Unable to start, see </span><span class="nv">$stdout_log</span><span class="s2"> and </span><span class="nv">$stderr_log</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	stop<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> -n <span class="s2">&#34;Stopping </span><span class="nv">$name</span><span class="s2">..&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">kill</span> <span class="sb">`</span>get_pid<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span>
+</span></span><span class="line"><span class="cl">					 <span class="c1"># for i in `seq 10`</span>
+</span></span><span class="line"><span class="cl">			<span class="k">do</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">					<span class="nb">break</span>
+</span></span><span class="line"><span class="cl">				<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> -n <span class="s2">&#34;.&#34;</span>
+</span></span><span class="line"><span class="cl">				sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">done</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Not stopped; may still be shutting down or shutdown may have failed&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">else</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">					rm <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Not running&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	restart<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$0</span> stop
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Unable to stop, will not attempt to start&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$0</span> start
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	status<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Running&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	*<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>按下 <code>ESC</code> ,输入 <code>:</code> 后按下 <code>wq</code> 回车保存并退出编辑。</p>
 <h3 id="设置权限">设置权限</h3>
@@ -585,9 +583,9 @@ is_running<span class="o">()</span> <span class="o">{</span>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo chmod <span class="m">755</span> /etc/init.d/homebridge
-sudo update-rc.d homebridge defaults
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo chmod <span class="m">755</span> /etc/init.d/homebridge
+</span></span><span class="line"><span class="cl">sudo update-rc.d homebridge defaults
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>重启之后 homebridge 就会自己运行。</p>
 <h2 id="参考">参考</h2>
@@ -702,7 +700,7 @@ sudo update-rc.d homebridge defaults
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

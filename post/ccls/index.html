@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/ccls/" />
@@ -167,8 +167,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">brew install cmake llvm
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install cmake llvm
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>brew</code> 安装的 <code>llvm</code> 路径在 <code>/usr/local/Cellar/llvm/10.0.1</code> ，编译 <code>ccls</code> 会用到。</p>
 <h4 id="编译ccls">编译ccls</h4>
@@ -180,11 +180,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git clone --depth<span class="o">=</span><span class="m">1</span> --recursive https://github.com/MaskRay/ccls
-<span class="nb">cd</span> ccls
-cmake -H. -BRelease -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DCMAKE_PREFIX_PATH<span class="o">=</span>/usr/local/Cellar/llvm/10.0.1/lib/cmake -DUSE_SYSTEM_RAPIDJSON<span class="o">=</span>off
-cmake --build Release --target install
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone --depth<span class="o">=</span><span class="m">1</span> --recursive https://github.com/MaskRay/ccls
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ccls
+</span></span><span class="line"><span class="cl">cmake -H. -BRelease -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DCMAKE_PREFIX_PATH<span class="o">=</span>/usr/local/Cellar/llvm/10.0.1/lib/cmake -DUSE_SYSTEM_RAPIDJSON<span class="o">=</span>off
+</span></span><span class="line"><span class="cl">cmake --build Release --target install
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>ccls</code> 会被安装到 <code>/usr/local/bin/ccls</code> 。</p>
 <p>其中 <code>-DCMAKE_PREFIX_PATH</code> 需要换成你的 <code>llvm</code> 的安装路径。</p>
@@ -196,8 +196,8 @@ cmake --build Release --target install
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S ccls-git
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S ccls-git
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>命令执行完，也就安装好了，非常省事。</p>
 <p>其它 <code>Linux</code> 发现版，可以参考 <a href="https://github.com/MaskRay/ccls/wiki/Build">Build · MaskRay/ccls Wiki</a></p>
@@ -214,11 +214,11 @@ cmake --build Release --target install
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span>On ..
-<span class="nb">cd</span> ..
-ln -s build/compile_commands.json
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span>On ..
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ..
+</span></span><span class="line"><span class="cl">ln -s build/compile_commands.json
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 会告诉 <code>cmake</code> 把编译的指令都导出到 <code>compile_commands.json</code> 中，当 <code>ccls</code> 解析 <code>compile_commands.json</code> 后就知道源码在哪里了，知道去哪里找头文件等等。</p>
 <p>除了在命令行加上 <code>-DCMAKE_EXPORT_COMPILE_COMMANDS</code> 参数外，还可以在 <code>cmake</code> 中设置，这样就可以避免每次编译都要输入，或者忘记。</p>
@@ -227,8 +227,8 @@ ln -s build/compile_commands.json
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_EXPORT_COMPILE_COMMANDS</span> <span class="s">ON</span><span class="p">)</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_EXPORT_COMPILE_COMMANDS</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果你不是使用 <code>cmake</code> 作为编译工具可以参考 <a href="https://github.com/MaskRay/ccls/wiki/Project-Setup">Project Setup · MaskRay/ccls Wiki</a></p>
 <h2 id="在-qt-中使用-ccls">在 QT 中使用 ccls</h2>
@@ -251,13 +251,13 @@ ln -s build/compile_commands.json
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">CMake Error at /usr/local/Cellar/cmake/3.21.1/share/cmake/Modules/CMakeTestCXXCompiler.cmake:62 (message):
-  The C++ compiler
-
-    &#34;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++&#34;
-
-  is not able to compile a simple test program.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">CMake Error at /usr/local/Cellar/cmake/3.21.1/share/cmake/Modules/CMakeTestCXXCompiler.cmake:62 (message):
+</span></span><span class="line"><span class="cl">  The C++ compiler
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &#34;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  is not able to compile a simple test program.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>碰到这个问题的解决办法是需要删除掉 <code>Release</code> 目录，就能正常编译。</p>
 <div class="highlight"><div class="chroma">
@@ -266,9 +266,9 @@ ln -s build/compile_commands.json
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> ccls
-rm -rf Release
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ccls
+</span></span><span class="line"><span class="cl">rm -rf Release
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -380,7 +380,7 @@ rm -rf Release
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

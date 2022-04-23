@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/aosp/" />
@@ -180,10 +180,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir ~/bin
-curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo
-chmod a+x ~/bin/repo
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ~/bin
+</span></span><span class="line"><span class="cl">curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo
+</span></span><span class="line"><span class="cl">chmod a+x ~/bin/repo
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="创建一个挂载镜像磁盘">创建一个挂载镜像磁盘</h2>
 <p>Mac 上的文件名默认是不区分大小写的，我们首先要创建一个支持大小写的镜像文件，用来存放下载的 <code>AOSP</code> 。这样做的好处是当容器被删除的时候，下载的内容不会跟着一起被删除。</p>
@@ -211,24 +211,24 @@ chmod a+x ~/bin/repo
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> ubuntu</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;/root/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&#34;</span><span class="err">
-</span><span class="err"></span><span class="k">ENV</span> <span class="nv">REPO_URL</span><span class="o">=</span><span class="s1">&#39;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#39;</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">RUN</span> apt update <span class="o">&amp;&amp;</span> apt install -y git curl python openjdk-8-jdk git-core gnupg flex bison gperf build-essential zip zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip <span class="o">&amp;&amp;</span> <span class="se">\
-</span><span class="se"></span>    rm -rf /var/cahce/apt <span class="o">&amp;&amp;</span> <span class="se">\
-</span><span class="se"></span>    rm -rf /var/lib/apt/lists <span class="o">&amp;&amp;</span> <span class="se">\
-</span><span class="se"></span>    mkdir ~/bin <span class="o">&amp;&amp;</span> curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo <span class="o">&amp;&amp;</span> chmod a+x ~/bin/repo <span class="o">&amp;&amp;</span> mkdir ~/aosp<span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">VOLUME</span><span class="s"> ~/aosp</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> ~/aosp</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">COPY</span> entrypoint.sh /root/entrypoint.sh<span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;/root/entrypoint.sh&#34;</span><span class="p">]</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> ubuntu</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENV</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;/root/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&#34;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENV</span> <span class="nv">REPO_URL</span><span class="o">=</span><span class="s1">&#39;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#39;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">RUN</span> apt update <span class="o">&amp;&amp;</span> apt install -y git curl python openjdk-8-jdk git-core gnupg flex bison gperf build-essential zip zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    rm -rf /var/cahce/apt <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    rm -rf /var/lib/apt/lists <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    mkdir ~/bin <span class="o">&amp;&amp;</span> curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo <span class="o">&amp;&amp;</span> chmod a+x ~/bin/repo <span class="o">&amp;&amp;</span> mkdir ~/aosp<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">VOLUME</span><span class="s"> ~/aosp</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">WORKDIR</span><span class="s"> ~/aosp</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">COPY</span> entrypoint.sh /root/entrypoint.sh<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;/root/entrypoint.sh&#34;</span><span class="p">]</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="entrypoint">ENTRYPOINT</h3>
 <p><code>entrypoint</code> 是个 <code>shell</code> 脚本，用来在启动容器时执行命令用的，在这里我们只要初始化 <code>repo</code> 并执行 <code>sync</code> 就会开始下载。</p>
@@ -242,13 +242,13 @@ chmod a+x ~/bin/repo
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/bash
-</span><span class="cp"></span><span class="nb">cd</span> ~/aosp
-<span class="nb">echo</span> <span class="s2">&#34;start sync&#34;</span>
-repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest <span class="o">&amp;&amp;</span> repo sync
-
-<span class="nb">exec</span> <span class="s2">&#34;</span><span class="nv">$@</span><span class="s2">&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nb">cd</span> ~/aosp
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;start sync&#34;</span>
+</span></span><span class="line"><span class="cl">repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest <span class="o">&amp;&amp;</span> repo sync
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> <span class="s2">&#34;</span><span class="nv">$@</span><span class="s2">&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="启动容器并开始下载">启动容器并开始下载</h3>
 <p>准备好 <code>Dockerfile</code> 和 <code>entrypoint</code> 后，我们开始构建镜像
@@ -277,22 +277,22 @@ repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest <span class="o"
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">Checking out project platform/test/vts-testcase/hal-trace
-Checking out project platform/test/vts-testcase/kernel
-Checking out project platform/test/vts-testcase/performance
-Syncing work tree:  98% <span class="o">(</span>557/568<span class="o">)</span>Checking out project platform/test/vts-testcase/security
-Checking out project platform/test/vts-testcase/vndk
-Checking out project toolchain/binutils
-Checking out project platform/tools/apksig
-Checking out project platform/tools/external/fat32lib
-Checking out project platform/tools/external/gradle
-Syncing work tree:  99% <span class="o">(</span>563/568<span class="o">)</span>Checking out project platform/tools/loganalysis
-Checking out project platform/tools/repohooks
-Checking out project platform/tools/test/connectivity
-Checking out project platform/tools/tradefederation/contrib
-Checking out project platform/tools/tradefederation
-Syncing work tree: 100% <span class="o">(</span>568/568<span class="o">)</span>, <span class="k">done</span>.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Checking out project platform/test/vts-testcase/hal-trace
+</span></span><span class="line"><span class="cl">Checking out project platform/test/vts-testcase/kernel
+</span></span><span class="line"><span class="cl">Checking out project platform/test/vts-testcase/performance
+</span></span><span class="line"><span class="cl">Syncing work tree:  98% <span class="o">(</span>557/568<span class="o">)</span>Checking out project platform/test/vts-testcase/security
+</span></span><span class="line"><span class="cl">Checking out project platform/test/vts-testcase/vndk
+</span></span><span class="line"><span class="cl">Checking out project toolchain/binutils
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/apksig
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/external/fat32lib
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/external/gradle
+</span></span><span class="line"><span class="cl">Syncing work tree:  99% <span class="o">(</span>563/568<span class="o">)</span>Checking out project platform/tools/loganalysis
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/repohooks
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/test/connectivity
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/tradefederation/contrib
+</span></span><span class="line"><span class="cl">Checking out project platform/tools/tradefederation
+</span></span><span class="line"><span class="cl">Syncing work tree: 100% <span class="o">(</span>568/568<span class="o">)</span>, <span class="k">done</span>.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="碰到的错误">碰到的错误</h3>
 <h4 id="entrypoint-dot-sh-permission-denied">entrypoint.sh permission denied</h4>
@@ -301,8 +301,8 @@ Syncing work tree: 100% <span class="o">(</span>568/568<span class="o">)</span>,
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">docker: Error response from daemon: OCI runtime create failed: container_linux.go:345: starting container process caused <span class="s2">&#34;exec: \&#34;/root/entrypoint.sh\&#34;: permission denied&#34;</span>: unknown.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker: Error response from daemon: OCI runtime create failed: container_linux.go:345: starting container process caused <span class="s2">&#34;exec: \&#34;/root/entrypoint.sh\&#34;: permission denied&#34;</span>: unknown.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个问题是在宿主机上没有给执行权限，在宿主机上执行下面指令
 <code>chmod a+x entrypoint.sh</code></p>
@@ -315,11 +315,11 @@ Syncing work tree: 100% <span class="o">(</span>568/568<span class="o">)</span>,
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">error: RPC failed<span class="p">;</span> curl <span class="m">56</span> GnuTLS recv error <span class="o">(</span>-54<span class="o">)</span>: Error in the pull <span class="k">function</span>.
-fatal: The remote end hung up unexpectedly
-fatal: early EOF
-fatal: index-pack failed
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">error: RPC failed<span class="p">;</span> curl <span class="m">56</span> GnuTLS recv error <span class="o">(</span>-54<span class="o">)</span>: Error in the pull <span class="k">function</span>.
+</span></span><span class="line"><span class="cl">fatal: The remote end hung up unexpectedly
+</span></span><span class="line"><span class="cl">fatal: early EOF
+</span></span><span class="line"><span class="cl">fatal: index-pack failed
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个错误是由于 <code>git</code> 的缓存设置的不够大</p>
 <div class="highlight"><div class="chroma">
@@ -328,9 +328,9 @@ fatal: index-pack failed
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git config --global http.sslVerify <span class="nb">false</span>
-git config --global http.postBuffer <span class="m">1073741824</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git config --global http.sslVerify <span class="nb">false</span>
+</span></span><span class="line"><span class="cl">git config --global http.postBuffer <span class="m">1073741824</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果设置的太大了会包下面的错误</p>
 <div class="highlight"><div class="chroma">
@@ -338,8 +338,8 @@ git config --global http.postBuffer <span class="m">1073741824</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">fatal: Out of memory, malloc failed <span class="o">(</span>tried to allocate <span class="m">20000000000</span> bytes<span class="o">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">fatal: Out of memory, malloc failed <span class="o">(</span>tried to allocate <span class="m">20000000000</span> bytes<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="index-pack-died-of-signal-952">index-pack died of signal 952</h4>
 <div class="highlight"><div class="chroma">
@@ -347,8 +347,8 @@ git config --global http.postBuffer <span class="m">1073741824</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">git config --global pack.windowMemory <span class="s2">&#34;32m&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git config --global pack.windowMemory <span class="s2">&#34;32m&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="server-does-not-provide-clone-dot-bundle">Server does not provide clone.bundle</h4>
 <div class="highlight"><div class="chroma">
@@ -357,9 +357,9 @@ git config --global http.postBuffer <span class="m">1073741824</span>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">curl: <span class="o">(</span>22<span class="o">)</span> The requested URL returned error: <span class="m">404</span>
-Server does not provide clone.bundle<span class="p">;</span> ignoring.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl: <span class="o">(</span>22<span class="o">)</span> The requested URL returned error: <span class="m">404</span>
+</span></span><span class="line"><span class="cl">Server does not provide clone.bundle<span class="p">;</span> ignoring.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果你用的清华的源，会碰到这个问题，这是由于清华的源不支持 <code>git</code> 协议导致的，忽略就好，不影响下载。</p>
 <h2 id="总结">总结</h2>
@@ -481,7 +481,7 @@ Server does not provide clone.bundle<span class="p">;</span> ignoring.
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

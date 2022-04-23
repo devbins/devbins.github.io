@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/nexus3/" />
@@ -57,7 +57,7 @@
 使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
 "><meta itemprop="datePublished" content="2018-11-05T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2018-11-05T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1119">
+<meta itemprop="wordCount" content="1116">
 <meta itemprop="keywords" content="nexus," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="在 Docker 中使用 nexus3 构建 Android 私有仓库"/>
 <meta name="twitter:description" content="
@@ -148,7 +148,7 @@
             <a href="../../categories/android/"> Android </a>
             <a href="../../categories/docker/"> Docker </a>
             </div>
-          <span class="more-meta"> 约 1119 字 </span>
+          <span class="more-meta"> 约 1116 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -181,9 +181,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mkdir ~/nexus-data <span class="o">&amp;&amp;</span> sudo chown -R <span class="m">200</span> ~/nexus-data <span class="c1"># Mac 和 Windows 中不需要修改权限，只需要创建目录就好</span>
-docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/nexus3
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ~/nexus-data <span class="o">&amp;&amp;</span> sudo chown -R <span class="m">200</span> ~/nexus-data <span class="c1"># Mac 和 Windows 中不需要修改权限，只需要创建目录就好</span>
+</span></span><span class="line"><span class="cl">docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/nexus3
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="创建一个仓库">创建一个仓库</h2>
 <p>nexus 搭建好了，需要等个一小会。启动好了后，点击右上角的登录，输入账号密码登录。默认账号是 <code>admin</code> 密码是 <code>admin123</code> 。</p>
@@ -225,31 +225,31 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.library&#39;</span>
-<span class="c1">// 要使用 maven 插件
-</span><span class="c1"></span><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;maven&#39;</span>
-
-<span class="n">android</span> <span class="o">{</span>
-
-    <span class="o">......</span>
-
-    <span class="n">uploadArchives</span> <span class="o">{</span>
-        <span class="n">repositories</span><span class="o">.</span><span class="na">mavenDeployer</span> <span class="o">{</span>
-            <span class="c1">// 这里填写刚才 copy 的地址
-</span><span class="c1"></span>            <span class="n">repository</span><span class="o">(</span><span class="nl">url:</span> <span class="s2">&#34;http://127.0.0.1:8081/repository/test/&#34;</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">// 填写仓库的用户名和密码，这里为了简单直接使用默认的，线上还是建议新建一个用户
-</span><span class="c1"></span>                <span class="n">authentication</span><span class="o">(</span><span class="nl">userName:</span> <span class="s2">&#34;admin&#34;</span><span class="o">,</span> <span class="nl">password:</span> <span class="s2">&#34;admin123&#34;</span><span class="o">)</span>
-            <span class="o">}</span>
-
-            <span class="n">pom</span><span class="o">.</span><span class="na">version</span> <span class="o">=</span> <span class="s2">&#34;0.0.1&#34;</span>
-            <span class="n">pom</span><span class="o">.</span><span class="na">artifactId</span> <span class="o">=</span> <span class="s2">&#34;test&#34;</span>
-            <span class="n">pom</span><span class="o">.</span><span class="na">groupId</span> <span class="o">=</span> <span class="s2">&#34;com.example&#34;</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.library&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 要使用 maven 插件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;maven&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">android</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">uploadArchives</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">repositories</span><span class="o">.</span><span class="na">mavenDeployer</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 这里填写刚才 copy 的地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">repository</span><span class="o">(</span><span class="nl">url:</span> <span class="s2">&#34;http://127.0.0.1:8081/repository/test/&#34;</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 填写仓库的用户名和密码，这里为了简单直接使用默认的，线上还是建议新建一个用户
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">authentication</span><span class="o">(</span><span class="nl">userName:</span> <span class="s2">&#34;admin&#34;</span><span class="o">,</span> <span class="nl">password:</span> <span class="s2">&#34;admin123&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">pom</span><span class="o">.</span><span class="na">version</span> <span class="o">=</span> <span class="s2">&#34;0.0.1&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pom</span><span class="o">.</span><span class="na">artifactId</span> <span class="o">=</span> <span class="s2">&#34;test&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pom</span><span class="o">.</span><span class="na">groupId</span> <span class="o">=</span> <span class="s2">&#34;com.example&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><figure><img src="../../images/nexus/nexus_upload.png"/>
 </figure>
@@ -283,36 +283,34 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 </span><span class="lnt">23
 </span><span class="lnt">24
 </span><span class="lnt">25
-</span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
-
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="o">......</span>
-<span class="o">}</span>
-
-<span class="n">allprojects</span> <span class="o">{</span>
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
-<span class="o">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">buildscript</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">......</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">allprojects</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 module 下的 <code>build.gradle</code> 添加依赖</p>
 <div class="highlight"><div class="chroma">
@@ -327,15 +325,15 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.application&#39;</span>
-
-<span class="o">......</span>
-
-<span class="n">dependencies</span> <span class="o">{</span>
-    <span class="o">......</span>
-    <span class="n">implementation</span> <span class="s1">&#39;com.example:test:0.0.1&#39;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;com.android.application&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">......</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dependencies</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">......</span>
+</span></span><span class="line"><span class="cl">    <span class="n">implementation</span> <span class="s1">&#39;com.example:test:0.0.1&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="创建仓库组">创建仓库组</h2>
 <p>完成了上面的步骤，你应该已经使用上了 <code>nexus3</code> ，但是在实际使用的时候碰到这样的情况：</p>
@@ -373,42 +371,40 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 </span><span class="lnt">29
 </span><span class="lnt">30
 </span><span class="lnt">31
-</span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
-
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
-        <span class="o">}</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="o">......</span>
-<span class="o">}</span>
-
-<span class="n">allprojects</span> <span class="o">{</span>
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
-        <span class="o">}</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
-<span class="o">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">buildscript</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">......</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">allprojects</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test1/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/test2/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>从上可以看出每个仓库都要进行配置，少的话还能写一下，多的话得累死。</p>
 <p>上面的问题是有解决办法的，就是创建一个仓库组，把需要用的 <code>library</code> 都加进这个仓库中，这样里面的仓库都能用，只需要配置一次</p>
@@ -445,36 +441,34 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 </span><span class="lnt">23
 </span><span class="lnt">24
 </span><span class="lnt">25
-</span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">buildscript</span> <span class="o">{</span>
-
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="o">......</span>
-<span class="o">}</span>
-
-<span class="n">allprojects</span> <span class="o">{</span>
-    <span class="n">repositories</span> <span class="o">{</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">jcenter</span><span class="o">()</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
-<span class="o">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">buildscript</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">......</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">allprojects</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">google</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jcenter</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s1">&#39;http://127.0.0.1:8081/repository/testgroup/&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">task</span> <span class="nf">clean</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Delete</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delete</span> <span class="n">rootProject</span><span class="o">.</span><span class="na">buildDir</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -580,7 +574,7 @@ docker run -d -p 8081:8081 --name nexus3 -v ~/nexus-data:/nexus-data sonatype/ne
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

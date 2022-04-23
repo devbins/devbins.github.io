@@ -27,7 +27,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/autoinstallarch/" />
@@ -299,87 +299,87 @@
 </span><span class="lnt">80
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">timedatectl set-ntp <span class="nb">true</span>
-
-fdisk /dev/sda <span class="s">&lt;&lt;EOF
-</span><span class="s">n
-</span><span class="s">p
-</span><span class="s">1
-</span><span class="s">
-</span><span class="s">+512M
-</span><span class="s">n
-</span><span class="s">p
-</span><span class="s">2
-</span><span class="s">
-</span><span class="s">+2G
-</span><span class="s">n
-</span><span class="s">p
-</span><span class="s">3
-</span><span class="s">
-</span><span class="s">+10G
-</span><span class="s">n
-</span><span class="s">p
-</span><span class="s">
-</span><span class="s">+10G
-</span><span class="s">w
-</span><span class="s">EOF</span>
-
-mkfs.vfat -F32 /dev/sda1
-mkswap /dev/sda2
-swapon /dev/sda2
-mkfs.ext4 /dev/sda3
-mkfs.ext4 /dev/sda4
-
-mount /dev/sda3 /mnt
-mkdir /mnt/boot
-mount /dev/sda1 /mnt/boot
-mkdir /mnt/home
-mount /dev/sda4 /mnt/home
-
-pacman -Syy
-
-pacstrap /mnt base linux linux-firmware vim git
-
-genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
-
-arch-chroot /mnt <span class="s">&lt;&lt;EOFARCH
-</span><span class="s">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-</span><span class="s">hwclock --systohc
-</span><span class="s">
-</span><span class="s">sed -i &#39;s/^#en_US.UTF-8/en_US.UTF-8/&#39; /etc/locale.gen
-</span><span class="s">sed -i &#39;s/^#zh_CN.UTF-8/zh_CN.UTF-8/&#39; /etc/locale.gen
-</span><span class="s">locale-gen
-</span><span class="s">
-</span><span class="s">echo &#34;LANG=en_US.UTF-8&#34; &gt;&gt; /etc/locale.conf
-</span><span class="s">
-</span><span class="s">cat&gt;&gt;/etc/hosts&lt;&lt;EOF
-</span><span class="s">127.0.0.1	     test
-</span><span class="s">::1	    	test
-</span><span class="s">127.0.1.1	     test.localdomain	   test
-</span><span class="s">EOF
-</span><span class="s">
-</span><span class="s">pacman -S --noconfirm dhcp wpa_supplicant dialog networkmanager zsh sudo
-</span><span class="s">systemctl enable NetworkManager
-</span><span class="s">
-</span><span class="s">passwd&lt;&lt;EOF
-</span><span class="s">test
-</span><span class="s">test
-</span><span class="s">EOF
-</span><span class="s">
-</span><span class="s">useradd -m -G wheel -s /bin/zsh test
-</span><span class="s">
-</span><span class="s">passwd test&lt;&lt;EOF
-</span><span class="s">test
-</span><span class="s">test
-</span><span class="s">EOF
-</span><span class="s">
-</span><span class="s">
-</span><span class="s">pacman -S --noconfirm grub
-</span><span class="s">grub-install /dev/sda
-</span><span class="s">grub-mkconfig -o /boot/grub/grub.cfg
-</span><span class="s">
-</span><span class="s">EOFARCH</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">timedatectl set-ntp <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">fdisk /dev/sda <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">n
+</span></span></span><span class="line"><span class="cl"><span class="s">p
+</span></span></span><span class="line"><span class="cl"><span class="s">1
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">+512M
+</span></span></span><span class="line"><span class="cl"><span class="s">n
+</span></span></span><span class="line"><span class="cl"><span class="s">p
+</span></span></span><span class="line"><span class="cl"><span class="s">2
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">+2G
+</span></span></span><span class="line"><span class="cl"><span class="s">n
+</span></span></span><span class="line"><span class="cl"><span class="s">p
+</span></span></span><span class="line"><span class="cl"><span class="s">3
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">+10G
+</span></span></span><span class="line"><span class="cl"><span class="s">n
+</span></span></span><span class="line"><span class="cl"><span class="s">p
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">+10G
+</span></span></span><span class="line"><span class="cl"><span class="s">w
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mkfs.vfat -F32 /dev/sda1
+</span></span><span class="line"><span class="cl">mkswap /dev/sda2
+</span></span><span class="line"><span class="cl">swapon /dev/sda2
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sda3
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sda4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mount /dev/sda3 /mnt
+</span></span><span class="line"><span class="cl">mkdir /mnt/boot
+</span></span><span class="line"><span class="cl">mount /dev/sda1 /mnt/boot
+</span></span><span class="line"><span class="cl">mkdir /mnt/home
+</span></span><span class="line"><span class="cl">mount /dev/sda4 /mnt/home
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pacman -Syy
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pacstrap /mnt base linux linux-firmware vim git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">arch-chroot /mnt <span class="s">&lt;&lt;EOFARCH
+</span></span></span><span class="line"><span class="cl"><span class="s">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span></span><span class="line"><span class="cl"><span class="s">hwclock --systohc
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">sed -i &#39;s/^#en_US.UTF-8/en_US.UTF-8/&#39; /etc/locale.gen
+</span></span></span><span class="line"><span class="cl"><span class="s">sed -i &#39;s/^#zh_CN.UTF-8/zh_CN.UTF-8/&#39; /etc/locale.gen
+</span></span></span><span class="line"><span class="cl"><span class="s">locale-gen
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#34;LANG=en_US.UTF-8&#34; &gt;&gt; /etc/locale.conf
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">cat&gt;&gt;/etc/hosts&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">127.0.0.1	     test
+</span></span></span><span class="line"><span class="cl"><span class="s">::1	    	test
+</span></span></span><span class="line"><span class="cl"><span class="s">127.0.1.1	     test.localdomain	   test
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">pacman -S --noconfirm dhcp wpa_supplicant dialog networkmanager zsh sudo
+</span></span></span><span class="line"><span class="cl"><span class="s">systemctl enable NetworkManager
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">passwd&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">test
+</span></span></span><span class="line"><span class="cl"><span class="s">test
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">useradd -m -G wheel -s /bin/zsh test
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">passwd test&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">test
+</span></span></span><span class="line"><span class="cl"><span class="s">test
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">pacman -S --noconfirm grub
+</span></span></span><span class="line"><span class="cl"><span class="s">grub-install /dev/sda
+</span></span></span><span class="line"><span class="cl"><span class="s">grub-mkconfig -o /boot/grub/grub.cfg
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">EOFARCH</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>前面都是一下安装指令，后面的就是一些配置，包括新建账号、 <code>zsh</code> 的配置，最后就是安装 <code>GRUB</code> 来进行引导。这是很关键的一步，这边如果出错了，基本上连系统都进不去。</p>
 <h2 id="后记">后记</h2>
@@ -492,7 +492,7 @@ arch-chroot /mnt <span class="s">&lt;&lt;EOFARCH
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

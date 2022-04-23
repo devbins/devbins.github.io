@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/miwifi/" />
@@ -204,8 +204,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">scp PandoraBox.bin root@192.168.31.1:/tmp/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">scp PandoraBox.bin root@192.168.31.1:/tmp/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这样就把固件上传到/tmp 目录下了，接下来登录路由器，准备开刷。</p>
 <div class="highlight"><div class="chroma">
@@ -215,10 +215,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.31.1 <span class="c1">#回车之后输入密码，密码就是在上一步，开启 ssh 那里让记住的密码</span>
-<span class="nb">cd</span> /tmp
-mtd -r write xxx.bin OS1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh root@192.168.31.1 <span class="c1">#回车之后输入密码，密码就是在上一步，开启 ssh 那里让记住的密码</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /tmp
+</span></span><span class="line"><span class="cl">mtd -r write xxx.bin OS1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>注意 <code>OS1</code> 是大写的，第一次试的时候写成小写的没有成功，换成大写的就好了。
 另外如果 <code>OS1</code> 不成功换成 <code>firmware</code> 试试。</p>
@@ -232,10 +232,10 @@ openwrt 默认用户名是 root，密码是 admin。管理的地址是 192.168.1
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh root@192.168.1.1 <span class="c1">#回车后输入密码</span>
-mv /ect/opkg.conf /etc/opkg.conf.bak
-vi /etc/opkg.conf
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh root@192.168.1.1 <span class="c1">#回车后输入密码</span>
+</span></span><span class="line"><span class="cl">mv /ect/opkg.conf /etc/opkg.conf.bak
+</span></span><span class="line"><span class="cl">vi /etc/opkg.conf
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>把下面的内容拷贝进去</p>
 <div class="highlight"><div class="chroma">
@@ -264,29 +264,29 @@ vi /etc/opkg.conf
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">dest root /
-dest ram /tmp
-lists_dir ext /etc/opkg-lists
-option overlay_root /overlay
-<span class="c1"># notice</span>
-dest usb /mnt/sdb1/opkg
-
-arch all <span class="m">100</span>
-arch ramips_24kec <span class="m">200</span>
-arch ramips <span class="m">300</span>
-arch mips <span class="m">400</span>
-arch unkown <span class="m">500</span>
-
-src/gz barrier_breaker_base http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/base
-src/gz barrier_breaker_luci http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/luci
-src/gz barrier_breaker_management http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/management
-src/gz barrier_breaker_oldpackages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/oldpackages
-src/gz barrier_breaker_packages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/packages
-src/gz barrier_breaker_routing http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/routing
-src/gz barrier_breaker_telephony http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/telephony
-src/gz openwrt_dist http://openwrt-dist.thankgfw.ml/releases/ramips/packages
-src/gz openwrt_dist_luci http://openwrt-dist.thankgfw.ml/releases/luci/packages
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dest root /
+</span></span><span class="line"><span class="cl">dest ram /tmp
+</span></span><span class="line"><span class="cl">lists_dir ext /etc/opkg-lists
+</span></span><span class="line"><span class="cl">option overlay_root /overlay
+</span></span><span class="line"><span class="cl"><span class="c1"># notice</span>
+</span></span><span class="line"><span class="cl">dest usb /mnt/sdb1/opkg
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">arch all <span class="m">100</span>
+</span></span><span class="line"><span class="cl">arch ramips_24kec <span class="m">200</span>
+</span></span><span class="line"><span class="cl">arch ramips <span class="m">300</span>
+</span></span><span class="line"><span class="cl">arch mips <span class="m">400</span>
+</span></span><span class="line"><span class="cl">arch unkown <span class="m">500</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_base http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/base
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_luci http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/luci
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_management http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/management
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_oldpackages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/oldpackages
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_packages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/packages
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_routing http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/routing
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_telephony http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/telephony
+</span></span><span class="line"><span class="cl">src/gz openwrt_dist http://openwrt-dist.thankgfw.ml/releases/ramips/packages
+</span></span><span class="line"><span class="cl">src/gz openwrt_dist_luci http://openwrt-dist.thankgfw.ml/releases/luci/packages
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>配置完了更新一下仓库。顺便了解一下 opkg 的使用</p>
 <div class="highlight"><div class="chroma">
@@ -301,15 +301,15 @@ src/gz openwrt_dist_luci http://openwrt-dist.thankgfw.ml/releases/luci/packages
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 更新列表</span>
-opkg update
-<span class="c1"># 安装软件</span>
-opkg install wget
-<span class="c1"># 删除软件</span>
-opkg remove wget
-<span class="c1"># 搜索</span>
-opkg search wget
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 更新列表</span>
+</span></span><span class="line"><span class="cl">opkg update
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装软件</span>
+</span></span><span class="line"><span class="cl">opkg install wget
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除软件</span>
+</span></span><span class="line"><span class="cl">opkg remove wget
+</span></span><span class="line"><span class="cl"><span class="c1"># 搜索</span>
+</span></span><span class="line"><span class="cl">opkg search wget
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>用于在国内，访问速度会很慢。</p>
 <h2 id="参考">参考</h2>
@@ -420,7 +420,7 @@ opkg search wget
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

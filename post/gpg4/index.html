@@ -28,7 +28,7 @@ pass 使用 GPG 非对称加密，这就是我们选择它的原因。
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gpg4/" />
@@ -212,8 +212,8 @@ pass 使用 GPG 非对称加密，这就是我们选择它的原因。"/>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">brew install pass
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install pass
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="linux-arch">Linux/Arch</h3>
 <div class="highlight"><div class="chroma">
@@ -221,8 +221,8 @@ pass 使用 GPG 非对称加密，这就是我们选择它的原因。"/>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo pacman -S pass
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S pass
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="初始化-pass">初始化 pass</h2>
 <p>在初始化之前，先要确保你已经用 <code>GPG</code> 创建过密钥了，如果没有可以查看前几篇文章。</p>
@@ -233,10 +233,10 @@ pass 使用 GPG 非对称加密，这就是我们选择它的原因。"/>
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass init test1 <span class="c1"># test1 是用来加密的 GPG id</span>
-mkdir: created directory <span class="s1">&#39;/home/test/.password-store/&#39;</span>
-Password store initialized <span class="k">for</span> test1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass init test1 <span class="c1"># test1 是用来加密的 GPG id</span>
+</span></span><span class="line"><span class="cl">mkdir: created directory <span class="s1">&#39;/home/test/.password-store/&#39;</span>
+</span></span><span class="line"><span class="cl">Password store initialized <span class="k">for</span> test1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="添加密码">添加密码</h2>
 <p>初始化好了密码之后，我们就可以把已经存在密码添加到 pass 中了。</p>
@@ -251,14 +251,14 @@ Password store initialized <span class="k">for</span> test1
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass insert Email/test.com
-mkdir: created directory <span class="s1">&#39;/home/test/.password-store/Email&#39;</span>
-Enter password <span class="k">for</span> Email/test.com:
-Retype password <span class="k">for</span> Email/test.com:
-<span class="o">[</span>master b331dff<span class="o">]</span> Add given password <span class="k">for</span> Email/test.com to store.
- <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
- create mode <span class="m">100644</span> Email/test.com.gpg
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass insert Email/test.com
+</span></span><span class="line"><span class="cl">mkdir: created directory <span class="s1">&#39;/home/test/.password-store/Email&#39;</span>
+</span></span><span class="line"><span class="cl">Enter password <span class="k">for</span> Email/test.com:
+</span></span><span class="line"><span class="cl">Retype password <span class="k">for</span> Email/test.com:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master b331dff<span class="o">]</span> Add given password <span class="k">for</span> Email/test.com to store.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> create mode <span class="m">100644</span> Email/test.com.gpg
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>除了把已经注册过的网站添加到 <code>pass</code> 中，我们还可以用 <code>pass</code> 来生成密码。用 <code>pass</code> 生成密码可以避免所有的密码都使用同一个。</p>
 <div class="highlight"><div class="chroma">
@@ -271,13 +271,13 @@ Retype password <span class="k">for</span> Email/test.com:
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass generate Email/test1.com <span class="m">15</span>
-<span class="o">[</span>master e5be6b2<span class="o">]</span> Add generated password <span class="k">for</span> Email/test1.com.
-<span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
-create mode <span class="m">100644</span> Email/test1.com.gpg
-The generated password <span class="k">for</span> Email/test1.com is:
-o6oQ<span class="se">\!</span><span class="o">}</span>P$<span class="o">]</span>sOU&lt;l
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass generate Email/test1.com <span class="m">15</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master e5be6b2<span class="o">]</span> Add generated password <span class="k">for</span> Email/test1.com.
+</span></span><span class="line"><span class="cl"><span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl">create mode <span class="m">100644</span> Email/test1.com.gpg
+</span></span><span class="line"><span class="cl">The generated password <span class="k">for</span> Email/test1.com is:
+</span></span><span class="line"><span class="cl">o6oQ<span class="se">\!</span><span class="o">}</span>P$<span class="o">]</span>sOU&lt;l
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>后面的 <code>15</code> 表示密码的位数。</p>
 <h2 id="查看密码">查看密码</h2>
@@ -290,12 +290,12 @@ o6oQ<span class="se">\!</span><span class="o">}</span>P$<span class="o">]</span>
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass Email/test1.com
-o6oQ<span class="se">\!</span><span class="o">}</span>P$<span class="o">]</span>sOU&lt;l
-<span class="c1"># 拷贝密码到剪切板</span>
-➜  ~ pass -c Email/test.com
-Copied Email/test.com to clipboard. Will clear in <span class="m">45</span> seconds.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass Email/test1.com
+</span></span><span class="line"><span class="cl">o6oQ<span class="se">\!</span><span class="o">}</span>P$<span class="o">]</span>sOU&lt;l
+</span></span><span class="line"><span class="cl"><span class="c1"># 拷贝密码到剪切板</span>
+</span></span><span class="line"><span class="cl">➜  ~ pass -c Email/test.com
+</span></span><span class="line"><span class="cl">Copied Email/test.com to clipboard. Will clear in <span class="m">45</span> seconds.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="修改密码">修改密码</h2>
 <div class="highlight"><div class="chroma">
@@ -316,21 +316,21 @@ Copied Email/test.com to clipboard. Will clear in <span class="m">45</span> seco
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass insert Email/test.com
-An entry already exists <span class="k">for</span> Email/test.com. Overwrite it? <span class="o">[</span>y/N<span class="o">]</span> y
-Enter password <span class="k">for</span> Email/test.com:
-Retype password <span class="k">for</span> Email/test.com:
-<span class="o">[</span>master 0d99622<span class="o">]</span> Add given password <span class="k">for</span> Email/test.com to store.
- <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
- rewrite Email/test.com.gpg <span class="o">(</span>100%<span class="o">)</span>
-➜  ~ pass generate Email/test1.com <span class="m">15</span>
-An entry already exists <span class="k">for</span> Email/test1.com. Overwrite it? <span class="o">[</span>y/N<span class="o">]</span> y
-<span class="o">[</span>master eceb081<span class="o">]</span> Add generated password <span class="k">for</span> Email/test1.com.
- <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
- rewrite Email/test1.com.gpg <span class="o">(</span>100%<span class="o">)</span>
-The generated password <span class="k">for</span> Email/test1.com is:
-Y&lt;<span class="sb">`</span>ZO,<span class="err">&#39;</span>VFx8<span class="p">|</span>U<span class="o">[</span>_
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass insert Email/test.com
+</span></span><span class="line"><span class="cl">An entry already exists <span class="k">for</span> Email/test.com. Overwrite it? <span class="o">[</span>y/N<span class="o">]</span> y
+</span></span><span class="line"><span class="cl">Enter password <span class="k">for</span> Email/test.com:
+</span></span><span class="line"><span class="cl">Retype password <span class="k">for</span> Email/test.com:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master 0d99622<span class="o">]</span> Add given password <span class="k">for</span> Email/test.com to store.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> rewrite Email/test.com.gpg <span class="o">(</span>100%<span class="o">)</span>
+</span></span><span class="line"><span class="cl">➜  ~ pass generate Email/test1.com <span class="m">15</span>
+</span></span><span class="line"><span class="cl">An entry already exists <span class="k">for</span> Email/test1.com. Overwrite it? <span class="o">[</span>y/N<span class="o">]</span> y
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master eceb081<span class="o">]</span> Add generated password <span class="k">for</span> Email/test1.com.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> rewrite Email/test1.com.gpg <span class="o">(</span>100%<span class="o">)</span>
+</span></span><span class="line"><span class="cl">The generated password <span class="k">for</span> Email/test1.com is:
+</span></span><span class="line"><span class="cl">Y&lt;<span class="sb">`</span>ZO,<span class="err">&#39;</span>VFx8<span class="p">|</span>U<span class="o">[</span>_
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="删除密码">删除密码</h2>
 <div class="highlight"><div class="chroma">
@@ -343,13 +343,13 @@ Y&lt;<span class="sb">`</span>ZO,<span class="err">&#39;</span>VFx8<span class="
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ pass rm Email/test1.com
-Are you sure you would like to delete Email/test1.com? <span class="o">[</span>y/N<span class="o">]</span> y
-removed <span class="s1">&#39;/home/test/.password-store/Email/test1.com.gpg&#39;</span>
-<span class="o">[</span>master 5ed43a8<span class="o">]</span> Remove Email/test1.com from store.
- <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
- delete mode <span class="m">100644</span> Email/test1.com.gpg
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ pass rm Email/test1.com
+</span></span><span class="line"><span class="cl">Are you sure you would like to delete Email/test1.com? <span class="o">[</span>y/N<span class="o">]</span> y
+</span></span><span class="line"><span class="cl">removed <span class="s1">&#39;/home/test/.password-store/Email/test1.com.gpg&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master 5ed43a8<span class="o">]</span> Remove Email/test1.com from store.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">0</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">0</span> deletions<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> delete mode <span class="m">100644</span> Email/test1.com.gpg
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="移动端">移动端</h2>
 <p>由于 <code>pass</code> 是个开源的产品，所有有很多大牛基于这个开发出了各种客户端，这里留下 <code>Android</code> 和 <code>iOS</code> 的地址，它们使用起来非常简单。</p>
@@ -373,16 +373,16 @@ removed <span class="s1">&#39;/home/test/.password-store/Email/test1.com.gpg&#39
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 只需要在已有的项目上输入如下命令</span>
-➜  ~ pass git init
-Initialized empty Git repository in /home/test/.password-store/.git/
-<span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> f41a601<span class="o">]</span> Add current contents of password store.
- <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>
- create mode <span class="m">100644</span> .gpg-id
-<span class="o">[</span>master d0c06cb<span class="o">]</span> Configure git repository <span class="k">for</span> gpg file diff.
- <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>
- create mode <span class="m">100644</span> .gitattributes
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 只需要在已有的项目上输入如下命令</span>
+</span></span><span class="line"><span class="cl">➜  ~ pass git init
+</span></span><span class="line"><span class="cl">Initialized empty Git repository in /home/test/.password-store/.git/
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> f41a601<span class="o">]</span> Add current contents of password store.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> create mode <span class="m">100644</span> .gpg-id
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master d0c06cb<span class="o">]</span> Configure git repository <span class="k">for</span> gpg file diff.
+</span></span><span class="line"><span class="cl"> <span class="m">1</span> file changed, <span class="m">1</span> insertion<span class="o">(</span>+<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> create mode <span class="m">100644</span> .gitattributes
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>每次操作， <code>pass</code> 都会用 <code>Git</code> 帮我们生成一次 <code>commit</code> 。</p>
 <p>我们用 <code>Git</code> 去管理 <code>pass</code> 但是还没有配置 <code>Git</code> 的仓库地址，如过你没有可以使用 <code>Github</code> 或者自己搭一个 <code>Gitlab</code> 甚至可以使用 <code>Gitee</code> 。配置的命令如下</p>
@@ -391,8 +391,8 @@ Initialized empty Git repository in /home/test/.password-store/.git/
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pass git remote add origin https://github.com/xxx/xxx.git
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pass git remote add origin https://github.com/xxx/xxx.git
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加好之后我们就需要把本地的密码推送到服务器了</p>
 <div class="highlight"><div class="chroma">
@@ -400,8 +400,8 @@ Initialized empty Git repository in /home/test/.password-store/.git/
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pass git push
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pass git push
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当我们在另外一台设备上使用的时候，可以通过下面命令来把密码下载到本地</p>
 <div class="highlight"><div class="chroma">
@@ -409,8 +409,8 @@ Initialized empty Git repository in /home/test/.password-store/.git/
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pass git pull
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pass git pull
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这些放到 <code>Git</code> 中的文件都是已经加过密的，只要你不把私钥泄漏，还是相当安全的。</p>
 <h2 id="参考">参考</h2>
@@ -521,7 +521,7 @@ Initialized empty Git repository in /home/test/.password-store/.git/
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

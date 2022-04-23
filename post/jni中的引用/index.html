@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/" />
@@ -198,15 +198,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr3</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello3&#34;</span><span class="p">);</span>
-    <span class="p">...</span>
-    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PopLocalFrame</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr3</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello3&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PopLocalFrame</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>PushLocalFrame</code> 之后的代码会在遇到 <code>PopLocalFrame</code> 后一次性全部释放，这样我们就不用手动一个一个的去释放了。</p>
 <p>上面这种情况是没有返回值的，如果有返回局部栈帧中的局部引用应该怎么办？</p>
@@ -223,15 +223,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jstring</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
-    <span class="n">jstring</span> <span class="n">jstr3</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello3&#34;</span><span class="p">);</span>
-    <span class="p">...</span>
-    <span class="k">return</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">PopLocalFrame</span><span class="p">(</span><span class="n">jstr1</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">jstring</span> <span class="nf">TestLocalFrame</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">PushLocalFrame</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr1</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr2</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello2&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jstring</span> <span class="n">jstr3</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello3&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">PopLocalFrame</span><span class="p">(</span><span class="n">jstr1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这样 <code>jstr1</code> 就会在父帧中被重新创建，所以其实 <code>jstr1</code> 还是会失效。只不过重新创建了一个新的引用。</p>
 <h3 id="ensurelocalcapacity">EnsureLocalCapacity</h3>
@@ -245,12 +245,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">EnsureLocalCapacity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">==</span>  <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span>  <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">jstring</span>  <span class="n">jstr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello, world&#34;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">EnsureLocalCapacity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">==</span>  <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span>  <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jstring</span>  <span class="n">jstr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="s">&#34;hello, world&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>EnsureLocalCapacity</code> 返回 <code>0</code> 表示创建成功。</p>
 <h2 id="全局引用">全局引用</h2>
@@ -269,14 +269,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">jobject</span> <span class="n">g_callback</span><span class="p">;</span>
-
-<span class="k">extern</span> <span class="s">&#34;C&#34;</span> <span class="n">JNIEXPORT</span> <span class="kt">void</span> <span class="n">JNICALL</span>
-<span class="n">AddListener</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// ...
-</span><span class="c1"></span>    <span class="n">g_listener</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewGlobalRef</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">jobject</span> <span class="n">g_callback</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="s">&#34;C&#34;</span> <span class="n">JNIEXPORT</span> <span class="kt">void</span> <span class="n">JNICALL</span>
+</span></span><span class="line"><span class="cl"><span class="n">AddListener</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">g_listener</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewGlobalRef</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里需要注意判断两个 <code>Java</code> 对象是不是同一个，需要用 <code>IsSameObject</code> ，而不是用 <code>==</code> 判断。</p>
 <div class="highlight"><div class="chroma">
@@ -288,12 +288,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_callback</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 对象是同一个
-</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="c1">// 对象不是同一个
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_callback</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 对象是同一个
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 对象不是同一个
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在不使用的时候记得要使用 <code>env-&gt;DeleteGlobalRef(callback)</code> 释放。</p>
 <h2 id="弱全局引用">弱全局引用</h2>
@@ -308,12 +308,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_weakCallback</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// 对象未被释放
-</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="c1">// 对象已经被释放了
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">g_weakCallback</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_FALSE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 对象未被释放
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 对象已经被释放了
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -427,7 +427,7 @@
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

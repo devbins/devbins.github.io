@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/jenkins/" />
@@ -199,8 +199,8 @@ Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sdkmanager --list
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sdkmanager --list
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="安装指定的包">安装指定的包</h3>
 <div class="highlight"><div class="chroma">
@@ -208,8 +208,8 @@ Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sdkmanager <span class="s2">&#34;platforms;android-26&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sdkmanager <span class="s2">&#34;platforms;android-26&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 <code>sdkmanager</code> 时会提示要你同意协议，在 docker 中我们肯定是不会每次安装一个都去输入 <code>yes</code> 去同意。所以通过 <code>Linux</code> 的管道来自动同意协议。命令就变成了</p>
 <div class="highlight"><div class="chroma">
@@ -217,8 +217,8 @@ Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">yes <span class="p">|</span> sdkmanager <span class="s2">&#34;platforms;android-26&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yes <span class="p">|</span> sdkmanager <span class="s2">&#34;platforms;android-26&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="一次性更新全部">一次性更新全部</h3>
 <div class="highlight"><div class="chroma">
@@ -226,8 +226,8 @@ Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sdkmanager --update
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sdkmanager --update
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="构建带有-android-环境的-jenkins">构建带有 Android 环境的 Jenkins</h2>
 <p>了解了怎么在命令行中怎么管理 <code>Android SDK</code> 后，我们就可以来构建带有 <code>Android</code> 环境的 docker 镜像了。编写如下 <code>Dockerfile</code></p>
@@ -246,18 +246,18 @@ Jenkins 是一个持续集成的工具，帮你构建和打包自动化，不用
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">From jenkins
-
-USER root
-
-RUN apt update <span class="o">&amp;&amp;</span> apt upgrade -y <span class="o">&amp;&amp;</span> apt install wget unzip <span class="o">&amp;&amp;</span> mkdir /opt/android <span class="o">&amp;&amp;</span> <span class="nb">cd</span> /opt/android  <span class="o">&amp;&amp;</span> wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip <span class="o">&amp;&amp;</span> unzip sdk-tools-linux-4333796.zip
-
-ENV <span class="nv">ANDROID_HOME</span><span class="o">=</span>/opt/android
-
-RUN yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;platform-tools&#34;</span> <span class="o">&amp;&amp;</span> yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;build-tools;28.0.2&#34;</span> <span class="o">&amp;&amp;</span> yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;platforms;android-28&#34;</span>
-
-USER jenkins
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">From jenkins
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">USER root
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">RUN apt update <span class="o">&amp;&amp;</span> apt upgrade -y <span class="o">&amp;&amp;</span> apt install wget unzip <span class="o">&amp;&amp;</span> mkdir /opt/android <span class="o">&amp;&amp;</span> <span class="nb">cd</span> /opt/android  <span class="o">&amp;&amp;</span> wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip <span class="o">&amp;&amp;</span> unzip sdk-tools-linux-4333796.zip
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ENV <span class="nv">ANDROID_HOME</span><span class="o">=</span>/opt/android
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">RUN yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;platform-tools&#34;</span> <span class="o">&amp;&amp;</span> yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;build-tools;28.0.2&#34;</span> <span class="o">&amp;&amp;</span> yes <span class="p">|</span> /opt/android/tools/bin/sdkmanager <span class="s2">&#34;platforms;android-28&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">USER jenkins
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>Dockerfile</code> 中安装的 <code>SDK</code> 包，需要根据自己项目动态调整，也没有必要所有的都安装，用不到的也没必要安装，不然构建出来的镜像很大。</p>
 <p>写好 <code>Dockerfile</code> 后使用 <code>docekr build -t jenkand:v1 .</code> 来构建。这里如果网速不好，花费的时间是比较久的，docker 可以使用国内的加速会快一些。</p>
@@ -267,8 +267,8 @@ USER jenkins
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">docker run -p 80:8080 jenkand:v1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker run -p 80:8080 jenkand:v1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>运行起来之后会输出管理员密码，用来初始化安装。
 <img src="../../images/jenkins/jenkins_pwd.png" alt="">
@@ -328,36 +328,36 @@ Jenkins 就可以用了，但是要想打包 <code>Android</code> 程序还要�
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="n">android</span> <span class="o">{</span>
-   <span class="n">signingConfigs</span> <span class="o">{</span>
-        <span class="n">signingConfig</span> <span class="o">{</span>
-            <span class="n">storeFile</span> <span class="nf">file</span><span class="o">(</span><span class="n">STORE_FILE_PATH</span><span class="o">)</span>    <span class="c1">// 签名文件的路径
-</span><span class="c1"></span>            <span class="n">storePassword</span> <span class="n">STORE_FILE_PASSWORD</span>  <span class="c1">// 签名密码
-</span><span class="c1"></span>            <span class="n">keyAlias</span> <span class="n">KEY_ALIAS</span>                 <span class="c1">// 别名
-</span><span class="c1"></span>            <span class="n">keyPassword</span> <span class="n">KEY_PASSWORD</span>           <span class="c1">// 签名密码
-</span><span class="c1"></span>        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="n">buildTypes</span> <span class="o">{</span>
-        <span class="n">release</span> <span class="o">{</span>
-            <span class="n">minifyEnabled</span> <span class="kc">true</span>
-            <span class="n">zipAlignEnabled</span> <span class="kc">true</span>
-            <span class="n">shrinkResources</span> <span class="kc">true</span>
-            <span class="n">proguardFiles</span> <span class="nf">getDefaultProguardFile</span><span class="o">(</span><span class="s1">&#39;proguard-android.txt&#39;</span><span class="o">),</span> <span class="s1">&#39;proguard-rules.pro&#39;</span>
-            <span class="n">signingConfig</span> <span class="n">signingConfigs</span><span class="o">.</span><span class="na">signingConfig</span>
-        <span class="o">}</span>
-        <span class="n">debug</span> <span class="o">{</span>  <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="c1">//渠道 Flavors
-</span><span class="c1"></span>    <span class="n">productFlavors</span> <span class="o">{</span>
-        <span class="n">wandoujia</span> <span class="o">{</span>
-            <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span><span class="nl">UMENG_CHANNEL_VALUE:</span> <span class="s2">&#34;wandoujia&#34;</span><span class="o">]</span>
-        <span class="o">}</span>
-        <span class="n">xiaomi</span> <span class="o">{</span>
-            <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span><span class="nl">UMENG_CHANNEL_VALUE:</span> <span class="s2">&#34;xiaomi&#34;</span><span class="o">]</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">android</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">signingConfigs</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">signingConfig</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">storeFile</span> <span class="nf">file</span><span class="o">(</span><span class="n">STORE_FILE_PATH</span><span class="o">)</span>    <span class="c1">// 签名文件的路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">storePassword</span> <span class="n">STORE_FILE_PASSWORD</span>  <span class="c1">// 签名密码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">keyAlias</span> <span class="n">KEY_ALIAS</span>                 <span class="c1">// 别名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">keyPassword</span> <span class="n">KEY_PASSWORD</span>           <span class="c1">// 签名密码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buildTypes</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">release</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">minifyEnabled</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">            <span class="n">zipAlignEnabled</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">            <span class="n">shrinkResources</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">            <span class="n">proguardFiles</span> <span class="nf">getDefaultProguardFile</span><span class="o">(</span><span class="s1">&#39;proguard-android.txt&#39;</span><span class="o">),</span> <span class="s1">&#39;proguard-rules.pro&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">signingConfig</span> <span class="n">signingConfigs</span><span class="o">.</span><span class="na">signingConfig</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">debug</span> <span class="o">{</span>  <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//渠道 Flavors
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">productFlavors</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">wandoujia</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span><span class="nl">UMENG_CHANNEL_VALUE:</span> <span class="s2">&#34;wandoujia&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">xiaomi</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">manifestPlaceholders</span> <span class="o">=</span> <span class="o">[</span><span class="nl">UMENG_CHANNEL_VALUE:</span> <span class="s2">&#34;xiaomi&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>打开终端在项目的根目录输入如下指令，就可以打包</p>
 <div class="highlight"><div class="chroma">
@@ -366,9 +366,9 @@ Jenkins 就可以用了，但是要想打包 <code>Android</code> 程序还要�
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">gradlew assembleXiaomiRelease // 小米渠道包
-gradlew assembleWandoujiaRelease // 豌豆荚渠道包
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gradlew assembleXiaomiRelease // 小米渠道包
+</span></span><span class="line"><span class="cl">gradlew assembleWandoujiaRelease // 豌豆荚渠道包
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="创建打包任务">创建打包任务</h2>
 <p>做了这么多，是驴是马拿出来遛遛，看看可行不可行。</p>
@@ -419,20 +419,20 @@ gradlew assembleWandoujiaRelease // 豌豆荚渠道包
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">➜  ~ docker <span class="nb">exec</span> -it --user root <span class="m">7508</span> /bin/bash <span class="c1"># 进入容器，7508 是容器的 id,要以 root 的身份进入，不然没有权限改变 jenkins.war</span>
-root@75082215a3f3:~# ps -ax <span class="c1"># 查看进程以便找出 jenkins 所在路径</span>
-PID TTY      STAT   TIME COMMAND
-<span class="m">1</span> ?        Ss     0:00 /bin/tini -- /usr/local/bin/jenkins.sh
-<span class="m">5</span> ?        Sl     1:56 java -jar /usr/share/jenkins/jenkins.war <span class="c1"># jenkins.war 所在路径</span>
-<span class="m">128</span> ?        Ss     0:00 /bin/bash
-<span class="m">167</span> ?        Ss     0:00 /bin/bash
-<span class="m">177</span> ?        R+     0:00 ps -ax
-root@75082215a3f3:/# <span class="nb">cd</span> /usr/share/jenkins/
-root@75082215a3f3:/usr/share/jenkins# ls
-jenkins.war  ref
-root@75082215a3f3:/usr/share/jenkins# mv jenkins.war jenkins.war.bak <span class="c1"># 备份旧版 jenkins</span>
-root@75082215a3f3:/usr/share/jenkins# wget http://mirrors.jenkins.io/war/latest/jenkins.war <span class="c1"># 下载最新 jenkins</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ docker <span class="nb">exec</span> -it --user root <span class="m">7508</span> /bin/bash <span class="c1"># 进入容器，7508 是容器的 id,要以 root 的身份进入，不然没有权限改变 jenkins.war</span>
+</span></span><span class="line"><span class="cl">root@75082215a3f3:~# ps -ax <span class="c1"># 查看进程以便找出 jenkins 所在路径</span>
+</span></span><span class="line"><span class="cl">PID TTY      STAT   TIME COMMAND
+</span></span><span class="line"><span class="cl"><span class="m">1</span> ?        Ss     0:00 /bin/tini -- /usr/local/bin/jenkins.sh
+</span></span><span class="line"><span class="cl"><span class="m">5</span> ?        Sl     1:56 java -jar /usr/share/jenkins/jenkins.war <span class="c1"># jenkins.war 所在路径</span>
+</span></span><span class="line"><span class="cl"><span class="m">128</span> ?        Ss     0:00 /bin/bash
+</span></span><span class="line"><span class="cl"><span class="m">167</span> ?        Ss     0:00 /bin/bash
+</span></span><span class="line"><span class="cl"><span class="m">177</span> ?        R+     0:00 ps -ax
+</span></span><span class="line"><span class="cl">root@75082215a3f3:/# <span class="nb">cd</span> /usr/share/jenkins/
+</span></span><span class="line"><span class="cl">root@75082215a3f3:/usr/share/jenkins# ls
+</span></span><span class="line"><span class="cl">jenkins.war  ref
+</span></span><span class="line"><span class="cl">root@75082215a3f3:/usr/share/jenkins# mv jenkins.war jenkins.war.bak <span class="c1"># 备份旧版 jenkins</span>
+</span></span><span class="line"><span class="cl">root@75082215a3f3:/usr/share/jenkins# wget http://mirrors.jenkins.io/war/latest/jenkins.war <span class="c1"># 下载最新 jenkins</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>重启容器就可以看到最新的 <code>jenkins</code> 。</p>
 <h3 id="android-sdk">Android SDK</h3>
@@ -446,12 +446,12 @@ root@75082215a3f3:/usr/share/jenkins# wget http://mirrors.jenkins.io/war/latest/
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">docker <span class="nb">exec</span> -it --user root <span class="m">7508</span> /bin/bash <span class="c1"># 进入容器</span>
-root@75082215a3f3:~# <span class="nb">cd</span> /opt/android/tools/bin/
-root@75082215a3f3:/opt/android/tools/bin# yes <span class="p">|</span> ./sdkmanager <span class="s2">&#34;platform-tools&#34;</span>
-Warning: File /root/.android/repositories.cfg could not be loaded.
-<span class="o">[=======================================]</span> 100% Computing updates...
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it --user root <span class="m">7508</span> /bin/bash <span class="c1"># 进入容器</span>
+</span></span><span class="line"><span class="cl">root@75082215a3f3:~# <span class="nb">cd</span> /opt/android/tools/bin/
+</span></span><span class="line"><span class="cl">root@75082215a3f3:/opt/android/tools/bin# yes <span class="p">|</span> ./sdkmanager <span class="s2">&#34;platform-tools&#34;</span>
+</span></span><span class="line"><span class="cl">Warning: File /root/.android/repositories.cfg could not be loaded.
+</span></span><span class="line"><span class="cl"><span class="o">[=======================================]</span> 100% Computing updates...
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <ul>
@@ -559,7 +559,7 @@ Warning: File /root/.android/repositories.cfg could not be loaded.
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 

@@ -28,7 +28,7 @@ nightly channel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一�
 
 
 
-<meta name="generator" content="Hugo 0.91.2 with theme even" />
+<meta name="generator" content="Hugo 0.97.2 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/rust_android/" />
@@ -198,11 +198,11 @@ nightly channel 会报 dl_iterate_phdr can&#39;t find 错误，这个错误一�
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">rustup target add aarch64-linux-android     <span class="c1"># arm64</span>
-rustup target add armv7-linux-androideabi   <span class="c1"># arm</span>
-rustup target add x86_64-linux-android      <span class="c1"># x86_64</span>
-rustup target add i686-linux-android        <span class="c1"># x86</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup target add aarch64-linux-android     <span class="c1"># arm64</span>
+</span></span><span class="line"><span class="cl">rustup target add armv7-linux-androideabi   <span class="c1"># arm</span>
+</span></span><span class="line"><span class="cl">rustup target add x86_64-linux-android      <span class="c1"># x86_64</span>
+</span></span><span class="line"><span class="cl">rustup target add i686-linux-android        <span class="c1"># x86</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="新建一个android工程配置rust插件">新建一个Android工程配置rust插件</h2>
 <p>新建 <code>Android</code> 项目就不说了，这个例子会使用<a href="https://github.com/mozilla/rust-android-gradle">mozilla/rust-android-gradle</a>这个插件来进行辅助开发，所以需要说一说插件的配置。在项目的 <code>build.gradle</code> 中加入如下配置</p>
@@ -220,17 +220,17 @@ rustup target add i686-linux-android        <span class="c1"># x86</span>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">buildscript</span> <span class="p">{</span>
-    <span class="n">repositories</span> <span class="p">{</span>
-        <span class="n">maven</span> <span class="p">{</span>
-            <span class="n">url</span> <span class="s2">&#34;https://plugins.gradle.org/m2/&#34;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">dependencies</span> <span class="p">{</span>
-        <span class="n">classpath</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">:</span><span class="n">plugin</span><span class="p">:</span><span class="m">0.9</span><span class="p">.</span><span class="m">0</span><span class="err">&#39;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="n">buildscript</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">repositories</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">maven</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span> <span class="s2">&#34;https://plugins.gradle.org/m2/&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dependencies</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">classpath</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">:</span><span class="n">plugin</span><span class="p">:</span><span class="m">0.9</span><span class="p">.</span><span class="m">0</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接着在 <code>app</code> module 中的 <code>build.gradle</code> 中加入如下配置</p>
 <div class="highlight"><div class="chroma">
@@ -262,32 +262,32 @@ rustup target add i686-linux-android        <span class="c1"># x86</span>
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="n">plugins</span> <span class="p">{</span>
-    <span class="n">id</span> <span class="err">&#39;</span><span class="n">com</span><span class="p">.</span><span class="n">android</span><span class="p">.</span><span class="n">application</span><span class="err">&#39;</span>
-    <span class="n">id</span> <span class="err">&#39;</span><span class="n">kotlin</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span>
-    <span class="n">id</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span> <span class="c1">// 新添加的
-</span><span class="c1"></span><span class="p">}</span>
-
-
-<span class="c1">// 配置rust
-</span><span class="c1"></span><span class="n">cargo</span> <span class="p">{</span>
-    <span class="n">module</span> <span class="p">=</span> <span class="s2">&#34;./rust&#34;</span> <span class="c1">// 配置rust 所在的路径，也就是Cargo.toml所在的目录
-</span><span class="c1"></span>    <span class="n">targets</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;arm64&#34;</span><span class="p">]</span> <span class="c1">// 配置需要编译的架构
-</span><span class="c1"></span>    <span class="n">libname</span> <span class="p">=</span> <span class="s2">&#34;rust&#34;</span> <span class="c1">// 编译之后so的名字，这里需要和Cargo.toml 中lib.name一致
-</span><span class="c1"></span><span class="p">}</span>
-
-<span class="c1">// 自动编译rust库
-</span><span class="c1"></span><span class="n">afterEvaluate</span> <span class="p">{</span>
-    <span class="n">android</span><span class="p">.</span><span class="n">applicationVariants</span><span class="p">.</span><span class="n">all</span> <span class="p">{</span> <span class="n">variant</span> <span class="o">-&gt;</span>
-        <span class="n">def</span> <span class="n">productFlavor</span> <span class="p">=</span> <span class="s2">&#34;&#34;</span>
-        <span class="n">variant</span><span class="p">.</span><span class="n">productFlavors</span><span class="p">.</span><span class="n">each</span> <span class="p">{</span>
-            <span class="n">productFlavor</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">${it.name.capitalize()}</span><span class="s2">&#34;</span>
-        <span class="p">}</span>
-        <span class="n">def</span> <span class="n">buildType</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="si">${variant.buildType.name.capitalize()}</span><span class="s2">&#34;</span>
-        <span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;generate</span><span class="si">${productFlavor}${buildType}</span><span class="s2">Assets&#34;</span><span class="p">].</span><span class="n">dependsOn</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;cargoBuild&#34;</span><span class="p">])</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="n">plugins</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="err">&#39;</span><span class="n">com</span><span class="p">.</span><span class="n">android</span><span class="p">.</span><span class="n">application</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="err">&#39;</span><span class="n">kotlin</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="err">&#39;</span><span class="n">org</span><span class="p">.</span><span class="n">mozilla</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="p">-</span><span class="n">gradle</span><span class="p">.</span><span class="n">rust</span><span class="p">-</span><span class="n">android</span><span class="err">&#39;</span> <span class="c1">// 新添加的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 配置rust
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">cargo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">module</span> <span class="p">=</span> <span class="s2">&#34;./rust&#34;</span> <span class="c1">// 配置rust 所在的路径，也就是Cargo.toml所在的目录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">targets</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;arm64&#34;</span><span class="p">]</span> <span class="c1">// 配置需要编译的架构
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">libname</span> <span class="p">=</span> <span class="s2">&#34;rust&#34;</span> <span class="c1">// 编译之后so的名字，这里需要和Cargo.toml 中lib.name一致
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 自动编译rust库
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">afterEvaluate</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">android</span><span class="p">.</span><span class="n">applicationVariants</span><span class="p">.</span><span class="n">all</span> <span class="p">{</span> <span class="n">variant</span> <span class="o">-&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">def</span> <span class="n">productFlavor</span> <span class="p">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">variant</span><span class="p">.</span><span class="n">productFlavors</span><span class="p">.</span><span class="n">each</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">productFlavor</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">${it.name.capitalize()}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">def</span> <span class="n">buildType</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="si">${variant.buildType.name.capitalize()}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;generate</span><span class="si">${productFlavor}${buildType}</span><span class="s2">Assets&#34;</span><span class="p">].</span><span class="n">dependsOn</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="s2">&#34;cargoBuild&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们现在还没有创建 <code>Rust</code> 的项目，这里先把配置都先写上来了。</p>
 <h2 id="创建rust库">创建Rust库</h2>
@@ -298,9 +298,9 @@ rustup target add i686-linux-android        <span class="c1"># x86</span>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> MyApplication/app            <span class="c1"># 根据上面的配置我们的rust在app下</span>
-cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> MyApplication/app            <span class="c1"># 根据上面的配置我们的rust在app下</span>
+</span></span><span class="line"><span class="cl">cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="添加jni依赖">添加JNI依赖</h2>
 <p>由于我们需要在 <code>Kotlin</code> 和 <code>Rust</code> 之间互相调用，所以还需要依赖 <code>jni</code> 这个 <code>crate</code> ，并且我们需要生成的是动态库</p>
@@ -313,12 +313,12 @@ cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>dependencies<span class="o">]</span>
-<span class="nv">jni</span> <span class="o">=</span> <span class="s2">&#34;0.19.0&#34;</span>                  <span class="c1"># 添加jni依赖</span>
-
-<span class="o">[</span>lib<span class="o">]</span>
-<span class="nv">crate_type</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;dylib&#34;</span><span class="o">]</span>          <span class="c1"># dylib 表示的是动态库</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>dependencies<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">jni</span> <span class="o">=</span> <span class="s2">&#34;0.19.0&#34;</span>                  <span class="c1"># 添加jni依赖</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>lib<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">crate_type</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;dylib&#34;</span><span class="o">]</span>          <span class="c1"># dylib 表示的是动态库</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="编写kotlin代码">编写Kotlin代码</h2>
 <p>从 <code>Kotlin</code> 中调用 <code>Rust</code> 代码和调用 <code>C/C++</code> 代码一样，先要把对应的 <code>so</code> 加载进来，并且需要把要调用的额函数声明为 <code>external</code> ， <code>Java</code> 就是 <code>native</code> 。</p>
@@ -347,27 +347,27 @@ cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
-
-    <span class="k">private</span> <span class="k">lateinit</span> <span class="k">var</span> <span class="py">binding</span><span class="p">:</span> <span class="n">ActivityMainBinding</span>
-
-    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
-        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
-
-        <span class="n">binding</span> <span class="p">=</span> <span class="n">ActivityMainBinding</span><span class="p">.</span><span class="n">inflate</span><span class="p">(</span><span class="n">layoutInflater</span><span class="p">)</span>
-        <span class="n">setContentView</span><span class="p">(</span><span class="n">binding</span><span class="p">.</span><span class="n">root</span><span class="p">)</span>
-
-        <span class="n">binding</span><span class="p">.</span><span class="n">sampleText</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">stringFromJNI</span><span class="p">()</span> <span class="c1">//显示从Rust中返回的字符串到TextView中
-</span><span class="c1"></span>    <span class="p">}</span>
-    <span class="k">external</span> <span class="k">fun</span> <span class="nf">stringFromJNI</span><span class="p">():</span> <span class="n">String</span>
-
-    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
-        <span class="k">init</span> <span class="p">{</span>
-            <span class="n">System</span><span class="p">.</span><span class="n">loadLibrary</span><span class="p">(</span><span class="s2">&#34;rust&#34;</span><span class="p">)</span> <span class="c1">//加载librust.so
-</span><span class="c1"></span>        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">lateinit</span> <span class="k">var</span> <span class="py">binding</span><span class="p">:</span> <span class="n">ActivityMainBinding</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">binding</span> <span class="p">=</span> <span class="n">ActivityMainBinding</span><span class="p">.</span><span class="n">inflate</span><span class="p">(</span><span class="n">layoutInflater</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">setContentView</span><span class="p">(</span><span class="n">binding</span><span class="p">.</span><span class="n">root</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">binding</span><span class="p">.</span><span class="n">sampleText</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">stringFromJNI</span><span class="p">()</span> <span class="c1">//显示从Rust中返回的字符串到TextView中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">external</span> <span class="k">fun</span> <span class="nf">stringFromJNI</span><span class="p">():</span> <span class="n">String</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">init</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">System</span><span class="p">.</span><span class="n">loadLibrary</span><span class="p">(</span><span class="s2">&#34;rust&#34;</span><span class="p">)</span> <span class="c1">//加载librust.so
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="编写rust代码">编写Rust代码</h2>
 <p>上一步我们编写好了 <code>Kotlin</code> 代码，接下来就需要实现对应的 <code>Rust</code> 函数了。</p>
@@ -392,22 +392,22 @@ cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="k">extern</span><span class="w"> </span><span class="k">crate</span><span class="w"> </span><span class="n">jni</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">objects</span>::<span class="p">{</span><span class="n">JObject</span><span class="p">};</span><span class="w">
-</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">sys</span>::<span class="n">jstring</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">JNIEnv</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
-</span><span class="w"></span><span class="cp">#[allow(non_snake_case)]</span><span class="w">
-</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">Java_com_example_myapplication_MainActivity_stringFromJNI</span><span class="p">(</span><span class="w">
-</span><span class="w">    </span><span class="n">env</span>: <span class="nc">JNIEnv</span><span class="p">,</span><span class="w">
-</span><span class="w">    </span><span class="n">_</span>: <span class="nc">JObject</span><span class="p">,</span><span class="w">
-</span><span class="w"></span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">jstring</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="n">new_string</span><span class="p">(</span><span class="s">&#34;Hello Rust&#34;</span><span class="p">.</span><span class="n">to_owned</span><span class="p">()).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
-</span><span class="w">    </span><span class="n">output</span><span class="p">.</span><span class="n">into_inner</span><span class="p">()</span><span class="w">
-</span><span class="w"></span><span class="p">}</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">extern</span><span class="w"> </span><span class="k">crate</span><span class="w"> </span><span class="n">jni</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">objects</span>::<span class="p">{</span><span class="n">JObject</span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">sys</span>::<span class="n">jstring</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">jni</span>::<span class="n">JNIEnv</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[no_mangle]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[allow(non_snake_case)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">Java_com_example_myapplication_MainActivity_stringFromJNI</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">env</span>: <span class="nc">JNIEnv</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">_</span>: <span class="nc">JObject</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">jstring</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="n">new_string</span><span class="p">(</span><span class="s">&#34;Hello Rust&#34;</span><span class="p">.</span><span class="n">to_owned</span><span class="p">()).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">output</span><span class="p">.</span><span class="n">into_inner</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="运行效果">运行效果</h2>
 <p>代码都编写完了，点击运行得到如下效果</p>
@@ -523,7 +523,7 @@ cargo new rust --lib            <span class="c1"># 创建库项目，加上--lib
 
 
 
-<script type="text/javascript" src="../../js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="../../js/main.min.64437849d125a2d603b3e71d6de5225d641a32d17168a58106e0b61852079683.js"></script>
 
 
 
