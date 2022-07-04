@@ -308,7 +308,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656888892687
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55 RefObj From JNI  time: <span class="m">1656888892687</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>从输出来看，创建的 <code>RefObj</code> 并没有被释放，如果你对 <code>JNI</code> 比较熟悉应该是知道有 <code>DeleteLocalRef</code> 这个方法的，我们猜测一下是不是需要手动调用 <code>DeleteLocalRef</code></p>
@@ -352,12 +352,12 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656889104009
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656889104009</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>很不幸 <code>RefObj</code> 依旧没有释放，这是怎么回事？难道是代码写错了？</p>
 <h2 id="gc">GC</h2>
-<p>由于 <code>Java</code> 是带有垃圾回收的，所以我们不需要去释放对内存，都由 <code>GC</code> 管理。</p>
+<p>由于 <code>Java</code> 是带有垃圾回收的，所以我们不需要去释放内存，都由 <code>GC</code> 管理。</p>
 <p>这里之所以没有释放很可能是没有触发 <code>GC</code> 所以导致没有释放 <code>RefObj</code> ，我们加入 <code>GC</code> 然后再试一下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -396,8 +396,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656889255901
-</span></span><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656889255960 ，RefObj From JNI : destruct
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656889255901</span>
+</span></span><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656889255960</span> ，RefObj From JNI : destruct
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>果然释放了，如果我们把 <code>DeleteLocalRef</code> 删掉是不是也能回收 <code>RefObj</code> ，于是我把 <code>DeleteLocalRef</code> 删掉后再次执行，结果如下</p>
@@ -407,8 +407,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656889569452
-</span></span><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656889569512 ，RefObj From JNI : destruct
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656889569452</span>
+</span></span><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656889569512</span> ，RefObj From JNI : destruct
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到两次结果是一样的，有没有 <code>DeleteLocalRef</code> 并不影响对象的释放。</p>
@@ -420,7 +420,7 @@
 <p>所以用完之后就释放，这样就可以给其它局部引用挪出位置，不会导致程序退出。</p>
 <h2 id="不释放">不释放</h2>
 <p>上面讨论了局部引用的释放问题，如果我不想释放要怎么做呢？</p>
-<p>根据上面的推理，我们的局部引用会收到 <code>Java</code> 虚拟机中的 <code>GC</code> 影响，所以从这个思路得出，我们只要持有这个对象的强引用 <code>GC</code> 就不会回收这个对象，写个代码验证一下</p>
+<p>根据上面的推理，我们的局部引用会受到 <code>Java</code> 虚拟机中的 <code>GC</code> 影响，所以从这个思路得出，我们只要持有这个对象的强引用 <code>GC</code> 就不会回收这个对象，写个代码验证一下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -546,7 +546,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656891033416
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656891033416</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到局部引用在触发 <code>GC</code> 之后并没有被释放，这也就是为什么我们经常写 <code>env-&gt;NewStringUTF</code> 直接返回到 <code>Java</code> 不会有问题的原因。</p>
@@ -675,10 +675,10 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">JNIRef$RefObj@2a139a55  RefObj From JNI  time: 1656891534173
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">JNIRef<span class="nv">$RefObj</span>@2a139a55  RefObj From JNI  time: <span class="m">1656891534173</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>可以看到使用全局引用后，触发了 <code>GC</code>  <code>refobj</code> 也没有被释放掉</p>
+</div><p>可以看到使用全局引用后，触发了 <code>GC</code> , <code>refobj</code> 也没有被释放掉</p>
 <h2 id="结论">结论</h2>
 <ul>
 <li>JNI 中创建的 Java 对象受虚拟机 GC 的管控</li>
