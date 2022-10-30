@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.104.3 with theme even" />
+<meta name="generator" content="Hugo 0.105.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/vue%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" />
@@ -62,7 +62,7 @@ Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式
 Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式框架。与其他重量级框架不同的是，Vue 采用自底向上增量开发的设计。Vue 的核心库只关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与单文件组件和 Vue 生态系统支持的库结合使用时，Vue 也完全能够为复杂的单页应用程序提供驱动。
 我个人觉得有基础的人学习 Vue 上手是比较快的，使用也是简单，并且还有完整的生态并且社区活跃，相信学习 Vue 会是一件有价值的事。"><meta itemprop="datePublished" content="2017-11-15T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2017-11-15T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1998">
+<meta itemprop="wordCount" content="2028">
 <meta itemprop="keywords" content="Vue," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Vue 使用总结"/>
 <meta name="twitter:description" content="
@@ -153,9 +153,10 @@ Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式
         <span class="post-time"> 2017-11-15 </span>
         <div class="post-category">
             <a href="../../categories/%E5%89%8D%E7%AB%AF/"> 前端 </a>
+            <a href="../../categories/vue/"> Vue </a>
             </div>
-          <span class="more-meta"> 约 1998 字 </span>
-          <span class="more-meta"> 预计阅读 4 分钟 </span>
+          <span class="more-meta"> 约 2028 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
     </header>
@@ -249,8 +250,7 @@ Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式
 </span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>在 <code>script</code> 标签里，我们创建了一个 Vue 对象。在 Vue 对象中有 <code>el</code> 字段,它代表我们创建的 Vue 对象要在哪个元素上进行操作，以后 Vue 所有的操作都会在该元素下，Vue 中的所有元素都是该元素的子元素。 <code>el</code> 可以通过 CSS 选择器来指定具体的元素。
-另外一个重要的字段就是 <code>data</code> ，Vue 是一个 MVVM 框架，没有数据和咸鱼有什么区别。在 <code>data</code> 中的数据就可以在 html 中访问，最简单就是使用 <code>{{ }}</code> 来访问。 <code>{{ }}</code> 是模板语法，会简单的显示文本内容，当 <code>data</code> 中的数据发生变化时， <code>{{ }}</code> 中的会自动更新。</p>
+</div><p>在 <code>script</code> 标签里，我们创建了一个 Vue 对象。在 Vue 对象中有 <code>el</code> 字段,它代表我们创建的 Vue 对象要在哪个元素上进行操作，以后 Vue 所有的操作都会在该元素下，Vue 中的所有元素都是该元素的子元素。 <code>el</code> 可以通过 CSS 选择器来指定具体的元素。另外一个重要的字段就是 <code>data</code> ，Vue 是一个 MVVM 框架，没有数据和咸鱼有什么区别。在 <code>data</code> 中的数据就可以在 html 中访问，最简单就是使用 <code>{{ }}</code> 来访问。 <code>{{ }}</code> 是模板语法，会简单的显示文本内容，当 <code>data</code> 中的数据发生变化时， <code>{{ }}</code> 中的会自动更新。</p>
 <h2 id="模板指令">模板指令</h2>
 <p>在了解了怎么在项目中引入 Vue 之后，就来了解一下 Vue 的使用。</p>
 <h3 id="文本渲染">文本渲染</h3>
@@ -324,60 +324,114 @@ Vue.js (读音 /vjuː/，类似于 view) 是一套构建用户界面的渐进式
 </div>
 </div><h4 id="循环">循环</h4>
 <p>循环在编程中是必不可少的，Vue 怎么能缺席呢。</p>
+<!-- raw HTML omitted -->
 <ul>
-<li>Vue 提供 <code>v-for</code> 指令来表示循环</li>
+<li>
+<p>Vue 提供 <code>v-for</code> 指令来表示循环</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;app&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">ol</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">li</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;item in items&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            {{item}}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">ol</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#app&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">items</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Java&#39;</span><span class="p">,</span><span class="s1">&#39;C/C++&#39;</span><span class="p">,</span><span class="s1">&#39;JavaScript&#39;</span><span class="p">,</span><span class="s1">&#39;Python&#39;</span><span class="p">,</span><span class="s1">&#39;PHP&#39;</span><span class="p">,</span><span class="s1">&#39;SQL&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
-<pre><code>```html
-&lt;div id=&quot;app&quot;&gt;
-    &lt;ol&gt;
-        &lt;li v-for=&quot;item in items&quot;&gt;
-            {{item}}
-        &lt;/li&gt;
-    &lt;/ol&gt;
-&lt;/div&gt;
-&lt;script&gt;
-    var app = new Vue({
-        el: '#app',
-        data: {
-            items: ['Java','C/C++','JavaScript','Python','PHP','SQL']
-        }
-    })
-&lt;/script&gt;
-```
-</code></pre>
+<!-- raw HTML omitted -->
 <ul>
-<li><code>v-for</code> 还提供了索引功能，所以上面的代码还可以修改成：</li>
+<li>
+<p><code>v-for</code> 还提供了索引功能，所以上面的代码还可以修改成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">li</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;(item,index) in items&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{index + &#34;:&#34; + item}}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
-<pre><code>```html
-&lt;li v-for=&quot;(item,index) in items&quot;&gt;
-    {{index + &quot;:&quot; + item}}
-&lt;/li&gt;
-```
-</code></pre>
+<!-- raw HTML omitted -->
 <ul>
-<li><code>v-for</code> 不仅可以遍历数组，还可以遍历对象的每个属性</li>
+<li>
+<p><code>v-for</code> 不仅可以遍历数组，还可以遍历对象的每个属性</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;app&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">ol</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">li</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;(value,key) in user&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            {{key + &#34;:&#34; + value}}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">ol</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#app&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">user</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Vue&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;2.0&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
-<pre><code>```html
-&lt;div id=&quot;app&quot;&gt;
-    &lt;ol&gt;
-        &lt;li v-for=&quot;(value,key) in user&quot;&gt;
-            {{key + &quot;:&quot; + value}}
-        &lt;/li&gt;
-    &lt;/ol&gt;
-&lt;/div&gt;
-&lt;script&gt;
-    var app = new Vue({
-        el: '#app',
-        data: {
-            user: {
-                name: 'Vue',
-                version: '2.0'
-            }
-        }
-    })
-&lt;/script&gt;
-```
-</code></pre>
 <h4 id="属性绑定">属性绑定</h4>
 <p>在 Vue 中，属性是不能使用 <code>{{ }}</code> 进行绑定的。所以 Vue 提供了 <code>v-bind</code> 来绑定属性。</p>
 <div class="highlight"><div class="chroma">
