@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Android Studio 二维码连接原理分析 - devbins blog</title>
+  <title>Android Studio 通过二维码使用WIFI连接手机原理分析 - devbins blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -41,7 +41,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Android Studio 二维码连接原理分析" />
+<meta property="og:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析" />
 <meta property="og:description" content="前言
 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。" />
@@ -50,14 +50,14 @@
 <meta property="article:published_time" content="2022-10-30T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-10-30T00:00:00+00:00" />
 
-<meta itemprop="name" content="Android Studio 二维码连接原理分析">
+<meta itemprop="name" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
 <meta itemprop="description" content="前言
 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。"><meta itemprop="datePublished" content="2022-10-30T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-10-30T00:00:00+00:00" />
-<meta itemprop="wordCount" content="3520">
+<meta itemprop="wordCount" content="3400">
 <meta itemprop="keywords" content="Android,adb,Rust," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Android Studio 二维码连接原理分析"/>
+<meta name="twitter:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析"/>
 <meta name="twitter:description" content="前言
 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。"/>
@@ -137,7 +137,7 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Android Studio 二维码连接原理分析</h1>
+      <h1 class="post-title">Android Studio 通过二维码使用WIFI连接手机原理分析</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2022-10-30 </span>
@@ -145,8 +145,8 @@
             <a href="../../categories/rust/"> Rust </a>
             <a href="../../categories/adb/"> adb </a>
             </div>
-          <span class="more-meta"> 约 3520 字 </span>
-          <span class="more-meta"> 预计阅读 8 分钟 </span>
+          <span class="more-meta"> 约 3400 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
         
       </div>
     </header>
@@ -183,8 +183,7 @@
 <p>所以当我发现新版的 <code>Android Studio</code> 有二维码连接之后就来了好奇心，这是怎做到的？</p>
 <h2 id="二维码连接的原理">二维码连接的原理</h2>
 <p>由于 <code>Android Studio</code> 开源了它的代码，所以可以进行研究。</p>
-<p>在研究之前我搜了一下发现已经有人研究过了，具体可以参考 <a href="https://saltedfish.fun/index.php/archives/29/">使用二维码链接WiFi ADB - 咸的鱼</a> 。</p>
-<p>详细的代码我就不带大家看了，我们直接开始研究。</p>
+<p>我们这就直接开始研究。</p>
 <h3 id="从二维码入手">从二维码入手</h3>
 <p>首先在通过二维码连接的时候， <code>Android Studio</code> 会生成一张二维码的图片，我们只要在手机的设置中找到开发者选项，找到无线调试，点进去然后开启无线调试，这时候使用二维码配对设备就会可以使用了，然后扫描 <code>Android Studio</code> 中的二维码，稍等片刻手机就连上了。</p>
 <p><code>WIFI</code> 连接的入口在设备列表中
@@ -442,24 +441,11 @@
 </span><span class="lnt">26
 </span><span class="lnt">27
 </span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="nd">@Throws</span><span class="p">(</span><span class="n">AdbCommandException</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">override</span> <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">scanMdnsServices</span><span class="p">():</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// TODO: Investigate updating (then using) ddmlib instead of spawning an adb client command, so that
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//       we don&#39;t have to rely on parsing command line output
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">adbService</span><span class="p">.</span><span class="n">executeCommand</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s2">&#34;mdns&#34;</span><span class="p">,</span> <span class="s2">&#34;services&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">adbService</span><span class="p">.</span><span class="n">executeCommand</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s2">&#34;mdns&#34;</span><span class="p">,</span> <span class="s2">&#34;services&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// Output example:
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//  List of discovered mdns services
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//  adb-939AX05XBZ-vWgJpq	_adb-tls-connect._tcp.	192.168.1.86:39149
@@ -467,15 +453,6 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Regular expression
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//  adb-&lt;everything-until-space&gt;&lt;spaces&gt;__adb-tls-pairing._tcp.&lt;spaces&gt;&lt;everything-until-colon&gt;:&lt;port&gt;
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">val</span> <span class="py">lineRegex</span> <span class="p">=</span> <span class="n">Regex</span><span class="p">(</span><span class="s2">&#34;([^</span><span class="se">\\</span><span class="s2">t]+)</span><span class="se">\\</span><span class="s2">t*_adb-tls-pairing._tcp.</span><span class="se">\\</span><span class="s2">t*([^:]+):([0-9]+)&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">errorCode</span> <span class="o">!=</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="n">AdbCommandException</span><span class="p">(</span><span class="s2">&#34;Error discovering services&#34;</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="n">AdbCommandException</span><span class="p">(</span><span class="s2">&#34;Empty output from </span><span class="se">\&#34;</span><span class="s2">adb mdns services</span><span class="se">\&#34;</span><span class="s2"> command&#34;</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">stderr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">stdout</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">mapNotNull</span> <span class="p">{</span> <span class="n">line</span> <span class="o">-&gt;</span>
@@ -802,7 +779,7 @@
     <script type="text/javascript">
       var gitalk = new Gitalk({
         id: '2022-10-30 00:00:00 \u002b0000 UTC',
-        title: 'Android Studio 二维码连接原理分析',
+        title: 'Android Studio 通过二维码使用WIFI连接手机原理分析',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: 'devbins.github.io',
