@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>用Rust实现Android Studio 二维码配对功能 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 在上一篇中我们讲了，在 Android Studio 中通过二维码使用WIFI连接手机的原理，今天就来使用 Rust 来实现类似的功能。
+没有看过的建议看一下，不然这篇文档可能会看不懂。
+为什么要用 Rust 呢？
+一方面是 Go 已经有了，而刚好我想用 Rust 来练练手，所以就是它了。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.105.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rust_adb_pair/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="用Rust实现Android Studio 二维码配对功能" />
+<meta property="og:description" content="前言
+在上一篇中我们讲了，在 Android Studio 中通过二维码使用WIFI连接手机的原理，今天就来使用 Rust 来实现类似的功能。
+没有看过的建议看一下，不然这篇文档可能会看不懂。
+为什么要用 Rust 呢？
+一方面是 Go 已经有了，而刚好我想用 Rust 来练练手，所以就是它了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.github.io/post/rust_adb_pair/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-10-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-31T00:00:00+00:00" />
+
+<meta itemprop="name" content="用Rust实现Android Studio 二维码配对功能">
+<meta itemprop="description" content="前言
+在上一篇中我们讲了，在 Android Studio 中通过二维码使用WIFI连接手机的原理，今天就来使用 Rust 来实现类似的功能。
+没有看过的建议看一下，不然这篇文档可能会看不懂。
+为什么要用 Rust 呢？
+一方面是 Go 已经有了，而刚好我想用 Rust 来练练手，所以就是它了。"><meta itemprop="datePublished" content="2022-10-31T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-31T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1335">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="用Rust实现Android Studio 二维码配对功能"/>
+<meta name="twitter:description" content="前言
+在上一篇中我们讲了，在 Android Studio 中通过二维码使用WIFI连接手机的原理，今天就来使用 Rust 来实现类似的功能。
+没有看过的建议看一下，不然这篇文档可能会看不懂。
+为什么要用 Rust 呢？
+一方面是 Go 已经有了，而刚好我想用 Rust 来练练手，所以就是它了。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">用Rust实现Android Studio 二维码配对功能</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-10-31 </span>
+        
+          <span class="more-meta"> 约 1335 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#回顾使用二维码连接的流程">回顾使用二维码连接的流程</a></li>
+    <li><a href="#准备">准备</a></li>
+    <li><a href="#开发">开发</a>
+      <ul>
+        <li><a href="#添加依赖">添加依赖</a></li>
+        <li><a href="#生成指定个数的字符串">生成指定个数的字符串</a></li>
+        <li><a href="#组装二维码内容">组装二维码内容</a></li>
+        <li><a href="#生成二维码">生成二维码</a></li>
+        <li><a href="#检测配对服务">检测配对服务</a></li>
+        <li><a href="#进行配对">进行配对</a></li>
+        <li><a href="#查看是否连接成功">查看是否连接成功</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在<a href="https://devbins.github.io/post/qrcode_pair/">上一篇</a>中我们讲了，在 <code>Android Studio</code> 中通过二维码使用WIFI连接手机的原理，今天就来使用 <code>Rust</code> 来实现类似的功能。</p>
+<p>没有看过的建议看一下，不然这篇文档可能会看不懂。</p>
+<p>为什么要用 <code>Rust</code> 呢？</p>
+<p>一方面是 <code>Go</code> 已经有了，而刚好我想用 <code>Rust</code> 来练练手，所以就是它了。</p>
+<h2 id="回顾使用二维码连接的流程">回顾使用二维码连接的流程</h2>
+<p>在开发之前我们先来回顾一下二维码的连接过程，主要有以下这几个步骤</p>
+<ol>
+<li>创建两个随机字符串，一个用于名字，一个用于密码</li>
+<li>根据规则组装二维码的内容并生成二维码，等待用户扫码</li>
+<li>通过 <code>adb</code> 检测 <code>mdns</code> 服务，看看是否有我们需要的</li>
+<li>使用 <code>adb pair</code> 命令进行配对</li>
+<li>使用 <code>adb</code> 查看连接列表是否已经连接成功</li>
+</ol>
+<h2 id="准备">准备</h2>
+<p>在开发之前我们来分析一下需要使用那些第三方库</p>
+<ul>
+<li>生成二维码需要用到<a href="https://docs.rs/qrcode/latest/qrcode/">qrcode - Rust</a></li>
+<li>制作随机字符串需要用到<a href="https://docs.rs/rand/0.8.5/rand/">rand - Rust</a></li>
+<li>用 <code>mDns</code> 服务需要用到<a href="https://docs.rs/mdns/3.0.0/mdns/">mdns - Rust</a></li>
+</ul>
+<h2 id="开发">开发</h2>
+<h3 id="添加依赖">添加依赖</h3>
+<p>根据上面的分析，我们把依赖加到 <code>Cargo.toml</code> 中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">dependencies</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">qrcode</span> <span class="p">=</span> <span class="s2">&#34;0.12&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">mdns</span> <span class="p">=</span> <span class="s2">&#34;3.0.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">rand</span> <span class="p">=</span> <span class="s2">&#34;0.8.5&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">async-stream</span> <span class="p">=</span> <span class="s2">&#34;0.2.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">async-std</span> <span class="p">=</span> <span class="p">{</span> <span class="nx">version</span> <span class="p">=</span> <span class="s2">&#34;1.6.2&#34;</span><span class="p">,</span> <span class="nx">features</span> <span class="p">=</span> <span class="p">[</span><span class="s2">&#34;unstable&#34;</span><span class="p">,</span> <span class="s2">&#34;attributes&#34;</span><span class="p">]</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">futures-core</span> <span class="p">=</span> <span class="s2">&#34;0.3.1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">futures-util</span> <span class="p">=</span> <span class="s2">&#34;0.3.1&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于 <code>mdns</code> 使用到了协程，所以我们还需把 <code>async-std</code> 、 <code>asnyc-stream</code> 、 <code>features-core</code> 、 <code>features-util</code> 加上</p>
+<h3 id="生成指定个数的字符串">生成指定个数的字符串</h3>
+<p>使用 <code>rand</code> 生成随机字符串，在这里我们要指定生成字符串的个数，然后从我们给定的字符集中随机取固定的个数，组成随机字符串。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">const</span><span class="w"> </span><span class="n">CHAR_SET</span>: <span class="kp">&amp;</span><span class="kt">str</span> <span class="o">=</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s">&#34;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&amp;*()-+*/&lt;&gt;{}&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">create_random_string</span><span class="p">(</span><span class="n">len</span>: <span class="kt">u32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">String</span> <span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">new</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thread_rng</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">(</span><span class="mi">0</span><span class="o">..=</span><span class="n">len</span><span class="p">).</span><span class="n">for_each</span><span class="p">(</span><span class="o">|</span><span class="n">_i</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">result</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">CHAR_SET</span><span class="p">.</span><span class="n">chars</span><span class="p">().</span><span class="n">choose</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">result</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="组装二维码内容">组装二维码内容</h3>
+<p>有了生成随机的字符串后，我们就需要生成一个10个字符的名字和12个字符串的密码，然后按照 <code>WIFI:T:ADB;S:${name};P:${pwd};;</code> 的格式来生成二维码的内容。</p>
+<p>这里要注意名字还有一个 <code>studio</code> 的前缀，其实没有也是可以的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">server_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;studio-{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">create_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">pwd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_random_string</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">pair_string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;WIFI:T:ADB;S:{};P:{};;&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">server_id</span><span class="p">,</span><span class="w"> </span><span class="n">pwd</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="生成二维码">生成二维码</h3>
+<p>生成二维码也挺简单的，由于我们是在终端中使用，所以只需要使用 <code>Unicode</code> 字符就行了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">generate_qr_code</span><span class="p">(</span><span class="n">content</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QrCode</span>::<span class="n">new</span><span class="p">(</span><span class="n">content</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">render</span>::<span class="o">&lt;</span><span class="n">unicode</span>::<span class="n">Dense1x2</span><span class="o">&gt;</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">dark_color</span><span class="p">(</span><span class="n">unicode</span>::<span class="n">Dense1x2</span>::<span class="n">Light</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">light_color</span><span class="p">(</span><span class="n">unicode</span>::<span class="n">Dense1x2</span>::<span class="n">Dark</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">build</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">image</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">generate_qr_code</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pair_string</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>把上一步组装好的内容当做参数传入，生成好之后，打印到控制台中，就能够看到二维码了。</p>
+<h3 id="检测配对服务">检测配对服务</h3>
+<p>生成好二维码之后，等待用户扫码，然后我们这里需要检测看看有没有配对的服务。有才能进行配对。</p>
+<p>这里有一个需要注意的地方，我们通过 <code>adb mdns services</code> 得到的结果是不带 <code>.local</code> 后缀的，但是我们使用 <code>mdns</code> 去检测的时候要带上。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">async</span><span class="w"> </span><span class="k">fn</span> <span class="nf">discovery_pair_services</span><span class="p">(</span><span class="n">service</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="nb">Option</span><span class="o">&lt;</span><span class="n">SocketAddr</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mdns</span>::<span class="n">discover</span>::<span class="n">all</span><span class="p">(</span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="n">Duration</span>::<span class="n">from_secs</span><span class="p">(</span><span class="mi">15</span><span class="p">))</span><span class="o">?</span><span class="p">.</span><span class="n">listen</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pin_mut</span><span class="o">!</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="nb">Ok</span><span class="p">(</span><span class="n">response</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="k">await</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">hostname</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">socket_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">socket_address</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="n">host</span><span class="p">),</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="n">socket_addr</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="n">socket_addr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;host: {}, socket_addr: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="n">socket_addr</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">host</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#34;_adb-tls-pairing._tcp.local&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="n">socket_addr</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(</span><span class="nb">None</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">let</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">discovery_pair_services</span><span class="p">(</span><span class="s">&#34;_adb-tls-pairing._tcp.local&#34;</span><span class="p">).</span><span class="k">await</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="进行配对">进行配对</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Ok</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">pair_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Command</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;adb&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="s">&#34;pair&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">to_string</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="n">pwd</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">output</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">expect</span><span class="p">(</span><span class="s">&#34;failed to execute process&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_utf8</span><span class="p">(</span><span class="n">pair_result</span><span class="p">.</span><span class="n">stdout</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>检测到配对服务后，我们就可以拿到它的 <code>IP</code> 和端口，由于返回的是个 <code>SocketAddr</code> ，所以调用它的 <code>to_string</code> 就能够得到 <code>ip:port</code> 的形式。</p>
+<p>在进行配对环节时，我们要调用 <code>adb</code> 这个外部程序，所以需要使用 <code>Commond</code> 来执行。</p>
+<p>在 <code>Command::new</code> 中传入外部程序的名字，然后通过 <code>arg</code> 来添加一个参数，通过 <code>output</code> 来以子进程的方式执行，并获取输出的结果。</p>
+<p><code>Command</code> 使用起来还是非常方便的，就像平时执行指令一样，只需要对指令和参数进行组装就行了。</p>
+<h3 id="查看是否连接成功">查看是否连接成功</h3>
+<p>配对完成之后，还需要查看是否连接成功，这时候就需要通过把已经连接上的设备打印出来，看看我们的设备是否在其中。执行这条指令要稍微延迟一下，连接有时会慢一点。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">devices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Command</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;adb&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="s">&#34;devices&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="n">arg</span><span class="p">(</span><span class="s">&#34;-l&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="n">output</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="n">expect</span><span class="p">(</span><span class="s">&#34;failed to execute process&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_utf8</span><span class="p">(</span><span class="n">devices</span><span class="p">.</span><span class="n">stdout</span><span class="p">).</span><span class="n">unwrap</span><span class="p">());</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>根据之前的分析，我们知道了大致的思路，所以写起来还是比较快的。</p>
+<p>100行的代码不到，就实现了一个二维码连接手机的功能。</p>
+<p>完整的代码在 <a href="https://github.com/devbins/adb_pair">devbins/adb_pair</a></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://saltedfish.fun/index.php/archives/29/">使用二维码链接WiFi ADB - 咸的鱼</a></li>
+<li><a href="https://github.com/lx200916/ADB_Pair_Go">lx200916/ADB_Pair_Go: Try to Make WiFi-ADB Easier.(Android 11+ Only)</a></li>
+<li><a href="https://github.com/kennytm/qrcode-rust">kennytm/qrcode-rust: QR code encoder in Rust.</a></li>
+<li><a href="https://github.com/dylanmckay/mdns">mdns/Cargo.toml at master · dylanmckay/mdns</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-31
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/qrcode_pair/">
+            <span class="next-text nav-default">Android Studio 通过二维码使用WIFI连接手机原理分析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2022-10-31 00:00:00 \u002b0000 UTC',
+        title: '用Rust实现Android Studio 二维码配对功能',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
