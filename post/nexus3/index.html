@@ -16,9 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="devbins" /><meta name="description" content=" 在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
-" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+<meta name="author" content="devbins" /><meta name="description" content="在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
 
@@ -42,28 +40,19 @@
 
 
 <meta property="og:title" content="在 Docker 中使用 nexus3 构建 Android 私有仓库" />
-<meta property="og:description" content="
-在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
-" />
+<meta property="og:description" content="在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/nexus3/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-11-05T00:00:00+00:00" />
 <meta property="article:modified_time" content="2018-11-05T00:00:00+00:00" />
 
 <meta itemprop="name" content="在 Docker 中使用 nexus3 构建 Android 私有仓库">
-<meta itemprop="description" content="
-在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
-"><meta itemprop="datePublished" content="2018-11-05T00:00:00+00:00" />
+<meta itemprop="description" content="在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加"><meta itemprop="datePublished" content="2018-11-05T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2018-11-05T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1116">
+<meta itemprop="wordCount" content="1117">
 <meta itemprop="keywords" content="nexus," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="在 Docker 中使用 nexus3 构建 Android 私有仓库"/>
-<meta name="twitter:description" content="
-在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。
-使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。
-"/>
+<meta name="twitter:description" content="在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -147,8 +136,9 @@
         <div class="post-category">
             <a href="../../categories/android/"> Android </a>
             <a href="../../categories/docker/"> Docker </a>
+            <a href="../../categories/nexus/"> Nexus </a>
             </div>
-          <span class="more-meta"> 约 1116 字 </span>
+          <span class="more-meta"> 约 1117 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -173,6 +163,7 @@
 <p>在 Android 中使用第三库有两种方式，第一种是把 jar 文件放到 libs 目录下作为 library 引用，第二种需要开发者把编译好的 jar 包上传到类似 maven 这种中央仓库，然后在项目中添加依赖就可以了。</p>
 <p>使用 jcenter 来管理第三方库在升级版本时非常方便，只需要更改版本号就可以了。不然每次版本升级都需要到指定的地方下载下来，然后替换旧版本，这样就非常麻烦。但是 maven 是所有人员都可以访问的，有一些公司的项目是不能公开，所以需要我们搭建自己的 maven 仓库，这就是本文要讲的。</p>
 </blockquote>
+<p>&lt;!&ndash;more&ndash;&gt;</p>
 <h2 id="安装">安装</h2>
 <p>安装这里说多了都是累，最开始我创建好了目录没有改变目录权限，后面运行一直都是失败的。但如果不挂载目录就可以正常运行。找了好久才找到原因，还一直误以为是挂载的不对。</p>
 <div class="highlight"><div class="chroma">
@@ -409,7 +400,7 @@
 </div><p>从上可以看出每个仓库都要进行配置，少的话还能写一下，多的话得累死。</p>
 <p>上面的问题是有解决办法的，就是创建一个仓库组，把需要用的 <code>library</code> 都加进这个仓库中，这样里面的仓库都能用，只需要配置一次</p>
 <p>下面来操作一下</p>
-<p>在创建仓库的地方创建一个仓库组，所以这里选择 <code>maven2(hosted)</code>
+<p>在创建仓库的地方创建一个仓库组，所以这里选择 <code>maven2(group)</code>
 <img src="../../images/nexus/nexus_group.png" alt="">
 给仓库取个名字，这里是 <code>testgroup</code> ，然后在 <code>Member repositories&gt;Available</code> 中选择需要加入的 <code>library</code> ，选中的会在右边的 <code>Members</code> 中显示。选好之后点击 <code>Create repository</code> 。
 <img src="../../images/nexus/nexus_add_group.png" alt=""></p>
