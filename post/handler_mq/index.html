@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.105.0 with theme even" />
+<meta name="generator" content="Hugo 0.110.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/handler_mq/" />
@@ -49,7 +49,6 @@
 <meta property="og:url" content="http://devbins.github.io/post/handler_mq/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-03-21T00:00:00+00:00" />
 <meta property="article:modified_time" content="2021-03-21T00:00:00+00:00" />
-
 <meta itemprop="name" content="Handler 之 MessageQueue">
 <meta itemprop="description" content="前言
 上一篇文章，我们从 Java 层探索了消息机制的原理，以及在使用中会碰到的问题，这一篇从 MessageQueue 入手，带你了解 Native 层的原理。
@@ -1595,12 +1594,12 @@
 </span></span><span class="line"><span class="cl"><span class="nf">onResume_native</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">jlong</span> <span class="n">handle</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">kLogTrace</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">ALOGD</span><span class="p">(</span><span class="s">&#34;onResume_native&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">ALOGD</span><span class="p">(</span><span class="s">&#34;onResume_native&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">NativeCode</span><span class="o">*</span> <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="n">NativeCode</span><span class="o">*</span><span class="p">)</span><span class="n">handle</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">callbacks</span><span class="p">.</span><span class="n">onResume</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">code</span><span class="o">-&gt;</span><span class="n">callbacks</span><span class="p">.</span><span class="n">onResume</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">code</span><span class="o">-&gt;</span><span class="n">callbacks</span><span class="p">.</span><span class="nf">onResume</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1659,8 +1658,8 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_app_write_cmd</span><span class="p">(</span><span class="k">struct</span> <span class="n">android_app</span><span class="o">*</span> <span class="n">android_app</span><span class="p">,</span> <span class="kt">int8_t</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">write</span><span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">msgwrite</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cmd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">LOGE</span><span class="p">(</span><span class="s">&#34;Failure writing android_app cmd: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">write</span><span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">msgwrite</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cmd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">LOGE</span><span class="p">(</span><span class="s">&#34;Failure writing android_app cmd: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="nf">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -1776,7 +1775,7 @@
   <span class="copyright-year">
     &copy; 
     2016 - 
-    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
   </span>
 </div>
 
