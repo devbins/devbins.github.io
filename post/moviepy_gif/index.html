@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MoviePy: 使用Python把视频转成Gif - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 上一篇文章讲了 MoviePy 的一些使用，今天来说一下怎么把视频转成 gif ，以及怎么把 gif 转成视频。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.110.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/moviepy_gif/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MoviePy: 使用Python把视频转成Gif" />
+<meta property="og:description" content="前言
+上一篇文章讲了 MoviePy 的一些使用，今天来说一下怎么把视频转成 gif ，以及怎么把 gif 转成视频。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.github.io/post/moviepy_gif/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-02-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-02-07T00:00:00+00:00" />
+<meta itemprop="name" content="MoviePy: 使用Python把视频转成Gif">
+<meta itemprop="description" content="前言
+上一篇文章讲了 MoviePy 的一些使用，今天来说一下怎么把视频转成 gif ，以及怎么把 gif 转成视频。"><meta itemprop="datePublished" content="2023-02-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-02-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="862">
+<meta itemprop="keywords" content="MoviePy,FFmpeg,Python,音视频," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MoviePy: 使用Python把视频转成Gif"/>
+<meta name="twitter:description" content="前言
+上一篇文章讲了 MoviePy 的一些使用，今天来说一下怎么把视频转成 gif ，以及怎么把 gif 转成视频。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MoviePy: 使用Python把视频转成Gif</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-02-07 </span>
+        <div class="post-category">
+            <a href="../../categories/moviepy/"> MoviePy </a>
+            <a href="../../categories/ffmpeg/"> FFmpeg </a>
+            <a href="../../categories/python/"> Python </a>
+            <a href="../../categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"> 音视频 </a>
+            </div>
+          <span class="more-meta"> 约 862 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#视频转-gif">视频转 gif</a></li>
+    <li><a href="#批量转换">批量转换</a></li>
+    <li><a href="#把-gif-转为视频">把 gif 转为视频</a></li>
+    <li><a href="#为什么转成-gif-文件还变大了">为什么转成 gif 文件还变大了?</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章讲了 <code>MoviePy</code> 的一些使用，今天来说一下怎么把视频转成 <code>gif</code> ，以及怎么把 <code>gif</code> 转成视频。</p>
+<h2 id="视频转-gif">视频转 gif</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;input.mp4&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">)</span> <span class="c1"># 提取不带扩展的文件名</span>
+</span></span><span class="line"><span class="cl"><span class="n">video</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">video</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="n">basename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&#34;.gif&#34;</span><span class="p">)</span> <span class="c1"># 使用 write_gif 把视频转成gif</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>直接把视频转成 <code>gif</code> 文件会很大，我们通过控制显示帧数来减小文件的大小</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;input.mp4&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">video</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">video</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="n">basename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&#34;.gif&#34;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span> <span class="c1"># 设置帧率为24</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过更改帧率有一定程度的减小文件大小，不过效果不是很好。</p>
+<h2 id="批量转换">批量转换</h2>
+<p>有了上面的基础，就可以把目录下的所有视频都转成 <code>gif</code> ，这样效率就非常高了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">items</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">)</span> <span class="c1"># 获取当前目录下的所有文件</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">video</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="n">basename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&#34;.gif&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="把-gif-转为视频">把 gif 转为视频</h2>
+<p>上面说了把视频转成 <code>gif</code> ，我转念一想是不是可以把 <code>gif</code> 转回视频，带着这个想法我写下了如下代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">video</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="s2">&#34;input.gif&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">video</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="s2">&#34;output.mp4&#34;</span><span class="p">)</span> <span class="c1"># 使用 write_videofile把gif转成MP4格式的视频</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果还真可以，把 <code>gif</code> 转成视频了，占用的空间就小了，因为视频有压缩。</p>
+<h2 id="为什么转成-gif-文件还变大了">为什么转成 gif 文件还变大了?</h2>
+<p>首先，我们看到的动画其实本质就是一张张不同的图片快速播放，造成了视觉错觉，所以看起来画面像是会动一样。</p>
+<p><code>gif</code> 里面存储的就是这一张张图片，所以 <code>gif</code> 的文件大小一定是要大于/等于这些图片文件大小的总和。</p>
+<p>在 <code>Mac</code> 上你可以使用下面这条指令来把 <code>gif</code> 中图片提取出来</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">convert input.gif frame-%02d.png
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再来说下视频，视频其实也是一张张不同的图片快速播放，但是视频会对这些图片进行压缩。在播放的时候会进行解码，保存成文件的时候会进行编码。因为相近的图片大部分的像素是一样的所以进行压缩是可行的。</p>
+<p>常用的压缩算法有 <code>H.264/AVC</code> 、 <code>H.265/HEVC</code> 。</p>
+<p>经过算法压缩后所以最后的文件不会那么大。如果不压缩那么你的磁盘存不了 1 部电影。</p>
+<p>一部未经编码的 720p 电影的大小取决于几个因素，包括电影的长度、每秒帧数（fps）和位深度（表示每个像素的位数）。</p>
+<p>作一个粗略的估计，720p 分辨率通常被是 1280 x 720 像素。假设 24 位颜色深度和 24 fps，则一秒钟的 720p 视频的未压缩大小将约为 1.3 GB（1280 x 720 x 24 x 24 bits/8 bits/byte = 1.3 GB）。帧率一般要到 60 才算流畅。</p>
+<p>因此，一部 720p 电影的整体大小，例如两个小时，将是约 1.3 GB/秒 x 7200 秒 = 9440 GB 或约 9.4 TB。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://moviepy.readthedocs.io/en/latest/index.html">User Guide — MoviePy documentation</a></li>
+</ul>
+<figure><img src="../../images/office_account.jpg"/>
+</figure>
+
+<p>关注公众号[devbins]，回复[gif]获取源码</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-02-07
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/moviepy/">MoviePy</a>
+          <a href="../../tags/ffmpeg/">FFmpeg</a>
+          <a href="../../tags/python/">Python</a>
+          <a href="../../tags/%E9%9F%B3%E8%A7%86%E9%A2%91/">音视频</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/moviepy/">
+            <span class="next-text nav-default">MoviePy: 用Python剪辑视频</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-02-07 00:00:00 \u002b0000 UTC',
+        title: 'MoviePy: 使用Python把视频转成Gif',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  <a href="http://devbins.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>devbins</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
