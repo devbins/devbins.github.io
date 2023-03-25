@@ -5,43 +5,47 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>用 Rust 开发 iOS - devbins blog</title>
   <meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 <meta name="theme-color" content="#f8f5ec" />
-<meta name="msapplication-navbutton-color" content="#f8f5ec">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec" />
 
 
 <meta name="author" content="devbins" /><meta name="description" content="前言 Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
 所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。
-" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+" /><meta
+  name="keywords"
+  content="devbins, Emacs, ArchLinux"
+/>
 
 
+ 
 
 
-
-
-<meta name="generator" content="Hugo 0.110.0 with theme even" />
+<meta
+  name="generator"
+  content="Hugo 0.111.3 with theme even"
+/>
 
 
 <link rel="canonical" href="http://devbins.github.io/post/rust_ios/" />
-<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
-<link rel="manifest" href="../../manifest.json">
-<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png"> <link rel="icon" type="image/png"
+sizes="16x16" href="../../favicon-16x16.png"> <link rel="manifest"
+href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
-
-
-<meta property="og:title" content="用 Rust 开发 iOS" />
+ <meta property="og:title" content="用 Rust 开发 iOS" />
 <meta property="og:description" content="前言
 Rust 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。
 所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。" />
@@ -62,13 +66,11 @@ Rust 是近几年特别火的语言，之前学过几次，每次学完之后就
 所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 Rust 在 iOS 上的探索。"/>
 
 <!--[if lte IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
-<![endif]-->
-
-<!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script> <!
+[endif]--> <!--[if lt IE 9]>
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-<![endif]-->
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script> <!
+[endif]-->
 
 </head>
 <body>
@@ -254,7 +256,7 @@ Rust 是近几年特别火的语言，之前学过几次，每次学完之后就
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Ok</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nb">Err</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&#34;Err c&#34;</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CString</span>::<span class="n">new</span><span class="p">(</span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;Rust String: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">r_str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CString</span>::<span class="n">new</span><span class="p">(</span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;Rust String: </span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">r_str</span><span class="p">))</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">unwrap</span><span class="p">()</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">into_raw</span><span class="p">()</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">

@@ -5,43 +5,47 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>小米路由器刷 openwrt - devbins blog</title>
   <meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 <meta name="theme-color" content="#f8f5ec" />
-<meta name="msapplication-navbutton-color" content="#f8f5ec">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec" />
 
 
 <meta name="author" content="devbins" /><meta name="description" content=" 我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
 开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。
-" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+" /><meta
+  name="keywords"
+  content="devbins, Emacs, ArchLinux"
+/>
 
 
+ 
 
 
-
-
-<meta name="generator" content="Hugo 0.110.0 with theme even" />
+<meta
+  name="generator"
+  content="Hugo 0.111.3 with theme even"
+/>
 
 
 <link rel="canonical" href="http://devbins.github.io/post/miwifi/" />
-<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
-<link rel="manifest" href="../../manifest.json">
-<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png"> <link rel="icon" type="image/png"
+sizes="16x16" href="../../favicon-16x16.png"> <link rel="manifest"
+href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
-
-
-<meta property="og:title" content="小米路由器刷 openwrt" />
+ <meta property="og:title" content="小米路由器刷 openwrt" />
 <meta property="og:description" content="
 我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
 开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。
@@ -68,13 +72,11 @@
 "/>
 
 <!--[if lte IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
-<![endif]-->
-
-<!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script> <!
+[endif]--> <!--[if lt IE 9]>
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-<![endif]-->
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script> <!
+[endif]-->
 
 </head>
 <body>

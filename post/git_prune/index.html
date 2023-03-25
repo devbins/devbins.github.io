@@ -5,15 +5,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Git 清理 fetch 失败占用的磁盘空间 - devbins blog</title>
   <meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 <meta name="theme-color" content="#f8f5ec" />
-<meta name="msapplication-navbutton-color" content="#f8f5ec">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec" />
 
 
 <meta name="author" content="devbins" /><meta name="description" content="最近在下载 chromium 源码，下载完之后需要切换到指定的分支，这时候使用 git fetch 进行切换，但是不是一次就能成功。
@@ -22,30 +25,31 @@
 在查找资料后发现使用 git prune 可以解决这个问题。
 git prune 会删除没有使用的 hash 文件，由于我们这边 fetch 失败了，所以这些文件是没有使用的。
 执行之后磁盘瞬间释放70G空间。
-" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+" /><meta
+  name="keywords"
+  content="devbins, Emacs, ArchLinux"
+/>
 
 
+ 
 
 
-
-
-<meta name="generator" content="Hugo 0.110.0 with theme even" />
+<meta
+  name="generator"
+  content="Hugo 0.111.3 with theme even"
+/>
 
 
 <link rel="canonical" href="http://devbins.github.io/post/git_prune/" />
-<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
-<link rel="manifest" href="../../manifest.json">
-<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png"> <link rel="icon" type="image/png"
+sizes="16x16" href="../../favicon-16x16.png"> <link rel="manifest"
+href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
-
-
-<meta property="og:title" content="Git 清理 fetch 失败占用的磁盘空间" />
+ <meta property="og:title" content="Git 清理 fetch 失败占用的磁盘空间" />
 <meta property="og:description" content="最近在下载 chromium 源码，下载完之后需要切换到指定的分支，这时候使用 git fetch 进行切换，但是不是一次就能成功。
 所以需要不断执行 git fetch ，但是随着执行的次数增多，我发现磁盘的空间却越来越少。
 也就是 git fetch 失败后占用了磁盘空间并没有释放。
@@ -75,13 +79,11 @@ git prune 会删除没有使用的 hash 文件，由于我们这边 fetch 失败
 执行之后磁盘瞬间释放70G空间。"/>
 
 <!--[if lte IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
-<![endif]-->
-
-<!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script> <!
+[endif]--> <!--[if lt IE 9]>
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-<![endif]-->
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script> <!
+[endif]-->
 
 </head>
 <body>
