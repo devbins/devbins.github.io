@@ -215,7 +215,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 </span></span><span class="line"><span class="cl">Undefined symbol: cocos2d::ui::WebView::loadURL<span class="o">(</span>std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const<span class="p">&amp;</span><span class="o">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>这是因为它在移动平台就没有引入 <code>WebView</code> ，我们查看 <code>CocosGUI.h</code> 源码，如下</p>
+</div><p>这是因为它在桌面平台就没有引入 <code>WebView</code> ，我们查看 <code>CocosGUI.h</code> 源码，如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -231,7 +231,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到这里只有在 <code>Android</code> 和 <code>iOS</code> 的情况下才会引入 <code>WebView</code> ，既然在桌面平台不能用，那怎么适配呢？</p>
-<p>桌面平台没有对对应的空间可以用，那么我们可以跳转到系统的浏览器并打开对应的网页，也能达到一定的效果。使用如下代码实现</p>
+<p>桌面平台没有对对应的控件可以用，那么我们可以跳转到系统的浏览器并打开对应的网页，也能达到一定的效果。使用如下代码实现</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
