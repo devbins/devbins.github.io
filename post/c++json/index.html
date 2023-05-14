@@ -58,7 +58,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 在 C&#43;&#43; 中有许多第三方库可以解析 JSON，但是都不是很好用，不能像 Java 中的 gson 、 fastjson 一样直接把 JSON 直接转成对象。
 找了许多库，找到了nlohmann/json: JSON for Modern C&#43;&#43;使用起来比较方便，也踩了坑，来了解一下。"><meta itemprop="datePublished" content="2023-05-14T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-05-14T00:00:00+00:00" />
-<meta itemprop="wordCount" content="648">
+<meta itemprop="wordCount" content="651">
 <meta itemprop="keywords" content="C&#43;&#43;," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="C&#43;&#43; JSON"/>
 <meta name="twitter:description" content="前言
@@ -146,7 +146,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             <a href="../../categories/json/"> JSON </a>
             </div>
-          <span class="more-meta"> 约 648 字 </span>
+          <span class="more-meta"> 约 651 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -185,9 +185,11 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
+</span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;nlohmann/json.hpp&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="nc">Person</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
@@ -275,7 +277,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 </div>
 </div><p>我们在 <code>from_json</code> 中对每个 <code>key</code> 先判断存不存在，存在才去获取 <code>value</code> ，这样就不会说 <code>key</code> 找不到了。</p>
 <h2 id="总结">总结</h2>
-<p><code>C++</code> 中使用<a href="https://github.com/nlohmann/json">nlohmann/json: JSON for Modern C++</a>来解析 JSON 相对其它库还是比较方便的，不用每次使用的时候都手动解析，但是和其它语言里的相比还是查了不少。</p>
+<p><code>C++</code> 中使用<a href="https://github.com/nlohmann/json">nlohmann/json: JSON for Modern C++</a>来解析 JSON 相对其它库还是比较方便的，不用每次使用的时候都手动解析，但是和其它语言里的相比还是差了不少。</p>
 <p>这里需要注意使用 <code>NLOHMANN_DEFINE_TYPE_INTRUSIVE</code> 的时候， <code>key</code> 如果不存在会直接抛异常。</p>
 <p>解决这个问题可以自定义 <code>from_json</code> 和 <code>to_json</code> 来进行灵活的控制。</p>
 <h2 id="参考">参考</h2>
