@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Cocos2d Layer 中点击事件穿透的最佳解决方案 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1"
+/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec" />
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。
+" /><meta
+  name="keywords"
+  content="devbins, Emacs, ArchLinux"
+/>
+
+
+ 
+
+
+<meta
+  name="generator"
+  content="Hugo 0.113.0 with theme even"
+/>
+
+
+<link rel="canonical" href="http://devbins.github.io/post/cocos2d_swallow_touch/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png"> <link rel="icon" type="image/png"
+sizes="16x16" href="../../favicon-16x16.png"> <link rel="manifest"
+href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+ <meta property="og:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案" />
+<meta property="og:description" content="前言
+熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://devbins.github.io/post/cocos2d_swallow_touch/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-06-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-06-13T00:00:00+00:00" />
+<meta itemprop="name" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+<meta itemprop="description" content="前言
+熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。"><meta itemprop="datePublished" content="2023-06-13T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-06-13T00:00:00+00:00" />
+<meta itemprop="wordCount" content="669">
+<meta itemprop="keywords" content="Cocos2d," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案"/>
+<meta name="twitter:description" content="前言
+熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script> <!
+[endif]--> <!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script> <!
+[endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Cocos2d Layer 中点击事件穿透的最佳解决方案</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-06-13 </span>
+        <div class="post-category">
+            <a href="../../categories/cocos2d/"> Cocos2d </a>
+            <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+            </div>
+          <span class="more-meta"> 约 669 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#事件传递机制">事件传递机制</a></li>
+    <li><a href="#解决-layer-触摸穿透">解决 Layer 触摸穿透</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>熟悉 <code>Cocos2d</code> 开发的应该都知道，在一个场景中如果有多个 <code>Layer</code> ，这些 <code>Layer</code> 一个一个的叠在上面，当我们点击 <code>Layer</code> 上的按钮的时候可以正常的触发对应的事件。</p>
+<p>但是，当点击的位置所在的 <code>Layer</code> 没有事件要响应，这时候触摸事件就会传递到下面的 <code>Layer</code> ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。</p>
+<h2 id="事件传递机制">事件传递机制</h2>
+<p>先来简单解一下事件传递机制，如下图所示，事件的传递是按照优先级来确定的
+<img src="../../images/cocos/in-order-walk.png" alt=""></p>
+<p><code>z-order</code> 数值较大的先收到事件，也就是最上面的先收到事件，如果上面的节点不处理，就会往下层传递。</p>
+<p>所以这里响应事件的顺序依次是 I -&gt; H -&gt; G -&gt; F -&gt; E -&gt; D -&gt; C -&gt; B -&gt; A</p>
+<p>如果当前节点处理该事件，则事件传递结束。</p>
+<h2 id="解决-layer-触摸穿透">解决 Layer 触摸穿透</h2>
+<p>根据上面的分析知道， <code>Layer</code> 之所以会导致事件穿透到下面 <code>Layer</code> 是因为上层的 <code>Layer</code> 在该位置没有响应事件的需要。</p>
+<p>所以根据事件传递机制就会往下传，导致下面的 <code>Layer</code> 接收到事件，并且刚好这个位置有需要响应触摸事件的需求，所以就响应，最后导致莫名其妙的事情发生了。</p>
+<p>既然知道了问题的原因就好办了，我们只需要在 <code>Layer</code> 中把没有消费的事件给消费掉，这样就不会传递到下层了。</p>
+<p>我们在 <code>Layer.init</code> 中处理这个问题，代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">dispatcher</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getEventDispatcher</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListenerTouchOneByOne</span><span class="o">::</span><span class="n">create</span><span class="p">();</span> <span class="c1">// 穿件事件监听器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchBegan</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">};</span> <span class="c1">// 需要返回true，消费掉事件，这样才不会往下传递
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchMoved</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchEnded</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">setSwallowTouches</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="c1">// 设置消费事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">dispatcher</span><span class="o">-&gt;</span><span class="n">addEventListenerWithSceneGraphPriority</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span> <span class="c1">// 添加监听器
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这时候运行再点击就不会穿透到下层了。</p>
+<h2 id="总结">总结</h2>
+<p><code>Layer</code> 中的点击事件默认会传递到下层，我们可以通过在 <code>Layer</code> 中设置监听器的方式，把没有响应的事件给消费掉，从而达到不传递事件到下层的目的。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://blog.csdn.net/zhou752947/article/details/103105370">Visual Studio cocos2d-x 3.10 触摸 防穿透方案_Memoselect 的博客-CSDN博客</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-06-13
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/cocos2d/">Cocos2d</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/caddy_fileserver/">
+            <span class="next-text nav-default">高效文件共享：使用Caddy打造快速、安全的File Server</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-06-13 00:00:00 \u002b0000 UTC',
+        title: 'Cocos2d Layer 中点击事件穿透的最佳解决方案',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a
+    href="binshengh@gmail.com"
+    class="iconfont icon-email"
+    title="email"
+  ></a>
+  <a
+    href="https://github.com/devbins"
+    class="iconfont icon-github"
+    title="github"
+  ></a> 
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year"> &copy; 2016 - 2023<span class="heart"><i class="iconfont icon-heart"></i></span
+    ><span
+      >devbins</span
+    >
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
