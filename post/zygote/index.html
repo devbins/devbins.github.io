@@ -32,7 +32,7 @@
 
 <meta
   name="generator"
-  content="Hugo 0.115.4 with theme even"
+  content="Hugo 0.117.0 with theme even"
 />
 
 
@@ -785,7 +785,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">    <span class="n">ZygoteHooks</span><span class="o">.</span><span class="na">startZygoteNoThreadCreation</span><span class="o">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">Os</span><span class="o">.</span><span class="na">setpgid</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Os</span><span class="o">.</span><span class="na">setpgid</span><span class="o">(</span><span class="n">0</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ErrnoException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">&#34;Failed to setpgid(0,0)&#34;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>
@@ -799,7 +799,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">zygoteSocketName</span> <span class="o">=</span> <span class="s">&#34;zygote&#34;</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">abiList</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">boolean</span> <span class="n">enableLazyPreload</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argv</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argv</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="s">&#34;start-system-server&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">argv</span><span class="o">[</span><span class="n">i</span><span class="o">]))</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">startSystemServer</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">&#34;--enable-lazy-preload&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">argv</span><span class="o">[</span><span class="n">i</span><span class="o">]))</span> <span class="o">{</span>
@@ -1093,14 +1093,14 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">        <span class="n">OsConstants</span><span class="o">.</span><span class="na">CAP_BLOCK_SUSPEND</span>
 </span></span><span class="line"><span class="cl">        <span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">StructCapUserHeader</span> <span class="n">header</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StructCapUserHeader</span><span class="o">(</span>
-</span></span><span class="line"><span class="cl">        <span class="n">OsConstants</span><span class="o">.</span><span class="na">_LINUX_CAPABILITY_VERSION_3</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OsConstants</span><span class="o">.</span><span class="na">_LINUX_CAPABILITY_VERSION_3</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">StructCapUserData</span><span class="o">[]</span> <span class="n">data</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="n">Os</span><span class="o">.</span><span class="na">capget</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ErrnoException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">&#34;Failed to capget()&#34;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">capabilities</span> <span class="o">&amp;=</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">effective</span><span class="o">)</span> <span class="o">|</span> <span class="o">(((</span><span class="kt">long</span><span class="o">)</span> <span class="n">data</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="na">effective</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">capabilities</span> <span class="o">&amp;=</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">data</span><span class="o">[</span><span class="n">0</span><span class="o">].</span><span class="na">effective</span><span class="o">)</span> <span class="o">|</span> <span class="o">(((</span><span class="kt">long</span><span class="o">)</span> <span class="n">data</span><span class="o">[</span><span class="n">1</span><span class="o">].</span><span class="na">effective</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="n">32</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">args</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="s">&#34;--setuid=1000&#34;</span><span class="o">,</span>
@@ -1141,7 +1141,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 0 表示子进程
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">pid</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 关闭从 Zygote 继承下来的 ServerSocket，因为用不到
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">zygoteServer</span><span class="o">.</span><span class="na">closeServerSocket</span><span class="o">();</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">handleSystemServerProcess</span><span class="o">(</span><span class="n">parsedArgs</span><span class="o">);</span>
@@ -1237,7 +1237,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span><span class="o">[]</span> <span class="n">usapPipeFDs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">StructPollfd</span><span class="o">[]</span> <span class="n">pollFDs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">pollIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">pollIndex</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="o">(</span><span class="n">FileDescriptor</span> <span class="n">socketFD</span> <span class="o">:</span> <span class="n">socketFDs</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">pollFDs</span><span class="o">[</span><span class="n">pollIndex</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StructPollfd</span><span class="o">();</span>
 </span></span><span class="line"><span class="cl">            <span class="n">pollFDs</span><span class="o">[</span><span class="n">pollIndex</span><span class="o">].</span><span class="na">fd</span> <span class="o">=</span> <span class="n">socketFD</span><span class="o">;</span>
@@ -1250,19 +1250,19 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 使用 poll 查询 pollFds 中的事件，如果没有事件则会阻塞
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Os</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">pollFDs</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Os</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">pollFDs</span><span class="o">,</span> <span class="o">-</span><span class="n">1</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ErrnoException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">&#34;poll failed&#34;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">        <span class="o">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="kt">boolean</span> <span class="n">usapPoolFDRead</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="o">(--</span><span class="n">pollIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">((</span><span class="n">pollFDs</span><span class="o">[</span><span class="n">pollIndex</span><span class="o">].</span><span class="na">revents</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="o">(--</span><span class="n">pollIndex</span> <span class="o">&gt;=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">((</span><span class="n">pollFDs</span><span class="o">[</span><span class="n">pollIndex</span><span class="o">].</span><span class="na">revents</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="o">)</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">            <span class="o">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">pollIndex</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">pollIndex</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">                <span class="c1">// pollIndex 为 0 表示的是 LocalServerSocket, 这时候是有连接请求了
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">ZygoteConnection</span> <span class="n">newPeer</span> <span class="o">=</span> <span class="n">acceptCommandPeer</span><span class="o">(</span><span class="n">abiList</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">                <span class="c1">// 加入 peers
@@ -1399,7 +1399,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;IOException on command socket&#34;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">-</span><span class="n">1</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">FileDescriptor</span> <span class="n">childPipeFd</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">FileDescriptor</span> <span class="n">serverPipeFd</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 解析参数
@@ -1411,7 +1411,7 @@ Zygote 是 Android 中所有 App 的父进程，有着举足轻重的地位。�
 </span></span><span class="line"><span class="cl">                                   <span class="n">parsedArgs</span><span class="o">.</span><span class="na">mInstructionSet</span><span class="o">,</span> <span class="n">parsedArgs</span><span class="o">.</span><span class="na">mAppDataDir</span><span class="o">,</span> <span class="n">parsedArgs</span><span class="o">.</span><span class="na">mTargetSdkVersion</span><span class="o">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">pid</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">zygoteServer</span><span class="o">.</span><span class="na">setForkChild</span><span class="o">();</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 子进程中用不到 ServerSocket ，所以需要关闭
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">zygoteServer</span><span class="o">.</span><span class="na">closeServerSocket</span><span class="o">();</span>
