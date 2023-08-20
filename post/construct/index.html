@@ -19,8 +19,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec" />
 
 
-<meta name="author" content="devbins" /><meta name="description" content="前言 自C&#43;&#43;11以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
-所以C&#43;&#43;的构造函数从3个变成了5个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
+<meta name="author" content="devbins" /><meta name="description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。
 " /><meta
   name="keywords"
@@ -48,8 +48,8 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
  <meta property="og:title" content="C&#43;&#43;5大构造函数" />
 <meta property="og:description" content="前言
-自C&#43;&#43;11以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
-所以C&#43;&#43;的构造函数从3个变成了5个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
+自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://devbins.github.io/post/construct/" /><meta property="article:section" content="post" />
@@ -57,16 +57,16 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <meta property="article:modified_time" content="2021-02-15T00:00:00+00:00" />
 <meta itemprop="name" content="C&#43;&#43;5大构造函数">
 <meta itemprop="description" content="前言
-自C&#43;&#43;11以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
-所以C&#43;&#43;的构造函数从3个变成了5个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
+自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。"><meta itemprop="datePublished" content="2021-02-15T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-02-15T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1543">
+<meta itemprop="wordCount" content="1526">
 <meta itemprop="keywords" content="C&#43;&#43;," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="C&#43;&#43;5大构造函数"/>
 <meta name="twitter:description" content="前言
-自C&#43;&#43;11以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
-所以C&#43;&#43;的构造函数从3个变成了5个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
+自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。"/>
 
 <!--[if lte IE 9]>
@@ -149,7 +149,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
         <div class="post-category">
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             </div>
-          <span class="more-meta"> 约 1543 字 </span>
+          <span class="more-meta"> 约 1526 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -177,8 +177,8 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
-<p>自C++11以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。</p>
-<p>所以C++的构造函数从3个变成了5个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。</p>
+<p>自 C++11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。</p>
+<p>所以 C++的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。</p>
 <p>它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。</p>
 <h2 id="先来看下面的这个例子">先来看下面的这个例子</h2>
 <div class="highlight"><div class="chroma">
@@ -480,13 +480,13 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <td>2</td>
 <td>Copy Construct</td>
 <td>Copy Construct</td>
-<td>使用t1初始化t2，创建新对象，调用拷贝构造函数</td>
+<td>使用 t1 初始化 t2，创建新对象，调用拷贝构造函数</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Copy Construct</td>
 <td>Copy Construct</td>
-<td>这里就有点迷惑了，t3是个新对象，所以也是调用拷贝构造函数，而不是拷贝赋值函数</td>
+<td>这里就有点迷惑了，t3 是个新对象，所以也是调用拷贝构造函数，而不是拷贝赋值函数</td>
 </tr>
 <tr>
 <td>4</td>
@@ -516,19 +516,19 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <td>6</td>
 <td>Copy Assignment Operator</td>
 <td>Copy Assignment Operator</td>
-<td>由于t5已经存在了，所以调用拷贝赋值函数</td>
+<td>由于 t5 已经存在了，所以调用拷贝赋值函数</td>
 </tr>
 <tr>
 <td>7</td>
 <td>Move construct</td>
 <td>Move construct</td>
-<td>把t1转换成右值，调用移动构造函数</td>
+<td>把 t1 转换成右值，调用移动构造函数</td>
 </tr>
 <tr>
 <td>8</td>
 <td>Move Assignment Operator</td>
 <td>Move Assignment Operator</td>
-<td>由于t7已经存在，所以调用移动赋值函数</td>
+<td>由于 t7 已经存在，所以调用移动赋值函数</td>
 </tr>
 <tr>
 <td>9</td>
@@ -540,19 +540,19 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <td></td>
 <td></td>
 <td>Move construct</td>
-<td>关闭优化，需要调用两次移动构造，一次是return返回给一个临时对象</td>
+<td>关闭优化，需要调用两次移动构造，一次是 return 返回给一个临时对象</td>
 </tr>
 <tr>
 <td></td>
 <td></td>
 <td>Move construct</td>
-<td>另一次是把临时对象赋值给t8，临时对象是右值，所以都调用移动构造函数</td>
+<td>另一次是把临时对象赋值给 t8，临时对象是右值，所以都调用移动构造函数</td>
 </tr>
 <tr>
 <td>10</td>
 <td>Move construct</td>
 <td>Move construct</td>
-<td>使用 move 把test转为右值，调用移动构造函数</td>
+<td>使用 move 把 test 转为右值，调用移动构造函数</td>
 </tr>
 <tr>
 <td>11</td>
@@ -564,7 +564,7 @@ href="../../manifest.json"> <link rel="mask-icon" href="../../safari-pinned-tab.
 <td>12</td>
 <td>construct</td>
 <td>construct</td>
-<td>t9是个已经存在的对象，而Test()是个右值，所以先调用构造函数</td>
+<td>t9 是个已经存在的对象，而 Test()是个右值，所以先调用构造函数</td>
 </tr>
 <tr>
 <td></td>
