@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>树莓派设置 Wi-Fi - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="devbins" /><meta name="description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.134.3 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/raspberry_wifi/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/raspberry_wifi/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="树莓派设置 Wi-Fi">
+  <meta property="og:description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-09-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-09-22T00:00:00+00:00">
+    <meta property="article:tag" content="Manjaro">
+    <meta property="article:tag" content="树莓派">
+    <meta property="article:tag" content="Wi-Fi">
+
+  <meta itemprop="name" content="树莓派设置 Wi-Fi">
+  <meta itemprop="description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+  <meta itemprop="datePublished" content="2024-09-22T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-09-22T00:00:00+00:00">
+  <meta itemprop="wordCount" content="388">
+  <meta itemprop="keywords" content="Manjaro,树莓派,Wi-Fi">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="树莓派设置 Wi-Fi">
+  <meta name="twitter:description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+ <meta property="og:url" content="http://devbins.github.io/post/raspberry_wifi/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="树莓派设置 Wi-Fi">
+  <meta property="og:description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-09-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-09-22T00:00:00+00:00">
+    <meta property="article:tag" content="Manjaro">
+    <meta property="article:tag" content="树莓派">
+    <meta property="article:tag" content="Wi-Fi">
+
+  <meta itemprop="name" content="树莓派设置 Wi-Fi">
+  <meta itemprop="description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+  <meta itemprop="datePublished" content="2024-09-22T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-09-22T00:00:00+00:00">
+  <meta itemprop="wordCount" content="388">
+  <meta itemprop="keywords" content="Manjaro,树莓派,Wi-Fi">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="树莓派设置 Wi-Fi">
+  <meta name="twitter:description" content="前言 上一篇文章讲了在树莓派上安装 Manjaro 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">树莓派设置 Wi-Fi</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2024-09-22 </span>
+        <div class="post-category">
+            <a href="../../categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"> 树莓派 </a>
+            <a href="../../categories/wi-fi/"> Wi-Fi </a>
+            </div>
+          <span class="more-meta"> 约 388 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#networkmanager-与-nmcli">NetworkManager 与 nmcli</a></li>
+    <li><a href="#查看网络连接状态">查看网络连接状态</a></li>
+    <li><a href="#查看-wi-fi-是否打开">查看 Wi-Fi 是否打开</a></li>
+    <li><a href="#扫描网络中的-wi-fi">扫描网络中的 Wi-Fi</a></li>
+    <li><a href="#连接">连接</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章讲了在树莓派上安装 <code>Manjaro</code> 系统，用的是有线的方式，树莓派是支持 Wi-Fi 的，所以今天来讲一下连接 Wi-Fi。</p>
+<h2 id="networkmanager-与-nmcli">NetworkManager 与 nmcli</h2>
+<p>配置 Wi-Fi 需要用到 <code>NetworkManager</code> 和 <code>nmcli</code> ，所以要先安装一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S networkmanager nmcli
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装好之后需要启动这个服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl start NetworkManager.service
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置开机自启动</span>
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> NetworkManager.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="查看网络连接状态">查看网络连接状态</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../../images/pi/nmclid.png" alt="">
+可以看到 Wi-Fi 是没有连接的</p>
+<h2 id="查看-wi-fi-是否打开">查看 Wi-Fi 是否打开</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli r
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WIFI-HW  WIFI    WWAN-HW  WWAN
+</span></span><span class="line"><span class="cl">已启用   已启用  missing  已启用
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>默认是打开的，如果没有打开可以使用如下命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli r wifi on
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="扫描网络中的-wi-fi">扫描网络中的 Wi-Fi</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli d wifi list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli d wifi list
+</span></span><span class="line"><span class="cl">IN-USE  BSSID              SSID             MODE   CHAN  RATE &gt;
+</span></span><span class="line"><span class="cl">        B1:A0:2B:E6:B2:K9  SSID-1           Infra  <span class="m">9</span>     <span class="m">130</span> M&gt;
+</span></span><span class="line"><span class="cl">        C0:A0:3B:E6:A3:01  SSID-2           Infra  <span class="m">9</span>     <span class="m">130</span> M&gt;
+</span></span><span class="line"><span class="cl">        14:A4:60:82:B9:F4  SSID-3           Infra  <span class="m">1</span>     <span class="m">270</span> M&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="连接">连接</h2>
+<p>假如我们连接 <code>SSID-1</code> 这个 Wi-Fi，可以通过下面这条指令，密码换成对应的密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nmcli d wifi connect SSID-1 password &lt;密码&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>在树莓派上连接 Wi-Fi 还是比较简单的，通过几个命令就行了。</p>
+<p>完整代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S networkmanager nmcli
+</span></span><span class="line"><span class="cl">sudo systemctl start NetworkManager.service
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> NetworkManager.service
+</span></span><span class="line"><span class="cl">nmcli r wifi on
+</span></span><span class="line"><span class="cl">nmcli d wifi connect SSID-1 password &lt;密码&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<p><a href="https://www.cnblogs.com/hokori/p/14265509.html">网络管理之命令行工具nmcli - hokori - 博客园</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">devbins</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2024-09-22
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/manjaro/">Manjaro</a>
+          <a href="../../tags/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a>
+          <a href="../../tags/wi-fi/">Wi-Fi</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/raspberry_manjaro/">
+            <span class="next-text nav-default">在树莓派上安装 Manjaro</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2024-09-22 00:00:00 \u002b0000 UTC',
+        title: '树莓派设置 Wi-Fi',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a
+    href="binshengh@gmail.com"
+    class="iconfont icon-email"
+    title="email"
+  ></a>
+  <a
+    href="https://github.com/devbins"
+    class="iconfont icon-github"
+    title="github"
+  ></a> 
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year"> &copy; 2016 - 2024<span class="heart"><i class="iconfont icon-heart"></i></span
+    ><span
+      >devbins</span
+    >
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
