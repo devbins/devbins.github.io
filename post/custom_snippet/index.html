@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>自定义 Snippets - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.139.2 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/custom_snippet/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/custom_snippet/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="自定义 Snippets">
+  <meta property="og:description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-11-26T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-11-26T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="Snippet">
+
+  <meta itemprop="name" content="自定义 Snippets">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+  <meta itemprop="datePublished" content="2024-11-26T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-11-26T00:00:00+00:00">
+  <meta itemprop="wordCount" content="771">
+  <meta itemprop="keywords" content="Emacs,Snippet">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="自定义 Snippets">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+ <meta property="og:url" content="http://localhost:1313/post/custom_snippet/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="自定义 Snippets">
+  <meta property="og:description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-11-26T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-11-26T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="Snippet">
+
+  <meta itemprop="name" content="自定义 Snippets">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+  <meta itemprop="datePublished" content="2024-11-26T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-11-26T00:00:00+00:00">
+  <meta itemprop="wordCount" content="771">
+  <meta itemprop="keywords" content="Emacs,Snippet">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="自定义 Snippets">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何如何在 Emacs 中使用 Snippet 来快速编写代码，提高效率。
+虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。
+今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">自定义 Snippets</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2024-11-26 </span>
+        <div class="post-category">
+            <a href="../../categories/emacs/"> Emacs </a>
+            <a href="../../categories/snippet/"> Snippet </a>
+            </div>
+          <span class="more-meta"> 约 771 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#自定义-snippet">自定义 Snippet</a>
+      <ul>
+        <li><a href="#模板语法">模板语法</a></li>
+        <li><a href="#执行-emacs-lisp-代码">执行 Emacs Lisp 代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章讲了如何如何在 <code>Emacs</code> 中使用 <code>Snippet</code> 来快速编写代码，提高效率。</p>
+<p>虽然很多插件已经为我们准备好了现成的模板，但有时我们需要一些个性化的代码片段。</p>
+<p>今天，我们就一起来学习如何在Emacs中创建自己的Snippets吧！</p>
+<h2 id="自定义-snippet">自定义 Snippet</h2>
+<p>要开始创建自己的代码片段，只需在Emacs中按下 M-x 然后输入 yas-new-snippet，或者直接使用快捷键 C-c C-n。</p>
+<p>这将打开一个新的编辑窗口，并且自动进入 <code>snippet-mode</code> 。里面预设了一些基本信息，看起来像这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cfg" data-lang="cfg"><span class="line"><span class="cl"><span class="c1"># -*- mode: snippet -*-</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># name:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># key:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># --</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>name 是 <code>Snippet</code> 的名称</p>
+</li>
+<li>
+<p>key 当你需要调用这个片段时，只需要输入这里的关键词，再按 Tab 键就能触发代码的自动填充。</p>
+<p><code>#--</code> 后面的内容就是展开后的内容</p>
+</li>
+</ul>
+<p>编写完成后使用 <code>C-c C-c</code> 来保存。</p>
+<h3 id="模板语法">模板语法</h3>
+<p>在 <code>Snippet</code> 中可以插入任意的文本，不过 <code>$</code> 、 <code>`</code> 是特殊的，需要使用 <code>\</code> 转义。</p>
+<p><code>$</code> 在 <code>Snippet</code> 中表示这个地方的内容需要手动输入，帮我占着这个位置，也就是占位符，可以通过 <code>TAB</code> 在占位符之间切换。</p>
+<p><code>$</code> 通常跟随一个数字，表示第几个位置，例如 <code>$1</code> 表示第一个位置，展开后光标默认就在这个地方，以此类推。</p>
+<p>占位符还可以有默认值，它需要跟者一对 <code>{}</code> ，然后用 <code>:</code> 分割位置和默认值。也可以不用数字直接写默认值 <code>${var}</code> 。</p>
+<p>例如: <code>这是一个 ${1:100} 测试</code> 展开后光标会停在 <code>100</code> 的左边，然后一旦你输入内容后，100 就会被替换，用 <code>TAB</code> 就会跳到下一个 100 就会保留。
+<img src="../../images/snippet/100.gif" alt=""></p>
+<p><code>$0</code> 表示所有占位符都确认后光标所停在的位置。</p>
+<p>比如在 <code>for</code> 循环，我们希望最后光标在循环体里，这时候 <code>$0</code> 就非常有用。</p>
+<p>下面是 <code>python</code> 中 <code>for in</code> 的 <code>snippet</code> ，当输完后就会进入到循环体里，这样方便编写逻辑。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">for</span> <span class="err">$</span><span class="p">{</span><span class="n">var</span><span class="p">}</span> <span class="ow">in</span> <span class="err">$</span><span class="p">{</span><span class="n">collection</span><span class="p">}:</span>
+</span></span><span class="line"><span class="cl">    <span class="err">$</span><span class="mi">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/snippet/for.gif">
+</figure>
+
+<h3 id="执行-emacs-lisp-代码">执行 Emacs Lisp 代码</h3>
+<p>Emacs Lisp 代码使用 <code>`</code> 包裹，将会在扩展的时候执行这个代码，从而可以动态的生成一些片段</p>
+<p>比如想要插入当前时间可以这么写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># -*- mode: snippet -*-
+</span></span><span class="line"><span class="cl"># name: time
+</span></span><span class="line"><span class="cl"># key: time
+</span></span><span class="line"><span class="cl"># --
+</span></span><span class="line"><span class="cl">`(current-time-string)`
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/snippet/time.gif">
+</figure>
+
+<h2 id="总结">总结</h2>
+<ul>
+<li>使用 <code>yas-new-snippet</code> 创建新的 <code>Snippet</code></li>
+<li><code>$</code> 表示占位符，后面的数字表示光标移动的顺序，可以使用 <code>${number:default value}</code> 添加默认值</li>
+<li>使用 <code>`</code> 编写的代码会在展开的时候执行</li>
+</ul>
+<h2 id="参考">参考</h2>
+<p><a href="https://joaotavora.github.io/yasnippet/snippet-development.html">Writing snippets</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2024-11-26
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/emacs/">Emacs</a>
+          <a href="../../tags/snippet/">Snippet</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/snippet/">
+            <span class="next-text nav-default">Emacs 中使用 Snippet 快速编写模板代码</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2024-11-26 00:00:00 \u002b0000 UTC',
+        title: '自定义 Snippets',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a
+    href="binshengh@gmail.com"
+    class="iconfont icon-email"
+    title="email"
+  ></a>
+  <a
+    href="https://github.com/devbins"
+    class="iconfont icon-github"
+    title="github"
+  ></a> 
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year"> &copy; 2016 - 2024<span class="heart"><i class="iconfont icon-heart"></i></span
+    ><span
+      ></span
+    >
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
