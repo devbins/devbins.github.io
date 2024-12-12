@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用 OpenSSL 进行 Base64 编解码 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.139.4 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/openssl_base64/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/openssl_base64/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta property="og:description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-12-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-12-11T00:00:00+00:00">
+    <meta property="article:tag" content="OpenSSL">
+    <meta property="article:tag" content="CMake">
+    <meta property="article:tag" content="C&#43;&#43;">
+    <meta property="article:tag" content="Base64">
+
+  <meta itemprop="name" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta itemprop="description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+  <meta itemprop="datePublished" content="2024-12-11T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-12-11T00:00:00+00:00">
+  <meta itemprop="wordCount" content="974">
+  <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,Base64">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta name="twitter:description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+ <meta property="og:url" content="http://localhost:1313/post/openssl_base64/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta property="og:description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2024-12-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-12-11T00:00:00+00:00">
+    <meta property="article:tag" content="OpenSSL">
+    <meta property="article:tag" content="CMake">
+    <meta property="article:tag" content="C&#43;&#43;">
+    <meta property="article:tag" content="Base64">
+
+  <meta itemprop="name" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta itemprop="description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+  <meta itemprop="datePublished" content="2024-12-11T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-12-11T00:00:00+00:00">
+  <meta itemprop="wordCount" content="974">
+  <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,Base64">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用 OpenSSL 进行 Base64 编解码">
+  <meta name="twitter:description" content="前言 在上一篇文章中我们讲了如何使用 CMake 搭建 OpenSSL 环境，并打印了 OpenSSL 的版本。
+今天要使用 OpenSSL 进行 Base64 编解码。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用 OpenSSL 进行 Base64 编解码</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2024-12-11 </span>
+        <div class="post-category">
+            <a href="../../categories/openssl/"> OpenSSL </a>
+            <a href="../../categories/cmake/"> CMake </a>
+            <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+            <a href="../../categories/base64/"> Base64 </a>
+            </div>
+          <span class="more-meta"> 约 974 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#base64">Base64</a></li>
+    <li><a href="#使用">使用</a>
+      <ul>
+        <li><a href="#编码">编码</a></li>
+        <li><a href="#解码">解码</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在上一篇文章中我们讲了如何使用 <code>CMake</code> 搭建 <code>OpenSSL</code> 环境，并打印了 <code>OpenSSL</code> 的版本。</p>
+<p>今天要使用 <code>OpenSSL</code> 进行 <code>Base64</code> 编解码。</p>
+<h2 id="base64">Base64</h2>
+<p><code>Base64</code> 是一种基于64个可打印字符来表示二进制数据的编码方法。它最初是为电子邮件系统设计的，因为早期的网络和邮件传输协议不能可靠地处理非文本数据（如图像、音频文件等）。</p>
+<p>通过将这些二进制数据转换成ASCII字符串格式，可以确保它们在网络上传输时不会被破坏或修改。</p>
+<p><code>Base64</code> 由大写字母A-Z、小写字母a-z、数字0-9以及符号&quot;+&ldquo;和&rdquo;/&quot;。</p>
+<p>64 = 2^6，所以用 6 位就能容纳，但是一个字节是 8 位，它们的最小公倍数是 24，所以每 3 个字节(3 * 8 = 4 * 6)可以分成一组，用 4 个字符可以表示。</p>
+<p>如果不足 24 位则用 0 补齐。</p>
+<h2 id="使用">使用</h2>
+<p>上面简单讲了一下 <code>Base64</code> 的原理和出现的原因，接下来看一下如何使用 <code>OpenSSL</code> 进行编解码。</p>
+<blockquote>
+<p>如何搭建 <code>OpenSSL</code> 在<a href="https://devbins.github.io/post/openssl/">CMake OpenSSL 环境搭建</a>中已经讲过了，不会的可以前去查看</p>
+</blockquote>
+<h3 id="编码">编码</h3>
+<p>我们直接看代码如何编写，先来导入一下头文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;openssl/bio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;openssl/evp.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;openssl/buffer.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>要使用 <code>Base64</code> 编码，我们需要用到 <code>OpenSSL</code> 的 <code>BIO</code> 接口。</p>
+<p><code>BIO（Basic Input Output）</code> 接口是用于实现输入输出操作的一套抽象层。它提供了一种灵活的方法来处理各种类型的I/O，包括文件、套接字、内存缓冲区等，并且支持过滤器（filters），这些过滤器可以在数据传递给最终目的地之前对其进行处理。</p>
+<p><code>BIO</code> 使用的流程一般是：</p>
+<ol>
+<li>创建 <code>BIO</code> 对象
+比如: <code>BIO_new</code></li>
+<li>配置算法/过滤器
+比如：加解密，Base64，摘要算法</li>
+<li>执行 IO 操作
+使用 <code>BIO_read</code> 和 <code>BIO_write</code> 来进行写入或读取数据。</li>
+<li>清理创建的对象，释放内存</li>
+</ol>
+<!--listend-->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 创建 BIO 对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">auto</span> <span class="n">bio_mem</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_s_mem</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">bio_mem</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 添加 Base64 过滤器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">auto</span> <span class="n">bio_b64</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_f_base64</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">bio_b64</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BIO_free</span><span class="p">(</span><span class="n">bio_mem</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 把内存和 Base64 编码算法关联起来
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">BIO_push</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">,</span> <span class="n">bio_mem</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;OpenSSL Base64 编码!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 写入数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="n">re</span> <span class="o">=</span> <span class="n">BIO_write</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">re</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BIO_free_all</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 刷新缓存，写入到 mem
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">BIO_flush</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">encoded_data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">BUF_MEM</span> <span class="o">*</span><span class="n">encoded_mem</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIO_get_mem_ptr</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">encoded_mem</span><span class="p">);</span> <span class="c1">// 读到 buffer 里
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="n">encoded_mem</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encoded_data</span> <span class="o">=</span> <span class="n">string</span><span class="p">(</span><span class="n">encoded_mem</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">encoded_mem</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIO_free_all</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Base64 编码: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">encoded_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输入如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Base64 编码: T3BlblNTTCBCYXNlNjQg57yW56CB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="解码">解码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">encoded_data</span> <span class="o">=</span> <span class="s">&#34;T3BlblNTTCBCYXNlNjQg57yW56CB&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">bio_mem_decode</span> <span class="o">=</span> <span class="n">BIO_new_mem_buf</span><span class="p">(</span><span class="n">encoded_data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">encoded_data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">bio_mem_decode</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">bio_b64_decode</span> <span class="o">=</span> <span class="n">BIO_new</span><span class="p">(</span><span class="n">BIO_f_base64</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">bio_b64_decode</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">BIO_free</span><span class="p">(</span><span class="n">bio_mem_decode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BIO_push</span><span class="p">(</span><span class="n">bio_b64_decode</span><span class="p">,</span> <span class="n">bio_mem_decode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIO_set_flags</span><span class="p">(</span><span class="n">bio_b64_decode</span><span class="p">,</span> <span class="n">BIO_FLAGS_BASE64_NO_NL</span><span class="p">);</span> <span class="c1">// 不进行换行，不设置一些情况下会解码失败
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">capcity</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="nf">decode_data</span><span class="p">(</span><span class="n">capcity</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIO_read_ex</span><span class="p">(</span><span class="n">bio_b64_decode</span><span class="p">,</span> <span class="n">decode_data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">capcity</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">BIO_free_all</span><span class="p">(</span><span class="n">bio_b64_decode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">decode_data</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Base64 解码: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">decode_data</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结果如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Base64 解码: OpenSSL Base64 编码
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p><code>Base64</code> 编码还是比较简单的， <code>OpenSSL</code> 使用起来比其它语言标准库的要复杂一些。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2024-12-11
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/openssl/">OpenSSL</a>
+          <a href="../../tags/cmake/">CMake</a>
+          <a href="../../tags/c&#43;&#43;/">C&#43;&#43;</a>
+          <a href="../../tags/base64/">Base64</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/openssl/">
+            <span class="next-text nav-default">CMake OpenSSL 环境搭建</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2024-12-11 00:00:00 \u002b0000 UTC',
+        title: '使用 OpenSSL 进行 Base64 编解码',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a
+    href="binshengh@gmail.com"
+    class="iconfont icon-email"
+    title="email"
+  ></a>
+  <a
+    href="https://github.com/devbins"
+    class="iconfont icon-github"
+    title="github"
+  ></a> 
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year"> &copy; 2016 - 2024<span class="heart"><i class="iconfont icon-heart"></i></span
+    ><span
+      ></span
+    >
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
