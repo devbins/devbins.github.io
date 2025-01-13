@@ -61,7 +61,7 @@
 今天要使用 OpenSSL 进行 Base64 编解码。">
   <meta itemprop="datePublished" content="2024-12-11T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-12-11T00:00:00+00:00">
-  <meta itemprop="wordCount" content="973">
+  <meta itemprop="wordCount" content="996">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,Base64">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="使用 OpenSSL 进行 Base64 编解码">
@@ -87,7 +87,7 @@
 今天要使用 OpenSSL 进行 Base64 编解码。">
   <meta itemprop="datePublished" content="2024-12-11T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-12-11T00:00:00+00:00">
-  <meta itemprop="wordCount" content="973">
+  <meta itemprop="wordCount" content="996">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,Base64">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="使用 OpenSSL 进行 Base64 编解码">
@@ -179,7 +179,7 @@
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             <a href="../../categories/base64/"> Base64 </a>
             </div>
-          <span class="more-meta"> 约 973 字 </span>
+          <span class="more-meta"> 约 996 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -288,6 +288,7 @@
 </span><span class="lnt">34
 </span><span class="lnt">35
 </span><span class="lnt">36
+</span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 创建 BIO 对象
@@ -317,7 +318,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// 刷新缓存，写入到 mem
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">BIO_flush</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BIO_set_flags</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">,</span> <span class="n">BIO_FLAGS_BASE64_NO_NL</span><span class="p">);</span> <span class="c1">// 不进行换行，不设置一些情况下会解码失败
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">encoded_data</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="n">BUF_MEM</span> <span class="o">*</span><span class="n">encoded_mem</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="n">BIO_get_mem_ptr</span><span class="p">(</span><span class="n">bio_b64</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">encoded_mem</span><span class="p">);</span> <span class="c1">// 读到 buffer 里
