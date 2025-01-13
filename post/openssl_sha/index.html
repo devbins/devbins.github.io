@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>使用OpenSSL 进行 MD5 计算 - devbins blog</title>
+  <title>使用 OpenSSL 进行 SHA 计算 - devbins blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
@@ -27,7 +27,7 @@
 <meta name="generator" content="Hugo 0.140.2 with theme even" />
 
 
-<link rel="canonical" href="http://devbins.github.io/post/openssl_md5/" />
+<link rel="canonical" href="http://devbins.github.io/post/openssl_sha/" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
@@ -40,52 +40,52 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:url" content="http://devbins.github.io/post/openssl_md5/">
+<meta property="og:url" content="http://devbins.github.io/post/openssl_sha/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="使用OpenSSL 进行 MD5 计算">
-  <meta property="og:description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
+  <meta property="og:title" content="使用 OpenSSL 进行 SHA 计算">
+  <meta property="og:description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-12-25T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-12-25T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-01-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-12T00:00:00+00:00">
     <meta property="article:tag" content="OpenSSL">
     <meta property="article:tag" content="CMake">
     <meta property="article:tag" content="C&#43;&#43;">
     <meta property="article:tag" content="MD5">
 
-  <meta itemprop="name" content="使用OpenSSL 进行 MD5 计算">
-  <meta itemprop="description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
-  <meta itemprop="datePublished" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="wordCount" content="744">
+  <meta itemprop="name" content="使用 OpenSSL 进行 SHA 计算">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
+  <meta itemprop="datePublished" content="2025-01-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-01-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="846">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,MD5">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="使用OpenSSL 进行 MD5 计算">
-  <meta name="twitter:description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
- <meta property="og:url" content="http://devbins.github.io/post/openssl_md5/">
+  <meta name="twitter:title" content="使用 OpenSSL 进行 SHA 计算">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
+ <meta property="og:url" content="http://devbins.github.io/post/openssl_sha/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="使用OpenSSL 进行 MD5 计算">
-  <meta property="og:description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
+  <meta property="og:title" content="使用 OpenSSL 进行 SHA 计算">
+  <meta property="og:description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-12-25T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-12-25T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-01-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-12T00:00:00+00:00">
     <meta property="article:tag" content="OpenSSL">
     <meta property="article:tag" content="CMake">
     <meta property="article:tag" content="C&#43;&#43;">
     <meta property="article:tag" content="MD5">
 
-  <meta itemprop="name" content="使用OpenSSL 进行 MD5 计算">
-  <meta itemprop="description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
-  <meta itemprop="datePublished" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="wordCount" content="744">
+  <meta itemprop="name" content="使用 OpenSSL 进行 SHA 计算">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
+  <meta itemprop="datePublished" content="2025-01-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-01-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="846">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,MD5">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="使用OpenSSL 进行 MD5 计算">
-  <meta name="twitter:description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
+  <meta name="twitter:title" content="使用 OpenSSL 进行 SHA 计算">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何使用 OpenSSL 进行 MD5 计算，今天来说一说 SHA 的使用。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -162,17 +162,17 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">使用OpenSSL 进行 MD5 计算</h1>
+      <h1 class="post-title">使用 OpenSSL 进行 SHA 计算</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2024-12-25 </span>
+        <span class="post-time"> 2025-01-12 </span>
         <div class="post-category">
             <a href="../../categories/openssl/"> OpenSSL </a>
             <a href="../../categories/cmake/"> CMake </a>
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             <a href="../../categories/md5/"> MD5 </a>
             </div>
-          <span class="more-meta"> 约 744 字 </span>
+          <span class="more-meta"> 约 846 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -184,13 +184,20 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#前言">前言</a></li>
-    <li><a href="#md5">MD5</a>
+    <li><a href="#sha">SHA</a>
       <ul>
-        <li><a href="#原理">原理</a></li>
+        <li><a href="#sha-0">SHA-0</a></li>
+        <li><a href="#sha-1">SHA-1</a></li>
+        <li><a href="#sha-2">SHA-2</a></li>
+        <li><a href="#sha3">SHA3</a></li>
       </ul>
     </li>
-    <li><a href="#上代码">上代码</a></li>
-    <li><a href="#更简单的方法">更简单的方法</a></li>
+    <li><a href="#上代码">上代码</a>
+      <ul>
+        <li><a href="#sha1">SHA1</a></li>
+        <li><a href="#sha256">SHA256</a></li>
+      </ul>
+    </li>
     <li><a href="#总结">总结</a></li>
   </ul>
 </nav>
@@ -198,60 +205,24 @@
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
-<p>上一篇文章说了如何使用 <code>OpenSSL</code> 进行 <code>Base64</code> 编码，这篇文章来说一说如何进行 <code>MD5</code> 计算</p>
-<h2 id="md5">MD5</h2>
-<p>MD5（Message-Digest Algorithm 5，消息摘要算法第五版）是一种广泛使用的密码散列函数，用于生成一个128位（16字节）的哈希值或消息摘要。</p>
-<p>通常被用来验证文件的完整性。</p>
-<h3 id="原理">原理</h3>
-<ul>
-<li>填充：如果输入数据的长度（以比特计）对512取余的结果不是448，则需要进行填充，使得其长度达到512比特的倍数减去64比特。填充的第一个比特是1，其余都是0。</li>
-<li>附加原始长度：在填充后的数据后面追加一个64比特的块，表示原始消息的长度（不包含填充）。这样做的目的是确保即使两个不同的消息仅在最后一个比特不同，它们也会有不同的摘要。</li>
-<li>初始化缓冲区：使用四个32位整数A、B、C、D来初始化缓冲区，这些值是固定的常量。</li>
-<li>处理消息：对于每个512比特的块，执行一系列复杂的非线性变换。这个过程分为四轮，每一轮又包含了16个基本的操作，总共64次操作。每次操作都涉及到对当前块的一部分和缓冲区中的值进行计算。</li>
-</ul>
+<p>上一篇文章讲了如何使用 <code>OpenSSL</code> 进行 <code>MD5</code> 计算，今天来说一说 <code>SHA</code> 的使用。</p>
+<h2 id="sha">SHA</h2>
+<p>SHA（Secure Hash Algorithm，安全散列算法）是一系列由美国国家安全局（NSA）设计，并由美国国家标准与技术研究院（NIST）发布的密码散列函数。SHA算法族包括了多个版本，如SHA-0、SHA-1、SHA-2和SHA-3，每个版本都有其特定的输出长度和内部结构</p>
+<h3 id="sha-0">SHA-0</h3>
+<p>这是最初的设计，但由于被发现存在安全弱点，在实际应用中几乎未被使用。长度为160位。</p>
+<h3 id="sha-1">SHA-1</h3>
+<p>作为SHA-0的改进版发布，曾经广泛应用于各种安全协议中。长度也是160位。</p>
+<p>随着时间的发展，研究者发现了SHA-1的安全缺陷，特别是容易受到碰撞攻击的影响。因此，它已不再被视为安全的选择。</p>
+<h3 id="sha-2">SHA-2</h3>
+<p>SHA-2是SHA-1的后继者，提供了更高级别的安全性。SHA-2不是一个单独的算法，而是一组算法，通常以它们的输出长度来区分，比如SHA-256、SHA-384等。</p>
+<p>相比SHA-1，SHA-2具有更大的内部状态空间和更复杂的运算逻辑，从而提高了抵抗碰撞攻击的能力。</p>
+<h3 id="sha3">SHA3</h3>
+<p>SHA-3并不是SHA-2的直接升级，而是在Keccak哈希函数的基础上发展而来的新一代标准。它被选为FIPS认可的标准之一，旨在提供一个不同于SHA-2的替代方案，以防万一SHA-2出现安全漏洞。</p>
+<p>SHA-3同样支持不同的输出长度，例如SHA3-224、SHA3-256、SHA3-384和SHA3-512。</p>
+<p>SHA-3采用了截然不同的设计原理——海绵构造（sponge construction），这使得它在某些应用场景下可能比SHA-2更适合或更高效。</p>
 <h2 id="上代码">上代码</h2>
-<p>使用 <code>MD5</code> 的大致流程是：先创建一个上下文，然后进行初始化，接着填入数据，最后计算结果。</p>
-<p>代码如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">MD5_CTX</span> <span class="n">ctx</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="n">MD5_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="n">MD5_Update</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl"><span class="n">MD5_Final</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ctx</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">43603754bc1756949ea186ef2394b2
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="更简单的方法">更简单的方法</h2>
-<p>每次计算 <code>MD5</code> 都要创建上下文挺麻烦的，而且这些步骤都是固定的。</p>
-<p>所以 <code>OpenSSL</code> 提供了一个简单方法可以直接使用，不需要麻烦的创建上下文，初始化的一堆操作。</p>
-<p>如下所示</p>
+<h3 id="sha1">SHA1</h3>
+<p><code>SHA1</code> 已经不怎么用了，直接上代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -264,12 +235,12 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试数据&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">MD5</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="n">out</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">SHA1</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">out</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -279,12 +250,40 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">43603754bc1756949ea186ef2394b2
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">f11be67999c8cfbc7db7233e1b964bb4423bcb45
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="sha256">SHA256</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试数据&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">SHA256</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">out</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">d4abe3226384bef0676bf9ac11b5a71f3b5bc3aad95c6373e5e64ebcce136cb6
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="总结">总结</h2>
-<p>由于其速度快且易于实现，MD5仍然被广泛应用于非安全性关键领域，例如检查文件完整性或版本控制系统的快照比较等。
-但是在涉及加密存储重要隐私数据时就不太合适了。</p>
+<p><code>SHA</code> 算法的使用和 <code>MD5</code> 是一样的，只有名字上的区别，但是 <code>MD5</code> 已经被攻破了，所以不安全，实际使用尽可能使用 <code>SHA2</code> 算法。</p>
     </div>
 
     <div class="post-copyright">
@@ -295,7 +294,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2024-12-25
+        2025-01-12
         
     </span>
   </p>
@@ -313,13 +312,9 @@
           <a href="../../tags/md5/">MD5</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="../../post/openssl_sha/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">使用 OpenSSL 进行 SHA 计算</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="../../post/openssl_base64/">
-            <span class="next-text nav-default">使用 OpenSSL 进行 Base64 编解码</span>
+        
+        <a class="next" href="../../post/openssl_md5/">
+            <span class="next-text nav-default">使用OpenSSL 进行 MD5 计算</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -332,8 +327,8 @@
     <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       var gitalk = new Gitalk({
-        id: '2024-12-25 00:00:00 \u002b0000 UTC',
-        title: '使用OpenSSL 进行 MD5 计算',
+        id: '2025-01-12 00:00:00 \u002b0000 UTC',
+        title: '使用 OpenSSL 进行 SHA 计算',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: 'devbins.github.io',
