@@ -58,7 +58,7 @@
   <meta itemprop="description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
   <meta itemprop="datePublished" content="2024-12-25T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="wordCount" content="748">
+  <meta itemprop="wordCount" content="744">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,MD5">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="使用OpenSSL 进行 MD5 计算">
@@ -81,7 +81,7 @@
   <meta itemprop="description" content="前言 上一篇文章说了如何使用 OpenSSL 进行 Base64 编码，这篇文章来说一说如何进行 MD5 计算">
   <meta itemprop="datePublished" content="2024-12-25T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-12-25T00:00:00+00:00">
-  <meta itemprop="wordCount" content="748">
+  <meta itemprop="wordCount" content="744">
   <meta itemprop="keywords" content="OpenSSL,CMake,C&#43;&#43;,MD5">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="使用OpenSSL 进行 MD5 计算">
@@ -172,7 +172,7 @@
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             <a href="../../categories/md5/"> MD5 </a>
             </div>
-          <span class="more-meta"> 约 748 字 </span>
+          <span class="more-meta"> 约 744 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -227,12 +227,12 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">data</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">MD5_CTX</span> <span class="n">ctx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="n">MD5_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="n">MD5_Update</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">MD5_Update</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl"><span class="n">MD5_Final</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ctx</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
@@ -264,10 +264,10 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">data</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#34;测试 Md5 数据&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">out</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">MD5</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">out</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">MD5</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="n">out</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
