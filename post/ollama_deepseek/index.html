@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在Ollama 上运行 DeepSeek 大模型 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.141.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/ollama_deepseek/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/ollama_deepseek/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta property="og:description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-01-21T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-21T00:00:00+00:00">
+    <meta property="article:tag" content="Ai">
+
+  <meta itemprop="name" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta itemprop="description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+  <meta itemprop="datePublished" content="2025-01-21T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-01-21T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1236">
+  <meta itemprop="keywords" content="Ai">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta name="twitter:description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+ <meta property="og:url" content="http://devbins.github.io/post/ollama_deepseek/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta property="og:description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-01-21T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-21T00:00:00+00:00">
+    <meta property="article:tag" content="Ai">
+
+  <meta itemprop="name" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta itemprop="description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+  <meta itemprop="datePublished" content="2025-01-21T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-01-21T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1236">
+  <meta itemprop="keywords" content="Ai">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Ollama 上运行 DeepSeek 大模型">
+  <meta name="twitter:description" content="前言 今天在群里有个小伙伴发了一个在 Ollama 上运行 deepseek 大模型的消息，最近 deepkseek 也是风头正劲，于是我就体验了一下。
+发现了还不错，它相比于其它的大模型会把思考过程也显示出来。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在Ollama 上运行 DeepSeek 大模型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2025-01-21 </span>
+        <div class="post-category">
+            <a href="../../categories/ai/"> Ai </a>
+            </div>
+          <span class="more-meta"> 约 1236 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#ollama-安装">ollama 安装</a></li>
+    <li><a href="#运行-deepseek-大模型">运行 deepseek 大模型</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>今天在群里有个小伙伴发了一个在 <code>Ollama</code> 上运行 <code>deepseek</code> 大模型的消息，最近 <code>deepkseek</code> 也是风头正劲，于是我就体验了一下。</p>
+<p>发现了还不错，它相比于其它的大模型会把思考过程也显示出来。</p>
+<h2 id="ollama-安装">ollama 安装</h2>
+<p><code>ollama</code> 安装很简单， 到<a href="https://www.ollama.com/download/mac">Download Ollama on macOS</a> 下载即可，支持 <code>macOS</code> 、 <code>Linux</code> 、 <code>Windows</code></p>
+<p><code>ollama</code> 是我用过的本地大模型中使用最简单和方便的。</p>
+<p>可以使用如下指令来检测是否安装成功</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ollama -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果能输出版本号就算成功。</p>
+<h2 id="运行-deepseek-大模型">运行 deepseek 大模型</h2>
+<p>在<a href="https://www.ollama.com/search">Ollama</a>中列出了支持的大模型，可以选择你需要的，这里用 <code>deepseek</code> 举例</p>
+<p>安装好后在终端中使用如下指令来把大模型下载到本地</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ollama pull deepseek-r1:1.5b
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>根据自己的内存选择一个合适的，要不然可能会暴内存</p>
+<p>下载好了就可以使用了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ollama run deepseek-r1:14b
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; 介绍一下你自己
+</span></span><span class="line"><span class="cl">&lt;think&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;/think&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">您好！我是由中国的深度求索（DeepSeek）公司开发的智能助手DeepSeek-R1。如您有任何任何问题，我会尽我所能为您提供帮助。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; 解释一下什么是大模型
+</span></span><span class="line"><span class="cl">&lt;think&gt;
+</span></span><span class="line"><span class="cl">Alright, the user just asked me to <span class="s2">&#34;explain what a large model is.&#34;</span> I need to provide a clear and concise explanation. First, I
+</span></span><span class="line"><span class="cl">should define what a large language model <span class="o">(</span>LLM<span class="o">)</span> is without being too technical.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">I remember that LLMs are based on neural networks, so maybe I should mention that they use deep learning techniques. Also, it<span class="s1">&#39;s
+</span></span></span><span class="line"><span class="cl"><span class="s1">important to highlight the scale aspect—like the number of parameters and the vast amount of data they&#39;</span>re trained on.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The user might be interested in understanding why these models are effective. So, I should explain how their size allows them to
+</span></span><span class="line"><span class="cl">capture complex patterns and contexts, which leads to better performance in various tasks.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">I also think it<span class="s1">&#39;s good to mention some practical applications like text generation or summarization to give examples of what
+</span></span></span><span class="line"><span class="cl"><span class="s1">LLMs can do. This helps make the concept more relatable.
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">Lastly, since there&#39;</span>s a lot of buzz around these models, I should note that they require significant computational resources and
+</span></span><span class="line"><span class="cl">careful management to ensure responsible use. That might address any underlying concerns about the technology<span class="s1">&#39;s impact.
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">I need to structure this in a way that&#39;</span>s easy to follow, maybe starting with the definition, <span class="k">then</span> moving on to how they work,
+</span></span><span class="line"><span class="cl">their benefits, and some considerations.
+</span></span><span class="line"><span class="cl">&lt;/think&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">**什么是大模型？**
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">“大模型”通常指的是具有大量参数的大型语言模型（Large Language Models，LLMs），这些模型基于深度学习技术构建，并通过海量数据进行训练
+</span></span><span class="line"><span class="cl">。它们能够捕捉到复杂的语言模式和上下文信息，从而在多种任务中表现出强大的理解与生成能力。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">### 大模型的特点：</span>
+</span></span><span class="line"><span class="cl">1. **规模庞大**：大模型通常拥有数亿甚至上百亿的参数，例如GPT系列（如GPT-3、GPT-4）、BERT等。
+</span></span><span class="line"><span class="cl">2. **深度学习基础**：基于神经网络架构，通过多层参数调整来模拟人类语言的学习过程。
+</span></span><span class="line"><span class="cl">3. **通用性**：经过广泛领域的数据训练，能够理解和生成多种语言及任务相关的文本内容。
+</span></span><span class="line"><span class="cl">4. **强大的上下文理解**：能捕捉到长距离依赖关系，理解复杂语境。
+</span></span><span class="line"><span class="cl">5. **多任务能力**：在问答、翻译、摘要、对话等多种任务中表现出色。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">### 大模型的作用：</span>
+</span></span><span class="line"><span class="cl">- **自然语言处理（NLP）**：如机器翻译、文本生成、情感分析等。
+</span></span><span class="line"><span class="cl">- **辅助决策**：通过分析大量数据提供洞察或建议。
+</span></span><span class="line"><span class="cl">- **人机交互**：提升聊天机器人、语音助手的对话能力。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">### 挑战与考虑：</span>
+</span></span><span class="line"><span class="cl">1. **计算资源需求高**：训练和运行大模型需要强大的算力支持。
+</span></span><span class="line"><span class="cl">2. **伦理与安全问题**：可能生成不准确或有害信息，需谨慎管理和引导使用。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">总之，“大模型”是人工智能领域的重要进展，正在改变我们处理语言任务的方式。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到输出带有一个 <code>&lt;think&gt;&lt;/think&gt;</code> 的标签，里面是一些它是怎么思考的，这个挺有意思的。</p>
+<p>不过有时候只想要答案的话，这个就显得啰唆了。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2025-01-21
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/ai/">Ai</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/openssl_des_cbc/">
+            <span class="next-text nav-default">OpenSSL DES-CBC 加解密</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2025-01-21 00:00:00 \u002b0000 UTC',
+        title: '在Ollama 上运行 DeepSeek 大模型',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>
