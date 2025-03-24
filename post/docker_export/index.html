@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Docker 更新容器镜像 - devbins blog</title>
+  <title>导出 Docker 镜像给他人使用 - devbins blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。
+<meta name="author" content="" /><meta name="description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
@@ -27,7 +30,7 @@
 <meta name="generator" content="Hugo 0.145.0 with theme even" />
 
 
-<link rel="canonical" href="http://devbins.github.io/post/docker_image/" />
+<link rel="canonical" href="http://devbins.github.io/post/docker_export/" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
@@ -40,46 +43,64 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:url" content="http://devbins.github.io/post/docker_image/">
+<meta property="og:url" content="http://devbins.github.io/post/docker_export/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Docker 更新容器镜像">
-  <meta property="og:description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
+  <meta property="og:title" content="导出 Docker 镜像给他人使用">
+  <meta property="og:description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-23T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-23T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-03-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-03-24T00:00:00+00:00">
     <meta property="article:tag" content="Docker">
 
-  <meta itemprop="name" content="Docker 更新容器镜像">
-  <meta itemprop="description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
-  <meta itemprop="datePublished" content="2025-03-23T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-23T00:00:00+00:00">
-  <meta itemprop="wordCount" content="69">
+  <meta itemprop="name" content="导出 Docker 镜像给他人使用">
+  <meta itemprop="description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
+  <meta itemprop="datePublished" content="2025-03-24T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-03-24T00:00:00+00:00">
+  <meta itemprop="wordCount" content="142">
   <meta itemprop="keywords" content="Docker">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Docker 更新容器镜像">
-  <meta name="twitter:description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
- <meta property="og:url" content="http://devbins.github.io/post/docker_image/">
+  <meta name="twitter:title" content="导出 Docker 镜像给他人使用">
+  <meta name="twitter:description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
+ <meta property="og:url" content="http://devbins.github.io/post/docker_export/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Docker 更新容器镜像">
-  <meta property="og:description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
+  <meta property="og:title" content="导出 Docker 镜像给他人使用">
+  <meta property="og:description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-23T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-23T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-03-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-03-24T00:00:00+00:00">
     <meta property="article:tag" content="Docker">
 
-  <meta itemprop="name" content="Docker 更新容器镜像">
-  <meta itemprop="description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
-  <meta itemprop="datePublished" content="2025-03-23T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-23T00:00:00+00:00">
-  <meta itemprop="wordCount" content="69">
+  <meta itemprop="name" content="导出 Docker 镜像给他人使用">
+  <meta itemprop="description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
+  <meta itemprop="datePublished" content="2025-03-24T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-03-24T00:00:00+00:00">
+  <meta itemprop="wordCount" content="142">
   <meta itemprop="keywords" content="Docker">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Docker 更新容器镜像">
-  <meta name="twitter:description" content="前言 Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。">
+  <meta name="twitter:title" content="导出 Docker 镜像给他人使用">
+  <meta name="twitter:description" content="前言 我在本地构建好了镜像，然后想要给其它人使用。
+可以把 Dockerfile 发给对方，让他自己构建。
+这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。
+这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -156,14 +177,14 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Docker 更新容器镜像</h1>
+      <h1 class="post-title">导出 Docker 镜像给他人使用</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2025-03-23 </span>
+        <span class="post-time"> 2025-03-24 </span>
         <div class="post-category">
             <a href="../../categories/docker/"> Docker </a>
             </div>
-          <span class="more-meta"> 约 69 字 </span>
+          <span class="more-meta"> 约 142 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -175,27 +196,34 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#前言">前言</a></li>
-    <li><a href="#更新">更新</a></li>
+    <li><a href="#导出">导出</a></li>
+    <li><a href="#导入">导入</a></li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
-<p>Docker 用久了，镜像就可能变旧，所以这时候我们要及时更新容器镜像。</p>
-<h2 id="更新">更新</h2>
+<p>我在本地构建好了镜像，然后想要给其它人使用。</p>
+<p>可以把 <code>Dockerfile</code> 发给对方，让他自己构建。</p>
+<p>这种方式简单，文件不大，但是如果碰到构建特别复杂而且镜像特别大，那这个过程就会很久，甚至很痛苦。</p>
+<p>这时候就需要把构建好的镜像导出给别人用了，今天就来讲一下如何导出镜像给别人使用</p>
+<h2 id="导出">导出</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker stop &lt;container name&gt;
-</span></span><span class="line"><span class="cl">docker rm &lt;container name&gt;
-</span></span><span class="line"><span class="cl">docker pull image:xxx <span class="c1"># 通常会使用 latest 更新到最新版本</span>
-</span></span><span class="line"><span class="cl">docker run --name &lt;container name&gt; image:xxx
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker save -o my-image.tar my-image
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="导入">导入</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker load -i my-image.tar
 </span></span></code></pre></td></tr></table>
 </div>
 </div>
@@ -209,7 +237,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2025-03-23
+        2025-03-24
         
     </span>
   </p>
@@ -224,13 +252,9 @@
           <a href="../../tags/docker/">Docker</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="../../post/docker_export/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">导出 Docker 镜像给他人使用</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="../../post/go_header/">
-            <span class="next-text nav-default">GoLang http header 字母大小写问题</span>
+        
+        <a class="next" href="../../post/docker_image/">
+            <span class="next-text nav-default">Docker 更新容器镜像</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -243,8 +267,8 @@
     <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       var gitalk = new Gitalk({
-        id: '2025-03-23 00:00:00 \u002b0000 UTC',
-        title: 'Docker 更新容器镜像',
+        id: '2025-03-24 00:00:00 \u002b0000 UTC',
+        title: '导出 Docker 镜像给他人使用',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: 'devbins.github.io',
