@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Golang 内嵌网页 - devbins blog</title>
+  <title>Gin 嵌入静态资源与路由冲突 - devbins blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,9 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
@@ -29,7 +27,7 @@
 <meta name="generator" content="Hugo 0.145.0 with theme even" />
 
 
-<link rel="canonical" href="http://devbins.github.io/post/embed/" />
+<link rel="canonical" href="http://devbins.github.io/post/gin_embed/" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
@@ -42,58 +40,48 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:url" content="http://devbins.github.io/post/embed/">
+<meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Golang 内嵌网页">
-  <meta property="og:description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
+  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
+  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
     <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
     <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
     <meta property="article:tag" content="Go">
+    <meta property="article:tag" content="Gin">
 
-  <meta itemprop="name" content="Golang 内嵌网页">
-  <meta itemprop="description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
+  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
   <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
   <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="295">
-  <meta itemprop="keywords" content="Go">
+  <meta itemprop="wordCount" content="387">
+  <meta itemprop="keywords" content="Go,Gin">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Golang 内嵌网页">
-  <meta name="twitter:description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
- <meta property="og:url" content="http://devbins.github.io/post/embed/">
+  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+ <meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Golang 内嵌网页">
-  <meta property="og:description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
+  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
+  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
     <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
     <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
     <meta property="article:tag" content="Go">
+    <meta property="article:tag" content="Gin">
 
-  <meta itemprop="name" content="Golang 内嵌网页">
-  <meta itemprop="description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
+  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
   <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
   <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="295">
-  <meta itemprop="keywords" content="Go">
+  <meta itemprop="wordCount" content="387">
+  <meta itemprop="keywords" content="Go,Gin">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Golang 内嵌网页">
-  <meta name="twitter:description" content="前言 开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。
-有没有办法只需要交付一个文件就行？
-答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。">
+  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -170,14 +158,15 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Golang 内嵌网页</h1>
+      <h1 class="post-title">Gin 嵌入静态资源与路由冲突</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2025-03-27 </span>
         <div class="post-category">
             <a href="../../categories/go/"> Go </a>
+            <a href="../../categories/gin/"> Gin </a>
             </div>
-          <span class="more-meta"> 约 295 字 </span>
+          <span class="more-meta"> 约 387 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -189,20 +178,18 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#前言">前言</a></li>
-    <li><a href="#embed">embed</a></li>
+    <li><a href="#冲突">冲突</a></li>
+    <li><a href="#解决冲突">解决冲突</a></li>
+    <li><a href="#参考">参考</a></li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
-<p>开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。</p>
-<p>有没有办法只需要交付一个文件就行？</p>
-<p>答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。</p>
-<h2 id="embed">embed</h2>
-<p><code>Go</code> 语言在 <code>1.16</code> 版本开始支持内嵌的技术，叫作 <code>embed</code> ，它可以把文件或者目录，直接嵌入到 <code>Go</code> 语言编译的可执行文件中。</p>
-<p>通过这个技术就能够实现前端和后端只需要一个文件就全搞定。</p>
-<p>下面来看一个使用 <code>Gin</code> 框架结合 <code>embed</code> 实现一个网站的效果</p>
+<p>上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。</p>
+<h2 id="冲突">冲突</h2>
+<p>先来看下代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -223,16 +210,38 @@
 </span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>使用 <code>embed</code> 的语法就是在 <code>embed.FS</code> 的变量的上面加上一行注释</p>
+</div><p>我们把网页内容绑定到了 <code>/</code> ，内容显示正常。</p>
+<p>但是这样做的后果就是所有的 <code>GET</code> 请求都会被 <code>/</code> 捕获，这时候使用 <code>GET</code> 绑定路由就会报错了。</p>
+<p>一种解法是不使用 <code>GET</code> ，虽然能解决问题，但是很别扭也很不优雅。</p>
+<p>另一种是把嵌入的网页内容绑定到一个特殊的路由，比如 <code>public</code> 或者 <code>static</code> 等等。这样就不会污染 <code>GET</code> 路由了。</p>
+<p>但是这样做也会存在问题，假设我们内嵌的文件有 <code>index.html</code> 、 <code>index.js</code> 、 <code>index.css</code></p>
+<p>当我们请求 <code>public/index.html</code> 的时候内容可以请求下来，但是 <code>js</code> 和 <code>css</code> 就不能请求下来了，因为我们把它们的路由改成了 <code>public/index.js</code> 和 <code>public/index.css</code> 了，所以会报文件找不到。</p>
+<h2 id="解决冲突">解决冲突</h2>
+<p>找了一圈在<a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a>中找到一个不错办法，就是通过把 <code>404</code> 错误重新定位到内嵌文件中</p>
+<p>如下所示</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed &lt;这里跟要嵌入的文件名或者目录&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed dist</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f</span> <span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/public&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">NoRoute</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">WrapH</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>简单的两行代码就实现了嵌入功能，非常方便。</p>
+</div><p>这样就能够解决问题了。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -256,15 +265,12 @@
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/go/">Go</a>
+          <a href="../../tags/gin/">Gin</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="../../post/gin_embed/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Gin 嵌入静态资源与路由冲突</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="../../post/typescript_for/">
-            <span class="next-text nav-default">TypeScript for of 与 for in 的区别</span>
+        
+        <a class="next" href="../../post/embed/">
+            <span class="next-text nav-default">Golang 内嵌网页</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -278,7 +284,7 @@
     <script type="text/javascript">
       var gitalk = new Gitalk({
         id: '2025-03-27 00:00:00 \u002b0000 UTC',
-        title: 'Golang 内嵌网页',
+        title: 'Gin 嵌入静态资源与路由冲突',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: 'devbins.github.io',
