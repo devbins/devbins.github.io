@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Gin 嵌入静态资源与路由冲突 - devbins blog</title>
+  <title>改进Gin 嵌入资源路由冲突 - devbins blog</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。
 " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
 
 
@@ -27,7 +27,7 @@
 <meta name="generator" content="Hugo 0.145.0 with theme even" />
 
 
-<link rel="canonical" href="http://devbins.github.io/post/gin_embed/" />
+<link rel="canonical" href="http://devbins.github.io/post/gin%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81/" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
@@ -40,48 +40,50 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
+<meta property="og:url" content="http://devbins.github.io/post/gin%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+  <meta property="og:title" content="改进Gin 嵌入资源路由冲突">
+  <meta property="og:description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-04-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-02T00:00:00+00:00">
     <meta property="article:tag" content="Go">
     <meta property="article:tag" content="Gin">
+    <meta property="article:tag" content="Vue">
 
-  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
-  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="387">
-  <meta itemprop="keywords" content="Go,Gin">
+  <meta itemprop="name" content="改进Gin 嵌入资源路由冲突">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
+  <meta itemprop="datePublished" content="2025-04-02T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-04-02T00:00:00+00:00">
+  <meta itemprop="wordCount" content="353">
+  <meta itemprop="keywords" content="Go,Gin,Vue">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
- <meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
+  <meta name="twitter:title" content="改进Gin 嵌入资源路由冲突">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
+ <meta property="og:url" content="http://devbins.github.io/post/gin%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81/">
   <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+  <meta property="og:title" content="改进Gin 嵌入资源路由冲突">
+  <meta property="og:description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
+    <meta property="article:published_time" content="2025-04-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-02T00:00:00+00:00">
     <meta property="article:tag" content="Go">
     <meta property="article:tag" content="Gin">
+    <meta property="article:tag" content="Vue">
 
-  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
-  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="387">
-  <meta itemprop="keywords" content="Go,Gin">
+  <meta itemprop="name" content="改进Gin 嵌入资源路由冲突">
+  <meta itemprop="description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
+  <meta itemprop="datePublished" content="2025-04-02T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-04-02T00:00:00+00:00">
+  <meta itemprop="wordCount" content="353">
+  <meta itemprop="keywords" content="Go,Gin,Vue">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+  <meta name="twitter:title" content="改进Gin 嵌入资源路由冲突">
+  <meta name="twitter:description" content="前言 上一篇文章讲了如何解决 Gin 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -158,15 +160,16 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Gin 嵌入静态资源与路由冲突</h1>
+      <h1 class="post-title">改进Gin 嵌入资源路由冲突</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2025-03-27 </span>
+        <span class="post-time"> 2025-04-02 </span>
         <div class="post-category">
             <a href="../../categories/go/"> Go </a>
             <a href="../../categories/gin/"> Gin </a>
+            <a href="../../categories/vue/"> Vue </a>
             </div>
-          <span class="more-meta"> 约 387 字 </span>
+          <span class="more-meta"> 约 353 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -178,18 +181,17 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#前言">前言</a></li>
-    <li><a href="#冲突">冲突</a></li>
-    <li><a href="#解决冲突">解决冲突</a></li>
-    <li><a href="#参考">参考</a></li>
+    <li><a href="#发现问题">发现问题</a></li>
+    <li><a href="#使用相对路径">使用相对路径</a></li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <h2 id="前言">前言</h2>
-<p>上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。</p>
-<h2 id="冲突">冲突</h2>
-<p>先来看下代码</p>
+<p>上一篇文章讲了如何解决 <code>Gin</code> 中嵌入资源地问题，虽然也解决了，但是还是碰到来问题。</p>
+<h2 id="发现问题">发现问题</h2>
+<p>在 <code>Gin</code> 中了为了区分 API 和 web，通常会指定不同的路由，以便区分。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -199,6 +201,7 @@
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed dist</span>
@@ -206,42 +209,52 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="nx">fp</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">fs</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="s">&#34;dist&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">fp</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/static&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">fp</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">api</span> <span class="o">:=</span> <span class="nx">router</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;/api&#34;</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>我们把网页内容绑定到了 <code>/</code> ，内容显示正常。</p>
-<p>但是这样做的后果就是所有的 <code>GET</code> 请求都会被 <code>/</code> 捕获，这时候使用 <code>GET</code> 绑定路由就会报错了。</p>
-<p>一种解法是不使用 <code>GET</code> ，虽然能解决问题，但是很别扭也很不优雅。</p>
-<p>另一种是把嵌入的网页内容绑定到一个特殊的路由，比如 <code>public</code> 或者 <code>static</code> 等等。这样就不会污染 <code>GET</code> 路由了。</p>
-<p>但是这样做也会存在问题，假设我们内嵌的文件有 <code>index.html</code> 、 <code>index.js</code> 、 <code>index.css</code></p>
-<p>当我们请求 <code>public/index.html</code> 的时候内容可以请求下来，但是 <code>js</code> 和 <code>css</code> 就不能请求下来了，因为我们把它们的路由改成了 <code>public/index.js</code> 和 <code>public/index.css</code> 了，所以会报文件找不到。</p>
-<h2 id="解决冲突">解决冲突</h2>
-<p>找了一圈在<a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a>中找到一个不错办法，就是通过把 <code>404</code> 错误重新定位到内嵌文件中</p>
-<p>如下所示</p>
+</div><p>当我把 web 文件指定到 <code>/static</code> 下，然后通过浏览器访问，发现访问 <code>index.html</code> 可以成功加载。</p>
+<p>然而获取 <code>css</code> 和 <code>js</code> 文件都报 <code>404</code> 了。</p>
+<p>但是把路由换到 <code>/</code> 又能正常访问。</p>
+<p>为了查明问题，我就打开了 <code>index.html</code> 的源码，发现了 <code>CSS</code> 和 <code>JS</code> 是用的绝对路径，所以导致加了 <code>static</code> 找不到文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;module&#34;</span> <span class="na">crossorigin</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;/assets/index.b90a234a.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/assets/index.49bb9456.css&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="使用相对路径">使用相对路径</h2>
+<p>知道了问题就好办了，只要把绝对路径改成相对路径就行了。</p>
+<p>于是问题久变成了 <code>Vue</code> 如何使用相对路径，搜索一圈下来发现只需要修改 <code>vite.config.ts</code> ，把 <code>base</code> 改为 <code>./</code> ，如果没有 <code>base</code> 新增即可。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed dist</span>
-</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f</span> <span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/public&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">NoRoute</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">WrapH</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))))</span>
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">base</span><span class="o">:</span> <span class="s1">&#39;./&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>这样就能够解决问题了。</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a></li>
-</ul>
+</div><p>然后重新生成，再看下 <code>index.html</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;module&#34;</span> <span class="na">crossorigin</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;./assets/index.b90a234a.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;./assets/index.49bb9456.css&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这时候 <code>CSS</code> 和 <code>JS</code> 就变成相对路径了，这样也就能正常加载了。</p>
     </div>
 
     <div class="post-copyright">
@@ -252,7 +265,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2025-03-27
+        2025-04-02
         
     </span>
   </p>
@@ -266,15 +279,12 @@
       <div class="post-tags">
           <a href="../../tags/go/">Go</a>
           <a href="../../tags/gin/">Gin</a>
+          <a href="../../tags/vue/">Vue</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="../../post/gin%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">改进Gin 嵌入资源路由冲突</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="../../post/embed/">
-            <span class="next-text nav-default">Golang 内嵌网页</span>
+        
+        <a class="next" href="../../post/gin_embed/">
+            <span class="next-text nav-default">Gin 嵌入静态资源与路由冲突</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -287,8 +297,8 @@
     <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
       var gitalk = new Gitalk({
-        id: '2025-03-27 00:00:00 \u002b0000 UTC',
-        title: 'Gin 嵌入静态资源与路由冲突',
+        id: '2025-04-02 00:00:00 \u002b0000 UTC',
+        title: '改进Gin 嵌入资源路由冲突',
         clientID: '1234e4dd9e0ad49470be',
         clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
         repo: 'devbins.github.io',
