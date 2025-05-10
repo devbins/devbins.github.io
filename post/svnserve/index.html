@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Linux 下 svn 服务搭建 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="安装 1 sudo apt install subversion " /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/svnserve/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/svnserve/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Linux 下 svn 服务搭建">
+  <meta property="og:description" content="安装 1 sudo apt install subversion">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-10-28T00:00:00+00:00">
+    <meta property="article:tag" content="SVN">
+
+  <meta itemprop="name" content="Linux 下 svn 服务搭建">
+  <meta itemprop="description" content="安装 1 sudo apt install subversion">
+  <meta itemprop="datePublished" content="2018-10-28T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-10-28T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1134">
+  <meta itemprop="keywords" content="SVN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux 下 svn 服务搭建">
+  <meta name="twitter:description" content="安装 1 sudo apt install subversion">
+ <meta property="og:url" content="http://devbins.github.io/post/svnserve/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Linux 下 svn 服务搭建">
+  <meta property="og:description" content="安装 1 sudo apt install subversion">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-10-28T00:00:00+00:00">
+    <meta property="article:tag" content="SVN">
+
+  <meta itemprop="name" content="Linux 下 svn 服务搭建">
+  <meta itemprop="description" content="安装 1 sudo apt install subversion">
+  <meta itemprop="datePublished" content="2018-10-28T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-10-28T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1134">
+  <meta itemprop="keywords" content="SVN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux 下 svn 服务搭建">
+  <meta name="twitter:description" content="安装 1 sudo apt install subversion">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Linux 下 svn 服务搭建</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-28 </span>
+        <div class="post-category">
+            <a href="../../categories/svn/"> SVN </a>
+            </div>
+          <span class="more-meta"> 约 1134 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#创建仓库">创建仓库</a></li>
+    <li><a href="#配置">配置</a>
+      <ul>
+        <li><a href="#passwd">passwd</a></li>
+        <li><a href="#authz">authz</a></li>
+        <li><a href="#svnserve-dot-conf">svnserve.conf</a></li>
+      </ul>
+    </li>
+    <li><a href="#删除仓库">删除仓库</a></li>
+    <li><a href="#启动服务">启动服务</a></li>
+    <li><a href="#多版本库管理">多版本库管理</a></li>
+    <li><a href="#版本库的备份">版本库的备份</a></li>
+    <li><a href="#版本库的导入">版本库的导入</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="安装">安装</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt install subversion
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="创建仓库">创建仓库</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/svn/project
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置">配置</h2>
+<p>svn 的配置在仓库根目录下的 <code>conf</code> 文件夹中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shtotal 12K
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent 1.1K Oct <span class="m">30</span> 07:55 authz
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent  <span class="m">309</span> Oct <span class="m">30</span> 07:55 passwd
+</span></span><span class="line"><span class="cl">-rw-rw-r--. <span class="m">1</span> cent cent 3.1K Oct <span class="m">30</span> 07:55 svnserve.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="passwd">passwd</h3>
+<p><code>passwd</code> 是配置用户名和密码的文件</p>
+<p>增加用户在 <code>[users]</code> 下添加账号和密码，格式为 <code>账号=密码</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>users<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry = harryssecret</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># sally = sallyssecret</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test1</span> <span class="o">=</span> test1 <span class="c1">#增加一个账号为 test1 密码为 test1 的用户</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test2</span> <span class="o">=</span> test2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="authz">authz</h3>
+<p><code>authz</code> 是配置用户组及对应版本库的权限</p>
+<p><code>[groups]</code> 配置用户组以及组员，组员之间用 <code>,</code> 隔开</p>
+<p>版本库通过 <code>[]</code> 表示， <code>[/]</code> 表示版本库的根目录， <code>[repository:/]</code> 表示名为 <code>repository</code> 的版本库， <code>[repository:/public]</code> 表示名为 <code>repository</code> 版本库下的 <code>public</code> 目录。</p>
+<p>用户组以 <code>@</code> 开头， <code>@dev</code> 表示 <code>dev</code> 用户组，不以 <code>@</code> 开头表示用户。后面接对应的权限， <code>r</code> 表示可读， <code>w</code> 表示可写，不填表示没有权限。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>groups<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry_and_sally = harry,sally</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry_sally_and_joe = harry,sally,&amp;joe</span>
+</span></span><span class="line"><span class="cl"><span class="nv">dev</span> <span class="o">=</span> test1,test2 <span class="c1"># 增加一个 dev 的用户组，组员有 test1 和 test2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># [/foo/bar]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># harry = rw</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &amp;joe = r</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># * =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># [repository:/baz/fuz]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># @harry_and_sally = rw</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># * = r</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>/<span class="o">]</span> <span class="c1"># 版本库的根目录</span>
+</span></span><span class="line"><span class="cl">@dev <span class="o">=</span> rw <span class="c1"># 用户组的权限</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>test:/<span class="o">]</span> <span class="c1"># 名为 test 的版本库</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test1</span> <span class="o">=</span> rw  <span class="c1"># 账号为 test1 对 test 版本库的权限</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>test:/public<span class="o">]</span> <span class="c1"># 名为 test 版本库下 public 目录的权限</span>
+</span></span><span class="line"><span class="cl"><span class="nv">test2</span> <span class="o">=</span> r <span class="c1"># test2 对 版本库 test 下 public 目录的权限</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="svnserve-dot-conf">svnserve.conf</h3>
+<p><code>svnserve.conf</code> 是用来设置用户密码配置文件所在的路径，和用户权限配置文件所在的路径，主要有以下 4 个配置</p>
+<ol>
+<li><code>anon-access</code> 用来设置没有认证的用户所具有的权限，有三个取值 <code>none</code> 表示没有权限， <code>write</code> 表示可以往服务器提交数据， <code>read</code> 表示可以从服务器更新数据，但是不能提交。</li>
+<li><code>auth-access</code> 用来设置验证用户所具有的权限，和 <code>anon-access</code> 一样有三个表示权限的值，这里不再赘述。</li>
+<li><code>password-db</code> 用来指定用户名和密码所在的路径</li>
+<li><code>authz-db</code> 用来指定权限所在的路径</li>
+</ol>
+<!--listend-->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">anon-access <span class="o">=</span> none
+</span></span><span class="line"><span class="cl">auth-access <span class="o">=</span> write
+</span></span><span class="line"><span class="cl">password-db <span class="o">=</span> passwd
+</span></span><span class="line"><span class="cl">authz-db <span class="o">=</span> authz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="删除仓库">删除仓库</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rm -rf ~/svn/project
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="启动服务">启动服务</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnserve -d -r ~/svn/project
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>svn 默认端口号是 3690，可以通过 <code>--listen-port xxx</code> 来指定特定的端口</p>
+<p>-d 表示后台运行</p>
+<p>-r 后面跟 svn 仓库的路径</p>
+<h2 id="多版本库管理">多版本库管理</h2>
+<p>在 svn 的管理中，可能会存在多个版本库的情况，这样就需要管理多个版本库。</p>
+<p>一般的做法是创建好了不同的版本库，分别启动一个 svnserve 去管理。这样做简单，但是第二个库开始就需要指定端口，默认的端口（3690）已经被第一个占用了。而且项目之间存放的路径可能不同，比较分散，这样管理起来就比较麻烦。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/project1
+</span></span><span class="line"><span class="cl">sudo svnadmin create ~/project2
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/project1
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/project2 --listen-port <span class="m">3691</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>除了上面的做法，还有一种做法是把所有的仓库存放在同一个目录下，统一管理。这样就可以通过一个端口来管理所有的版本库了，不过需要注意的是这些仓库需要放在同一个目录下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo svnadmin create ~/svn/project1
+</span></span><span class="line"><span class="cl">sudo svnadmin create ~/svn/project2
+</span></span><span class="line"><span class="cl">svnserve -d -r ~/svn/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="版本库的备份">版本库的备份</h2>
+<p>随着开发不断进行，版本库的版本号一直在增加，内容也在不断增多，占用的空间也越来越大，这时候我们可以通过备份来丢弃掉前面的一些版本，以此达到精简版本的目的。</p>
+<p>备份的指令是 <code>svnadmin dump 仓库的路径 -r 开始版本号:结束版本号 &gt; 保存的地址</code></p>
+<p>举个🌰</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnadmin dump ~/svn/project -r 3:10 &gt; ~/dump
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="版本库的导入">版本库的导入</h2>
+<p>版本库备份之后，我们还要把它导入到一个新的仓库中使用。</p>
+<p>导入的指令是 <code>svnadmin load 仓库的地址 &lt; 精简之后的地址</code></p>
+<p>同样举个🌰</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svnadmin load ~/svn/project &lt; ~/dump
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-10-28
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/svn/">SVN</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/linuxsvn/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Linux 下 svn 使用</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/jenkins/">
+            <span class="next-text nav-default">在 Docker 中用 Jenkins 搭建 Android 自动化打包</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-10-28 00:00:00 \u002b0000 UTC',
+        title: 'Linux 下 svn 服务搭建',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

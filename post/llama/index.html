@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Mac 部署LLaMA2 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook&rsquo;s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/llama/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/llama/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Mac 部署LLaMA2">
+  <meta property="og:description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-08-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-08-20T00:00:00+00:00">
+    <meta property="article:tag" content="LLaMA">
+
+  <meta itemprop="name" content="Mac 部署LLaMA2">
+  <meta itemprop="description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+  <meta itemprop="datePublished" content="2023-08-20T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-08-20T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1085">
+  <meta itemprop="keywords" content="LLaMA">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Mac 部署LLaMA2">
+  <meta name="twitter:description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+ <meta property="og:url" content="http://devbins.github.io/post/llama/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Mac 部署LLaMA2">
+  <meta property="og:description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-08-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-08-20T00:00:00+00:00">
+    <meta property="article:tag" content="LLaMA">
+
+  <meta itemprop="name" content="Mac 部署LLaMA2">
+  <meta itemprop="description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+  <meta itemprop="datePublished" content="2023-08-20T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-08-20T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1085">
+  <meta itemprop="keywords" content="LLaMA">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Mac 部署LLaMA2">
+  <meta name="twitter:description" content="前言 前不久 Meta 开源了Llama 2 - Meta AI ，并且是可商用的。
+所以今天要在 Mac 上搭建 Llama ，由于 Llama 需要非常高的内存普通玩家玩不起，所以为了在 Mac 上跑起来就有了ggerganov/llama.cpp: Port of Facebook’s LLaMA model in C/C&#43;&#43; ，本文也是采用 llama.cpp 的方式进行部署。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Mac 部署LLaMA2</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-08-20 </span>
+        <div class="post-category">
+            <a href="../../categories/ai/"> Ai </a>
+            </div>
+          <span class="more-meta"> 约 1085 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#准备数据--下载大模型">准备数据(下载大模型)</a></li>
+    <li><a href="#转换数据">转换数据</a></li>
+    <li><a href="#量化-quantize">量化 quantize</a></li>
+    <li><a href="#使用">使用</a></li>
+    <li><a href="#web-服务">web 服务</a></li>
+    <li><a href="#python-调用">Python 调用</a>
+      <ul>
+        <li><a href="#安装-python-bindings">安装 Python bindings</a></li>
+        <li><a href="#使用-python-调用">使用 Python 调用</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>前不久 <code>Meta</code> 开源了<a href="https://ai.meta.com/llama/">Llama 2 - Meta AI</a> ，并且是可商用的。</p>
+<p>所以今天要在 <code>Mac</code> 上搭建 <code>Llama</code> ，由于 <code>Llama</code> 需要非常高的内存普通玩家玩不起，所以为了在 <code>Mac</code> 上跑起来就有了<a href="https://github.com/ggerganov/llama.cpp/tree/master">ggerganov/llama.cpp: Port of Facebook&rsquo;s LLaMA model in C/C++</a> ，本文也是采用 <code>llama.cpp</code> 的方式进行部署。</p>
+<h2 id="安装">安装</h2>
+<p>在使用前我们需要先编译好 <code>llama</code> ，在 <code>Mac</code> 上可以开启 <code>Metal</code> 加速</p>
+<p>我这里使用 <code>CMake</code> 进行编译，当然使用 <code>make</code> 也是可以的，编译之前确保安装好了 <code>XCode</code> 和 <code>CMake</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install cmake
+</span></span><span class="line"><span class="cl">git clone https://github.com/ggerganov/llama.cpp
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> llama.cpp
+</span></span><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake -DLLAMA_METAL<span class="o">=</span>ON .. <span class="c1"># 支持 Metal 加速</span>
+</span></span><span class="line"><span class="cl">cmake --build . --config Release
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译好的文件都在 <code>build/bin</code> 下面</p>
+<h2 id="准备数据--下载大模型">准备数据(下载大模型)</h2>
+<p>编译好之后，我们需要下载好 <code>llama2</code> 的大模型，由于下载还需要和 <code>Meta</code> 申请，着实麻烦。</p>
+<p>所以我就使用了 <code>Vicuna</code> ，它是由 UC 伯克利、CMU、斯坦福等机构的学者在 <code>Llama</code> 基础上进行微调后得到的模型，不用申请，省去了申请的麻烦。</p>
+<p>如果你不想这么麻烦，也可以直接使用<a href="https://huggingface.co/TheBloke/Llama-2-7B-GGML">TheBloke/Llama-2-7B-GGML · Hugging Face</a> ，这是 <code>TheBloke</code> 转换好并且量化之后的模型</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install git-lfs
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> models
+</span></span><span class="line"><span class="cl">git lfs clone https://huggingface.co/lmsys/vicuna-7b-v1.5
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="转换数据">转换数据</h2>
+<p>下载好了模型，还不能直接给 <code>llama.cpp</code> 使用，还需要把他转换为 <code>ggml</code> 的格式。</p>
+<p>转换的工具也在 <code>llam.cpp</code> 中，它是 <code>Python</code> 写的，所以我这里使用 <code>Anaconda</code> 创建一个 <code>Python3.9</code> 的环境用来运行脚本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">conda create -n llama <span class="nv">python</span><span class="o">=</span>3.9
+</span></span><span class="line"><span class="cl">conda activate llama
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>激活环境后需要安装一下依赖，然后就可以运行转换脚本了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 -m pip install -r requirements.txt
+</span></span><span class="line"><span class="cl">python3 convert.py models/vicuna-7b-v1.5
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>转换挺快的，运行完成后会得到一个 <code>ggml-model-f16.bin</code> 的文件。</p>
+<h2 id="量化-quantize">量化 quantize</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./build/bin/quantize ./models/vicuna-7b-v1.5/ggml-model-f16.bin ./models/vicuna-7b-v1.5/ggml-model-q4_0.bin q4_0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="使用">使用</h2>
+<p>条件都准备好了，来小试牛刀一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./build/bin/main -m models/vicuna-7b-v1.5/ggml-model-q4_0.bin -n <span class="m">128</span> -p <span class="s1">&#39;The first man on the moon was &#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出结果如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> The first man on the moon was <span class="m">40</span> years old at the <span class="nb">time</span> of his historic achievement.
+</span></span><span class="line"><span class="cl">As Neil Armstrong stepped onto the surface of the moon, he declared, <span class="s2">&#34;That&#39;s one small step for man, one giant leap for mankind.&#34;</span> This iconic moment in <span class="nb">history</span> marked a significant milestone and paved the way <span class="k">for</span> many more great advancements in space exploration and scientific research.
+</span></span><span class="line"><span class="cl">The moon landing was the result of years of dedicated hard work by thousands of scientists engineers technicians and support staff, who worked tirelessly to overcome numerous technical challenges, such as developing building developing developing developing developing developing developing developing developing
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>翻译如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">第一个登上月球的人在他取得历史性成就时已经40岁了。
+</span></span><span class="line"><span class="cl">当尼尔·阿姆斯特朗踏上月球表面时，他宣称：“这是人类的一小步，也是人类的一大步。这一标志性的历史时刻标志着一个重要的里程碑，并为太空探索和科学研究的更多重大进展铺平了道路。
+</span></span><span class="line"><span class="cl">登月是数千名科学家工程师技术人员和支持人员多年辛勤工作的结果，他们孜孜不倦地克服了许多技术挑战，例如开发建筑开发开发
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到最后面的输出有点奇怪，人物倒是对了。每次的结果不一样，而且出错的概率还是有点高的。</p>
+<h2 id="web-服务">web 服务</h2>
+<p>上面这种方式太难用了，交互太差，所以 <code>llama.cpp</code> 也提供了一个简单的 web 服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./build/bin/server -m models/vicuna-7b-v1.5/ggml-model-q4_0.bin -ngl <span class="m">512</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行起来后，使用浏览器打开 <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a> 界面如下
+<img src="../../images/llama/llama.png" alt=""></p>
+<h2 id="python-调用">Python 调用</h2>
+<p>除了 web 服务，我们还希望可以基于 <code>llama.cpp</code> 开发自己的应用，所以会有许多第三方的语言的版本，这里以 <code>Python</code> 为例讲解一下如何使用</p>
+<h3 id="安装-python-bindings">安装 Python bindings</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip install llama-cpp-python
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-python-调用">使用 Python 调用</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">llama_cpp</span> <span class="kn">import</span> <span class="n">Llama</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">llm</span> <span class="o">=</span> <span class="n">Llama</span><span class="p">(</span><span class="n">model_path</span><span class="o">=</span><span class="s2">&#34;./models/vicuna-7b-v1.5/ggml-model-q4_0.bin&#34;</span><span class="p">,</span><span class="n">n_ctx</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span><span class="n">n_batch</span><span class="o">=</span><span class="mi">126</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">output</span> <span class="o">=</span> <span class="n">llm</span><span class="p">(</span><span class="s2">&#34;The first man on the moon was &#34;</span><span class="p">,</span><span class="n">max_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">top_p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;#&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">output_text</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s2">&#34;choices&#34;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&#34;text&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">output_text</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/ggerganov/llama.cpp">ggerganov/llama.cpp: Port of Facebook&rsquo;s LLaMA model in C/C++</a></li>
+<li><a href="https://huggingface.co/TheBloke/Llama-2-7B-GGML/tree/main">TheBloke/Llama-2-7B-GGML at main</a></li>
+<li><a href="https://huggingface.co/lmsys/vicuna-7b-v1.5/tree/main">lmsys/vicuna-7b-v1.5 at main</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-08-20
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/llama/">LLaMA</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/netcat/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用netcat调试TCP/UDP</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/chatglm/">
+            <span class="next-text nav-default">Mac 体验ChatGLM2-6B</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-08-20 00:00:00 \u002b0000 UTC',
+        title: 'Mac 部署LLaMA2',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

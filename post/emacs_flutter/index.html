@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用 Emacs 开发 Flutter - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/emacs_flutter/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/emacs_flutter/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="使用 Emacs 开发 Flutter">
+  <meta property="og:description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-08-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-08-27T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+
+  <meta itemprop="name" content="使用 Emacs 开发 Flutter">
+  <meta itemprop="description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+  <meta itemprop="datePublished" content="2022-08-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2022-08-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="701">
+  <meta itemprop="keywords" content="Emacs">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用 Emacs 开发 Flutter">
+  <meta name="twitter:description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+ <meta property="og:url" content="http://devbins.github.io/post/emacs_flutter/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="使用 Emacs 开发 Flutter">
+  <meta property="og:description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-08-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-08-27T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+
+  <meta itemprop="name" content="使用 Emacs 开发 Flutter">
+  <meta itemprop="description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+  <meta itemprop="datePublished" content="2022-08-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2022-08-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="701">
+  <meta itemprop="keywords" content="Emacs">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用 Emacs 开发 Flutter">
+  <meta name="twitter:description" content="前言 一直都想在 Emacs 中做 flutter 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用 Emacs 开发 Flutter</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-08-27 </span>
+        <div class="post-category">
+            <a href="../../categories/flutter/"> Flutter </a>
+            </div>
+          <span class="more-meta"> 约 701 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#flutter">Flutter</a>
+      <ul>
+        <li><a href="#下载flutter">下载flutter</a></li>
+        <li><a href="#设置环境变量">设置环境变量</a></li>
+        <li><a href="#android-和-ios-环境搭建">Android 和 iOS 环境搭建</a></li>
+        <li><a href="#检测">检测</a></li>
+      </ul>
+    </li>
+    <li><a href="#emacs">Emacs</a>
+      <ul>
+        <li><a href="#dart">dart</a></li>
+        <li><a href="#lsp">lsp</a></li>
+        <li><a href="#flutter">flutter</a></li>
+        <li><a href="#使用">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>一直都想在 <code>Emacs</code> 中做 <code>flutter</code> 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。</p>
+<h2 id="flutter">Flutter</h2>
+<h3 id="下载flutter">下载flutter</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/flutter/flutter.git -b stable
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我比较喜欢使用 <code>git</code> 的方式来管理，这样可以和上游保持同步。</p>
+<h3 id="设置环境变量">设置环境变量</h3>
+<p>修改 <code>.bashrc</code> 中的 <code>PATH</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$PATH</span><span class="s2">:</span><span class="nv">$HOME</span><span class="s2">/flutter/bin&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>设置环境变量没什么好说的，设置之后才能在终端中使用。</p>
+<h3 id="android-和-ios-环境搭建">Android 和 iOS 环境搭建</h3>
+<p><code>Android</code> 环境和 <code>iOS</code> 环境搭建比较简单，这里就简单说一下。</p>
+<p><code>Android</code> 需要下载好 <code>Android Studio</code> ，然后更新 <code>Android SDK</code> 中的 <code>Platform-Tools</code> 以及 <code>Android SDK Build-Tools</code> 。</p>
+<p><code>iOS</code> 只需要下载 <code>Xcode</code> 就好。</p>
+<h3 id="检测">检测</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">flutter doctor
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>flutter doctor</code> 会帮你检测你的环境哪里有问题，并且会告诉你要怎么做，根据这些提示可以解决不少问题。</p>
+<h2 id="emacs">Emacs</h2>
+<p><code>Flutter</code> 环境搭建好了，我们接下来就来配置 <code>Emacs</code></p>
+<h3 id="dart">dart</h3>
+<p><code>Flutter</code> 使用 <code>dart</code> 语言进行开发，所以我们要配置 <code>dart</code> 相关插件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">dart-mode</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:defines</span> <span class="p">(</span><span class="nv">projectile-project-root-files-bottom-up</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:init</span> <span class="p">(</span><span class="k">setq</span> <span class="nv">dart-format-on-save</span> <span class="no">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:config</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">with-eval-after-load</span> <span class="s">&#34;projectile&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;projectile-project-root-files-bottom-up</span> <span class="s">&#34;pubspec.yaml&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">&#39;projectile-project-root-files-bottom-up</span> <span class="s">&#34;BUILD&#34;</span><span class="p">)))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="lsp">lsp</h3>
+<p><code>lsp</code> 的全称是 <code>language server protocol</code> 用来在各个语言之间提供代码提示，静态检查等功能。</p>
+<p><code>lsp</code> 是一个可以极大提升开发体验和效率的工具</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">lsp-mode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">lsp-treemacs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">flycheck</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">lsp-dart</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:init</span> <span class="p">(</span><span class="k">setq</span> <span class="nv">lsp-dart-sdk-dir</span> <span class="s">&#34;~/flutter/bin/cache/dart-sdk&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:hook</span> <span class="p">(</span><span class="nv">dart-mode</span> <span class="o">.</span> <span class="nv">lsp</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置 <code>lsp-dart</code> 需要设置 <code>lsp-dart-sdk-dir</code> 的路径，这样才能正确使用 <code>dart</code></p>
+<h3 id="flutter">flutter</h3>
+<p>接下来就是 <code>flutter</code> 了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nf">use-package</span> <span class="nv">flutter</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:after</span> <span class="nv">dart-mode</span>
+</span></span><span class="line"><span class="cl">  <span class="ss">:custom</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">flutter-sdk-path</span> <span class="s">&#34;~/flutter/&#34;</span><span class="p">))</span>      <span class="c1">;; 替换成你的 flutter 路径</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里要注意需要设置 <code>flutter-sdk-path</code> 为你电脑的路径，不然可能会找不到文件而报错。</p>
+<h3 id="使用">使用</h3>
+<p>编写好代码之后按下 <code>M-x</code> 输入 <code>flutter-run</code> 或 <code>flutter-run-or-hot-reload</code> 运行项目</p>
+<p>也可以使用快捷键 <code>C-M-x</code> 来启动项目。</p>
+<p>项目启动后会开启一个 <code>*Flutter*</code> 的 <code>buffer</code> ，在这里你可以做如下操作</p>
+<ul>
+<li>r Hot reload. 🔥🔥🔥</li>
+<li>R Hot restart.</li>
+<li>h List all available interactive commands.</li>
+<li>d Detach (terminate &ldquo;flutter run&rdquo; but leave application running).</li>
+<li>c Clear the screen</li>
+<li>q Quit (terminate the application on the device).</li>
+</ul>
+<p>可以看到这里和终端中一样，这样你就可以不用离开 <code>Emacs</code> 就可以操作了，体验还是很棒的。
+<img src="../../images/emacs_flutter.png" alt=""></p>
+<h2 id="总结">总结</h2>
+<p>在 <code>Emacs</code> 中开发 <code>Flutter</code> 毕竟是小众，免不了要折腾。</p>
+<p>经过几天的折腾，在 <code>Emacs</code> 下开发 <code>Flutter</code> 的体验比之前好了不少，可以进行日常的开发。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://flutter.cn/docs/get-started/install/macos">在 macOS 上安装和配置 Flutter 开发环境 - Flutter 中文文档 - Flutter 中文开发者网站 - Flutter</a></li>
+<li><a href="https://emacs-lsp.github.io/lsp-dart/">LSP Dart</a></li>
+<li><a href="https://github.com/amake/flutter.el">amake/flutter.el: Flutter tools for Emacs</a></li>
+<li><a href="https://github.com/bradyt/dart-mode">bradyt/dart-mode: An Emacs mode for the Dart language</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-08-27
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/emacs/">Emacs</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/qrcode_pair/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Android Studio 通过二维码使用WIFI连接手机原理分析</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/c_mem_leak/">
+            <span class="next-text nav-default">C/C&#43;&#43; 内存泄漏检测</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2022-08-27 00:00:00 \u002b0000 UTC',
+        title: '使用 Emacs 开发 Flutter',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

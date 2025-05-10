@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>GDB调试 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/gdb/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/gdb/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="GDB调试">
+  <meta property="og:description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-09-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-09-19T00:00:00+00:00">
+    <meta property="article:tag" content="Gdb">
+
+  <meta itemprop="name" content="GDB调试">
+  <meta itemprop="description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+  <meta itemprop="datePublished" content="2021-09-19T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-09-19T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2203">
+  <meta itemprop="keywords" content="Gdb">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GDB调试">
+  <meta name="twitter:description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+ <meta property="og:url" content="http://devbins.github.io/post/gdb/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="GDB调试">
+  <meta property="og:description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-09-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-09-19T00:00:00+00:00">
+    <meta property="article:tag" content="Gdb">
+
+  <meta itemprop="name" content="GDB调试">
+  <meta itemprop="description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+  <meta itemprop="datePublished" content="2021-09-19T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-09-19T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2203">
+  <meta itemprop="keywords" content="Gdb">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GDB调试">
+  <meta name="twitter:description" content="前言 gdb 是 GNU 下的一款调试器，支持常见的语言，例如 C/C&#43;&#43; 、 Go 、 Rust 等等。
+调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。
+今天来了解一下 gdb 的使用。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">GDB调试</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-09-19 </span>
+        <div class="post-category">
+            <a href="../../categories/gdb/"> gdb </a>
+            </div>
+          <span class="more-meta"> 约 2203 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#启动调试">启动调试</a></li>
+    <li><a href="#设置断点">设置断点</a></li>
+    <li><a href="#查看断点">查看断点</a></li>
+    <li><a href="#清除断点">清除断点</a></li>
+    <li><a href="#单步调试">单步调试</a></li>
+    <li><a href="#设置启动参数">设置启动参数</a></li>
+    <li><a href="#打印变量的值">打印变量的值</a></li>
+    <li><a href="#调试core-dump">调试core dump</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p><code>gdb</code> 是 <code>GNU</code> 下的一款调试器，支持常见的语言，例如 <code>C/C++</code> 、 <code>Go</code> 、 <code>Rust</code> 等等。</p>
+<p>调试器对我们开发程序的时候有非常大的帮助，是每一个开发都需要学会的调试技能。</p>
+<p>今天来了解一下 <code>gdb</code> 的使用。</p>
+<h2 id="启动调试">启动调试</h2>
+<p>使用 <code>gdb</code> 调试有两种方式，分别是直接调试还没运行的程序和调试已经运行的程序。</p>
+<p>我们先来了解如何调试编译好的程序，这里需要注意一点，编译的时候需要加入 <code>-g</code> 保留调试信息，否则不能被调试。</p>
+<p>假如我们要调试的程序名为 <code>main</code> ，先用 <code>gcc -g -o main main.c</code> 进行编译，然后中使用 <code>gdb main</code> 就可以对 <code>main</code> 进行调试。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ gdb main
+</span></span><span class="line"><span class="cl">GNU gdb <span class="o">(</span>GDB<span class="o">)</span> 10.2
+</span></span><span class="line"><span class="cl">Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2021</span> Free Software Foundation, Inc.
+</span></span><span class="line"><span class="cl">License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
+</span></span><span class="line"><span class="cl">This is free software: you are free to change and redistribute it.
+</span></span><span class="line"><span class="cl">There is NO WARRANTY, to the extent permitted by law.
+</span></span><span class="line"><span class="cl">Type <span class="s2">&#34;show copying&#34;</span> and <span class="s2">&#34;show warranty&#34;</span> <span class="k">for</span> details.
+</span></span><span class="line"><span class="cl">This GDB was configured as <span class="s2">&#34;x86_64-pc-linux-gnu&#34;</span>.
+</span></span><span class="line"><span class="cl">Type <span class="s2">&#34;show configuration&#34;</span> <span class="k">for</span> configuration details.
+</span></span><span class="line"><span class="cl">--Type &lt;RET&gt; <span class="k">for</span> more, q to quit, c to <span class="k">continue</span> without paging--c
+</span></span><span class="line"><span class="cl">For bug reporting instructions, please see:
+</span></span><span class="line"><span class="cl">&lt;https://www.gnu.org/software/gdb/bugs/&gt;.
+</span></span><span class="line"><span class="cl">Find the GDB manual and other documentation resources online at:
+</span></span><span class="line"><span class="cl">    &lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">For help, <span class="nb">type</span> <span class="s2">&#34;help&#34;</span>.
+</span></span><span class="line"><span class="cl">Type <span class="s2">&#34;apropos word&#34;</span> to search <span class="k">for</span> commands related to <span class="s2">&#34;word&#34;</span>...
+</span></span><span class="line"><span class="cl">Reading symbols from main...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这时候程序还没开始执行。要想程序开始执行可以使用 <code>run</code> ，这样程序就直接运行起来了。 <code>run</code> 可以简写为 <code>r</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Reading symbols from main...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> run
+</span></span><span class="line"><span class="cl">Starting program: /home/test/main
+</span></span><span class="line"><span class="cl">hello,world
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Inferior <span class="m">1</span> <span class="o">(</span>process 1215<span class="o">)</span> exited normally<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是通过 <code>run</code> 运行的程序会直接执行，这时候还没来得及设置断点，程序已经运行结束了。</p>
+<p>为了解决这个问题可以使用 <code>start</code> 来运行程序，它会停在 <code>main</code> 函数处，等待下一步的调试指令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Reading symbols from main...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> start
+</span></span><span class="line"><span class="cl">Temporary breakpoint <span class="m">1</span> at 0x1148: file main.c, line 5.
+</span></span><span class="line"><span class="cl">Starting program: /home/test/main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Temporary breakpoint 1, main <span class="o">(</span><span class="nv">argc</span><span class="o">=</span>1, <span class="nv">argv</span><span class="o">=</span>0x7fffffffde48<span class="o">)</span> at main.c:5
+</span></span><span class="line"><span class="cl"><span class="m">5</span>           printf<span class="o">(</span><span class="s2">&#34;%s\n&#34;</span>,<span class="s2">&#34;hello,world&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于已经启动的程序，需要通过进程号来启动调试，获取进程号可以通过 <code>ps -ef |grep 进程名</code> ，获取到进程号之后就可以使用 <code>gdb attach 进程号</code> 来启动调试。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ ps -ef <span class="p">|</span>grep main
+</span></span><span class="line"><span class="cl"><span class="nb">test</span>     <span class="m">1352</span>    <span class="m">1202</span>  <span class="m">0</span> 21:16 pts/2    00:00:00 ./main
+</span></span><span class="line"><span class="cl">➜  ~ gdb attach <span class="m">1352</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Attaching to process <span class="m">1352</span>
+</span></span><span class="line"><span class="cl">Reading symbols from /home/test/main...
+</span></span><span class="line"><span class="cl">Reading symbols from /usr/lib/libc.so.6...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>No debugging symbols found in /usr/lib/libc.so.6<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Reading symbols from /lib64/ld-linux-x86-64.so.2...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>No debugging symbols found in /lib64/ld-linux-x86-64.so.2<span class="o">)</span>
+</span></span><span class="line"><span class="cl">0x00007f3179b51a4a in clock_nanosleep@GLIBC_2.2.5 <span class="o">()</span> from /usr/lib/libc.so.6
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果你有执行文件还可以使用 <code>gdb 程序 -p 进程号</code> 来进行调试，效果和上面的一样的。</p>
+<p>如果你已经进入 <code>gdb</code> 环境，可以直接使用 <code>attach 进程号</code> 来指定要调试的进程。</p>
+<p>在使用 <code>attch</code> 的时候会碰到一个 <code>not permitted</code> 的错误，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">attach: No such file or directory.
+</span></span><span class="line"><span class="cl">Attaching to process <span class="m">1285</span>
+</span></span><span class="line"><span class="cl">ptrace: Operation not permitted.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这时候你可以使用 <code>sudo echo 0 &gt; /proc/sys/kernel/yama/ptrace_scope</code> 来解决这个问题。</p>
+<h2 id="设置断点">设置断点</h2>
+<p>使用 <code>gdb</code> 运行程序后，我们需要对程序设置断点，当程序执行到这里程序就会暂停往下执行，这对我们调试程序非常有帮助。</p>
+<p>设置断点可以通过 <code>break</code> 关键字，后面可以跟函数名、行号， <code>break</code> 可以简写为 <code>b</code> ，在多个文件的情况下可以使用 <code>文件名: 行号</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">break</span> main
+</span></span><span class="line"><span class="cl">Breakpoint <span class="m">1</span> at 0x1148: file main.c, line 5.
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> b <span class="m">6</span>
+</span></span><span class="line"><span class="cl">Breakpoint <span class="m">2</span> at 0x1157: file main.c, line 6.
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> b main.c:7
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的设置会在程序执行到断点的位置时停止执行，每次都是。我们希望在某些情况下才停下来，其他情况继续执行，这时候就需要用到条件断点。</p>
+<p>条件断点的设置只需要在断点后面加上需要的条件，例如 <code>b 8 if a==0</code> ，这样当程序执行到第8行的时候发现 <code>a==0</code> 就会暂停执行。</p>
+<h2 id="查看断点">查看断点</h2>
+<p>设置完断点之后，可以通过 <code>info break</code> 来查看设置过的断点，简写 <code>i b</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> info <span class="nb">break</span>
+</span></span><span class="line"><span class="cl">Num     Type           Disp Enb Address            What
+</span></span><span class="line"><span class="cl"><span class="m">1</span>       breakpoint     keep y   0x0000000000001148 in main at main.c:5
+</span></span><span class="line"><span class="cl"><span class="m">2</span>       breakpoint     keep y   0x0000000000001157 in main at main.c:6
+</span></span><span class="line"><span class="cl"><span class="m">3</span>       breakpoint     keep y   0x000000000000115c in main at main.c:7
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>第一列的是断点号，清除断点的时候会用到，下一小节会讲到。</p>
+<h2 id="清除断点">清除断点</h2>
+<p>清除断点使用 <code>clear</code> ，单独它会清除当前行的断点。</p>
+<p><code>clear 函数名</code> 会清除函数上的断点。</p>
+<p><code>clear 文件名：行号</code> 会清除指定文件对于行号上的断点， <code>clear 文件名：函数名</code> 会清除对应文件函数上的断点。</p>
+<p><code>delete</code> 删除所有断点。</p>
+<p><code>delete 断点号</code> 删除指定断点号的断点，断点号就是上一小节使用 <code>info break</code> 查看中的第一列。</p>
+<h2 id="单步调试">单步调试</h2>
+<p>我们在设置好断点之后，希望一步一步执行代码，在 <code>gdb</code> 中可以使用 <code>next</code> 来一行一行执行， <code>next</code> 可以简写为 <code>n</code> 。</p>
+<p>在单步执行的过程中如果碰到函数，使用 <code>n</code> 不会进入函数内部执行，这时候需要用到 <code>step</code> ， <code>step</code> 简写为 <code>s</code> 。使用 <code>s</code> 可以进入到函数内部进行调试。</p>
+<p>如果你不想再一步一步的调试，想要程序继续一直往下执行可以使用 <code>continue</code> ，简写为 <code>c</code> ，这样程序会在碰到下一个断点的时候停下来。</p>
+<h2 id="设置启动参数">设置启动参数</h2>
+<p>在一些程序中，启动的时候需要传递参数给程序进行处理，而在 <code>gdb</code> 中可以通过 <code>set args 参数</code> 来设置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Reading symbols from main...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set</span> args value1 value2
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> start
+</span></span><span class="line"><span class="cl">Temporary breakpoint <span class="m">1</span> at 0x1148: file main.c, line 5.
+</span></span><span class="line"><span class="cl">Starting program: /home/test/main value1 value2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Temporary breakpoint 1, main <span class="o">(</span><span class="nv">argc</span><span class="o">=</span>3, <span class="nv">argv</span><span class="o">=</span>0x7fffffffde28<span class="o">)</span> at main.c:5
+</span></span><span class="line"><span class="cl"><span class="m">5</span>           printf<span class="o">(</span><span class="s2">&#34;%s\n&#34;</span>, <span class="s2">&#34;hello, world&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p argc
+</span></span><span class="line"><span class="cl"><span class="nv">$1</span> <span class="o">=</span> <span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p argv
+</span></span><span class="line"><span class="cl"><span class="nv">$2</span> <span class="o">=</span> <span class="o">(</span>char **<span class="o">)</span> 0x7fffffffde28
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p argv<span class="o">[</span>0<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$3</span> <span class="o">=</span> 0x7fffffffe1c9 <span class="s2">&#34;/home/test/main&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p argv<span class="o">[</span>1<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$4</span> <span class="o">=</span> 0x7fffffffe1dc <span class="s2">&#34;value1&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p argv<span class="o">[</span>2<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$5</span> <span class="o">=</span> 0x7fffffffe1e3 <span class="s2">&#34;value2&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="打印变量的值">打印变量的值</h2>
+<p>在使用 <code>gdb</code> 调试的过程中，我们经常需要查看变量的值，打印使用 <code>print</code> 简写为 <code>p</code> 。</p>
+<p>例如我要打印变量 <code>a</code> 的值，可以使用 <code>p a</code> 。</p>
+<p><code>print</code> 也支持格式打印，和 <code>c</code> 语言中的 <code>print</code> 类似</p>
+<table>
+  <thead>
+      <tr>
+          <th>x</th>
+          <th>按十六进制格式打印</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>d</td>
+          <td>按十进制格式打印</td>
+      </tr>
+      <tr>
+          <td>o</td>
+          <td>按八进制格式打印</td>
+      </tr>
+  </tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p a
+</span></span><span class="line"><span class="cl"><span class="nv">$1</span> <span class="o">=</span> <span class="m">15</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p/x a
+</span></span><span class="line"><span class="cl"><span class="nv">$2</span> <span class="o">=</span> 0xf
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p/d a
+</span></span><span class="line"><span class="cl"><span class="nv">$3</span> <span class="o">=</span> <span class="m">15</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> p/o a
+</span></span><span class="line"><span class="cl"><span class="nv">$4</span> <span class="o">=</span> <span class="m">017</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="调试core-dump">调试core dump</h2>
+<p><code>Linux</code> 下程序崩溃后会产生一个 <code>core dump</code> 文件，通过这个文件可以分析程序的崩溃问题</p>
+<p>在使用 <code>systemd</code> 的系统中可以使用 <code>coredumpctl list</code> 来查看所有的 <code>core dump</code> 记录</p>
+<p>这时候可以通过 <code>coredumpctl gdb 进程号</code> 来对崩溃的进程进行调试</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">coredumpctl gdb <span class="m">1248</span>
+</span></span><span class="line"><span class="cl">For help, <span class="nb">type</span> <span class="s2">&#34;help&#34;</span>.
+</span></span><span class="line"><span class="cl">Type <span class="s2">&#34;apropos word&#34;</span> to search <span class="k">for</span> commands related to <span class="s2">&#34;word&#34;</span>...
+</span></span><span class="line"><span class="cl">Reading symbols from /home/test/main...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>New LWP 1248<span class="o">]</span>
+</span></span><span class="line"><span class="cl">Core was generated by <span class="sb">`</span>./main<span class="err">&#39;</span>.
+</span></span><span class="line"><span class="cl">Program terminated with signal SIGSEGV, Segmentation fault.
+</span></span><span class="line"><span class="cl"><span class="c1">#0  0x000056091440e15b in main (argc=1, argv=0x7ffdf32b2d28) at main.c:7</span>
+</span></span><span class="line"><span class="cl"><span class="m">7</span>           *p <span class="o">=</span> 10<span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> bt
+</span></span><span class="line"><span class="cl"><span class="c1">#0  0x000056091440e15b in main (argc=1, argv=0x7ffdf32b2d28) at main.c:6</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从上面的输出可以看到在第7行发生了段错误，这里崩溃的原因是使用了一个没有初始化的指针。</p>
+<p>对于 <code>core dump</code> 我们还可以把它保存下来，使用 <code>coredumpctl -o core dump 1248</code> 这样就会把 1248 这个进程的崩溃保存到 core 文件中，方便下次进行查看。</p>
+<p>有了 <code>core dump</code> 文件也可以直接从 <code>gdb</code> 中查看，通过 <code>gdb main core</code> 来进行调试。输出结果跟上面一样。</p>
+<p>在调试 <code>core dump</code> 的时候可以通过 <code>backtrace</code> 来查看函数的调用栈。 <code>backtrace</code> 可以简写为 <code>bt</code> 。</p>
+<h2 id="总结">总结</h2>
+<table>
+  <thead>
+      <tr>
+          <th>调试指令</th>
+          <th>解释</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>r</td>
+          <td>直接运行程序</td>
+      </tr>
+      <tr>
+          <td>start</td>
+          <td>运行程序，会停在 main 方法上</td>
+      </tr>
+      <tr>
+          <td>n</td>
+          <td>单步执行</td>
+      </tr>
+      <tr>
+          <td>s</td>
+          <td>单步执行，会进入函数内部</td>
+      </tr>
+      <tr>
+          <td>p</td>
+          <td>打印变量</td>
+      </tr>
+      <tr>
+          <td>set args</td>
+          <td>设置程序运行参数</td>
+      </tr>
+      <tr>
+          <td>b</td>
+          <td>设置断点，可以跟行号、函数名</td>
+      </tr>
+      <tr>
+          <td>clear</td>
+          <td>清除断点，可以跟行号、函数名</td>
+      </tr>
+      <tr>
+          <td>delete</td>
+          <td>删除所有断点</td>
+      </tr>
+      <tr>
+          <td>bt</td>
+          <td>查看调用栈</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://documentation.suse.com/zh-cn/sles/15-SP2/html/SLES-all/cha-tuning-systemd-coredump.html">使用 systemd-coredump 针对应用程序崩溃进行调试 | 系统分析和微调指南 | SUSE Linux Enterprise Server 15 SP2</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/74897601">GDB调试入门指南 - 知乎</a></li>
+<li><a href="http://web.mit.edu/gnu/doc/html/gdb%5F6.html">Debugging with GDB - Running Programs Under GDB</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-09-19
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/gdb/">gdb</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/cronet/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Android Cronet 构建</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/forge_issue/">
+            <span class="next-text nav-default">使用Forge管理GitHub Issue</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-09-19 00:00:00 \u002b0000 UTC',
+        title: 'GDB调试',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

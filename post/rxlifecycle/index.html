@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RxLifecycle 原理解析 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rxlifecycle/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/rxlifecycle/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="RxLifecycle 原理解析">
+  <meta property="og:description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-07-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-07-27T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+
+  <meta itemprop="name" content="RxLifecycle 原理解析">
+  <meta itemprop="description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+  <meta itemprop="datePublished" content="2019-07-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2019-07-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1765">
+  <meta itemprop="keywords" content="Android">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RxLifecycle 原理解析">
+  <meta name="twitter:description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+ <meta property="og:url" content="http://devbins.github.io/post/rxlifecycle/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="RxLifecycle 原理解析">
+  <meta property="og:description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-07-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2019-07-27T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+
+  <meta itemprop="name" content="RxLifecycle 原理解析">
+  <meta itemprop="description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+  <meta itemprop="datePublished" content="2019-07-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2019-07-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1765">
+  <meta itemprop="keywords" content="Android">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RxLifecycle 原理解析">
+  <meta name="twitter:description" content="介绍 从名字中可以看出 RxLifecycle 和生命周期有关。也的确如此， RxLifecycle 通过监听生命周期的变化，来解决 RxJava 内存泄漏的问题。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RxLifecycle 原理解析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-07-27 </span>
+        <div class="post-category">
+            <a href="../../categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 1765 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#介绍">介绍</a></li>
+    <li><a href="#添加依赖">添加依赖</a></li>
+    <li><a href="#基本使用">基本使用</a></li>
+    <li><a href="#bindtolifecycle">bindToLifecycle</a></li>
+    <li><a href="#activity-lifecycle">ACTIVITY_LIFECYCLE</a></li>
+    <li><a href="#lifecycletransformer">LifecycleTransformer</a></li>
+    <li><a href="#binduntilevent">bindUntilEvent</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="介绍">介绍</h2>
+<p>从名字中可以看出 <code>RxLifecycle</code> 和生命周期有关。也的确如此， <code>RxLifecycle</code> 通过监听生命周期的变化，来解决 <code>RxJava</code> 内存泄漏的问题。</p>
+<h2 id="添加依赖">添加依赖</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle:2.2.2&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// If you want to bind to Android-specific lifecycles
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle-android:2.2.2&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// If you want pre-written Activities and Fragments you can subclass as providers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">implementation</span> <span class="s1">&#39;com.trello.rxlifecycle2:rxlifecycle-components:2.2.2&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="基本使用">基本使用</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyActivity</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">RxAppCompatActivity</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">super</span><span class="p">.</span><span class="na">onResume</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">myObservable</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">compose</span><span class="p">(</span><span class="n">bindUntilEvent</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">DESTROY</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">subscribe</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyActivity</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">RxAppCompatActivity</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">super</span><span class="p">.</span><span class="na">onResume</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">myObservable</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">compose</span><span class="p">(</span><span class="n">bindToLifecycle</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">subscribe</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用很简单，只要继承 <code>RxAppCompatActivity</code> 然后调用 <code>Observable.compose(bindToLifecycle())</code> 或者 <code>Observable.compose(bindUntilEvent(ActivityEvent.DESTROY))</code> 就行了。</p>
+<p>下面就从源码角度来看看 <code>RxLifecycle</code> 。</p>
+<h2 id="bindtolifecycle">bindToLifecycle</h2>
+<p>就从 <code>bindToLifecycle</code> 看起吧</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RxAppCompatActivity</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AppCompatActivity</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">LifecycleProvider</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">BehaviorSubject</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycleSubject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BehaviorSubject</span><span class="p">.</span><span class="na">create</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@NonNull</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CheckResult</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">lifecycle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">hide</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@NonNull</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CheckResult</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bindUntilEvent</span><span class="p">(</span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">RxLifecycle</span><span class="p">.</span><span class="na">bindUntilEvent</span><span class="p">(</span><span class="n">lifecycleSubject</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@NonNull</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CheckResult</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bindToLifecycle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">RxLifecycleAndroid</span><span class="p">.</span><span class="na">bindActivity</span><span class="p">(</span><span class="n">lifecycleSubject</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Bundle</span><span class="w"> </span><span class="n">savedInstanceState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">CREATE</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onStart</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onStart</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">START</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onResume</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">RESUME</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onPause</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">PAUSE</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onPause</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onStop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">STOP</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onStop</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@CallSuper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onDestroy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">lifecycleSubject</span><span class="p">.</span><span class="na">onNext</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">DESTROY</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onDestroy</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>bindToLifecycle</code> 中只是调用了 <code>RxLifecycleAndroid.bindActivity(lifecycleSubject);</code> ，把 <code>lifecycleSubject</code> 当做参数传递进去，最后返回一个 <code>LifecycleTransformer</code> 。</p>
+<p>这个 <code>lifecycleSubject</code> 继承了 <code>Subject</code> ， <code>Subject</code> 继承了 <code>Observable</code> 并实现了 <code>Observer</code> ，也就是 <code>lifecycleSubject</code> 拥有发射事件的能力和接收事件的能力。 <code>lifecycleSubject</code> 会在 <code>Activity</code> 的生命周期发射对应的事件，这里大胆的猜测一下 <code>RxLifecycle</code> 会在 <code>Activity</code> 销毁的时候进行取消订阅的操作。</p>
+<p>接着来看 <code>RxLifecycleAndroid.bindActivity</code> 里做了什么</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 1.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bindActivity</span><span class="p">(</span><span class="nd">@NonNull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">bind</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">,</span><span class="w"> </span><span class="n">ACTIVITY_LIFECYCLE</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 2.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bind</span><span class="p">(</span><span class="nd">@Nonnull</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">,</span><span class="nd">@Nonnull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">correspondingEvents</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;lifecycle == null&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">correspondingEvents</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;correspondingEvents == null&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">bind</span><span class="p">(</span><span class="n">takeUntilCorrespondingEvent</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">.</span><span class="na">share</span><span class="p">(),</span><span class="w"> </span><span class="n">correspondingEvents</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 3.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bind</span><span class="p">(</span><span class="nd">@Nonnull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">takeUntilCorrespondingEvent</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">,</span><span class="kd">final</span><span class="w"> </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">correspondingEvents</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Observable</span><span class="p">.</span><span class="na">combineLatest</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">lifecycle</span><span class="p">.</span><span class="na">take</span><span class="p">(</span><span class="n">1</span><span class="p">).</span><span class="na">map</span><span class="p">(</span><span class="n">correspondingEvents</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">lifecycle</span><span class="p">.</span><span class="na">skip</span><span class="p">(</span><span class="n">1</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">BiFunction</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="p">,</span><span class="w"> </span><span class="n">Boolean</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="kd">public</span><span class="w"> </span><span class="n">Boolean</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">R</span><span class="w"> </span><span class="n">bindUntilEvent</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="n">lifecycleEvent</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="n">lifecycleEvent</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">bindUntilEvent</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="na">onErrorReturn</span><span class="p">(</span><span class="n">Functions</span><span class="p">.</span><span class="na">RESUME_FUNCTION</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">Functions</span><span class="p">.</span><span class="na">SHOULD_COMPLETE</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 2 中 <code>bind</code> 里调用了 <code>takeUntilCorrespondingEvent</code> ，它会根据 <code>lifecycle（其实就是 lifelifecycleSubject）</code> 发射的第一个值，也就是生命周期里的事件，从 <code>correspondingEvents</code> 取出对应要取消订阅的生命周期事件。这里的 <code>correspondingEvents</code> 就是 <code>ACTIVITY_LIFECYCLE</code> ，我们稍后再讲 <code>ACTIVITY_LIFECYCLE</code> 。接着 <code>lifecycle.skip(1)</code> 跳过了第一个，也就是第一个发射事件不能作为取消事件，如果第一个就取消了也没有什么意义。然后判断接下来的事件是不是和要取消订阅事件相等，相等才会发射事件，如果不是就不发射事件。这就起到一个过滤的作用，只会在特定的事件里去取消订阅。</p>
+<p>最后 3 里调用了 <code>bind(@Nonnull final Observable&lt;R&gt; lifecycle)</code> 构造了 <code>LifecycleTransformer</code> 。我们稍后看 <code>LifecycleTransformer</code> 先来从 <code>ACTIVITY_LIFECYCLE</code> 看看发射事件和取消订阅事件有什么规律。</p>
+<h2 id="activity-lifecycle">ACTIVITY_LIFECYCLE</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ACTIVITY_LIFECYCLE</span><span class="w"> </span><span class="o">=</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">new</span><span class="w"> </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">ActivityEvent</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="kd">public</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">ActivityEvent</span><span class="w"> </span><span class="n">lastEvent</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">lastEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">CREATE</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">return</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">DESTROY</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">START</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">return</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">RESUME</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">return</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">PAUSE</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">PAUSE</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">return</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">STOP</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">return</span><span class="w"> </span><span class="n">ActivityEvent</span><span class="p">.</span><span class="na">DESTROY</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">case</span><span class="w"> </span><span class="n">DESTROY</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OutsideLifecycleException</span><span class="p">(</span><span class="s">&#34;Cannot bind to Activity lifecycle when outside of it.&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="k">default</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                          </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">UnsupportedOperationException</span><span class="p">(</span><span class="s">&#34;Binding to &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lastEvent</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34; not yet implemented&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">};</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>根据上面可以发现如下规律</p>
+<table>
+  <thead>
+      <tr>
+          <th>发射的事件</th>
+          <th>对应的取消订阅的事件</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>CREATE</td>
+          <td>DESTORY</td>
+      </tr>
+      <tr>
+          <td>START</td>
+          <td>STOP</td>
+      </tr>
+      <tr>
+          <td>RESUME</td>
+          <td>PAUSE</td>
+      </tr>
+      <tr>
+          <td>PAUSE</td>
+          <td>STOP</td>
+      </tr>
+      <tr>
+          <td>STOP</td>
+          <td>DESTORY</td>
+      </tr>
+  </tbody>
+</table>
+<p>在 <code>ACTIVITY_LIFECYCLE</code> 中发现并不是所有的事件都是在 <code>DESTORY</code> 进行取消订阅的。</p>
+<h2 id="lifecycletransformer">LifecycleTransformer</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ObservableTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                                           </span><span class="n">FlowableTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                                           </span><span class="n">SingleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                                           </span><span class="n">MaybeTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                                           </span><span class="n">CompletableTransformer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">observable</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">LifecycleTransformer</span><span class="p">(</span><span class="n">Observable</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">observable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">observable</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;observable == null&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">observable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">observable</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="n">ObservableSource</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">upstream</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">upstream</span><span class="p">.</span><span class="na">takeUntil</span><span class="p">(</span><span class="n">observable</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">……</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>之前提到在 <code>bindToLifecycle</code> 最后的返回值是 <code>LifecycleTransformer</code> ， <code>LifecycleTransformer</code> 实现了 <code>ObservableTransformer</code> 、 <code>FlowableTransformer</code> 、 <code>SingleTransformer</code> 、 <code>MaybeTransformer</code> 、 <code>CompletableTransformer</code> ，这些大同小异，我们就看最熟悉的 <code>ObservableTransformer</code> 中的 <code>apply</code> 方法。</p>
+<p><code>apply</code> 方法很简单就只调用了 <code>upstream.takeUntil(observable)</code> ， <code>takeUntil</code> 这个操作符会在 <code>observable</code> 发射了一项数据或者终止事件时，取消 <code>upstream</code> 的订阅，丢弃所有事件。 <code>upstream</code> 就是我们进行网络请求的 <code>Observable</code> 。</p>
+<p>所以到这里就可以很明白的知道 <code>RxLifecycle</code> 是在满足某个条件（这里就是生命周期中的某个环节）下，通过取消订阅来保证 <code>RxJava</code> 内存不会泄漏的。</p>
+<h2 id="binduntilevent">bindUntilEvent</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bindUntilEvent</span><span class="p">(</span><span class="nd">@Nonnull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                                                            </span><span class="nd">@Nonnull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;lifecycle == null&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;event == null&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">bind</span><span class="p">(</span><span class="n">takeUntilEvent</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">takeUntilEvent</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">,</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="n">R</span><span class="w"> </span><span class="n">lifecycleEvent</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">lifecycleEvent</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Binds the given source to a lifecycle.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &lt;p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This helper automatically determines (based on the lifecycle sequence itself) when the source
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * should stop emitting items. Note that for this method, it assumes &lt;em&gt;any&lt;/em&gt; event
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * emitted by the given lifecycle indicates that the lifecycle is over.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @param lifecycle the lifecycle sequence
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @return a reusable {@link LifecycleTransformer} that unsubscribes the source whenever the lifecycle emits
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@Nonnull</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@CheckReturnValue</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">bind</span><span class="p">(</span><span class="nd">@Nonnull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Observable</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lifecycle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LifecycleTransformer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">lifecycle</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>经过上面的分析，这里就简单了。 <code>bindUntilEvent</code> 和 <code>bindToLifecycle</code> 不同的地方在于 <code>bindUntilEvent</code> 指定了要取消订阅的事件。这样就不用去查找第一个发射的事件对应的取消订阅的事件，而是直接把发射事件和指定的事件进行比对，如果是就取消订阅。</p>
+<h2 id="总结">总结</h2>
+<p><code>RxLifecycle</code> 创建了 <code>BehaviorSubject</code> 来发射对应的生命周期事件，通过 <code>compose</code> 把网络请求或者其他 <code>Observable</code> 关联在一起。 <code>BehaviorSubject</code> 在收到生命周期事件的时候会和对应取消订阅的事件进行比对，如果相等，则发射一个事件，这个事件用来告诉网络请求订阅需要被取消。取消订阅事件可以通过 <code>bindUntilEvent</code> 来指定。</p>
+<p>取消订阅的原理是通过 <code>takeUntil</code> 操作符，当 <code>BehaviorSubject</code> 发出一个事件或者终止事件时，取消网络请求的订阅，这样请求的数据就不会被处理，也就不会回到主线程进行相关操作了。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://www.jianshu.com/p/8311410de676">解决 RxJava 内存泄漏（前篇）：RxLifecycle 详解及原理分析 - 简书</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-27
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/android/">Android</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/dockerfile/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Dockerfile</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/hugo/">
+            <span class="next-text nav-default">使用 hugo 搭建网站</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2019-07-27 00:00:00 \u002b0000 UTC',
+        title: 'RxLifecycle 原理解析',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

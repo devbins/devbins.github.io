@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Android中管道的使用 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/pipe/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/pipe/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Android中管道的使用">
+  <meta property="og:description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-03-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-03-13T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="Pipe">
+
+  <meta itemprop="name" content="Android中管道的使用">
+  <meta itemprop="description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+  <meta itemprop="datePublished" content="2021-03-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-03-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2239">
+  <meta itemprop="keywords" content="Android,Pipe">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Android中管道的使用">
+  <meta name="twitter:description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+ <meta property="og:url" content="http://devbins.github.io/post/pipe/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Android中管道的使用">
+  <meta property="og:description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-03-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-03-13T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="Pipe">
+
+  <meta itemprop="name" content="Android中管道的使用">
+  <meta itemprop="description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+  <meta itemprop="datePublished" content="2021-03-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-03-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2239">
+  <meta itemprop="keywords" content="Android,Pipe">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Android中管道的使用">
+  <meta name="twitter:description" content="前言 最近读了一些 Android 源码，发现其中不少是用 pipe 机制来实现的，并且和我们往常使用 pipe 有些不一样。
+有必要学习一下 pipe 的使用，不然会影响阅读源码，并且 Android 里的使用方式比较有技巧。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Android中管道的使用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-13 </span>
+        <div class="post-category">
+            <a href="../../categories/android/"> Android </a>
+            <a href="../../categories/pipe/"> Pipe </a>
+            </div>
+          <span class="more-meta"> 约 2239 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#pipe-管道通信">Pipe 管道通信</a></li>
+    <li><a href="#android-中是怎么使用管道的">Android 中是怎么使用管道的?</a>
+      <ul>
+        <li><a href="#什么时候往管道中写入数据">什么时候往管道中写入数据</a></li>
+        <li><a href="#什么时候从管道中读取数据">什么时候从管道中读取数据</a></li>
+        <li><a href="#小结">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>最近读了一些 <code>Android</code> 源码，发现其中不少是用 <code>pipe</code> 机制来实现的，并且和我们往常使用 <code>pipe</code>  有些不一样。</p>
+<p>有必要学习一下 <code>pipe</code> 的使用，不然会影响阅读源码，并且 <code>Android</code> 里的使用方式比较有技巧。</p>
+<h2 id="pipe-管道通信">Pipe 管道通信</h2>
+<p>先来看一个 <code>Linux</code> 手册中的例子，你可以通过  <code>man 2 pipe</code> 来查看，内容如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">pipefd</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 定义两个描述符，用于接收 pipe 创建的读写描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">pid_t</span> <span class="n">cpid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Usage: %s &lt;string&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">pipe</span><span class="p">(</span><span class="n">pipefd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 创建描述符，保存到 pipefd 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;pipe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">cpid</span> <span class="o">=</span> <span class="nf">fork</span><span class="p">();</span> <span class="c1">// 创建子进程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;fork&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">cpid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关掉子进程中的写描述符         /* Close unused write end */
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="nf">read</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// 从管道中读取数据，直到没有内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="nf">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nf">write</span><span class="p">(</span><span class="n">STDOUT_FILENO</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">_exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// 关掉父进程中的读描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">write</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span> <span class="c1">// 往写描述符中写入 argv[1]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">close</span><span class="p">(</span><span class="n">pipefd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 关闭写描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>                <span class="cm">/* Wait for child */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>管道有以下两种局限性</p>
+<ol>
+<li>管道只能在具有公共祖先的两个进程之间使用。通常配合 <code>fork</code> 一起使用</li>
+<li>管道是半双工的（数据只能在一个方向上流动）。当然有些系统提供全双工的管道。</li>
+</ol>
+<p>当我们调用 <code>fork</code> 的时候，描述符如下所示</p>
+<figure><img src="../../images/pipe/pipe.png">
+</figure>
+
+<p><code>fork</code> 之后我们可以决定数据的流向，是从父进程流向子进程还是从子进程流向父进程。上面的例子关闭了父进程的读描述符和子进程的写描述符，所以数据从父进程流向子进程，如下图所示。
+<img src="../../images/pipe/pipe_fork.png" alt=""></p>
+<p>在《UNIX环境高级编程》一书中提到，单个进程中的管道几乎没有任何用处。然而最近读Android源码发现许多地方用到的就是单个进程的管道。</p>
+<p>接下来，我们从Android源码中看看管道是怎么在单个进程中使用的。</p>
+<h2 id="android-中是怎么使用管道的">Android 中是怎么使用管道的?</h2>
+<p>源码基于 <code>Android5.1</code> ，因为之后的版本改成了 <code>eventfd</code> ，而不再是 <code>pipe</code> 。
+<code>/system/core/libutils/Looper.cpp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Looper</span><span class="o">::</span><span class="n">Looper</span><span class="p">(</span><span class="kt">bool</span> <span class="n">allowNonCallbacks</span><span class="p">)</span> <span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mAllowNonCallbacks</span><span class="p">(</span><span class="n">allowNonCallbacks</span><span class="p">),</span> <span class="n">mSendingMessage</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponseIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">mNextMessageUptime</span><span class="p">(</span><span class="n">LLONG_MAX</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">wakeFds</span><span class="p">);</span> <span class="c1">// 创建管道
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create wake pipe.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mWakeReadPipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mWakeWritePipeFd</span> <span class="o">=</span> <span class="n">wakeFds</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake read pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake write pipe non-blocking.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Allocate the epoll instance and register the wake pipe.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mEpollFd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="n">EPOLL_SIZE_HINT</span><span class="p">);</span> <span class="c1">// 创建 epoll 描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create epoll instance.  errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">epoll_event</span><span class="p">));</span> <span class="c1">// zero out unused members of data field union
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">eventItem</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">mWakeReadPipeFd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">);</span> <span class="c1">// 监听读管道中的事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not add wake read pipe to epoll instance.  errno=%d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>Native</code> 层的 <code>Looper</code> 的构造方法中，会创建一个管道，这里和平时使用管道有点不一样，这里的管道并没有进行关闭操作。</p>
+<p>因为这里没有进行 <code>fork</code> 所以不会存在两个一模一样的管道， <code>fork</code> 出来的子进程和父进程是一模一样的。在 <code>Looper</code> 中如果你调用 <code>close</code> 关闭了其中一个，那么数据就无法流通了。</p>
+<p>然后使用 <code>epoll_create</code> 创建了一个用于监听其它描述符的描述符，接着使用 <code>epoll_ctl</code> 把管道的读描述符加入到 <code>epoll</code> 中进行监听，这样在向管道中写入数据的时候就可以通过 <code>epoll_wait</code> 监听到了。</p>
+<h3 id="什么时候往管道中写入数据">什么时候往管道中写入数据</h3>
+<p>在往 <code>MessageQueue</code> 中插入消息的时候会调用 <code>wake</code> 方法，这里就会向管道中的写描述符写入 <code>W</code> ，如果失败了会一直尝试，直到成功为止。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">wake</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">nWrite</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nWrite</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">mWakeWritePipeFd</span><span class="p">,</span> <span class="s">&#34;W&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 往写描述符中写入 W
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">nWrite</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EAGAIN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Could not write wake signal, errno=%d&#34;</span><span class="p">,</span> <span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="什么时候从管道中读取数据">什么时候从管道中读取数据</h3>
+<p>在 <code>Looper</code> 中的 <code>loop</code> 有一个死循环，会一直调用 <code>queue.next</code> ，在 <code>next</code> 中会调用 <code>epoll_wait</code> 去检测是否管道中有事件发生，如过有事件发生则会调用 <code>awoken</code> ， <code>awoken</code> 则向管道中的读描述符读取数据，直到没有内容。管道中的数据读取完了就会开始处理消息，分发给对应的 <code>Handler</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollInner</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponses</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mResponseIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">EPOLL_MAX_EVENTS</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 检测监听的描述符中是否有事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">,</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mIdling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeReadPipeFd</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 判断是否是读管道描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 读取管道中所有的数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on wake read pipe.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_INPUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_OUTPUT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
+</span></span><span class="line"><span class="cl">                      <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nl">Done</span><span class="p">:</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span> <span class="c1">// obtain handler
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="c1">// release handler
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">                <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// The last message left at the head of the queue determines the next wakeup time.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// Release lock.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">awoken</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">nRead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nRead</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">mWakeReadPipeFd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span> <span class="c1">// 从管道中读取数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span> <span class="k">while</span> <span class="p">((</span><span class="n">nRead</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="o">||</span> <span class="n">nRead</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>epoll_wait</code> 在没有数据的时候会阻塞住，这时候进程会被挂起，不占用 <code>CPU</code> 资源。</p>
+<p><code>awoken</code> 会读取管道中的所有数据，直到管道中没有数据，这样就把管道中的事件消费了，等待下一次的事件到来。</p>
+<h3 id="小结">小结</h3>
+<p>在 <code>Android</code> 中管道被用于同一个进程间数据的传递，主要作用是用于监听管道中是否有事件发生，而不是传递数据，因为管道中的数据并没有使用，监听的意义大于数据中实际的内容。</p>
+<p><code>Android</code> 中由于是在同一个进程中使用，所以没有像一般的用法去关闭进程中的描述符。</p>
+<p><code>Android</code> 中通过使用 <code>epoll</code> 机制监听管道中的数据，用来判断是否有消息，从而避免在没有数据的时候浪费 <code>CPU</code> 的资源。</p>
+<p>当有消息的时候往 <code>MessageQueue</code> 中插入数据，会向管道中写数据，这时候 <code>epoll_wait</code> 就会返回有事件发生了，然后就开始处理消息，把它们进行分发，并且会从管道中的读描述符中，把数据全部读取完。这样就完成了事件的发送与接收，从而处理了消息。</p>
+<h2 id="总结">总结</h2>
+<p>可以看到在 <code>Android</code> 中管道被用同一个进程间通信，有点颠覆传统，使用的很巧妙。尤其是在 《UNIX环境高级编程》一书中说了管道在单进程中没有意义，所以很多时候我们都不会考虑在单进程中去使用。这就容易掉入思维陷阱里了。</p>
+<p>相对于 <code>Binder</code> ，管道轻量了很多，没有服务端，客户端，线程池的概念。管道其实就是在读写文件，这一点不得不佩服，UNIX的哲学 <code>一切皆文件</code> 。让许多复杂的东西，通过读写操作就能搞定。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li>《UNIX环境高级编程》</li>
+<li>man 2 pipe</li>
+<li><a href="http://androidxref.com/5.1.1%5Fr6/xref/system/core/libutils/Looper.cpp">Cross Reference: /system/core/libutils/Looper.cpp</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-03-13
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/android/">Android</a>
+          <a href="../../tags/pipe/">Pipe</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/handler/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Handler</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/construct/">
+            <span class="next-text nav-default">C&#43;&#43;5大构造函数</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-03-13 00:00:00 \u002b0000 UTC',
+        title: 'Android中管道的使用',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

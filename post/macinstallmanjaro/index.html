@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>把Manjaro安装到Macbook Pro的外置硬盘 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/macinstallmanjaro/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/macinstallmanjaro/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta property="og:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-01-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-01-13T00:00:00+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Manjaro">
+
+  <meta itemprop="name" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta itemprop="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+  <meta itemprop="datePublished" content="2021-01-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-01-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1085">
+  <meta itemprop="keywords" content="Linux,Manjaro">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta name="twitter:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+ <meta property="og:url" content="http://devbins.github.io/post/macinstallmanjaro/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta property="og:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-01-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-01-13T00:00:00+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Manjaro">
+
+  <meta itemprop="name" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta itemprop="description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+  <meta itemprop="datePublished" content="2021-01-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-01-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1085">
+  <meta itemprop="keywords" content="Linux,Manjaro">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="把Manjaro安装到Macbook Pro的外置硬盘">
+  <meta name="twitter:description" content="前言 在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。
+随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">把Manjaro安装到Macbook Pro的外置硬盘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-13 </span>
+        <div class="post-category">
+            <a href="../../categories/linux/"> Linux </a>
+            <a href="../../categories/manjaro/"> Manjaro </a>
+            </div>
+          <span class="more-meta"> 约 1085 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#需要准备的材料">需要准备的材料</a></li>
+    <li><a href="#刻录镜像">刻录镜像</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p><strong>在开始行动之前，请使用Time Machine备份系统，以免出现数据丢失，导致不可挽回的局面。</strong></p>
+<p>随着电脑的使用，软件越装越多，感觉越来越卡，在Mac上也不能例外。于是我就萌生来在Mac上装Linux的想法，毕竟Mac的配置跑Linux完全没有问题。</p>
+<p>可是我又不想把 <code>macOS</code> 给删除，毕竟还能用。有一种方案是通过 <code>Boot Camp</code> 来进行分区，但是我电脑上的硬盘空间已经非常少了，连装Xcode都需要把旧的删掉，然后删一些文件才能装上，所以这条路不通。</p>
+<p>于是我就想在外置硬盘上安装，毕竟我曾经在一台电脑上装过黑苹果，Windows还有Linux。</p>
+<p>有了这个想法后，我就开始搜相关的教程，发现没有十分满意的，于是我就按我自己的想法开始折腾了，还成功了，便有了此文。希望对有同样需求的人能够有帮助。</p>
+<h2 id="需要准备的材料">需要准备的材料</h2>
+<ol>
+<li>Macbook Pro一台(我这里是Macbook Pro 2015)</li>
+<li>U盘一个，需要8G及以上的空间</li>
+<li>外置硬盘或者移动硬盘，最好是固态</li>
+</ol>
+<h2 id="刻录镜像">刻录镜像</h2>
+<p>刻录镜像之前，我们需要对U盘进行格式化，这里用到的工具是 SD Card Formatter，可以在 <a href="https://www.sdcard.org/downloads/formatter/">SD Memory Card Formatter官网</a>下载到。</p>
+<p>下载完成后安装好软件，然后打开，选择你的U盘，点击格式化就行了。</p>
+<p>U盘格式化好后，在<a href="https://manjaro.org/download/">Manjaro官网</a>中下载镜像，通过如下命令进行刻录镜像。刻录的时间很长，需要好几个小时，耐心等待一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo dd <span class="nv">bs</span><span class="o">=</span>4m <span class="k">if</span><span class="o">=</span>~/Downloads/manjaro-kde-20.2.1-210103-linux59.iso <span class="nv">of</span><span class="o">=</span>/dev/disk2 <span class="nv">conv</span><span class="o">=</span>sync
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>其中 <code>if</code> 是输入文件，也就是我们的镜像所在的路径，需要替换成你本地的下载路径</li>
+<li><code>of</code> 是我们的U盘，可以通过 <code>diskutil list</code> 来查看 U盘所在路径，一次不插入U盘，然后看插入U盘的，多出来的就是U盘的路径。</li>
+</ul>
+<h2 id="安装">安装</h2>
+<p>先把电脑关机，让后按下 option (alt)键，出现两个启动选项一个是Mactonish，另一个是 EFI Boot，选择EFI Boot回车后启动</p>
+<figure><img src="../../images/macmanjaro/20210228_161048_CHuNEt.png">
+</figure>
+
+<p>来到如下界面，回车进入安装桌面</p>
+<figure><img src="../../images/macmanjaro/20210228_143151_4F6WYr.png">
+</figure>
+
+<p><img src="../../images/macmanjaro/20210228_145631_FdPF34.png" alt="">
+点击中间的 <code>Launch installer</code> 然后一路下一步, 中间的选项可以根据自己的需要做适当的调整，直到来到分区界面，如下所示
+<img src="../../images/macmanjaro/20210228_145449_YgjD0k.png" alt="">
+在分区界面要注意的是在选择存储器中一定要选择你的外置硬盘，可别选错了。</p>
+<p>在接下来就是进行磁盘分区了，如果你是高手那么按照自己的要求来分就行来，如果不是很熟练就使用默认的就行了。然后一路下一步，输入一些用户名和密码之类的。</p>
+<p>然后点击安装，等待安装好，这一步稍微快一些，需要半个小时左右。安装完成后关机，拔掉U盘。</p>
+<p>然后按下 option (alt)键，还是出现两个启动选项一个是Mactonish，另一个是 EFI Boot，这个EFI Boot就是移动硬盘上的了，选择EFI Boot回车后启动，就能进入到 <code>Manjaro</code> 了。</p>
+<h2 id="总结">总结</h2>
+<p>在 <code>Mac</code> 上装上了 <code>Linux</code> 现在想用哪个就用哪个，对于性能要求比较高的，我会切换到外置硬盘上，一般使用我就会在虚拟机上使用了。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://florisvanbreugel.wordpress.com/2018/03/23/installing-ubuntu-on-an-external-ssd-drive-on-a-macbook/">Installing Ubuntu on an external SSD drive on a Macbook – Floris van Breugel</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-13
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/linux/">Linux</a>
+          <a href="../../tags/manjaro/">Manjaro</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/construct/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">C&#43;&#43;5大构造函数</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/opengl/">
+            <span class="next-text nav-default">OpenGL环境搭建</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-01-13 00:00:00 \u002b0000 UTC',
+        title: '把Manjaro安装到Macbook Pro的外置硬盘',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

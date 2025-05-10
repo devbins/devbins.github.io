@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>探秘 AIDL 为什么不支持 short - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/aidl_short/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/aidl_short/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="探秘 AIDL 为什么不支持 short">
+  <meta property="og:description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-05-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-05-30T00:00:00+00:00">
+    <meta property="article:tag" content="IPC">
+
+  <meta itemprop="name" content="探秘 AIDL 为什么不支持 short">
+  <meta itemprop="description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+  <meta itemprop="datePublished" content="2021-05-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-05-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1427">
+  <meta itemprop="keywords" content="IPC">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="探秘 AIDL 为什么不支持 short">
+  <meta name="twitter:description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+ <meta property="og:url" content="http://devbins.github.io/post/aidl_short/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="探秘 AIDL 为什么不支持 short">
+  <meta property="og:description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-05-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-05-30T00:00:00+00:00">
+    <meta property="article:tag" content="IPC">
+
+  <meta itemprop="name" content="探秘 AIDL 为什么不支持 short">
+  <meta itemprop="description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+  <meta itemprop="datePublished" content="2021-05-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2021-05-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1427">
+  <meta itemprop="keywords" content="IPC">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="探秘 AIDL 为什么不支持 short">
+  <meta name="twitter:description" content="前言 前阵子复习 AIDL 相关的知识，知道 AIDL 不支持 short 类型，但是我却发现同样使用 AIDL 的 Messenger 却可以。
+这是怎么回事，本文将探索这其中原因。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">探秘 AIDL 为什么不支持 short</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-05-30 </span>
+        <div class="post-category">
+            <a href="../../categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 1427 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#short-的支持">short 的支持</a>
+      <ul>
+        <li><a href="#客户端">客户端</a></li>
+        <li><a href="#服务端">服务端</a></li>
+      </ul>
+    </li>
+    <li><a href="#探秘-aidl-不支持-short-的原因">探秘 <code>AIDL</code> 不支持 <code>short</code> 的原因</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>前阵子复习 <code>AIDL</code> 相关的知识，知道 <code>AIDL</code> 不支持 <code>short</code> 类型，但是我却发现同样使用 <code>AIDL</code> 的 <code>Messenger</code> 却可以。</p>
+<p>这是怎么回事，本文将探索这其中原因。</p>
+<h2 id="short-的支持">short 的支持</h2>
+<p>我们知道 <code>AIDL</code> 是不支持 <code>short</code> 类型的，平常我们也不会去使用 <code>short</code> ，如果要用也可以用 <code>int</code> 来代替。</p>
+<p>虽然 <code>AIDL</code> 不支持，但是在使用 <code>Messenger</code> 的时候，怀着好奇心在 <code>Messenger</code> 中的 <code>data</code> 里面放进去一个 <code>short</code> 类型数据，发现服务端可以收到，并正确打印。代码如下:</p>
+<h3 id="客户端">客户端</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">private</span> <span class="k">val</span> <span class="py">TAG</span> <span class="p">=</span> <span class="n">MainActivity</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">simpleName</span>
+</span></span><span class="line"><span class="cl">        <span class="k">var</span> <span class="py">mMessenger</span><span class="p">:</span><span class="n">Messenger</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">conn</span> <span class="p">=</span> <span class="k">object</span> <span class="err">: </span><span class="nc">ServiceConnection</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">override</span> <span class="k">fun</span> <span class="nf">onServiceDisconnected</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">ComponentName</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nc">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="s2">&#34;onServiceDisconnected&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">override</span> <span class="k">fun</span> <span class="nf">onServiceConnected</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">ComponentName</span><span class="p">?,</span> <span class="n">service</span><span class="p">:</span> <span class="n">IBinder</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">mMessenger</span> <span class="p">=</span> <span class="n">Messenger</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sendMsgToServer</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">setContentView</span><span class="p">(</span><span class="nc">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">activity_main</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">bindService</span><span class="p">(</span><span class="n">Intent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">MessengerService</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">),</span> <span class="n">conn</span><span class="p">,</span> <span class="nc">Context</span><span class="p">.</span><span class="n">BIND_AUTO_CREATE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">private</span> <span class="k">fun</span> <span class="nf">sendMsgToServer</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">msg</span> <span class="p">=</span> <span class="nc">Message</span><span class="p">.</span><span class="n">obtain</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">msg</span><span class="p">.</span><span class="k">data</span> <span class="p">=</span> <span class="n">Bundle</span><span class="p">().</span><span class="n">also</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">it</span><span class="p">.</span><span class="n">putShort</span><span class="p">(</span><span class="s2">&#34;shortTest&#34;</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mMessenger</span><span class="o">?.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="服务端">服务端</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MessengerService</span> <span class="p">:</span> <span class="n">Service</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">mMessenger</span> <span class="p">=</span> <span class="n">Messenger</span><span class="p">(</span><span class="k">object</span> <span class="err">: </span><span class="nc">Handler</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">handleMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">super</span><span class="p">.</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">data</span> <span class="p">=</span> <span class="n">msg</span><span class="p">.</span><span class="k">data</span>
+</span></span><span class="line"><span class="cl">            <span class="n">println</span><span class="p">(</span><span class="k">data</span><span class="p">.</span><span class="n">getShort</span><span class="p">(</span><span class="s2">&#34;shortTest&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onBind</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">Intent</span><span class="p">?):</span> <span class="n">IBinder</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">mMessenger</span><span class="p">.</span><span class="n">binder</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这就奇怪了，为什么同样使用 <code>AIDL</code> ， <code>Messenger</code> 就可以使用 <code>short</code> ，反而 <code>AIDL</code> 不行？</p>
+<p>这里我们发现 <code>short</code> 是放在 <code>Bundle</code> 中的， <code>Bundle</code> 实现了 <code>Parcelable</code> 。 而在  <code>.aidl</code> 中是直接写在文件中，基于这个差异于是猜想在 <code>.aidl</code> 文件中不能使用 <code>short</code> 类型，而自己写一个类，里面放 <code>short</code> 是可以的。</p>
+<p>于是我写了如下代码，来验证一下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">android.os.Parcel</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">android.os.Parcelable</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">ShortMsg</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Parcelable</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="n">shortType</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ShortMsg</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">shortType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="nf">ShortMsg</span><span class="p">(</span><span class="n">Parcel</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">shortType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">short</span><span class="p">)</span><span class="w"> </span><span class="n">in</span><span class="p">.</span><span class="na">readInt</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">writeToParcel</span><span class="p">(</span><span class="n">Parcel</span><span class="w"> </span><span class="n">dest</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">dest</span><span class="p">.</span><span class="na">writeInt</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">shortType</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Creator</span><span class="o">&lt;</span><span class="n">ShortMsg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CREATOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Creator</span><span class="o">&lt;</span><span class="n">ShortMsg</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">ShortMsg</span><span class="w"> </span><span class="nf">createFromParcel</span><span class="p">(</span><span class="n">Parcel</span><span class="w"> </span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShortMsg</span><span class="p">(</span><span class="n">in</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">ShortMsg</span><span class="o">[]</span><span class="w"> </span><span class="nf">newArray</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShortMsg</span><span class="o">[</span><span class="n">size</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">describeContents</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对应的 <code>AIDL</code> 文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.dev.bins.aidl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">parcelable</span><span class="w"> </span><span class="n">ShortMsg</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>写一个方法来传递数据</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">com.dev.bins.aidl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">com.dev.bins.aidl.ShortMsg</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">interface</span> <span class="nc">IShortInterface</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">in</span><span class="w"> </span><span class="n">ShortMsg</span><span class="w"> </span><span class="n">msg</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对应的 <code>Service</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">ShortService</span> <span class="p">:</span> <span class="n">Service</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">binder</span> <span class="p">=</span> <span class="k">object</span><span class="p">:</span> <span class="nc">IShortInterface</span><span class="p">.</span><span class="n">Stub</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">send</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="n">ShortMsg</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">println</span><span class="p">(</span><span class="s2">&#34;short: </span><span class="si">${msg?.shortType}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onBind</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="n">Intent</span><span class="p">?):</span> <span class="n">IBinder</span><span class="p">?</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">binder</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>Activity</code> 中发送 <code>ShortMsg</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">TAG</span> <span class="p">=</span> <span class="nc">MainActivity</span><span class="p">.</span><span class="n">javaClass</span><span class="p">.</span><span class="n">simpleName</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">var</span> <span class="py">server</span> <span class="p">:</span> <span class="n">IShortInterface</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">conn</span> <span class="p">=</span> <span class="k">object</span> <span class="err">: </span><span class="nc">ServiceConnection</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onServiceDisconnected</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">ComponentName</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nc">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="s2">&#34;onServiceDisconnected&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onServiceConnected</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">ComponentName</span><span class="p">?,</span> <span class="n">service</span><span class="p">:</span> <span class="n">IBinder</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nc">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span> <span class="s2">&#34;connect&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">server</span> <span class="p">=</span> <span class="nc">IShortInterface</span><span class="p">.</span><span class="nc">Stub</span><span class="p">.</span><span class="n">asInterface</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">msg</span> <span class="p">=</span> <span class="n">ShortMsg</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="o">?.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">setContentView</span><span class="p">(</span><span class="nc">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">activity_main</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">intent</span> <span class="p">=</span> <span class="n">Intent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">ShortService</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bindService</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="nc">Context</span><span class="p">.</span><span class="n">BIND_AUTO_CREATE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>见证奇迹的时候，控制台打印了 <code>short</code> 的数据。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">2021-05-28 23:39:42.845 16923-16936/com.dev.bins.aidl I/System.out: short: 2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>到了这里就可以肯定了， <code>short</code> 不能在 <code>.aidl</code> 文件中使用，但是可以通过自定义类型来传递 <code>short</code> 类型的数据。</p>
+<h2 id="探秘-aidl-不支持-short-的原因">探秘 <code>AIDL</code> 不支持 <code>short</code> 的原因</h2>
+<p>如果我们在 <code>aidl</code> 文件中使用 <code>short</code> 会报如下错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Failed to resolve <span class="s1">&#39;short&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们知道在编译的时候会把 <code>.aidl</code> 文件转成 <code>.java</code> 文件，转换使用的是 <code>sdk/build-tools/30.0.1/aidl</code> 工具来生成的，所以不能使用的原因在 <code>aidl</code> 这个工具里。 <code>aidl</code> 的源码在 <code>/system/tools/aidl</code> 中，我这里以 <code>Android10</code> 源码为例。</p>
+<p>由于源码太多，我们从错误入手，使用 <code>rg</code> 搜索 <code>Failed to resolve</code> 幸运的发现只有一处，文件在 <code>/system/tools/aidl/aidl_language.cpp</code> 如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">Parser</span><span class="o">::</span><span class="n">Resolve</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">success</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">AidlTypeSpecifier</span><span class="o">*</span> <span class="nl">typespec</span> <span class="p">:</span> <span class="n">unresolved_typespecs_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">typespec</span><span class="o">-&gt;</span><span class="n">Resolve</span><span class="p">(</span><span class="n">typenames_</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">AIDL_ERROR</span><span class="p">(</span><span class="n">typespec</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Failed to resolve &#39;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">typespec</span><span class="o">-&gt;</span><span class="n">GetUnresolvedName</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">success</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// don&#39;t stop to show more errors if any
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">AidlTypeSpecifier</span><span class="o">::</span><span class="n">Resolve</span><span class="p">(</span><span class="n">android</span><span class="o">::</span><span class="n">aidl</span><span class="o">::</span><span class="n">AidlTypenames</span><span class="o">&amp;</span> <span class="n">typenames</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">IsResolved</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">typenames</span><span class="p">.</span><span class="n">ResolveTypename</span><span class="p">(</span><span class="n">unresolved_name_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fully_qualified_name_</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从上面的代码可以看出来，问题出现在 <code>typespec-&gt;Resolve</code> 中，接着发现在 <code>Resolve</code> 中调用了 <code>AidlTypenames.ResolveTypename</code> ，对应文件在 <code>/system/tools/aidl/aidl_typenames.cpp</code> 中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// The built-in AIDL types..
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 没有发现 short 的身影
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">const</span> <span class="n">set</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">kBuiltinTypes</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;void&#34;</span><span class="p">,</span> <span class="s">&#34;boolean&#34;</span><span class="p">,</span> <span class="s">&#34;byte&#34;</span><span class="p">,</span>           <span class="s">&#34;char&#34;</span><span class="p">,</span>         <span class="s">&#34;int&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;long&#34;</span><span class="p">,</span> <span class="s">&#34;float&#34;</span><span class="p">,</span>   <span class="s">&#34;double&#34;</span><span class="p">,</span>         <span class="s">&#34;String&#34;</span><span class="p">,</span>       <span class="s">&#34;List&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;Map&#34;</span><span class="p">,</span>  <span class="s">&#34;IBinder&#34;</span><span class="p">,</span> <span class="s">&#34;FileDescriptor&#34;</span><span class="p">,</span> <span class="s">&#34;CharSequence&#34;</span><span class="p">,</span> <span class="s">&#34;ParcelFileDescriptor&#34;</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="n">string</span><span class="o">&gt;</span> <span class="n">kJavaLikeTypeToAidlType</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;java.util.List&#34;</span><span class="p">,</span> <span class="s">&#34;List&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;java.util.Map&#34;</span><span class="p">,</span> <span class="s">&#34;Map&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;android.os.ParcelFileDescriptor&#34;</span><span class="p">,</span> <span class="s">&#34;ParcelFileDescriptor&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">AidlTypenames</span><span class="o">::</span><span class="n">IsBuiltinTypename</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">type_name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">kBuiltinTypes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">type_name</span><span class="p">)</span> <span class="o">!=</span> <span class="n">kBuiltinTypes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        <span class="n">kJavaLikeTypeToAidlType</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">type_name</span><span class="p">)</span> <span class="o">!=</span> <span class="n">kJavaLikeTypeToAidlType</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pair</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">AidlTypenames</span><span class="o">::</span><span class="n">ResolveTypename</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">type_name</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">IsBuiltinTypename</span><span class="p">(</span><span class="n">type_name</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">found</span> <span class="o">=</span> <span class="n">kJavaLikeTypeToAidlType</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">type_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">found</span> <span class="o">!=</span> <span class="n">kJavaLikeTypeToAidlType</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nf">make_pair</span><span class="p">(</span><span class="n">found</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">make_pair</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">AidlDefinedType</span><span class="o">*</span> <span class="n">defined_type</span> <span class="o">=</span> <span class="n">TryGetDefinedType</span><span class="p">(</span><span class="n">type_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">defined_type</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">make_pair</span><span class="p">(</span><span class="n">defined_type</span><span class="o">-&gt;</span><span class="n">GetCanonicalName</span><span class="p">(),</span> <span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">make_pair</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>ResolveTypename</code> 中，先调用了 <code>IsBuiltinTypename</code> 来判断是不是内置类型，而判断内置类型是通过查找 <code>kBuiltinTypes</code> 这个 <code>Set</code> 和 <code>kJavaLikeTypeToAidlType</code> 这个 <code>Map</code> 。显然这里就没有 <code>short</code> ，所以返回 <code>false</code> 。</p>
+<p>接着调用 <code>TryGetDefinedType</code> ，这个函数是用于处理自定义类型的，显然也是没有 <code>short</code> 的，所以这里返回 <code>nullptr</code> ，最后整个函数返回 <code>pair(type_name, false)</code> ，所以最后会输出 <code>Failed to resolve 'short'</code></p>
+<p>分析到这里我们就知道了在把 <code>.aidl</code> 转换为 <code>.java</code> 的时候不支持 <code>short</code> ，所以在 <code>.aidl</code> 中不能使用的原因在于这里。</p>
+<h2 id="总结">总结</h2>
+<p>今天我们发现同样基于 <code>AIDL</code> 的 <code>Messenger</code> 可以支持 <code>short</code> 类型，而 <code>AIDL</code> 却不可以。</p>
+<p>接着我们从源码中找到了 <code>AIDL</code> 不支持的原因。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/ipc/">IPC</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/http2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">HTTP/2</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/mmap/">
+            <span class="next-text nav-default">mmap 探索</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2021-05-30 00:00:00 \u002b0000 UTC',
+        title: '探秘 AIDL 为什么不支持 short',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

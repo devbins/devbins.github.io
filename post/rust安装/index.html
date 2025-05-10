@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Rust 环境搭建 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rust%E5%AE%89%E8%A3%85/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/rust%E5%AE%89%E8%A3%85/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Rust 环境搭建">
+  <meta property="og:description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-06-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-06-15T00:00:00+00:00">
+    <meta property="article:tag" content="Rust">
+
+  <meta itemprop="name" content="Rust 环境搭建">
+  <meta itemprop="description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+  <meta itemprop="datePublished" content="2020-06-15T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-06-15T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1235">
+  <meta itemprop="keywords" content="Rust">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rust 环境搭建">
+  <meta name="twitter:description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+ <meta property="og:url" content="http://devbins.github.io/post/rust%E5%AE%89%E8%A3%85/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Rust 环境搭建">
+  <meta property="og:description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-06-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-06-15T00:00:00+00:00">
+    <meta property="article:tag" content="Rust">
+
+  <meta itemprop="name" content="Rust 环境搭建">
+  <meta itemprop="description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+  <meta itemprop="datePublished" content="2020-06-15T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-06-15T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1235">
+  <meta itemprop="keywords" content="Rust">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rust 环境搭建">
+  <meta name="twitter:description" content="简介 早就听说 Rust 的大名， 近两年 Rust 发展的不错，从微软宣布要使用 Rust 来替代 C/C&#43;&#43; 重写 Windows 组件，到 Rust 进入 TIOBE 排名前20，越来越受到开发的关注。
+Rust 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Rust 环境搭建</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-06-15 </span>
+        <div class="post-category">
+            <a href="../../categories/rust/"> Rust </a>
+            </div>
+          <span class="more-meta"> 约 1235 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a>
+      <ul>
+        <li><a href="#语义化版本">语义化版本</a></li>
+        <li><a href="#多渠道发布">多渠道发布</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装">安装</a>
+      <ul>
+        <li><a href="#配置环境变量">配置环境变量</a></li>
+        <li><a href="#更新-rust-和工具链">更新 Rust 和工具链</a></li>
+        <li><a href="#更新-rustup-本身">更新 rustup 本身</a></li>
+        <li><a href="#卸载-rust">卸载 rust</a></li>
+        <li><a href="#切换渠道">切换渠道</a></li>
+        <li><a href="#使用中科大镜像-加速访问">使用中科大镜像，加速访问</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装-rls--rust-language-server">安装 RLS(Rust Language Server)</a></li>
+    <li><a href="#cargo-rust的构建工具和包管理器">Cargo: Rust的构建工具和包管理器</a>
+      <ul>
+        <li><a href="#配置中科大镜像">配置中科大镜像</a></li>
+        <li><a href="#创建新项目">创建新项目</a></li>
+        <li><a href="#运行项目">运行项目</a></li>
+        <li><a href="#构建项目">构建项目</a></li>
+        <li><a href="#更多">更多</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="简介">简介</h2>
+<p>早就听说 <code>Rust</code> 的大名， 近两年 <code>Rust</code> 发展的不错，从微软宣布要使用 <code>Rust</code> 来替代 <code>C/C++</code> 重写 <code>Windows</code> 组件，到 <code>Rust</code> 进入 <code>TIOBE</code> 排名前20，越来越受到开发的关注。</p>
+<p><code>Rust</code> 的官网介绍其是一门赋予每个人构建可靠且高效软件能力的语言。它的特点是：运行快，防止段错误，保证线程安全。</p>
+<h3 id="语义化版本">语义化版本</h3>
+<p><code>Rust</code> 编译器采用语义化版本号，格式为：主版本号.次版本号.修订号</p>
+<h4 id="主版本号">主版本号</h4>
+<p>当做了不兼容的修改，主版本号增加。</p>
+<h4 id="次版本号">次版本号</h4>
+<p>当做了向下兼容的功能性新增，次版本号增加。</p>
+<h4 id="修订号">修订号</h4>
+<p>当做了向下兼容的问题修正时，修订号增加。</p>
+<h3 id="多渠道发布">多渠道发布</h3>
+<p><code>Rust</code> 为了兼顾更新速度以及稳定性，采用了多渠道发布。</p>
+<h4 id="nightly-版本">nightly 版本</h4>
+<p>nightly 版本时每天在主版本上创建出来的版本，这个渠道上功能最多，更新最快，存在的问题可能性也大。新功能会在这个渠道中先开启，供用户使用。</p>
+<h4 id="beta版本">beta版本</h4>
+<p>beta 版本每隔一段时间，将在 nightly 渠道中验证过的功能开放给用户使用。</p>
+<h4 id="stable版本">stable版本</h4>
+<p>stable 版本就是正式版本，每隔6个星期发布一个新版本，最稳定、可靠，保证向前兼容。</p>
+<h2 id="安装">安装</h2>
+<p>通过 <code>rustup</code> 来安装 <code>Rust</code> ，它不仅是个安装工具，还是一个版本管理工具。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class="p">|</span> sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置环境变量">配置环境变量</h3>
+<p>装好了 <code>Rust</code> 之后，我们还需要把它添加到环境变量中，这样才能使用相关命令。它在 <code>~/.cargo/bin</code> 中，这个目录还包含了 <code>rustc</code> 、 <code>cargo</code> 、 <code>rustup</code> 等工具链。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">/.cargo/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="更新-rust-和工具链">更新 Rust 和工具链</h3>
+<p>当我们使用一段时间后 <code>Rust</code> 发布了新版本，可以通过如下命令来升级到最新版本。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="更新-rustup-本身">更新 rustup 本身</h3>
+<p>除了 <code>Rust</code> 会发布新版本， <code>rustup</code> 也会发布新版本，同样的可以通过如下命令来升级到最新版本。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup self update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="卸载-rust">卸载 rust</h3>
+<p>当你哪天不想用了，可以通过如下命令来卸载。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup self uninstall
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="切换渠道">切换渠道</h3>
+<p>上面我们说过 <code>Rust</code> 有三个不同的渠道，我们可以在其中自由的切换，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装 nightly 渠道</span>
+</span></span><span class="line"><span class="cl">rustup install nightly
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置默认的渠道为 nightly</span>
+</span></span><span class="line"><span class="cl">rustup default nightly
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用中科大镜像-加速访问">使用中科大镜像，加速访问</h3>
+<p>由于 <code>Rust</code> 的服务器位于国外，我们想要访问，特别的慢，体验非常不好，中科大提供了 <code>Rust</code> 的镜像，我们可以使用它来加速访问。</p>
+<p>如果你使用 <code>zsh</code> 则把下面文件追加到 <code>.zshrc</code> 中，其它 <code>SHELL</code> 则放到对应的配置文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">RUSTUP_DIST_SERVER</span><span class="o">=</span>https://mirrors.ustc.edu.cn/rust-static
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">RUSTUP_UPDATE_ROOT</span><span class="o">=</span>https://mirrors.ustc.edu.cn/rust-static/rustup
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装-rls--rust-language-server">安装 RLS(Rust Language Server)</h2>
+<p><code>RLS</code> 是用来增强编辑器的工具，可以做到代码提示、跳转到定义、显示函数签名等信息。可以极大的提高开发效率。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rustup component add rls --toolchain nightly
+</span></span><span class="line"><span class="cl">rustup component add rust-analysis --toolchain nightly
+</span></span><span class="line"><span class="cl">rustup component add rust-src --toolchain nightly
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装好 <code>RLS</code> 后就可以很方便的在 <code>VSCODE</code> 或者 <code>Emacs</code> 等其它编辑器中使用了。</p>
+<h2 id="cargo-rust的构建工具和包管理器">Cargo: Rust的构建工具和包管理器</h2>
+<h3 id="配置中科大镜像">配置中科大镜像</h3>
+<p>安装好 <code>Rust</code> 之后，它的包管理工具 <code>cargo</code> 也是一并安装好了的。 <code>Rust</code> 第三方库也在国外，地址是 <a href="https://crates.io">https://crates.io</a> 。访问它同样比较慢，幸运的是中科大也提供了镜像，这样我们就可以用它来加速。</p>
+<p>在 <code>~/.cargo</code> 下创建一个 <code>config</code> 的文件，把如下内容复制进去</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>source.crates-io<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">registry</span> <span class="o">=</span> <span class="s2">&#34;https://github.com/rust-lang/crates.io-index&#34;</span>
+</span></span><span class="line"><span class="cl">replace-with <span class="o">=</span> <span class="s1">&#39;ustc&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>source.ustc<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">registry</span> <span class="o">=</span> <span class="s2">&#34;git://mirrors.ustc.edu.cn/crates.io-index&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="创建新项目">创建新项目</h3>
+<p><code>cargo</code> 提供了创建项目的命令，我们可以通过它来帮我们创建好基本的项目结构</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cargo new hello-rust
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>项目结构如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hello-rust
+</span></span><span class="line"><span class="cl">├── Cargo.toml
+</span></span><span class="line"><span class="cl">└── src
+</span></span><span class="line"><span class="cl">    └── main.rs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">1</span> directory, <span class="m">2</span> files
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>Cargo.toml</code> 是第三方依赖的配置文件， <code>src</code> 下存放着源代码。</p>
+<h3 id="运行项目">运行项目</h3>
+<p>当我们写好代码后，可以想要运行看下效果，可以通过如下命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cargo run
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="构建项目">构建项目</h3>
+<p>当我们添加第三方库的时候，修改了 <code>Cargo.toml</code> 可以使用如下命令来更新依赖，构建项目。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cargo build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="更多">更多</h3>
+<p>如果你想要了解更多有关 <code>cargo</code> 的信息，可以查看 <a href="https://doc.rust-lang.org/cargo/commands/cargo-doc.html">cargo doc - The Cargo Book</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-15
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/rust/">Rust</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/orgmode%E6%98%9F%E6%9C%9F%E4%B8%8D%E6%98%BE%E7%A4%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Windows 下 Org-Mode 星期不显示</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/parallel_manjaro/">
+            <span class="next-text nav-default">Parallels Desktop 安装 Manjaro 无法进入安装界面的解决办法</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-06-15 00:00:00 \u002b0000 UTC',
+        title: 'Rust 环境搭建',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

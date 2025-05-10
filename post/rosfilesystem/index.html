@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ROS文件系统 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/rosfilesystem/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/rosfilesystem/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="ROS文件系统">
+  <meta property="og:description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-08-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-08-04T00:00:00+00:00">
+    <meta property="article:tag" content="ROS">
+
+  <meta itemprop="name" content="ROS文件系统">
+  <meta itemprop="description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+  <meta itemprop="datePublished" content="2020-08-04T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-08-04T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1718">
+  <meta itemprop="keywords" content="ROS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ROS文件系统">
+  <meta name="twitter:description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+ <meta property="og:url" content="http://devbins.github.io/post/rosfilesystem/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="ROS文件系统">
+  <meta property="og:description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-08-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-08-04T00:00:00+00:00">
+    <meta property="article:tag" content="ROS">
+
+  <meta itemprop="name" content="ROS文件系统">
+  <meta itemprop="description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+  <meta itemprop="datePublished" content="2020-08-04T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-08-04T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1718">
+  <meta itemprop="keywords" content="ROS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ROS文件系统">
+  <meta name="twitter:description" content="前言 在上一篇文章中，我们谈到了怎么在 Arch 系的 Linux 上安装 ROS ，这只是入门的第一步，接下来我们要来了解 ROS 的文件系统。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ROS文件系统</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-04 </span>
+        <div class="post-category">
+            <a href="../../categories/ros/"> ROS </a>
+            <a href="../../categories/linux/"> Linux </a>
+            </div>
+          <span class="more-meta"> 约 1718 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#ros架构">ROS架构</a></li>
+    <li><a href="#ros-文件系统">ROS 文件系统</a>
+      <ul>
+        <li><a href="#元功能包--metapackage">元功能包(Metapackage)</a></li>
+        <li><a href="#功能包">功能包</a></li>
+      </ul>
+    </li>
+    <li><a href="#ros-文件系统工具">ROS 文件系统工具</a>
+      <ul>
+        <li><a href="#rospack">rospack</a></li>
+        <li><a href="#roscd">roscd</a></li>
+        <li><a href="#rosls">rosls</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在上一篇文章中，我们谈到了怎么在 <code>Arch</code> 系的 <code>Linux</code> 上安装 <code>ROS</code> ，这只是入门的第一步，接下来我们要来了解 <code>ROS</code> 的文件系统。</p>
+<h2 id="ros架构">ROS架构</h2>
+<p>安装 <code>ROS</code> 时我们知道， <code>ROS</code> 和传统意义上的操作系统不一样，它不是直接运行在硬件上的，而是安装在操作系统之上的一个软件。它提供了许多工具和软件库，并且还有类似操作系统硬件抽象、软件包管理，开发工具链等，所以我们可以认为它是一个操作系统。</p>
+<p>在大型项目中，为了更好的扩展功能，会把不同的功能分为不同的层。在 <code>ROS</code> 架构中分为三层，分别是基于 <code>Linux</code> 系统的 <code>OS</code> 层、实现 <code>ROS</code> 核心通信机制以及众多机器人开发库的中间层、在 <code>ROS Master</code> 管理下保证功能节点的正常运行的应用层。如下所示：
+<img src="../../images/ros/architecture.jpg" alt=""></p>
+<h2 id="ros-文件系统">ROS 文件系统</h2>
+<p>在了解了 <code>ROS</code> 的架构之后，我们来了解 <code>ROS</code> 的文件系统，所谓文件系统就是把各种文件按照一定的组织放到特定的目录中，当系统要某些文件的时候才知道要去哪里找，不然就算系统中存在这个文件，系统也是不知道的。</p>
+<p>我们先通过下面这张图来了解， <code>ROS</code> 是怎么组织文件的。
+<img src="../../images/ros/fs.jpg" alt=""></p>
+<h3 id="元功能包--metapackage">元功能包(Metapackage)</h3>
+<p>元功能包是功能包的一个集合，里面存放着多个功能包。这些功能包功能相近，也可能相互依赖。比如： <code>navigation</code> 功能包。</p>
+<p>元功能包在开发一个大型的功能时比较常用，这样的功能往往需要很多功能包，包括一些第三方的，我们可以通过元功能包一次性把这些包安装好。</p>
+<p>元功能包也可以给一系列功能包取一个别名，这样别人通过这个别名就能把所有的依赖都安装好，而不要一个一个的单独去安装。</p>
+<p>在元功能包中通常只包含两个文件一个是 <code>CMakeLists.txt</code> 和 <code>package.xml</code></p>
+<p>以 <code>navigation</code> 为例： <code>CMakeLists.txt</code> 如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.8.3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">navigation</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">catkin</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">catkin_metapackage</span><span class="p">()</span> <span class="c"># 元功能包特有，用来告诉编译器这是一个元功能包
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>package.xml</code> 如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;?xml-model href=&#34;http://download.ros.org/schema/package_format2.xsd&#34; schematypens=&#34;http://www.w3.org/2001/XMLSchema&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;package</span> <span class="na">format=</span><span class="s">&#34;2&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>navigation<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.16.6<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>
+</span></span><span class="line"><span class="cl">        A 2D navigation stack that takes in information from odometry, sensor
+</span></span><span class="line"><span class="cl">        streams, and a goal pose and outputs safe velocity commands that are sent
+</span></span><span class="line"><span class="cl">        to a mobile base.
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;mfergs7@gmail.com&#34;</span><span class="nt">&gt;</span>Michael Ferguson<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;davidvlu@gmail.com&#34;</span><span class="nt">&gt;</span>David V. Lu!!<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;maintainer</span> <span class="na">email=</span><span class="s">&#34;ahoy@fetchrobotics.com&#34;</span><span class="nt">&gt;</span>Aaron Hoy<span class="nt">&lt;/maintainer&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;author&gt;</span>contradict@gmail.com<span class="nt">&lt;/author&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;author&gt;</span>Eitan Marder-Eppstein<span class="nt">&lt;/author&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;license&gt;</span>BSD,LGPL,LGPL (amcl)<span class="nt">&lt;/license&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;url&gt;</span>http://wiki.ros.org/navigation<span class="nt">&lt;/url&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;buildtool_depend&gt;</span>catkin<span class="nt">&lt;/buildtool_depend&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>amcl<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>base_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>carrot_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>clear_costmap_recovery<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>costmap_2d<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>dwa_local_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>fake_localization<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>global_planner<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>map_server<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_base<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_base_msgs<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>move_slow_and_clear<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>navfn<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>nav_core<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>rotate_recovery<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;exec_depend&gt;</span>voxel_grid<span class="nt">&lt;/exec_depend&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c">&lt;!-- 元功能包固定写法 --&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;export&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;metapackage/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/export&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/package&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>要注意在 <code>package.xml</code> 中需要用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;export&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;metapackage/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/export&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>来指定是元功能包，这是固定写法。</p>
+<p>元功能包在老版本也叫 <code>stack</code> (功能包集)，都是一个意思。</p>
+<h3 id="功能包">功能包</h3>
+<p>功能包是 <code>ROS</code> 软件的基本单元，功能包中包含了一个或多个节点、库、配置文件、源代码等，是ROS软件中基本的构成项和发布项。</p>
+<h4 id="功能包清单--package-dot-xml">功能包清单(package.xml)</h4>
+<p>每个包都必须包含一个 <code>package.xml</code> 的功能包清单文件，里面记录了包的基本信息、作者信息、许可信息、依赖选项、编译标志等。</p>
+<h4 id="消息--msg">消息(msg)</h4>
+<p>消息是 <code>ROS</code> 节点之间发布/订阅之间的通信消息，文件通常以 <code>.msg</code> 结尾。 <code>ROS</code> 定义了一些基本的消息类型，我们也可以自定义消息。</p>
+<h4 id="服务--srv">服务(srv)</h4>
+<p>服务是 <code>ROS</code> 中另一种通信方式的数据类型，文件通常以 <code>.srv</code> 结尾。同样的 <code>ROS</code> 也定义了一些基本的类型，也支持自定义类型。</p>
+<h4 id="代码--src">代码(src)</h4>
+<p>代码是用来存放 <code>C++</code> 文件的目录， <code>ROS</code> 还支持 <code>python</code> 来编写，通常放在 <code>scripts</code> 目录下。</p>
+<p>关于功能包我们就先了解这么多，之后我们会在工作空间中详细介绍，先有一个大概的印象。</p>
+<h2 id="ros-文件系统工具">ROS 文件系统工具</h2>
+<p><code>ROS</code> 中有非常多的包，我们在使用的时候不可能每个都记住它们所在的位置，所有在 <code>ROS</code> 中提供了一些命令行工具方便我们使用这些 <code>package</code> 。</p>
+<h3 id="rospack">rospack</h3>
+<p><code>rospack</code> 是一个用来查找 <code>package</code> 的工具，它可以定位 <code>package</code> 安装的位置。例如，我们使用它查找 <code>roscpp</code> 可以得到 <code>roscpp</code> 的安装位置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack find roscpp
+</span></span><span class="line"><span class="cl">/opt/ros/melodic/share/roscpp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>除了查找 <code>package</code> 的位置，还可以通过 <code>rospack list</code> 列出所有的 <code>package</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack list
+</span></span><span class="line"><span class="cl">actionlib /opt/ros/melodic/share/actionlib
+</span></span><span class="line"><span class="cl">actionlib_msgs /opt/ros/melodic/share/actionlib_msgs
+</span></span><span class="line"><span class="cl">actionlib_tutorials /opt/ros/melodic/share/actionlib_tutorials
+</span></span><span class="line"><span class="cl">angles /opt/ros/melodic/share/angles
+</span></span><span class="line"><span class="cl">bond /opt/ros/melodic/share/bond
+</span></span><span class="line"><span class="cl">bondcpp /opt/ros/melodic/share/bondcpp
+</span></span><span class="line"><span class="cl">bondpy /opt/ros/melodic/share/bondpy
+</span></span><span class="line"><span class="cl">camera_calibration /opt/ros/melodic/share/camera_calibration
+</span></span><span class="line"><span class="cl">camera_calibration_parsers /opt/ros/melodic/share/camera_calibration_parsers
+</span></span><span class="line"><span class="cl">camera_info_manager /opt/ros/melodic/share/camera_info_manager
+</span></span><span class="line"><span class="cl">catkin /opt/ros/melodic/share/catkin
+</span></span><span class="line"><span class="cl">class_loader /opt/ros/melodic/share/class_loader
+</span></span><span class="line"><span class="cl">cmake_modules /opt/ros/melodic/share/cmake_modules
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>rospack</code> 中还有一个比较常用的是，查看 <code>package</code> 的依赖</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rospack depends roscpp
+</span></span><span class="line"><span class="cl">cpp_common
+</span></span><span class="line"><span class="cl">rostime
+</span></span><span class="line"><span class="cl">roscpp_traits
+</span></span><span class="line"><span class="cl">roscpp_serialization
+</span></span><span class="line"><span class="cl">catkin
+</span></span><span class="line"><span class="cl">genmsg
+</span></span><span class="line"><span class="cl">genpy
+</span></span><span class="line"><span class="cl">message_runtime
+</span></span><span class="line"><span class="cl">gencpp
+</span></span><span class="line"><span class="cl">geneus
+</span></span><span class="line"><span class="cl">gennodejs
+</span></span><span class="line"><span class="cl">genlisp
+</span></span><span class="line"><span class="cl">message_generation
+</span></span><span class="line"><span class="cl">rosbuild
+</span></span><span class="line"><span class="cl">rosconsole
+</span></span><span class="line"><span class="cl">std_msgs
+</span></span><span class="line"><span class="cl">rosgraph_msgs
+</span></span><span class="line"><span class="cl">xmlrpcpp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面列出来的是比较常用的，更多的用法可以通过 <code>rospack help</code> 来查看</p>
+<h3 id="roscd">roscd</h3>
+<p>在 <code>Linux</code> 中 <code>cd</code> 用来切换目录，在 <code>ROS</code> 中也有类似的命令，也就是 <code>roscd</code> 。使用 <code>roscd</code> 会自动帮你切换到 <code>ROS</code> 对应包的安装目录下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ <span class="nb">pwd</span>
+</span></span><span class="line"><span class="cl">/home/test
+</span></span><span class="line"><span class="cl">➜  ~ roscd roscpp
+</span></span><span class="line"><span class="cl">➜  <span class="nb">pwd</span>
+</span></span><span class="line"><span class="cl">/opt/ros/melodic/share/roscpp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当然你用 <code>cd</code> 也是可以进入到 <code>roscpp</code> 目录的，只是比较麻烦而已。</p>
+<h3 id="rosls">rosls</h3>
+<p><code>rosls</code> 和 <code>ls</code> 命令类似，用来列出 <code>package</code> 下的文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜ rosls roscpp
+</span></span><span class="line"><span class="cl">cmake  msg  package.xml  rosbuild  srv
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>了解 <code>ROS</code> 架构和文件系统对于初学者来说是十分有必要的，你会知道 <code>ROS</code> 是怎么划分它们的，不同的文件存放在哪里，我需要的功能去哪里找，怎么快速定位它们。</p>
+<p>了解了这些，日后使用时可以大大提高查找的效率，也为编写自己的 <code>package</code> 打下了基础。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://book.douban.com/subject/30367515/">ROS机器人开发实践 (豆瓣)</a></li>
+<li><a href="https://book.douban.com/subject/30750417/">ROS机器人高效编程（原书第3版） (豆瓣)</a></li>
+<li><a href="http://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem">ROS/Tutorials/NavigatingTheFilesystem - ROS Wiki</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-04
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/ros/">ROS</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/ccls/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用ccls作为C/C&#43;&#43;的补全方案</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/%E5%9C%A8arch%E4%B8%8A%E5%AE%89%E8%A3%85ros/">
+            <span class="next-text nav-default">在Arch上安装ROS</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-08-04 00:00:00 \u002b0000 UTC',
+        title: 'ROS文件系统',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

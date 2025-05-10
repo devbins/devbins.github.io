@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>jwt - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/jwt/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/jwt/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="jwt">
+  <meta property="og:description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-01-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-01-23T00:00:00+00:00">
+    <meta property="article:tag" content="Jwt">
+
+  <meta itemprop="name" content="jwt">
+  <meta itemprop="description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+  <meta itemprop="datePublished" content="2022-01-23T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2022-01-23T00:00:00+00:00">
+  <meta itemprop="wordCount" content="617">
+  <meta itemprop="keywords" content="Jwt">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="jwt">
+  <meta name="twitter:description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+ <meta property="og:url" content="http://localhost:1313/post/jwt/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="jwt">
+  <meta property="og:description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2022-01-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-01-23T00:00:00+00:00">
+    <meta property="article:tag" content="Jwt">
+
+  <meta itemprop="name" content="jwt">
+  <meta itemprop="description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+  <meta itemprop="datePublished" content="2022-01-23T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2022-01-23T00:00:00+00:00">
+  <meta itemprop="wordCount" content="617">
+  <meta itemprop="keywords" content="Jwt">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="jwt">
+  <meta name="twitter:description" content="前言 jwt(JSON Web Tokens) 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 cookie 和 session 。
+流程 1 2 3 4 5 6 @startuml client -&gt; server : login use pwd server -&gt; client : response jwt client -&gt; server : with jwt Authorization header server -&gt; client : respose data @enduml 格式 jwt 由三部分组成，分别是">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">jwt</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-01-23 </span>
+        <div class="post-category">
+            <a href="../../categories/jwt/"> jwt </a>
+            </div>
+          <span class="more-meta"> 约 617 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#流程">流程</a></li>
+    <li><a href="#格式">格式</a></li>
+    <li><a href="#生成">生成</a></li>
+    <li><a href="#解析">解析</a></li>
+    <li><a href="#缺点">缺点</a></li>
+    <li><a href="#gin-jwt-中间件">gin jwt 中间件</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p><code>jwt(JSON Web Tokens)</code> 是用于客户端与服务端进行身份鉴权的东西。类似于常用的 <code>cookie</code> 和 <code>session</code> 。</p>
+<h2 id="流程">流程</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@startuml
+</span></span><span class="line"><span class="cl">client -&gt; server : login use pwd
+</span></span><span class="line"><span class="cl">server -&gt; client : response jwt
+</span></span><span class="line"><span class="cl">client -&gt; server : with jwt Authorization header
+</span></span><span class="line"><span class="cl">server -&gt; client : respose data
+</span></span><span class="line"><span class="cl">@enduml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/jwt.png">
+</figure>
+
+<h2 id="格式">格式</h2>
+<p><code>jwt</code> 由三部分组成，分别是</p>
+<ol>
+<li>Header头部，里面存放了类型和加密算法</li>
+<li>Claims载荷，里面存放了我们定义的数据</li>
+<li>Signature签名，在签名中会对Header和Claims进行Base64编码之后，用Header中存放的加密算法和自定义的secret进行加密后获得</li>
+</ol>
+<p>这三部分之间使用 <code>.</code> 分隔，生成之后大概是这个样子 <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</code></p>
+<p>你可以在 <a href="https://jwt.io/#debugger-io">JSON Web Tokens - jwt.io</a> 中查看解码之后的样子</p>
+<h2 id="生成">生成</h2>
+<p>来看下使用 <code>jwt-go</code> 怎么生成 <code>jwt</code></p>
+<p><code>jwt-go</code> 带了一个标准的 <code>Claims</code> ，里面包含了常用的字段，有生效时间、过期时间、签发人、签发的主题、签发给谁的等等。这些不是必须的，可以根据自己的选择忽略，当然也支持自定义字段。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">secret</span> <span class="p">=</span> <span class="s">&#34;devbins&#34;</span> <span class="c1">// 加密用的，需要保密</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewJwtToken</span><span class="p">(</span><span class="nx">userName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">claims</span> <span class="o">:=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nx">StandardClaims</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Audience</span><span class="p">:</span>  <span class="nx">userName</span><span class="p">,</span>                          <span class="c1">// 给谁加密</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ExpiresAt</span><span class="p">:</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span> <span class="o">*</span> <span class="mi">24</span><span class="p">).</span><span class="nf">Unix</span><span class="p">(),</span>    <span class="c1">// 过期时间</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Id</span><span class="p">:</span>        <span class="nx">userName</span><span class="p">,</span>                          <span class="c1">// 用户id</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">IssuedAt</span><span class="p">:</span>  <span class="nx">now</span><span class="p">.</span><span class="nf">Unix</span><span class="p">(),</span>                        <span class="c1">// 什么时候签发的</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Issuer</span><span class="p">:</span>    <span class="s">&#34;devbins&#34;</span><span class="p">,</span>                         <span class="c1">// 谁签发的</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">NotBefore</span><span class="p">:</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="o">-</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span> <span class="o">*</span> <span class="mi">10</span><span class="p">).</span><span class="nf">Unix</span><span class="p">(),</span> <span class="c1">// 在什么时间开始生效</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Subject</span><span class="p">:</span>   <span class="s">&#34;token&#34;</span><span class="p">,</span>                           <span class="c1">// jwt的主题，用途</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">tokenClaims</span> <span class="o">:=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">NewWithClaims</span><span class="p">(</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">SigningMethodHS256</span><span class="p">,</span> <span class="nx">claims</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">tokenClaims</span><span class="p">.</span><span class="nf">SignedString</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">secret</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">NewJwtToken</span><span class="p">(</span><span class="s">&#34;devbins&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nb">println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nb">println</span><span class="p">(</span><span class="s">&#34;token: &#34;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="解析">解析</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">parseToken</span><span class="p">(</span><span class="nx">token</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">jwtToken</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">ParseWithClaims</span><span class="p">(</span><span class="nx">token</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">StandardClaims</span><span class="p">{},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">token</span> <span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">Token</span><span class="p">)</span> <span class="p">(</span><span class="nx">i</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">e</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">Secret</span><span class="p">),</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="nx">jwtToken</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">claim</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">jwtToken</span><span class="p">.</span><span class="nx">Claims</span><span class="p">.(</span><span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">StandardClaims</span><span class="p">);</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">jwtToken</span><span class="p">.</span><span class="nx">Valid</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nx">claim</span><span class="p">.</span><span class="nx">Token</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="缺点">缺点</h2>
+<p>说完了怎么使用 <code>jwt</code> 的，我们还需要了解它的缺点才能更好的使用他。</p>
+<h2 id="gin-jwt-中间件">gin jwt 中间件</h2>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://jwt.io/#debugger-io">JSON Web Tokens - jwt.io</a></li>
+<li><a href="https://youngxhui.top/2019/10/gin%E5%8D%81%E4%BA%94jwt%E4%BD%BF%E7%94%A8%E7%BB%AD/">Gin(十五):JWT使用(续) - ISLAND</a></li>
+<li><a href="https://github.com/golang-jwt/jwt">golang-jwt/jwt: Community maintained clone of https://github.com/dgrijalva/jwt-go</a></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-01-23
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/jwt/">jwt</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/restclient/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Emacs中的Postman</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/gin%E4%B8%8A%E4%BC%A0%E6%9C%8D%E5%8A%A1/">
+            <span class="next-text nav-default">Gin 实现上传/下载服务</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2022-01-23 00:00:00 \u002b0000 UTC',
+        title: 'jwt',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

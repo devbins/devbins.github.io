@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>GPG加密五：在 Emacs 中使用 GPG 加密 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/gpg5/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/gpg5/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta property="og:description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-02-06T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-02-06T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="GPG">
+
+  <meta itemprop="name" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta itemprop="description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  <meta itemprop="datePublished" content="2020-02-06T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-02-06T00:00:00+00:00">
+  <meta itemprop="wordCount" content="432">
+  <meta itemprop="keywords" content="Emacs,GPG">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta name="twitter:description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+ <meta property="og:url" content="http://devbins.github.io/post/gpg5/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta property="og:description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-02-06T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-02-06T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="GPG">
+
+  <meta itemprop="name" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta itemprop="description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+  <meta itemprop="datePublished" content="2020-02-06T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-02-06T00:00:00+00:00">
+  <meta itemprop="wordCount" content="432">
+  <meta itemprop="keywords" content="Emacs,GPG">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GPG加密五：在 Emacs 中使用 GPG 加密">
+  <meta name="twitter:description" content="前言 之前我们介绍了 GPG 的使用，也介绍了用 GPG 来管理自己的密码。
+今天我们来讲一讲在 Emacs 中配合 GPG 加密 Org mode 。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">GPG加密五：在 Emacs 中使用 GPG 加密</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-02-06 </span>
+        <div class="post-category">
+            <a href="../../categories/emacs/"> Emacs </a>
+            <a href="../../categories/gpg/"> GPG </a>
+            </div>
+          <span class="more-meta"> 约 432 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#emacs-配置">emacs 配置</a></li>
+    <li><a href="#使用">使用</a></li>
+    <li><a href="#mac-下的问题及解决方案">Mac 下的问题及解决方案</a></li>
+    <li><a href="#碰到的问题">碰到的问题</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>之前我们介绍了 <code>GPG</code> 的使用，也介绍了用 <code>GPG</code> 来管理自己的密码。</p>
+<p>今天我们来讲一讲在 <code>Emacs</code> 中配合 <code>GPG</code> 加密 <code>Org mode</code> 。</p>
+<h2 id="emacs-配置">emacs 配置</h2>
+<p>在使用 <code>GPG</code> 加密之前，我们先要对 <code>Emacs</code> 进行配置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(use-package org-crypt
+</span></span><span class="line"><span class="cl">  :ensure nil
+</span></span><span class="line"><span class="cl">  :demand t
+</span></span><span class="line"><span class="cl">  :config
+</span></span><span class="line"><span class="cl">  ;; 在文件加密之前进行保存
+</span></span><span class="line"><span class="cl">  (org-crypt-use-before-save-magic)
+</span></span><span class="line"><span class="cl">  ;; 设置要加密的 TAG 为 crypt
+</span></span><span class="line"><span class="cl">  (setq org-crypt-tag-matcher &#34;crypt&#34;
+</span></span><span class="line"><span class="cl">        ;; 防止子 TAG 也为 crypt，进行再次加密
+</span></span><span class="line"><span class="cl">        org-tags-exclude-from-inheritance (quote (&#34;crypt&#34;))
+</span></span><span class="line"><span class="cl">        ;; 设置要使用加密的 GPG 账户
+</span></span><span class="line"><span class="cl">        org-crypt-key &#34;test1&#34;))
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="使用">使用</h2>
+<p>配置好 <code>Emacs</code> 后，我们创建一个 <code>test.org</code> 并为标题添加 <code>crypt</code> 的 <code>TAG</code> ，然后保存文件， <code>Emacs</code> 会自动把含有 <code>crypt</code> 的内容进行加密。
+<img src="../../images/gpg/org-crypt.gif" alt="">
+解密使用 <code>org-decrypt-entry</code></p>
+<h2 id="mac-下的问题及解决方案">Mac 下的问题及解决方案</h2>
+<p>在 <code>Mac</code> 上使用的时候，会发现没办法输入密码，通过如下配置可以解决。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">pinentry</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:hook</span><span class="p">(</span><span class="nv">after-init</span> <span class="o">.</span> <span class="nv">pinentry-start</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="碰到的问题">碰到的问题</h2>
+<p>如果你之前有使用过 <code>GPG</code> 很可能会碰到 <code>Error: (error &quot;Encrypt failed&quot;)</code> 这个错误，我找了半天，终于在 <a href="https://gpgtools.tenderapp.com/discussions/problems/15313-symmetric-file-encryption-with-emacs-again-please-describe-the-steps-leading-up-to-the-problem">Symmetric file encryption with emacs / Stable / Discussion Area - GPGTools Support</a> 这里找到了解决办法，折腾了好久。</p>
+<p>解决的办法很简单，把 <code>GPG</code> 进程杀死，然后重新操作就可以了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ ps ax <span class="p">|</span>grep gpg
+</span></span><span class="line"><span class="cl"><span class="m">14650</span>   ??  Ss     0:00.33 gpg-agent --homedir /Users/test/.gnupg --use-standard-socket --daemon
+</span></span><span class="line"><span class="cl">➜  ~ <span class="nb">kill</span> <span class="m">14650</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p><code>GPG</code> 相关的内容，到这里就全部讲完了。</p>
+<p>我在日常中主要使用 <code>GPG</code> 来加密文件，管理密码，并配合 <code>Emacs</code> 使用。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://coldnew.github.io/4bb1df06/">使用 gnupg 加密你的 org-mode 文章 | coldnew&rsquo;s blog</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-02-06
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/emacs/">Emacs</a>
+          <a href="../../tags/gpg/">GPG</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/autoinstallarch/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">一键自动安装 ArchLinux</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/gpg4/">
+            <span class="next-text nav-default">GPG加密四：用 GPG 加密你的密码</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-02-06 00:00:00 \u002b0000 UTC',
+        title: 'GPG加密五：在 Emacs 中使用 GPG 加密',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

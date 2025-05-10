@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Java 垃圾回收机制 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/gc/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/gc/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Java 垃圾回收机制">
+  <meta property="og:description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-04-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-04-13T00:00:00+00:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="GC">
+    <meta property="article:tag" content="JVM">
+
+  <meta itemprop="name" content="Java 垃圾回收机制">
+  <meta itemprop="description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+  <meta itemprop="datePublished" content="2020-04-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-04-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2157">
+  <meta itemprop="keywords" content="Java,GC,JVM">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Java 垃圾回收机制">
+  <meta name="twitter:description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+ <meta property="og:url" content="http://devbins.github.io/post/gc/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Java 垃圾回收机制">
+  <meta property="og:description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-04-13T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-04-13T00:00:00+00:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="GC">
+    <meta property="article:tag" content="JVM">
+
+  <meta itemprop="name" content="Java 垃圾回收机制">
+  <meta itemprop="description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+  <meta itemprop="datePublished" content="2020-04-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-04-13T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2157">
+  <meta itemprop="keywords" content="Java,GC,JVM">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Java 垃圾回收机制">
+  <meta name="twitter:description" content="前言 之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。
+但我们很少像 C/C&#43;&#43; 一样去自己管理，释放内存，这其中就要归功于 Java GC ，它在背后默默的工作着。
+虽然 Java GC 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Java 垃圾回收机制</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-13 </span>
+        <div class="post-category">
+            <a href="../../categories/java/"> Java </a>
+            <a href="../../categories/gc/"> GC </a>
+            <a href="../../categories/jvm/"> JVM </a>
+            </div>
+          <span class="more-meta"> 约 2157 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#在-java-中什么是垃圾">在 Java 中什么是垃圾</a></li>
+    <li><a href="#怎么判断对象是垃圾">怎么判断对象是垃圾</a>
+      <ul>
+        <li><a href="#可达性分析算法">可达性分析算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#怎么回收垃圾">怎么回收垃圾</a>
+      <ul>
+        <li><a href="#标记清除算法">标记清除算法</a></li>
+        <li><a href="#复制算法">复制算法</a></li>
+        <li><a href="#标记-压缩算法">标记-压缩算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#分代回收策略">分代回收策略</a>
+      <ul>
+        <li><a href="#年轻代">年轻代</a></li>
+        <li><a href="#老年代">老年代</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>之前我们介绍了 JVM 运行时内存是怎么分配的，其中方法区和堆是线程共享的，这里的对象如果不需要使用了，需要释放掉。</p>
+<p>但我们很少像 C/C++ 一样去自己管理，释放内存，这其中就要归功于 <code>Java GC</code> ，它在背后默默的工作着。</p>
+<p>虽然 <code>Java GC</code> 在背后默默的工作着，但是我们一直都不了解它，今天来看看它是怎么工作的，这样出现问题了才有应对之法。</p>
+<h2 id="在-java-中什么是垃圾">在 Java 中什么是垃圾</h2>
+<p>我们通常所说的垃圾指的是用不到的东西，或者说对于我们来说没有价值的东西，放在家里占用了空间，如果不扔掉，久而久之家里的地方就会越来越小。生活质量就会越来越差。</p>
+<p>在 Java 中垃圾也是类似的意思，指的是那些不再需要使用的对象，如果不释放掉，那么剩余的内存就会越来越少，直到没有内存可以使用，便抛出异常。这样给用户的体验就非常差了。</p>
+<h2 id="怎么判断对象是垃圾">怎么判断对象是垃圾</h2>
+<p>知道了什么是垃圾，那么我们人可以主观的判断一个物品是不是垃圾，但是程序是怎么知道一个对象是否用完了，应该把它当做垃圾进行回收？</p>
+<h3 id="可达性分析算法">可达性分析算法</h3>
+<p>在 Java 中使用一个叫 <strong>可达性分析</strong> 的算法来判断一个对象是否是垃圾。</p>
+<p>可达性算法的依据是把所有的对象看成是一张图，从 <code>GC Root</code> 对象可以访问到的对象，认为它是还有使用的，如果不能访问到的那么认为这个对象已经使用完成，不会再使用了，应该把它当做垃圾回收掉。</p>
+<p>其中 <code>GC Root</code> 可以由以下几种对象组成</p>
+<ul>
+<li>Class 系统加载的 class</li>
+<li>方法中的局部变量引用的对象</li>
+<li>静态变量引用的对象</li>
+<li>活着的线程</li>
+<li>本地方法变量引用的对象</li>
+</ul>
+<h2 id="怎么回收垃圾">怎么回收垃圾</h2>
+<p>知道了怎么判断一个对象是否为垃圾后，什么时候进行回收？好比小区里的垃圾车也只有每天早上和晚上才会过来收一次，不可能一直都在，这样太没效率了。</p>
+<p>Java 中的垃圾回收就像真实回收垃圾一样，也在两种情况下会进行回收。</p>
+<ul>
+<li>内存分配失败(Allocation Failure)的时候
+在内存分配失败的时候，垃圾回收器会进行一次回收，看看回收之后的内存是否足够使用。这就像家里有很多用不到的东西，新买的东西没地方放了，所以我们就需要丢弃一些没用的东西。</li>
+<li>主动调用回收API(System.gc)
+生活中我们有些东西不想要了想要丢掉，出门的时候顺带把垃圾主动扔掉。</li>
+</ul>
+<p>上面说的讲的是什么时候回收，接下里看具体是怎么回收的，都有哪些算法</p>
+<h3 id="标记清除算法">标记清除算法</h3>
+<p>标记清除算法分为两个阶段</p>
+<ul>
+<li>标记阶段：在这个阶段，虚拟机会遍历 <code>GC Root</code> 把所有可以通过 <code>GC Root</code> 直接或间接访问的对象标记为存活对象，不可到达的对象标记为垃圾对象</li>
+<li>清除阶段：在标记阶段结束后，将所有的垃圾对象进行清除。</li>
+</ul>
+<p>标记清除算法实现简单，但是在执行过程中会停止其它线程(stop the word)，如果回收太频繁会影响用户体验。而且被回收的地方容易产生内存碎片。
+标记清除算法之所以需要停止其它线程是以防一个新对象刚刚 <code>new</code> 出来，发现没有引用就被标记为垃圾了，使用的时候却发现是空指针。</p>
+<h3 id="复制算法">复制算法</h3>
+<p>复制算法会将内存分为两块，每次只使用其中一块，另一块留着回收的时候把不是垃圾的对象复制进去，然后把使用中的内存清除。</p>
+<p>这样的做法会导致有一半的内存被浪费。在没有对象要被回收都会复制一次。</p>
+<p>复制算法的优点是实现简单，不会有内存碎片。</p>
+<h3 id="标记-压缩算法">标记-压缩算法</h3>
+<p>标记-压缩算法和标记清除算法一样也存在两个阶段</p>
+<ul>
+<li>标记阶段：在这个阶段和标记清除算法一样先对对象进行标记，区分出存活的对象和垃圾对象。</li>
+<li>压缩阶段：这个阶段会把存活的对象压缩到内存的某一端，剩下的垃圾就会被清理了。</li>
+</ul>
+<p>标记-压缩算法不会像标记-清除算法一样产生内存碎片，也不会有一半的空间被浪费，但是在压缩的过程中需要把对象移动到另一端，效率难免有所下降。</p>
+<h2 id="分代回收策略">分代回收策略</h2>
+<p>现在全国各地都在进行垃圾分类，其实在 Java 中也是有对垃圾进行分类的，并不是所有的都垃圾扔到垃圾桶就行了。Java的分代回收策略就有点像垃圾分类。</p>
+<p><code>JVM</code> 会根据对象生命周期的长短，把堆内存分为新生代和老年代。具体的做法是新建的对象会放在老年代，这些对象经过15次 <code>GC</code> 后如果还没有被回收就会把这些对象放进老年代中。</p>
+<h3 id="年轻代">年轻代</h3>
+<p><code>JVM</code> 会把新建的对象放到老年代，新生代对象朝生夕死，一次回收就会70%~95%，回收率很高，一般采用复制算法。</p>
+<p>年轻代还可以继续细分，如下图所示
+<img src="../../images/jvm/heap.png" alt="">
+年轻代分为 <code>Eden</code> 、 <code>Survivor0</code> 、 <code>Survivor1</code> ，他们的比例为8:1:1。</p>
+<p>新创建的对象首先分配在 <code>Eden</code> 中，第一次 <code>GC</code> 会把 <code>Eden</code> 中的存活对象复制到 <code>Survivor0</code> 并清空 <code>Eden</code> 。</p>
+<p>第二次当 <code>Eden</code> 满的时候会把 <code>Eden</code> 、 <code>Survivor0</code> 中的存活对象复制到 <code>Survivor1</code> 中并清空 <code>Eden</code> 和 <code>Survivor0</code> 。如此反复15次对象都没有被回收的话，就会把对象转移到老年代中。</p>
+<p>年轻代触发回收的时机是 <code>Eden</code> 区内存不足的时候，也就是 <code>YGC</code> ， <code>也叫 Minor GC</code></p>
+<h3 id="老年代">老年代</h3>
+<p>上小节我们说到一个对象在经历过15次GC后没有被回收会被放入老年代中，除此之外，一个对象如果较大，年轻代中放不下，会把这个对象直接放入老年代中。</p>
+<p>放入老年代对象的大小可以通过 <code>-XX:PretenureSizeThreshold</code> 来控制，大于这个值会直接放进老年代中，老年代中的对象存活的比较长，一般采用标记-压缩算法。</p>
+<p>老年代中还有一个 512 byte 的 <code>card table</code> ，用来存放老年代对年轻代的引用，这样当老年代有引用年轻代的时候就不需要遍历整个老年代，只要查表就可以了，这样大大提高了回收效率。</p>
+<p>老年代回收的时机是老年代内存不足的时候，也就是 <code>FGC</code> ，也叫 <code>Major GC</code> ，老年代回收的时候也会把年轻代也回收。</p>
+<h2 id="总结">总结</h2>
+<p>本次我们学习了 <code>JVM</code> 通过可达性分析对象是否为垃圾，以及回收垃圾的几种算法和分代回收策略。垃圾回收是影响并发性能的因之一，学会了可以在出现问题的时候更好的帮我们分析问题，进行优化。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.yourkit.com/docs/java/help/gc%5Froots.jsp">YourKit Java Profiler Help - GC roots</a></li>
+<li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=67#/detail/pc?id=1856">GC 回收机制与分代回收策略</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-13
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/java/">Java</a>
+          <a href="../../tags/gc/">GC</a>
+          <a href="../../tags/jvm/">JVM</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/class/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Java Class 探秘</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/gitflow/">
+            <span class="next-text nav-default">在 Emacs 中使用 Git Flow</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-04-13 00:00:00 \u002b0000 UTC',
+        title: 'Java 垃圾回收机制',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

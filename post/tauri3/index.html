@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Tauri文件选择API：让用户轻松选择文件和目录 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/tauri3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/tauri3/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta property="og:description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-19T00:00:00+00:00">
+    <meta property="article:tag" content="Tauri">
+
+  <meta itemprop="name" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta itemprop="description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+  <meta itemprop="datePublished" content="2023-10-19T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-19T00:00:00+00:00">
+  <meta itemprop="wordCount" content="748">
+  <meta itemprop="keywords" content="Tauri">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta name="twitter:description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+ <meta property="og:url" content="http://localhost:1313/post/tauri3/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta property="og:description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-19T00:00:00+00:00">
+    <meta property="article:tag" content="Tauri">
+
+  <meta itemprop="name" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta itemprop="description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+  <meta itemprop="datePublished" content="2023-10-19T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-19T00:00:00+00:00">
+  <meta itemprop="wordCount" content="748">
+  <meta itemprop="keywords" content="Tauri">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tauri文件选择API：让用户轻松选择文件和目录">
+  <meta name="twitter:description" content="前言 在 Tauri 中使用 Rust 和 JS 双向通信以及文件选择时，有几个关键要点需要注意。
+本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Tauri文件选择API：让用户轻松选择文件和目录</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-10-19 </span>
+        <div class="post-category">
+            <a href="../../categories/tauri/"> Tauri </a>
+            <a href="../../categories/rust/"> Rust </a>
+            </div>
+          <span class="more-meta"> 约 748 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#js">JS</a>
+      <ul>
+        <li><a href="#选择文件">选择文件</a></li>
+        <li><a href="#选择目录">选择目录</a></li>
+        <li><a href="#过滤">过滤</a></li>
+        <li><a href="#多选">多选</a></li>
+        <li><a href="#设置默认目录">设置默认目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#rust">Rust</a>
+      <ul>
+        <li><a href="#选择文件">选择文件</a></li>
+        <li><a href="#选择多个文件">选择多个文件</a></li>
+        <li><a href="#选择目录-多个">选择目录/多个</a></li>
+        <li><a href="#过滤">过滤</a></li>
+        <li><a href="#设置默认目录">设置默认目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置--重要">配置(重要)</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在 <code>Tauri</code> 中使用 <code>Rust</code> 和 <code>JS</code> 双向通信以及文件选择时，有几个关键要点需要注意。</p>
+<p>本文将为您提供一些示例代码，演示如何选择文件和目录，如何进行过滤，如何允许多选，以及如何设置默认目录。</p>
+<h2 id="js">JS</h2>
+<h3 id="选择文件">选择文件</h3>
+<p>首先，我们来看一下如何在 JS 中进行文件选择。在 JS 中，可以使用 Tauri 提供的 API 轻松实现文件和目录选择，如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">open</span> <span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;@tauri-apps/api/dialog&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">selected</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">open</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="选择目录">选择目录</h3>
+<p>如果需要选择目录，可以使用以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">files</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">open</span><span class="p">({</span><span class="nx">directory</span>: <span class="kt">true</span><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="过滤">过滤</h3>
+<p>而如果需要对文件进行过滤，可以按照以下方式设置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">files</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">open</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">filters</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Image&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;png&#34;</span><span class="p">,</span> <span class="s2">&#34;jpeg&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="多选">多选</h3>
+<p>还可以启用多选功能，让用户选择多个文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">files</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">open</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">multiple</span>: <span class="kt">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">filters</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Image&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;png&#34;</span><span class="p">,</span> <span class="s2">&#34;jpeg&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="设置默认目录">设置默认目录</h3>
+<p>如果要设置默认目录，可以这样操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">files</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">open</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">multiple</span>: <span class="kt">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">filters</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Image&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;png&#34;</span><span class="p">,</span> <span class="s2">&#34;jpeg&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">defaultPath</span><span class="o">:</span> <span class="s2">&#34;/Users/tauri/Pictures&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="rust">Rust</h2>
+<h3 id="选择文件">选择文件</h3>
+<p>接下来，让我们看看如何在 Rust 中进行文件选择。在 Rust 中，可以使用 Tauri 的 API 来实现类似的功能。以下是选择文件的示例代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">tauri</span>::<span class="n">api</span>::<span class="n">dialog</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">dialog</span>::<span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">pick_file</span><span class="p">(</span><span class="o">|</span><span class="n">file_path</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">file_path</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="选择多个文件">选择多个文件</h3>
+<p>下面是选择多个文件的示例:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">dialog</span>::<span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">pick_files</span><span class="p">(</span><span class="o">|</span><span class="n">file_paths</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">file_paths</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="选择目录-多个">选择目录/多个</h3>
+<p>选择目录或多个目录，可以分别使用以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">pick_folder</span><span class="p">(</span><span class="o">|</span><span class="n">folder_path</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">folder_path</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">pick_folders</span><span class="p">(</span><span class="o">|</span><span class="n">file_paths</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">folder_paths</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="过滤">过滤</h3>
+<p>当我们需要指定文件类型，可以按照以下方式设置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">add_filter</span><span class="p">(</span><span class="s">&#34;Image&#34;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="s">&#34;png&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;jpeg&#34;</span><span class="p">]).</span><span class="n">pick_folder</span><span class="p">(</span><span class="o">|</span><span class="n">folder_path</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">folder_path</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="设置默认目录">设置默认目录</h3>
+<p>设置默认目录，可以这样操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">FileDialogBuilder</span>::<span class="n">new</span><span class="p">().</span><span class="n">set_directory</span><span class="p">(</span><span class="n">Path</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;/Users/tauri/Pictures&#34;</span><span class="p">)).</span><span class="n">pick_folder</span><span class="p">(</span><span class="o">|</span><span class="n">folder_path</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;</span><span class="si">{:?}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">folder_path</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置--重要">配置(重要)</h2>
+<p>如果你按照上面的 <code>API</code> 进行调用，会发现根本就不起效果。</p>
+<p>原因是没有开启 <code>dialog</code> 的调用权限， <code>dialog</code> 使用需要在 <code>src-tauri/tauri.conf.json</code> 中配置 <code>open</code> 的访问权限，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;tauri&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;allowlist&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nt">&#34;dialog&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;open&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>加上之后再次调用就生效了。</p>
+<h2 id="总结">总结</h2>
+<ol>
+<li><code>Tauri</code> 提供了强大的文件选择功能，不仅支持 <code>JS</code> ，还支持 <code>Rust</code></li>
+<li><code>Tauri</code> 提供了多种选项，以满足不同的需求。包括文件、目录、单选、多选、过滤、设置默认目录等的操作。</li>
+<li>配置访问权限是确保这些功能正常运行的关键步骤。</li>
+</ol>
+<h2 id="参考">参考</h2>
+<p><a href="https://tauri.app/v1/api/js/dialog/">dialog | Tauri Apps</a>
+<a href="https://docs.rs/tauri/1.5.2/tauri/api/dialog/index.html">tauri::api::dialog - Rust</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-10-19
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/tauri/">Tauri</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/tauri4/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Tauri: 使用通知提高用户参与度</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/tauri2/">
+            <span class="next-text nav-default">Tauri: Rust传递数据给JS</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-10-19 00:00:00 \u002b0000 UTC',
+        title: 'Tauri文件选择API：让用户轻松选择文件和目录',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

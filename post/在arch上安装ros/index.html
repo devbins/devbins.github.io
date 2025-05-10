@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在Arch上安装ROS - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/%E5%9C%A8arch%E4%B8%8A%E5%AE%89%E8%A3%85ros/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/%E5%9C%A8arch%E4%B8%8A%E5%AE%89%E8%A3%85ros/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在Arch上安装ROS">
+  <meta property="og:description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-07-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-07-25T00:00:00+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="ROS">
+
+  <meta itemprop="name" content="在Arch上安装ROS">
+  <meta itemprop="description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+  <meta itemprop="datePublished" content="2020-07-25T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-07-25T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1103">
+  <meta itemprop="keywords" content="Linux,ROS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Arch上安装ROS">
+  <meta name="twitter:description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+ <meta property="og:url" content="http://devbins.github.io/post/%E5%9C%A8arch%E4%B8%8A%E5%AE%89%E8%A3%85ros/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在Arch上安装ROS">
+  <meta property="og:description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-07-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-07-25T00:00:00+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="ROS">
+
+  <meta itemprop="name" content="在Arch上安装ROS">
+  <meta itemprop="description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+  <meta itemprop="datePublished" content="2020-07-25T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2020-07-25T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1103">
+  <meta itemprop="keywords" content="Linux,ROS">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Arch上安装ROS">
+  <meta name="twitter:description" content="前言 上周开始，我在 Arch 上安装 ROS ，装了一周才搞定，记录一下碰到的问题。
+官方推荐使用 Ubuntu 来安装 ROS ，但是我比较喜欢 Arch 所以就尝试在 Arch 上安装， Arch 上安装 ROS 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在Arch上安装ROS</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-07-25 </span>
+        <div class="post-category">
+            <a href="../../categories/ros/"> ROS </a>
+            <a href="../../categories/arch/"> Arch </a>
+            </div>
+          <span class="more-meta"> 约 1103 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#配置仓库">配置仓库</a></li>
+    <li><a href="#配置代理">配置代理</a></li>
+    <li><a href="#导入-gpg-key">导入 GPG key</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#初始化-rosdep">初始化 rosdep</a></li>
+    <li><a href="#设置ros环境">设置ROS环境</a>
+      <ul>
+        <li><a href="#bash">bash</a></li>
+        <li><a href="#zsh">zsh</a></li>
+      </ul>
+    </li>
+    <li><a href="#检查是否安装成功">检查是否安装成功</a></li>
+    <li><a href="#碰到的错误">碰到的错误</a>
+      <ul>
+        <li><a href="#错误一">错误一</a></li>
+        <li><a href="#错误二">错误二</a></li>
+        <li><a href="#错误三">错误三</a></li>
+        <li><a href="#错误四">错误四</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上周开始，我在 <code>Arch</code> 上安装 <code>ROS</code> ，装了一周才搞定，记录一下碰到的问题。</p>
+<p>官方推荐使用 <code>Ubuntu</code> 来安装 <code>ROS</code> ，但是我比较喜欢 <code>Arch</code> 所以就尝试在 <code>Arch</code> 上安装， <code>Arch</code> 上安装 <code>ROS</code> 的资料还是比较少的，官网的教程并不是那么准确，有误导性，所以写下此文，希望能帮助有缘人。</p>
+<h2 id="配置仓库">配置仓库</h2>
+<p>由于官方自带的仓库没有 <code>ROS</code> 的包，所以需要配置一下仓库地址，只需要在 <code>/etc/pacman.conf</code> 中加入如下配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>oscloud<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Server</span> <span class="o">=</span> http://repo.oscloud.info/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置代理">配置代理</h2>
+<p>安装之前配置一下代理，不然非常慢，而且可能还容易失败，很多人止步于安装环境，非常可惜</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">http_proxy</span><span class="o">=</span>socks5://127.0.0.1:1080
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span>socks5://127.0.0.1:1080
+</span></span><span class="line"><span class="cl">git config --global http.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
+</span></span><span class="line"><span class="cl">git config --global https.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="导入-gpg-key">导入 GPG key</h2>
+<p>配置好仓库后，我们还要配置一下 <code>GPG</code> ，这样下载的时候才能通过验证</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman-key --recv-keys CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
+</span></span><span class="line"><span class="cl">sudo pacman-key --finger CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
+</span></span><span class="line"><span class="cl">sudo pacman-key --lsign-key CB222E7EBC11D682AAC8B317A4A0D73114FDE6FC
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装">安装</h2>
+<p>配置好仓库后，就可以通过如下命令来安装 <code>ROS</code> 了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy
+</span></span><span class="line"><span class="cl">yay -S ros-melodic-desktop-full
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="初始化-rosdep">初始化 rosdep</h2>
+<p>安装好之后，我们还需要初始化 <code>rosdep</code> ，这个可以方便的安装系统的依赖，和系统的一些核心组件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo rosdep init
+</span></span><span class="line"><span class="cl">rosdep update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="设置ros环境">设置ROS环境</h2>
+<p>根据的你 <code>SHELL</code> 选择，如果你不知道是什么可以通过 <code>echo $SHELL</code> 来查看，由于我用的是 <code>zsh</code> 所以选择下面的第二个</p>
+<h3 id="bash">bash</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;source /opt/ros/melodic/setup.bash&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ~/.bashrc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="zsh">zsh</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;source /opt/ros/melodic/setup.zsh&#34;</span> &gt;&gt; ~/.zshrc
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ~/.zshrc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="检查是否安装成功">检查是否安装成功</h2>
+<p>最后我们通过 <code>roscore</code> 来检查是否安装成功</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ roscore
+</span></span><span class="line"><span class="cl">... logging to /home/test/.ros/log/cebd27dc-ce7d-11ea-b37c-001c42662094/roslaunch-test-42399.log
+</span></span><span class="line"><span class="cl">Checking log directory <span class="k">for</span> disk usage. This may take awhile.
+</span></span><span class="line"><span class="cl">Press Ctrl-C to interrupt
+</span></span><span class="line"><span class="cl">Done checking log file disk usage. Usage is &lt;1GB.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">started roslaunch server http://test:44305/
+</span></span><span class="line"><span class="cl">ros_comm version 1.14.3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">SUMMARY</span>
+</span></span><span class="line"><span class="cl"><span class="o">========</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PARAMETERS
+</span></span><span class="line"><span class="cl">* /rosdistro: melodic
+</span></span><span class="line"><span class="cl">* /rosversion: 1.14.3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NODES
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto-starting new master
+</span></span><span class="line"><span class="cl">process<span class="o">[</span>master<span class="o">]</span>: started with pid <span class="o">[</span>42407<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ROS_MASTER_URI</span><span class="o">=</span>http://test:11311/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">setting /run_id to cebd27dc-ce7d-11ea-b37c-001c42662094
+</span></span><span class="line"><span class="cl">process<span class="o">[</span>rosout-1<span class="o">]</span>: started with pid <span class="o">[</span>42417<span class="o">]</span>
+</span></span><span class="line"><span class="cl">started core service <span class="o">[</span>/rosout<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>看到如上所示，带版本号就表示安装成功了。</p>
+<h2 id="碰到的错误">碰到的错误</h2>
+<h3 id="错误一">错误一</h3>
+<p><code>error: ros-melodic-urdf-tutorial: signature from &quot;Oscar Roesler (Username: bionade 24) &lt;o.roesler@oscloud.info&gt;&quot; is invalid</code>
+解决办法很简单，在 <code>/etc/pacman.conf</code> 中，为 <code>[oscloud]</code> 添加一行 <code>SigLevel = Never</code> ，改完后如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>oscloud<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SigLevel</span> <span class="o">=</span> Never
+</span></span><span class="line"><span class="cl"><span class="nv">Server</span> <span class="o">=</span> http://repo.oscloud.info/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="错误二">错误二</h3>
+<p>执行 <code>sudo rosdep init</code> 出现如下错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ sudo rosdep init
+</span></span><span class="line"><span class="cl">ERROR: cannot download default sources list from:
+</span></span><span class="line"><span class="cl">https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/sources.list.d/20-default.list
+</span></span><span class="line"><span class="cl">Website may be down.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决办法需要编辑 <code>/etc/hosts</code> ，添加如下配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">151.101.84.133  raw.githubusercontent.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="错误三">错误三</h3>
+<p>执行 <code>rosdep update</code> 报如下错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">➜  ~ rosdep update
+</span></span><span class="line"><span class="cl">reading in sources list data from /etc/ros/rosdep/sources.list.d
+</span></span><span class="line"><span class="cl">Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/osx-homebrew.yaml
+</span></span><span class="line"><span class="cl">Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+</span></span><span class="line"><span class="cl">Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/python.yaml
+</span></span><span class="line"><span class="cl">Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/ruby.yaml
+</span></span><span class="line"><span class="cl">ERROR: unable to process <span class="nb">source</span> <span class="o">[</span>https://raw.githubusercontent.com/ros/rosdistro/master/releases/fuerte.yaml<span class="o">]</span>:
+</span></span><span class="line"><span class="cl">Failed to download target platform data <span class="k">for</span> gbpdistro:
+</span></span><span class="line"><span class="cl">&lt;urlopen error _ssl.c:1091: The handshake operation timed out&gt;
+</span></span><span class="line"><span class="cl">Query rosdistro index https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml
+</span></span><span class="line"><span class="cl">ERROR: error loading sources list:
+</span></span><span class="line"><span class="cl">The <span class="nb">read</span> operation timed out
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>多试几次，就行了，我试了不下50次。</p>
+<h3 id="错误四">错误四</h3>
+<p>用阿里或者清华的源常常卡在下面这两种情况</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">error: target not found: ros-melodic-catkin
+</span></span><span class="line"><span class="cl">error: target not found: ros-melodic-cmake-modules
+</span></span><span class="line"><span class="cl">error: target not found: ros-melodic-ros-environme
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">fatal error: opencv2/xfeatures2d/cuda.hpp: No such file or directory
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>死活过不去这里，时间就是浪费在这里了。</p>
+<h2 id="总结">总结</h2>
+<p>在Arch上安装ROS，是我没有想到会这么麻烦和困难，基本上足足折腾了一星期。只要下班回家，我就折腾，虚拟机都安装了10个左右，终于成功了。</p>
+<p>其中花的时间最多的是在 <code>yay -S ros-melodic-desktop-full</code> ，这里卡了6.5天，这里过了后面的基本就比较顺利了。一开始我用的是阿里的源，试了几次不行后我用换清华的，实在不行，我也是抱着侥幸试一下 <code>oscloud</code> ，没想到成功了。</p>
+<p>安装ROS不论是在 <code>Ubuntu</code> 还是 <code>Arch</code> 上都不是一件容易的事。网络问题也是非常让人头疼的。希望这篇文章能帮到大家。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://wiki.ros.org/melodic/Installation/ArchLinux">melodic/Installation/ArchLinux - ROS Wiki</a></li>
+<li><a href="https://community.bwbot.org/topic/811/rosdep-init-%E6%88%96%E8%80%85rosdep-update-%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">rosdep init 或者rosdep update 连接错误的解决办法 | 蓝鲸ROS机器人论坛</a></li>
+<li><a href="https://aur.archlinux.org/packages/ros-melodic-desktop-full/#pinned-689417">AUR (en) - ros-melodic-desktop-full</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-07-25
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/linux/">Linux</a>
+          <a href="../../tags/ros/">ROS</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/rosfilesystem/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ROS文件系统</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/gitgpg/">
+            <span class="next-text nav-default">Windows 下的 Git 自带 GPG</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-07-25 00:00:00 \u002b0000 UTC',
+        title: '在Arch上安装ROS',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

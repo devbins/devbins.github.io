@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Arch Linux 安装 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/archlinux/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/archlinux/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Arch Linux 安装">
+  <meta property="og:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-08-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-08-03T00:00:00+00:00">
+    <meta property="article:tag" content="Arch">
+
+  <meta itemprop="name" content="Arch Linux 安装">
+  <meta itemprop="description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+  <meta itemprop="datePublished" content="2018-08-03T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-08-03T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1725">
+  <meta itemprop="keywords" content="Arch">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Arch Linux 安装">
+  <meta name="twitter:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+ <meta property="og:url" content="http://devbins.github.io/post/archlinux/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Arch Linux 安装">
+  <meta property="og:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-08-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-08-03T00:00:00+00:00">
+    <meta property="article:tag" content="Arch">
+
+  <meta itemprop="name" content="Arch Linux 安装">
+  <meta itemprop="description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+  <meta itemprop="datePublished" content="2018-08-03T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-08-03T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1725">
+  <meta itemprop="keywords" content="Arch">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Arch Linux 安装">
+  <meta name="twitter:description" content="今年开始我一直使用 Manjaro ，这是一个基于 Arch 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 Linux ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。
+本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 Manjaro 或者 Ubuntu 可能会适合你。
+本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Arch Linux 安装</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        <div class="post-category">
+            <a href="../../categories/linux/"> Linux </a>
+            </div>
+          <span class="more-meta"> 约 1725 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#下载镜像">下载镜像</a></li>
+    <li><a href="#制作启动盘">制作启动盘</a></li>
+    <li><a href="#联网">联网</a>
+      <ul>
+        <li><a href="#有线连接">有线连接</a></li>
+        <li><a href="#wifi-连接">WiFi 连接</a></li>
+      </ul>
+    </li>
+    <li><a href="#更新系统时间">更新系统时间</a></li>
+    <li><a href="#分区">分区</a></li>
+    <li><a href="#格式化分区">格式化分区</a></li>
+    <li><a href="#挂载分区">挂载分区</a></li>
+    <li><a href="#选择合适的软件源">选择合适的软件源</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#生成文件系统信息">生成文件系统信息</a></li>
+    <li><a href="#配置">配置</a>
+      <ul>
+        <li><a href="#进入到新系统">进入到新系统</a></li>
+        <li><a href="#设置时区">设置时区</a></li>
+        <li><a href="#本地化">本地化</a></li>
+        <li><a href="#主机名">主机名</a></li>
+        <li><a href="#配置网络">配置网络</a></li>
+        <li><a href="#设置-root-密码">设置 root 密码</a></li>
+        <li><a href="#创建用户">创建用户</a></li>
+        <li><a href="#配置-grub-进行开机引导">配置 GRUB 进行开机引导</a></li>
+      </ul>
+    </li>
+    <li><a href="#重启">重启</a></li>
+    <li><a href="#桌面">桌面</a>
+      <ul>
+        <li><a href="#装-x--x-是桌面环境的简称">装 X(X 是桌面环境的简称)</a></li>
+        <li><a href="#显示管理器--display-manager">显示管理器(Display Manager)</a></li>
+        <li><a href="#deepin">deepin</a></li>
+        <li><a href="#kde">kde</a></li>
+        <li><a href="#安装显卡驱动">安装显卡驱动</a></li>
+        <li><a href="#安装声卡驱动">安装声卡驱动</a></li>
+        <li><a href="#字体">字体</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>今年开始我一直使用 <code>Manjaro</code> ，这是一个基于 <code>Arch</code> 的发行版，有较友好的安装界面。省去了不少折腾，但是这也带来了一些问题，你不知道有些东西是没有必要的，驱动怎么安装，分区怎么分。从头开始会让你更了解 <code>Linux</code> ，虽然这么说，但我还是没有选择折腾，直到最近在升级的时候有线网卡找不到了，一下子和全球的人失去了联系，进入了孤岛，这是多么痛苦的一件事。于是下定决心，折腾一下。</p>
+<p>本文不适合一点 Linux 都不懂的小白，至少你有使用过，懂得基本命令。如果你是新手 <code>Manjaro</code> 或者 <code>Ubuntu</code> 可能会适合你。</p>
+<p>本文教程需要你准备一个额外的 4G U 盘，制作环境是 Linux。</p>
+<h2 id="下载镜像">下载镜像</h2>
+<p>在开始之前先要从<a href="https://www.archlinux.org/download/">Arch Linux</a> 下载镜像，以便我们制作装机 U 盘。</p>
+<h2 id="制作启动盘">制作启动盘</h2>
+<p>把 U 盘接入电脑，使用 <code>lsblk</code> 查找 U 盘</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lsblk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>U 盘的格式如 <code>/dev/sdb</code> 这样的，不要带上数字。</p>
+<p>找到之后使用 <code>dd</code> (Linux 下制作)来制作启动 U 盘， <code>if</code> 后面跟 <code>archlinux</code> 的镜像路径， <code>of</code> 跟 U 盘的路径，把 <code>sdx</code> 换成对应的设备，下同。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>/path/to/archlinux.iso <span class="nv">of</span><span class="o">=</span>/dev/sdx <span class="nv">status</span><span class="o">=</span>progress <span class="o">&amp;&amp;</span> sync
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="联网">联网</h2>
+<p>重启电脑，选择从 U 盘启动。
+<img src="../../images/arch/arch.png" alt=""></p>
+<p>启动之后先检查网络，Arch 安装需要使用到网络，没有网络是无法安装的。如果可以正常访问网络了，跳过到下一步。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ping www.baidu.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="有线连接">有线连接</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dhcpcd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="wifi-连接">WiFi 连接</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wifi-menu
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="更新系统时间">更新系统时间</h2>
+<p>先来更新一下时间，确保时间是准确的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">timedatectl set-ntp <span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="分区">分区</h2>
+<p>装系统很重要的一步就是分区，使用 <code>fdisk</code> 来建立分区。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">fdisk /dev/sdx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按 <code>n</code> 创建一个新分区， <code>p</code> 创建主分区。
+这里创建 4 个分区</p>
+<ul>
+<li>sdx1 100M /boot</li>
+<li>sdx2 2G swap</li>
+<li>sdx3 10G /</li>
+<li>sdx4 10G /home</li>
+</ul>
+<figure><img src="../../images/arch/fdiskl.jpg">
+</figure>
+
+<h2 id="格式化分区">格式化分区</h2>
+<p>分区建立好之后，就是格式化分区了，不同的分区需要格式化为不同的格式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkfs.vfat -F32 /dev/sdx1
+</span></span><span class="line"><span class="cl">mkswap /dev/sdx2
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sdx3
+</span></span><span class="line"><span class="cl">mkfs.ext4 /dev/sdx4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="挂载分区">挂载分区</h2>
+<p>分区格式化完成之后，把格式化好的分区挂载到 <code>/mnt</code> 下，我们的新系统会安装到这里。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mount /dev/sdx3 /mnt <span class="c1">#先挂载根分区，不然后面的没法挂载，根分区是一切的开始。</span>
+</span></span><span class="line"><span class="cl">mkdir /mnt/boot
+</span></span><span class="line"><span class="cl">mount /dev/sdx1 /mnt/boot
+</span></span><span class="line"><span class="cl">mkidr /mnt/home
+</span></span><span class="line"><span class="cl">mount /dev/sdx4 /mnt/home
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>swap 分区不需要挂载，但是要开启</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">swapon /dev/sdx2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="选择合适的软件源">选择合适的软件源</h2>
+<p>选择一个快速的软件源，可以节约下载的时间，没必要浪费时间在这里等待。更改软件源在 <code>/etc/pacman.d/mirrorlist</code> 你可以使用 vi 打开，找到</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">## China</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Server</span> <span class="o">=</span> http://mirrors.ustc.edu.cn/archlinux/<span class="nv">$repo</span>/os/<span class="nv">$arch</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>放到文件的最开头，并更新</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -Syy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装">安装</h2>
+<p>做了这么多，可以开始安装系统了，输入如下指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -i /mnt base base-devel vim
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="生成文件系统信息">生成文件系统信息</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看生成的 <code>fstab</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /mnt/etc/fstab
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置">配置</h2>
+<h3 id="进入到新系统">进入到新系统</h3>
+<p>系统装完了，我们需要对安装完的系统进行一些配置，不然安装完，很多东西没法用，而且也不太好用。要对配置安装完的系统，当然是要进入新系统中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">arch-chroot /mnt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="设置时区">设置时区</h3>
+<p>这里没什么好说的，设置时区</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span><span class="line"><span class="cl">hwclock --systohc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="本地化">本地化</h3>
+<p>编辑 <code>/etc/locale.gen</code> 把 <code>en_US.UTF-8 UTF-8</code> 与 <code>zh_CN.UTF-8 UTF-8</code> 注释去掉（移除行首的 #）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">en_US.UTF-8 UTF-8
+</span></span><span class="line"><span class="cl">zh_CN.UTF-8 UTF-8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>locale-gen</code> 生成 locale 信息</p>
+<p>设置系统语言
+编辑 <code>/etc/locale.conf</code> 文件，设置 <code>LANG</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="主机名">主机名</h3>
+<p>编辑 <code>/etc/hostname</code> ,其中 <code>hostname</code> 随意，写什么无所谓。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">hostname
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>添加到 <code>/etc/hosts</code> ,第三行的 <code>hostname</code> 改为上一步写的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">127.0.0.1	localhost
+</span></span><span class="line"><span class="cl">::1	    	localhost
+</span></span><span class="line"><span class="cl">127.0.1.1	hostname.localdomain	hostname
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置网络">配置网络</h3>
+<p>这里要配置一下，不然系统装完了，重启发现没法上网就很尴尬</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装必要的软件包</span>
+</span></span><span class="line"><span class="cl">pacman -S wpa_supplicant dialog network-manager-applet networmanager
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> dhcpcd.service
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> NetworkManager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="设置-root-密码">设置 root 密码</h3>
+<p>更改 <code>root</code> 密码，有些操作需要在 <code>root</code> 下操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">passwd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="创建用户">创建用户</h3>
+<p>为新系统创建一个用户， <code>root</code> 的权限太高了，建个普通用户在合适不过。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">useradd -m -G wheel -s /bin/bash arch
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为用户添加 <code>sudo</code> , 输入 <code>visudo</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wheel <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> ALL <span class="c1"># 找到这行，把行首的 #去掉</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置-grub-进行开机引导">配置 GRUB 进行开机引导</h3>
+<p>配置开机引导，如果不做这一步，开机后没法进入系统。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -S grub
+</span></span><span class="line"><span class="cl">grub-install /dev/sdx
+</span></span><span class="line"><span class="cl">grub-mkconfig -o /boot/grub/grub.cfg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="重启">重启</h2>
+<p>安装好了，重启看看效果。别忘了把 U 盘弹出。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">umount -R /mnt
+</span></span><span class="line"><span class="cl">reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="桌面">桌面</h2>
+<p>新系统是没有桌面环境的，有一个好看的桌面还是非常重要的。</p>
+<h3 id="装-x--x-是桌面环境的简称">装 X(X 是桌面环境的简称)</h3>
+<p>xorg 是 X11 的一个实现，是所有桌面环境的基础，没有这个就没有桌面可以看。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xorg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="显示管理器--display-manager">显示管理器(Display Manager)</h3>
+<p>装好了桌面环境后，我们还需要一个用来管理桌面的管理器，不然你需要手动启动它。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S lightdm lightdm-gtk-greeter
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> lightdm <span class="c1"># 开机自启动</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>装好了 <code>lightdm</code> 之后需要配置一下。编辑 <code>/etc/lightdm/lightdm.conf</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>Seat:*<span class="o">]</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">greeter-session<span class="o">=</span>lightdm-gtk-greeter <span class="c1"># 如果你装了 deepin 可以改为 lightdm-deepin-greeter</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>有哪些 <code>greeter-session</code> 可以通过如下命令来查看。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -l /usr/share/xgreeters/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="deepin">deepin</h3>
+<p>deepin 是深度科技开发桌面系统，有着漂亮的界面，如果你需要使用 <code>QQ</code> ， <code>微信</code> 等软件，deepin 桌面是一个不错的选择。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S deepin deepin-extra
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/arch/arch_deepin.jpg">
+</figure>
+
+<h3 id="kde">kde</h3>
+<p>kde 是另外一个非常好看的桌面，不过 <code>QQ</code> 不能在其上运行， <code>微信</code> 部分功能不能正常使用，比如截图，发文件等。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S plasma kde-applications kde-l10n-zh_cn
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/arch/arch_kde.jpg">
+</figure>
+
+<h3 id="安装显卡驱动">安装显卡驱动</h3>
+<p>显卡最好只安装集成显卡，不要使用独立显卡。</p>
+<h4 id="intel">Intel</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-intel
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="amd">AMD</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-amdgpu
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="ati">ATI</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-ati
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="nvidia">NVIDIA</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xf86-video-nv
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安装声卡驱动">安装声卡驱动</h3>
+<p>安装声卡，听听歌还是不错的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacman -S alsa-utils alsa-oss
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行 <code>alsamixer</code> 取消静音</p>
+<h3 id="字体">字体</h3>
+<p>中文字体按需选择。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S ttf-dejavu wqy-microhei wqy-zenhei
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Installation%5Fguide%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)">Installation guide (简体中文) - ArchWiki</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Locale%5F(%25E7%25AE%2580%25E4%25BD%2593%25E4%25B8%25AD%25E6%2596%2587)#.E8.AE.BE.E7.BD.AE%5Flocale">Locale (简体中文) - ArchWiki</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-08-03
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/arch/">Arch</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/archlinux%E5%AE%89%E8%A3%85uefi/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ArchLinux 安装 UEFI &#43; GPT</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+            <span class="next-text nav-default">单例模式的多种写法</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-08-03 00:00:00 \u002b0000 UTC',
+        title: 'Arch Linux 安装',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

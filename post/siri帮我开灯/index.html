@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Siri 帮我开灯 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content=" 苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Siri 帮我开灯">
+  <meta property="og:description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-01-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-01-07T00:00:00+00:00">
+    <meta property="article:tag" content="RaspberryPi">
+    <meta property="article:tag" content="Yeelight">
+
+  <meta itemprop="name" content="Siri 帮我开灯">
+  <meta itemprop="description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+  <meta itemprop="datePublished" content="2018-01-07T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-01-07T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2308">
+  <meta itemprop="keywords" content="RaspberryPi,Yeelight">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Siri 帮我开灯">
+  <meta name="twitter:description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+ <meta property="og:url" content="http://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Siri 帮我开灯">
+  <meta property="og:description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-01-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-01-07T00:00:00+00:00">
+    <meta property="article:tag" content="RaspberryPi">
+    <meta property="article:tag" content="Yeelight">
+
+  <meta itemprop="name" content="Siri 帮我开灯">
+  <meta itemprop="description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+  <meta itemprop="datePublished" content="2018-01-07T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-01-07T00:00:00+00:00">
+  <meta itemprop="wordCount" content="2308">
+  <meta itemprop="keywords" content="RaspberryPi,Yeelight">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Siri 帮我开灯">
+  <meta name="twitter:description" content="苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有nfarina逆向了苹果的协议，做出了homebridge才使得众多智能设备接入 HomeKit 成为现实。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Siri 帮我开灯</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-01-07 </span>
+        <div class="post-category">
+            <a href="../../categories/iot/"> IOT </a>
+            </div>
+          <span class="more-meta"> 约 2308 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#材料准备">材料准备</a></li>
+    <li><a href="#yeelight-设置局域网控制-极客模式">Yeelight 设置局域网控制（极客模式）</a></li>
+    <li><a href="#树莓派的配置">树莓派的配置</a>
+      <ul>
+        <li><a href="#安装-node-dot-js">安装 Node.js</a></li>
+        <li><a href="#安装-homebridge">安装 homebridge</a></li>
+        <li><a href="#安装-yeelight-插件">安装 Yeelight 插件</a></li>
+        <li><a href="#插件配置">插件配置</a></li>
+        <li><a href="#启动-homebridge">启动 homebridge</a></li>
+      </ul>
+    </li>
+    <li><a href="#接入-homekit">接入 HomeKit</a></li>
+    <li><a href="#开机自启动">开机自启动</a>
+      <ul>
+        <li><a href="#先验证一下-homebridge-的路径">先验证一下 <code>homebridge</code> 的路径</a></li>
+        <li><a href="#制作启动脚本">制作启动脚本</a></li>
+        <li><a href="#设置权限">设置权限</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p></blockquote>
+<h2 id="材料准备">材料准备</h2>
+<ol>
+<li>树莓派（我手上的是树莓派 3B）</li>
+<li>Yeelight 灯一个（我用的是 Yeelight 台灯）</li>
+<li>iPhone 或者 iPad 一个，要求 iOS10 以上（这里我使用 iPad）</li>
+</ol>
+<h2 id="yeelight-设置局域网控制-极客模式">Yeelight 设置局域网控制（极客模式）</h2>
+<blockquote>
+<p>先说一下 Yeelight 的极客模式，这里极客模式和局域网控制是一个东西，我刚买的时候还是极客模式，几个月之后极客模式变成了局域网控制。我特地去问了客服，这两个是一个东西，客服截图上显示的还是极客模式，而我这里显示的却是局域网控制。如果你手上也是显示的是局域网控制，不要奇怪，当成一样的就好了，不影响使用。</p></blockquote>
+<p>我们先从灯的设置开始。先用手机下载一个 Yeelight 的 APP（应用商店里搜一下就有了），输入账号密码登录。登录之后需点击右上角的加号添加一台设备，选择你手上所使用的设备，我这里是台灯。下图是添加好的样子，添加过程中需要输入 WiFi 密码。
+<img src="../../images/siri/yeelightdeviece.png" width="300px" /></p>
+<p>连接好之后，点击刚刚添加的台灯，进入控制页，选择右下角的三角形。
+<img src="../../images/siri/yeelightmore.png" width="300px"/></p>
+<p>在弹出的页面中选择局域网控制（极客模式）
+<img src="../../images/siri/yeelightlnc.png" width="300px" /></p>
+<p>把局域网控制的开关给打开
+<img src="../../images/siri/yeelightolnc.png" width="300px" />
+Yeelight 台灯的设置就这些，没有了。</p>
+<h2 id="树莓派的配置">树莓派的配置</h2>
+<blockquote>
+<p>这里默认已经在树莓派上装好了系统，并且接上电源，连接了网络并且要和 Yeelight 灯在同一个局域网。没有的话参考<a href="https://binsheng.github.io/2017/05/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/#more">树莓派入门</a>。不用树莓派用其它的也是可以的，需要根据自己的系统进行相应的调整。</p></blockquote>
+<h3 id="安装-node-dot-js">安装 Node.js</h3>
+<p>首先打开终端，通过 <code>ssh</code> 连接上树莓派，我们的操作都是在命令行下进行。Windows 可以使用 Xshell、PuTTY 等工具。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh pi@192.168.1.x <span class="c1">#这里换成你自己的 IP，回车后输入密码</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来安装 Node.js</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sL https://deb.nodesource.com/setup_9.x <span class="p">|</span> sudo -E bash -
+</span></span><span class="line"><span class="cl">sudo apt-get install -y nodejs
+</span></span><span class="line"><span class="cl">node -v <span class="c1"># 查看一下是否安装成功，成功会输出类似 v9.x.x</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为 npm(node 的包管理工具，安装好 Node.js 就有) 配置淘宝源，在终端中输入 <code>vi .npmrc</code>
+按下 <code>i</code> 后输入下面内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">registry</span> <span class="o">=</span> https://registry.npm.taobao.org
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输好后按下 <code>ESC（一般在 F1 旁边）</code> ,输入 <code>:</code> ,接着按下 <code>wq</code> 回车。</p>
+<p>不做这一步也是可以的，但是国内速度可能会稍慢。</p>
+<h3 id="安装-homebridge">安装 homebridge</h3>
+<p>装好了 Node.js 就可以安装 homebridge，homebridge 是一个把设备接入 HomeKit 的工具（类似桥梁的作用），没有它就不能使用没有经过苹果认证的设备。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo apt-get install libavahi-compat-libdnssd-dev
+</span></span><span class="line"><span class="cl">sudo npm install -g --unsafe-perm homebridge hap-nodejs node-gyp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安装-yeelight-插件">安装 Yeelight 插件</h3>
+<p>装好了 homebridge 还需要装上插件才能使用对应的智能设备，这里我使用的 Yeelight 台灯，所以还要安装 homebridge-yeelight 这个插件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo npm install -g homebridge-yeelight
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="插件配置">插件配置</h3>
+<p>插件装好了之后，我们需要配置一下让 homebridge 识别我们。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ~/.homebridge  <span class="c1"># 没有的话手动创建，使用 mkdir ~/.homebridge</span>
+</span></span><span class="line"><span class="cl">vi config.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>打开文件之后按下 <code>i</code> 键，复制下面的内容到里面。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Homebridge&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;CC:22:3D:E3:CE:30&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;port&#34;</span><span class="p">:</span> <span class="mi">51826</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;pin&#34;</span><span class="p">:</span> <span class="s2">&#34;031-45-154&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;platforms&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">	  <span class="nt">&#34;platform&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	  <span class="nt">&#34;name&#34;</span> <span class="p">:</span> <span class="s2">&#34;yeelight&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>写好之后按下 <code>ESC</code> ，输入 <code>:</code> 后再输入 <code>wq</code> 回车，该操作会保存文件并退出 <code>vi</code> 回到终端。解释一下上面 bridge 中的配置</p>
+<ul>
+<li>name 一个名称，在家庭 APP 上添加配件时显示，可以随意填写</li>
+<li>username 一个唯一标识符，类似 MAC 地址，可以随意填写，格式不能变</li>
+<li>port homebridge 的端口号，可以任意，但是需要没有被系统占用的</li>
+<li>pin 密码，验证的时候用，可以任意，但是必须是 8 位数字，格式如上</li>
+<li>platforms 里的东西是插件里规定的，就这么写吧，不用改。</li>
+</ul>
+<h3 id="启动-homebridge">启动 homebridge</h3>
+<p>在终端中输入下面命令，启动 homebridge</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">homebridge
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../../images/siri/homebridge.png" alt="">
+会看到一个二维码和我们刚刚配置的 pin（图中红色方框中的），二维码暂时用不到，pin 会在接下来用到。到这里树莓派上的操作都完成了。</p>
+<h2 id="接入-homekit">接入 HomeKit</h2>
+<p>打开 iPad，进入家庭 APP，选择添加配件。
+<img src="../../images/siri/adddevice.png" width="300px" /></p>
+<p>在弹出的窗口中扫描终端显示的 pin（就是刚刚运行 homebridge 的地方），这一步通常是不能正确识别的，别担心后面可以手动输入。
+<img src="../../images/siri/scan.png" width="300px"/></p>
+<p>来到这里估计估计你已经没有识别出 pin，没关系，我们手动输入 pin。
+<img src="../../images/siri/pin.png" width="300px" /></p>
+<p>输入正确的 pin 后，可以看到 Homebridge 显示在 iPad 上了，点击 Homebridge 添加。这里的 Homebridge 就是我们在配置文件里设置的 <code>bridge.name</code> 。
+<img src="../../images/siri/addhomebridge.png" width="300px"/></p>
+<p>点击后会提示未认证配件，选择仍然添加。不添加怎么玩？
+<img src="../../images/siri/sureadd.png" width="300px"/></p>
+<p>接下来的是一些设置，我们默认不动，选择下一步。
+<img src="../../images/siri/confighomebridge.png" width="300px"/></p>
+<p>可以看到 Yeelight 灯出现了。在下图红框框中，我把名字改为台灯，这样方便 Siri 识别。改好之后点击右上角完成。
+<img src="../../images/siri/addyeelight.png" width="300px" /></p>
+<p>回到家庭 APP 主页，台灯已经显示出来。到这里已经已经成功的把 Yeelight 台灯接入 HomeKit。
+<img src="../../images/siri/addcomplete.png" width="300px" /></p>
+<h2 id="开机自启动">开机自启动</h2>
+<p>照着上面的配置好了，也能够使用了。但是每次使用都要我手动运行 <code>homebridge</code> 太麻烦了，有没有开机自启动？有，接下来就来配置开机自启动。</p>
+<h3 id="先验证一下-homebridge-的路径">先验证一下 <code>homebridge</code> 的路径</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">which homebridge
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果输出不是 <code>/usr/bin/homebridge</code> ，那么你需要把下面拷贝第 13 行的 <code>cmd=&quot;DEBUG=* /usr/bin/homebridge&quot;</code> 改为 <code>cmd =&quot;DEBUG=* 刚刚输出的东西&quot;</code> 。</p>
+<h3 id="制作启动脚本">制作启动脚本</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo vi /etc/init.d/homebridge
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按下键盘上 <code>i</code> ，把下面的内容拷贝进去</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
+</span><span class="lnt">98
+</span><span class="lnt">99
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">### BEGIN INIT INFO</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Provides: homebridge</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Required-Start:    $network $remote_fs $syslog</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Required-Stop:     $remote_fs $syslog</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Default-Start:     2 3 4 5</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Default-Stop:      0 1 6</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Short-Description: Start daemon at boot time</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Description:       Enable service provided by daemon.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">### END INIT INFO</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">dir</span><span class="o">=</span><span class="s2">&#34;/home/pi&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">cmd</span><span class="o">=</span><span class="s2">&#34;DEBUG=* /usr/bin/homebridge&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">user</span><span class="o">=</span><span class="s2">&#34;pi&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$0</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pid_file</span><span class="o">=</span><span class="s2">&#34;/var/run/</span><span class="nv">$name</span><span class="s2">.pid&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">stdout_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.log&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">stderr_log</span><span class="o">=</span><span class="s2">&#34;/var/log/</span><span class="nv">$name</span><span class="s2">.err&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">get_pid<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">	cat <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">is_running<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">	<span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> ps -p <span class="sb">`</span>get_pid<span class="sb">`</span> &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> in
+</span></span><span class="line"><span class="cl">	start<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Already started&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Starting </span><span class="nv">$name</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$dir</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				sudo <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">else</span>
+</span></span><span class="line"><span class="cl">				sudo -u <span class="s2">&#34;</span><span class="nv">$user</span><span class="s2">&#34;</span> <span class="nv">$cmd</span> &gt;&gt; <span class="s2">&#34;</span><span class="nv">$stdout_log</span><span class="s2">&#34;</span> 2&gt;&gt; <span class="s2">&#34;</span><span class="nv">$stderr_log</span><span class="s2">&#34;</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Unable to start, see </span><span class="nv">$stdout_log</span><span class="s2"> and </span><span class="nv">$stderr_log</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	stop<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> -n <span class="s2">&#34;Stopping </span><span class="nv">$name</span><span class="s2">..&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">kill</span> <span class="sb">`</span>get_pid<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span>
+</span></span><span class="line"><span class="cl">					 <span class="c1"># for i in `seq 10`</span>
+</span></span><span class="line"><span class="cl">			<span class="k">do</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> ! is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">					<span class="nb">break</span>
+</span></span><span class="line"><span class="cl">				<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> -n <span class="s2">&#34;.&#34;</span>
+</span></span><span class="line"><span class="cl">				sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">done</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Not stopped; may still be shutting down or shutdown may have failed&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">			<span class="k">else</span>
+</span></span><span class="line"><span class="cl">				<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="o">[</span> -f <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">					rm <span class="s2">&#34;</span><span class="nv">$pid_file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">				<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">			<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Not running&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	restart<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$0</span> stop
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Unable to stop, will not attempt to start&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$0</span> start
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	status<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> is_running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Running&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">else</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">echo</span> <span class="s2">&#34;Stopped&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="k">fi</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl">	*<span class="o">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">		<span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按下 <code>ESC</code> ,输入 <code>:</code> 后按下 <code>wq</code> 回车保存并退出编辑。</p>
+<h3 id="设置权限">设置权限</h3>
+<p>保存之后我们还要给执行的文件权限，不然开机之后还是没法自动启动的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo chmod <span class="m">755</span> /etc/init.d/homebridge
+</span></span><span class="line"><span class="cl">sudo update-rc.d homebridge defaults
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重启之后 homebridge 就会自己运行。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://github.com/nfarina/homebridge">homebridge</a></li>
+<li><a href="https://github.com/vvpossible/homebridge%5Fyeelight">homebridge_yeelight</a></li>
+<li><a href="http://lijiawei.cc/rpi-homekit-yeelight.html#%E6%9B%B4%E6%8D%A2%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90">用树莓派实现 HomeKit 控制台灯</a></li>
+<li><a href="https://sspai.com/post/36617">借助树莓派与 HomeBridge，将 YeeLight 彩光灯接入 Apple HomeKit</a></li>
+<li><a href="https://sspai.com/post/38358">从米家到 HomeKit，你只需要一个树莓派</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-01-07
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/raspberrypi/">RaspberryPi</a>
+          <a href="../../tags/yeelight/">Yeelight</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/ssh/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用 SSH 登录服务器</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/2017%E7%9A%84%E6%88%91/">
+            <span class="next-text nav-default">2017 的我</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-01-07 00:00:00 \u002b0000 UTC',
+        title: 'Siri 帮我开灯',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

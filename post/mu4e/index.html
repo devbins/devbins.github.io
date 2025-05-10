@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在 Emacs 中用 mu4e 来收邮件 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content=" 使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/mu4e/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/mu4e/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta property="og:description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-11-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-11-25T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="Mu">
+    <meta property="article:tag" content="Offlineimap">
+
+  <meta itemprop="name" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta itemprop="description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+  <meta itemprop="datePublished" content="2018-11-25T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-11-25T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1197">
+  <meta itemprop="keywords" content="Emacs,Mu,Offlineimap">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta name="twitter:description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+ <meta property="og:url" content="http://devbins.github.io/post/mu4e/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta property="og:description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-11-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-11-25T00:00:00+00:00">
+    <meta property="article:tag" content="Emacs">
+    <meta property="article:tag" content="Mu">
+    <meta property="article:tag" content="Offlineimap">
+
+  <meta itemprop="name" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta itemprop="description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+  <meta itemprop="datePublished" content="2018-11-25T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-11-25T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1197">
+  <meta itemprop="keywords" content="Emacs,Mu,Offlineimap">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在 Emacs 中用 mu4e 来收邮件">
+  <meta name="twitter:description" content="使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。
+最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。
+在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在 Emacs 中用 mu4e 来收邮件</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-25 </span>
+        <div class="post-category">
+            <a href="../../categories/emacs/"> Emacs </a>
+            <a href="../../categories/email/"> email </a>
+            </div>
+          <span class="more-meta"> 约 1197 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#offlineimap">offlineimap</a>
+      <ul>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#配置">配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#mu">mu</a>
+      <ul>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#建立索引">建立索引</a></li>
+      </ul>
+    </li>
+    <li><a href="#emacs-配置">Emacs 配置</a>
+      <ul>
+        <li><a href="#启用-mu4e-layer">启用 mu4e layer</a></li>
+        <li><a href="#配置-mu4e">配置 mu4e</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用">使用</a>
+      <ul>
+        <li><a href="#打开-mu4e-使用快捷键-spc-a-m">打开 mu4e 使用快捷键 <code>SPC a M</code></a></li>
+        <li><a href="#其它快捷键">其它快捷键</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>使用 Emacs 的人喜欢把所有的事情都使用 emacs 来管理，总是把有意思的事情集成进 Emacs。其中乐趣（痛苦）只有折腾过才能体会。</p>
+<p>最近想在 Linux 中收发邮件，网页版使用起来多有不便，于是想着用 Emacs 来收发邮件岂不是很有趣。</p>
+<p>在 Emacs 中折腾邮件也是一件很费力的事，看了好多文章有用 guns、mu4e、Wander Lust 的。试了一下 mu4e 比较容易上手，就决定是它了。</p></blockquote>
+<p>在 Emacs 中使用邮件我们需要借助其它工具来把邮件下载下来， <code>offlineimap</code> 是一个比较方便获取邮件的工具，通过 <code>offlineimap</code> 把邮件下载到本地，再通过 <code>mu</code> 来对下载好的文件进行索引管理，不过 <code>mu</code> 是个命令行工具管理起来多有不便，所以我们最后借助 <code>emacs</code> 来管理前两者，这样就能够管理邮件了。</p>
+<h2 id="offlineimap">offlineimap</h2>
+<p><code>offlineimap</code> 用来下载邮件的工具，先来安装。</p>
+<h3 id="安装">安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S offlineimap <span class="c1"># Arch</span>
+</span></span><span class="line"><span class="cl">brew install offlineimap <span class="c1"># Mac</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置">配置</h3>
+<p><code>offlineimap</code> 安装好之后我们需要配置邮箱账号信息，这样 <code>offlineimap</code> 才知道我们要从哪里下载邮件，下载哪个账号的邮件。</p>
+<p>配置文件在 <code>~/.offlineimaprc</code> ，不过通常这个文件是不存在的，需要手动创建。 <code>offlineimap</code> 支持多账号配置，这里使用 <code>126</code> 邮箱。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>general<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">accounts</span> <span class="o">=</span> <span class="m">126</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pythonfile</span> <span class="o">=</span> ~/.offlineimap.py
+</span></span><span class="line"><span class="cl"><span class="nv">fsync</span> <span class="o">=</span> False
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Account 126<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">localrepository</span> <span class="o">=</span> 126-Local
+</span></span><span class="line"><span class="cl"><span class="nv">remoterepository</span> <span class="o">=</span> 126-Remote
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Repository 126-Local<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> <span class="o">=</span> Maildir
+</span></span><span class="line"><span class="cl"><span class="nv">localfolders</span> <span class="o">=</span> ~/mails/ <span class="c1"># 邮件保存的路径</span>
+</span></span><span class="line"><span class="cl"><span class="nv">nametrans</span> <span class="o">=</span> lambda foldername: foldername.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Repository 126-Remote<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">sslcacertfile</span><span class="o">=</span>/etc/ssl/certs/ca-certificates.crt
+</span></span><span class="line"><span class="cl"><span class="nv">maxconnections</span> <span class="o">=</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> <span class="o">=</span> IMAP
+</span></span><span class="line"><span class="cl"><span class="nv">auth</span> <span class="o">=</span> on
+</span></span><span class="line"><span class="cl"><span class="nv">ssl</span> <span class="o">=</span> yes
+</span></span><span class="line"><span class="cl"><span class="nv">remotehost</span> <span class="o">=</span> imap.126.com
+</span></span><span class="line"><span class="cl"><span class="nv">remoteuser</span> <span class="o">=</span> 填写邮箱地址
+</span></span><span class="line"><span class="cl"><span class="nv">remoteport</span> <span class="o">=</span> <span class="m">993</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">remotepass</span> <span class="o">=</span> 填写密码，不是登录密码，而是授权码
+</span></span><span class="line"><span class="cl"><span class="nv">nametrans</span> <span class="o">=</span> lambda folder: folder.decode<span class="o">(</span><span class="s1">&#39;imap4-utf-7&#39;</span><span class="o">)</span>.encode<span class="o">(</span><span class="s1">&#39;utf-8&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">folderfilter</span> <span class="o">=</span> lambda folder: folder in <span class="o">[</span><span class="s1">&#39;INBOX&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">keepalive</span> <span class="o">=</span> <span class="m">60</span>
+</span></span><span class="line"><span class="cl"><span class="nv">holdconnectionopen</span> <span class="o">=</span> yes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>offlineimap.py</code> 的作用是为了让中文正常显示而做转码用的，不然目录你会看到乱码。把下面的代码拷贝到 <code>~/.offlineimap.py</code> ，不需要改动。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">binascii</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">codecs</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">modified_base64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">_in</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;</span><span class="si">%s</span><span class="s1">-&#39;</span> <span class="o">%</span> <span class="n">modified_base64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_in</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">del</span> <span class="n">_in</span><span class="p">[:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_in</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ordC</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="mh">0x20</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x25</span> <span class="ow">or</span> <span class="mh">0x27</span> <span class="o">&lt;=</span> <span class="n">ordC</span> <span class="o">&lt;=</span> <span class="mh">0x7e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;-&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">doB64</span><span class="p">(</span><span class="n">_in</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># decoding</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">modified_unbase64</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">b</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">a2b_base64</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;===&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s1">&#39;utf-16be&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&amp;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="ow">and</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">decode</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">decode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modified_unbase64</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decode</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bin_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="n">bin_str</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">StreamReader</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamReader</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">StreamWriter</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">StreamWriter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">encoder</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">imap4_utf_7</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;imap4-utf-7&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">StreamReader</span><span class="p">,</span> <span class="n">StreamWriter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">codecs</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">imap4_utf_7</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置好了 <code>offlineimap</code> 就可以把邮件从服务器下载下来了，通过如下命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">offlineimap
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 Mac 中配置 ssl 需要额外安装一下 <code>openssl</code> 并且通过软连接放到正确的位置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install openssl
+</span></span><span class="line"><span class="cl">sudo ln -s /usr/local/etc/openssl/cert.pem /etc/ssl/certs/ca-certificates.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="mu">mu</h2>
+<h3 id="安装">安装</h3>
+<p>mu 是用来管理下载好的邮件，同样需要先安装。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S mu <span class="c1"># Arch</span>
+</span></span><span class="line"><span class="cl">brew install mu --with-Emacs <span class="c1"># Mac</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="建立索引">建立索引</h3>
+<p>安装好之后使用 <code>mu</code> 对已经下载好的进行首次索引。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mu index --rebuild --maildir<span class="o">=</span>~/mails <span class="c1"># 目录要根据自己目录修改</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="emacs-配置">Emacs 配置</h2>
+<h3 id="启用-mu4e-layer">启用 mu4e layer</h3>
+<p>在 <code>Spacemacs</code> 中启用 <code>mu4e</code> layer</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(mu4e :variables mu4e-installation-path &#34;/usr/share/Emacs/site-lisp&#34;
+</span></span><span class="line"><span class="cl">      mu4e-enable-mode-line t
+</span></span><span class="line"><span class="cl">      mu4e-enable-async-operations t
+</span></span><span class="line"><span class="cl">      mu4e-enable-notifications t)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="配置-mu4e">配置 mu4e</h3>
+<p>在 <code>user-config</code> 中增加 <code>mu4e</code> 配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">(with-eval-after-load &#39;mu4e-alert
+</span></span><span class="line"><span class="cl">  ;; Enable Desktop notifications
+</span></span><span class="line"><span class="cl">  (mu4e-alert-set-default-style &#39;notifier)) ; For linux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">;;; Set up some common mu4e variables
+</span></span><span class="line"><span class="cl">(setq mu4e-maildir &#34;~/mails&#34;
+</span></span><span class="line"><span class="cl">      mu4e-trash-folder &#34;/已删除&#34;
+</span></span><span class="line"><span class="cl">      mu4e-refile-folder &#34;/Archive&#34;
+</span></span><span class="line"><span class="cl">      mu4e-sent-folder &#34;/已发送&#34;
+</span></span><span class="line"><span class="cl">      mu4e-drafts-folder &#34;/草稿箱&#34;
+</span></span><span class="line"><span class="cl">      ;; sync email from imap server
+</span></span><span class="line"><span class="cl">      mu4e-get-mail-command &#34;offlineimap&#34;
+</span></span><span class="line"><span class="cl">      mu4e-update-interval 300
+</span></span><span class="line"><span class="cl">      mu4e-compose-signature-auto-include nil
+</span></span><span class="line"><span class="cl">      mu4e-view-show-images t
+</span></span><span class="line"><span class="cl">      mu4e-view-show-addresses t)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="使用">使用</h2>
+<h3 id="打开-mu4e-使用快捷键-spc-a-m">打开 mu4e 使用快捷键 <code>SPC a M</code></h3>
+<figure><img src="../../images/mu4e/mu4e.png">
+</figure>
+
+<h3 id="其它快捷键">其它快捷键</h3>
+<table>
+  <thead>
+      <tr>
+          <th>作用</th>
+          <th>快捷键</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>打开未读邮件</td>
+          <td>bu</td>
+      </tr>
+      <tr>
+          <td>打开所有邮件</td>
+          <td>bi</td>
+      </tr>
+      <tr>
+          <td>搜索邮件</td>
+          <td>s</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://lengyueyang.github.io/Life/use-Mu4e-to-manage-email.html">Use Mu4e to manage email 用 mu4e 管理邮件</a></li>
+<li><a href="https://emacs.lujianmei.com/init-daily-using/init-mu4e#mu-4-e">Mu4e 邮件管理</a></li>
+<li><a href="https://coldnew.github.io/6a7aa5c1/">在 Emacs 下使用 mu4e 收發郵件</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-11-25
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/emacs/">Emacs</a>
+          <a href="../../tags/mu/">mu</a>
+          <a href="../../tags/offlineimap/">offlineimap</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/retrofit/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Retrofit 源码解析</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/nexus3/">
+            <span class="next-text nav-default">在 Docker 中使用 nexus3 构建 Android 私有仓库</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-11-25 00:00:00 \u002b0000 UTC',
+        title: '在 Emacs 中用 mu4e 来收邮件',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

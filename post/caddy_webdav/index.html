@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/caddy_webdav/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/caddy_webdav/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta property="og:description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-05-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-05-27T00:00:00+00:00">
+    <meta property="article:tag" content="WebDav">
+
+  <meta itemprop="name" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta itemprop="description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+  <meta itemprop="datePublished" content="2023-05-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-05-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1180">
+  <meta itemprop="keywords" content="WebDav">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta name="twitter:description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+ <meta property="og:url" content="http://devbins.github.io/post/caddy_webdav/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta property="og:description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-05-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-05-27T00:00:00+00:00">
+    <meta property="article:tag" content="WebDav">
+
+  <meta itemprop="name" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta itemprop="description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+  <meta itemprop="datePublished" content="2023-05-27T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-05-27T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1180">
+  <meta itemprop="keywords" content="WebDav">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享">
+  <meta name="twitter:description" content="前言 我在 iOS 上使用 beorg 来管理日程，所以经常需要在电脑和手机之间同步。
+beorg 支持 iCloud 、 Dropbox 、 WebDav 等方式同步，使用 iCloud 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， Dropbox 就你懂的，所以就只剩下 WebDav 了。
+WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。
+我找了一圈看上了 Caddy ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 Caddy 来搭建 WebDav 服务。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-05-27 </span>
+        <div class="post-category">
+            <a href="../../categories/webdav/"> WebDav </a>
+            </div>
+          <span class="more-meta"> 约 1180 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#caddy-安装">caddy 安装</a></li>
+    <li><a href="#安装-webdav-插件">安装 WebDav 插件</a></li>
+    <li><a href="#编写-caddyfile">编写 Caddyfile</a></li>
+    <li><a href="#启动-caddy">启动 caddy</a></li>
+    <li><a href="#连接-webdav-服务">连接 webdav 服务</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>我在 <code>iOS</code> 上使用 <code>beorg</code> 来管理日程，所以经常需要在电脑和手机之间同步。</p>
+<p><code>beorg</code> 支持 <code>iCloud</code> 、 <code>Dropbox</code> 、 <code>WebDav</code> 等方式同步，使用 <code>iCloud</code> 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， <code>Dropbox</code> 就你懂的，所以就只剩下 <code>WebDav</code> 了。</p>
+<p>WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。</p>
+<p>我找了一圈看上了 <code>Caddy</code> ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 <code>Caddy</code> 来搭建 <code>WebDav</code> 服务。</p>
+<h2 id="caddy-安装">caddy 安装</h2>
+<p>在使用之前需要来看下如何在电脑上安装 <code>caddy</code> ，在<a href="https://caddyserver.com/docs/install">Install — Caddy Documentation</a>中可以找到各个操作系统的安装方式，我使用的是 <code>Mac</code> 所以可以直接使用下面的命令进行安装。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install caddy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装好之后可以使用 <code>caddy help</code> 来查看使用帮助，内容有点多，这里就不贴出来了。列几个重要的</p>
+<ul>
+<li>caddy run 在前台执行(推荐)</li>
+<li>caddy start 在后台执行</li>
+<li>caddy stop 停止在后台执行的 caddy 服务</li>
+<li>caddy version 查看 caddy 的版本</li>
+</ul>
+<p>安装好 <code>caddy</code> 之后并不能直接使用 <code>webdav</code> ，这是因为 <code>webdav</code> 不是内置的插件，所以要使用的话还需要额外安装 <code>webdav</code> 的插件。</p>
+<h2 id="安装-webdav-插件">安装 WebDav 插件</h2>
+<p>安装 <code>WebDav</code> 插件需要自己编译，官方出了 <a href="https://github.com/caddyserver/xcaddy">caddyserver/xcaddy: Build Caddy with plugins</a> 用来简化编译流程，非常方便，所以在安装插件之前需要安装 <code>xcaddy</code> 。</p>
+<p>安装 <code>xcaddy</code> 需要你安装了 <code>Go</code> ，如果你是 <code>Mac</code> 可以直接使用 <code>brew install go</code> 来快速安装 <code>Go</code> ，这里不展开说了。</p>
+<p>安装好 <code>Go</code> 之后就可以通过下面指令安装 <code>xcaddy</code> 。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>xcaddy</code> 会被安装到 <code>$HOME/go/bin</code> 下，为了方便可以把它添加到 <code>PATH</code> 中，这样就可以直接使用了。</p>
+<p>好接下来要构建支持 <code>webdav</code> 的 <code>caddy</code> ，如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">xcaddy build --with github.com/mholt/caddy-webdav
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>命令执行完后，会在当前目录下生成 <code>caddy</code> 的二进制文件。</p>
+<p>由于之前使用 <code>brew install caddy</code> 安装了，所以这里可以使用 <code>brew uninstall caddy</code> 来卸载之前的。</p>
+<p>为了方便可以把生成的 <code>caddy</code> 放到 <code>PATH</code> 环境中或者使用相对路径执行。</p>
+<p>支持 <code>WebDav</code> 的 <code>caddy</code> 已经编译好了，接下来就需要编写 <code>Caddyfile</code> 来启用 <code>WebDav</code> 了。</p>
+<h2 id="编写-caddyfile">编写 Caddyfile</h2>
+<p>在当前目录下创建 <code>Caddyfile</code> 文件，填入如下内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cfg" data-lang="cfg"><span class="line"><span class="cl"><span class="na">{</span>
+</span></span><span class="line"><span class="cl">    <span class="na">order webdav before file_server</span>
+</span></span><span class="line"><span class="cl"><span class="na">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">:80, :443 {</span>
+</span></span><span class="line"><span class="cl">    <span class="na">basicauth {</span>
+</span></span><span class="line"><span class="cl">        <span class="na">username password</span>
+</span></span><span class="line"><span class="cl">    <span class="na">}</span>
+</span></span><span class="line"><span class="cl">    <span class="na">webdav /dav/* {</span>
+</span></span><span class="line"><span class="cl">        <span class="na">root /home/username/webdav</span>
+</span></span><span class="line"><span class="cl">        <span class="na">prefix /dav</span>
+</span></span><span class="line"><span class="cl">    <span class="na">}</span>
+</span></span><span class="line"><span class="cl"><span class="na">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>密码可以使用 <code>caddy hash-password username</code> 生成，其中 <code>username</code> 要换成你自己的名字。用生成好的字符串替换 <code>basicauth</code> 中的 <code>password</code> 。</p>
+<p>在这个配置中我们监听了 <code>80</code> 和 <code>443</code> 端口，并配置基本的账号和密码，毕竟你也不想谁都可以访问你的文件。</p>
+<p>然后重点就是 <code>WebDav</code> 的配置， <code>webdav</code> 的语法如下所示</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cfg" data-lang="cfg"><span class="line"><span class="cl"><span class="na">webdav [&lt;matcher&gt;] {</span>
+</span></span><span class="line"><span class="cl">    <span class="na">root &lt;path&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">prefix &lt;request-base-path&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>matcher</code> 就是用来决定哪些路由会使用 <code>webdav</code> ，比如上面写的是 <code>dav</code> 所以当访问 <code>127.0.0.1/dav/xxx</code> 的时候就会匹配到 <code>webdav</code> 的功能。</p>
+<p>接着 <code>root</code> 表示的是 <code>webdav</code> 要共享的目录。</p>
+<p><code>prefix</code> 是可选的，但是 <code>matcher</code> 和 <code>path</code> 一起使用的时候是必须要的，通常就是 <code>matcher</code> 。</p>
+<h2 id="启动-caddy">启动 caddy</h2>
+<p>写好了 <code>Caddyfile</code> 就可以通过如下命令启动了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./caddy start --config Caddyfile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于没有把 <code>caddy</code> 加到 <code>PATH</code> 中，所以我使用了相对路径。</p>
+<h2 id="连接-webdav-服务">连接 webdav 服务</h2>
+<p>在 <code>Mac</code> 中可以通过 <code>finder</code> 来连接。</p>
+<p>打开 <code>finder</code> ，按下 <code>cmd+k</code> 打开连接服务器，填入地址，例如: <code>127.0.0.1/dav</code> ，输入账号和密码就可以连接成功了。</p>
+<h2 id="总结">总结</h2>
+<p><code>WebDav</code> 是一个可以在多个设备之间进行文件同步和分享的技术，本文通过讲解如何利用 <code>Caddy</code> 搭建 <code>WebDav</code> ，从而实现跨平台的文件同步和无缝的文件共享体验。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://caddyserver.com/docs/install">Install — Caddy Documentation</a></li>
+<li><a href="https://caddyserver.com/docs/build">Build from source — Caddy Documentation</a></li>
+<li><a href="https://github.com/mholt/caddy-webdav">mholt/caddy-webdav: WebDAV handler module for Caddy</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-05-27
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/webdav/">WebDav</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/cstring/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">C语言字符串\0的截断陷阱</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/cocos2d_%E7%9B%91%E5%90%AC%E8%BE%93%E5%85%A5/">
+            <span class="next-text nav-default">Cocos2d监听TextField输入</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-05-27 00:00:00 \u002b0000 UTC',
+        title: '跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

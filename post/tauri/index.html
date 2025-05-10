@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Tauri入门 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/tauri/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/tauri/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Tauri入门">
+  <meta property="og:description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-14T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-14T00:00:00+00:00">
+    <meta property="article:tag" content="Rust">
+
+  <meta itemprop="name" content="Tauri入门">
+  <meta itemprop="description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+  <meta itemprop="datePublished" content="2023-10-14T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-14T00:00:00+00:00">
+  <meta itemprop="wordCount" content="670">
+  <meta itemprop="keywords" content="Rust">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tauri入门">
+  <meta name="twitter:description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+ <meta property="og:url" content="http://devbins.github.io/post/tauri/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Tauri入门">
+  <meta property="og:description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-14T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-14T00:00:00+00:00">
+    <meta property="article:tag" content="Rust">
+
+  <meta itemprop="name" content="Tauri入门">
+  <meta itemprop="description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+  <meta itemprop="datePublished" content="2023-10-14T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-14T00:00:00+00:00">
+  <meta itemprop="wordCount" content="670">
+  <meta itemprop="keywords" content="Rust">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tauri入门">
+  <meta name="twitter:description" content="前言 Tauri 是一个跨平台应用构建工具包，使用 Rust 和 Web 技术。
+我用 Tauri 做了几个应用还不错，推荐大家有空试试。
+本文以 Mac 为例，带大家入门。要先安装好 Xcode 。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Tauri入门</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-10-14 </span>
+        <div class="post-category">
+            <a href="../../categories/tauri/"> tauri </a>
+            <a href="../../categories/rust/"> rust </a>
+            </div>
+          <span class="more-meta"> 约 670 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#搭建环境">搭建环境</a>
+      <ul>
+        <li><a href="#rust">Rust</a></li>
+        <li><a href="#yarn">yarn</a></li>
+      </ul>
+    </li>
+    <li><a href="#创建项目">创建项目</a></li>
+    <li><a href="#目录结构">目录结构</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p><code>Tauri</code> 是一个跨平台应用构建工具包，使用 <code>Rust</code> 和 <code>Web</code> 技术。</p>
+<p>我用 <code>Tauri</code> 做了几个应用还不错，推荐大家有空试试。</p>
+<p>本文以 <code>Mac</code> 为例，带大家入门。要先安装好 <code>Xcode</code> 。</p>
+<h2 id="搭建环境">搭建环境</h2>
+<h3 id="rust">Rust</h3>
+<p><code>Rust</code> 搭建，不用说了，按照下面的指令执行就行。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 https://sh.rustup.rs -sSf <span class="p">|</span> sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="yarn">yarn</h3>
+<p><code>Tauri</code> 使用 <code>Web</code> 作为 <code>UI</code> 显示的技术，所以会用到对应的包管理工具。</p>
+<p>可选的管理器有 <code>npm</code> 、 <code>cnpm</code> 、 <code>yarn</code> ，我比较喜欢 <code>yarn</code> 所以这里使用 <code>yarn</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install yarn
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="创建项目">创建项目</h2>
+<p>环境搭建好了来创建一个项目，使用 <code>yarn create tauri-app</code> 来创建</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yarn create tauri-app
+</span></span><span class="line"><span class="cl">yarn create v1.22.19
+</span></span><span class="line"><span class="cl"><span class="o">[</span>1/4<span class="o">]</span> 🔍  Resolving packages...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2/4<span class="o">]</span> 🚚  Fetching packages...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>3/4<span class="o">]</span> 🔗  Linking dependencies...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>4/4<span class="o">]</span> 🔨  Building fresh packages...
+</span></span><span class="line"><span class="cl">success Installed <span class="s2">&#34;create-tauri-app@3.5.0&#34;</span> with binaries:
+</span></span><span class="line"><span class="cl">      - create-tauri-app
+</span></span><span class="line"><span class="cl">✔ Project name · demo
+</span></span><span class="line"><span class="cl">✔ Choose which language to use <span class="k">for</span> your frontend · TypeScript / JavaScript - <span class="o">(</span>pnpm, yarn, npm<span class="o">)</span>
+</span></span><span class="line"><span class="cl">✔ Choose your package manager · yarn
+</span></span><span class="line"><span class="cl">✔ Choose your UI template · Vue - <span class="o">(</span>https://vuejs.org<span class="o">)</span>
+</span></span><span class="line"><span class="cl">✔ Choose your UI flavor · TypeScript
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Template created! To get started run:
+</span></span><span class="line"><span class="cl">  <span class="nb">cd</span> demo
+</span></span><span class="line"><span class="cl">  yarn
+</span></span><span class="line"><span class="cl">  yarn tauri dev
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">✨  Done in 66.05s.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建项目的时候会问你使用 <code>TS</code> 还是 <code>JS</code> ，选择你熟悉的就可以，我选择了 <code>TS</code> ，包管理器是 <code>yarn</code> ，UI 使用的 Vue。</p>
+<p>创建好之后，按照提示执行如下指令，进行编译，完成后就能看到成功运行了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> demo
+</span></span><span class="line"><span class="cl">yarn
+</span></span><span class="line"><span class="cl">yarn tauri dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><figure><img src="../../images/tauri/tauri.png">
+</figure>
+
+<h2 id="目录结构">目录结构</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">demo
+</span></span><span class="line"><span class="cl">├── README.md
+</span></span><span class="line"><span class="cl">├── index.html
+</span></span><span class="line"><span class="cl">├── node_modules
+</span></span><span class="line"><span class="cl">├── package.json
+</span></span><span class="line"><span class="cl">├── public
+</span></span><span class="line"><span class="cl">│   ├── tauri.svg
+</span></span><span class="line"><span class="cl">│   └── vite.svg
+</span></span><span class="line"><span class="cl">├── src
+</span></span><span class="line"><span class="cl">│   ├── App.vue
+</span></span><span class="line"><span class="cl">│   ├── assets
+</span></span><span class="line"><span class="cl">│   ├── components
+</span></span><span class="line"><span class="cl">│   ├── main.ts
+</span></span><span class="line"><span class="cl">│   ├── style.css
+</span></span><span class="line"><span class="cl">│   └── vite-env.d.ts
+</span></span><span class="line"><span class="cl">├── src-tauri
+</span></span><span class="line"><span class="cl">│   ├── Cargo.lock
+</span></span><span class="line"><span class="cl">│   ├── Cargo.toml
+</span></span><span class="line"><span class="cl">│   ├── build.rs
+</span></span><span class="line"><span class="cl">│   ├── icons
+</span></span><span class="line"><span class="cl">│   ├── src
+</span></span><span class="line"><span class="cl">│   ├── target
+</span></span><span class="line"><span class="cl">│   └── tauri.conf.json
+</span></span><span class="line"><span class="cl">├── tsconfig.json
+</span></span><span class="line"><span class="cl">├── tsconfig.node.json
+</span></span><span class="line"><span class="cl">├── vite.config.ts
+</span></span><span class="line"><span class="cl">└── yarn.lock
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>src 是 UI 目录，存放的是 Web 代码，我这里使用的是 Vue 框架，所以这个目录结构就和 Vue 一致</li>
+<li>src-tauri 是 rust 的目录</li>
+<li>src-tauri/tauri.conf.json 是应用的配置文件</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>如果你对 <code>Rust</code> 感兴趣，并且 <code>Web</code> 也玩得溜，那么 <code>Tauri</code> 是一个不错的跨平台构建工具。</p>
+<p>它比 <code>Electron</code> 好很多，在包体积、性能上都要好。</p>
+<p>不妨一试。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://tauri.app/zh-cn/">Build smaller, faster, and more secure desktop applications with a web frontend | Tauri Apps</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-10-14
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/rust/">rust</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/tauri1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Tauri：Web调用Rust函数</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/%E6%88%90%E5%8A%9F%E6%98%AF%E6%88%90%E5%8A%9F%E4%B9%8B%E6%AF%8D/">
+            <span class="next-text nav-default">成功是成功之母</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-10-14 00:00:00 \u002b0000 UTC',
+        title: 'Tauri入门',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>openSUSE 下安装 Parallels Tools - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content=" Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/opensuse/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/opensuse/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="openSUSE 下安装 Parallels Tools">
+  <meta property="og:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-09-18T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-09-18T00:00:00+00:00">
+    <meta property="article:tag" content="OpenSUSE">
+
+  <meta itemprop="name" content="openSUSE 下安装 Parallels Tools">
+  <meta itemprop="description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+  <meta itemprop="datePublished" content="2017-09-18T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2017-09-18T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1100">
+  <meta itemprop="keywords" content="OpenSUSE">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="openSUSE 下安装 Parallels Tools">
+  <meta name="twitter:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+ <meta property="og:url" content="http://devbins.github.io/post/opensuse/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="openSUSE 下安装 Parallels Tools">
+  <meta property="og:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-09-18T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-09-18T00:00:00+00:00">
+    <meta property="article:tag" content="OpenSUSE">
+
+  <meta itemprop="name" content="openSUSE 下安装 Parallels Tools">
+  <meta itemprop="description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+  <meta itemprop="datePublished" content="2017-09-18T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2017-09-18T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1100">
+  <meta itemprop="keywords" content="OpenSUSE">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="openSUSE 下安装 Parallels Tools">
+  <meta name="twitter:description" content="Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">openSUSE 下安装 Parallels Tools</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-09-18 </span>
+        <div class="post-category">
+            <a href="../../categories/linux/"> Linux </a>
+            </div>
+          <span class="more-meta"> 约 1100 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装-parallels-tools-初试">安装 Parallels Tools 初试</a></li>
+    <li><a href="#安装-dkms">安装 dkms</a></li>
+    <li><a href="#发现问题">发现问题</a></li>
+    <li><a href="#尝试解决">尝试解决</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考链接">参考链接</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>Parallels Desktop 是 macOS 上一款优秀的虚拟机软件，支持各种操作系统。然而想要在其上面愉快的使用桌面操作系统，还需要在虚拟机上安装 Parallels Tools 这个工具。在 Windows 上和 Ubuntu 以及 Centos 上安装还是非常简单，然而我在 openSUSE 上尝试却失败了，寻找良久才找到解决方法。遂以此文纪念我踩过的坑，以便给后人提供参考，而不会错过一些美好的事情。</p></blockquote>
+<h2 id="安装-parallels-tools-初试">安装 Parallels Tools 初试</h2>
+<p>在 Parallels Desktop 上成功安装好 openSUSE 后，把 Parallels Tools 挂载到系统（不要和我说你不知道怎么操作）。进入挂载的目录，并执行安装程序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /run/media/<span class="nv">$USER</span>/Parallels Tools/ <span class="c1">#$USER 为你的用户名，不知道什么也没关系，一般/run/media/下就只有一个目录，就是它</span>
+</span></span><span class="line"><span class="cl">sudo ./install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输入密码等待程序启动，点击 next 等一小会,出现如下如所示，点击 next 安装。
+<img src="../../images/suse/parallel-install.png" alt="">
+等待一杯咖啡的时间，如果一杯喝完没有提示安装失败，就再喝一杯。两杯咖啡下肚，终于出现如下错误
+<img src="../../images/suse/parallels.png" alt="">
+它告诉我安装失败了，去 <code>/var/log/parallels-tools-install.log</code> 下看更多的信息。直觉告诉我看了可能也没什么用。不过还是去看看。</p>
+<p>打开文件，映入眼帘，这么明显（此处略去后面的提示）
+<img src="../../images/suse/parallelslog.png" alt="">
+它告诉我 <code>dkms</code> 找不到，据我以前安装 Ubuntu 的经验很可能是这货的问题，于是安装 <code>dkms</code> 。</p>
+<h2 id="安装-dkms">安装 dkms</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo zypper in dkms
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>提示找不到这个软件包，估计 Parallels Tools 也是调用这条命令安装的吧，所以安装失败。</p>
+<p>既然没有，我们只好从别的地方找一个，在<a href="https://software.opensuse.org/search">官方软件包中</a>搜索 dkms，还真找到了
+<img src="../../images/suse/dkms.png" alt="">
+点击一键安装，待安装好 dkms 之后，重新执行上一小节的操作。换来的还是一样的结果，安装失败。
+<img src="../../images/suse/parallels.png" alt="">
+于是我决定重启系统再安装一次，结果还是一样，一点都不意外。心灰意冷的我不断在网上找相关的问题，一次一次的尝试，结果总是那么的相似，都没有找到解决方法。直到我在 <a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a>寻找答案的时候，偶然看了一下开机过程，发现了解决问题的契机。</p>
+<h2 id="发现问题">发现问题</h2>
+<p>在<a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a>这篇文章中说道</p>
+<ul>
+<li>kernel-default 是系统默认版内核。</li>
+<li>kernel-desktop 在 kernel-pae 基础上针对桌面进行优化，并屏蔽了只有服务器上才会使用的内核功能，提升启动速度和响应速度</li>
+</ul>
+<p>于是我在开机的时候观察到
+<img src="../../images/suse/default-kenel.png" alt="">
+openSUSE 默认的果然是 kernel-default 的内核。尝试一下 kernel-desktop 兴许会成功。
+于是便尝试安装 kernel-desktop 的内核。</p>
+<h2 id="尝试解决">尝试解决</h2>
+<p>在默认的源里是没有 kernel-desktop 的安装包，还需要使用如下命令把他添加进去,并安装 kernel-desktop</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo zypper ar http://download.opensuse.org/repositories/home:/Ledest:/kernel:/lts/openSUSE_Leap_42.3/ kd
+</span></span><span class="line"><span class="cl">sudo zypper refresh <span class="c1"># 提示是否信任的时候选择 t 回车</span>
+</span></span><span class="line"><span class="cl">sudo zypper in kernel-desktop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>第一次安装 kernel-desktop 可能会提示失败，输入 <code>r</code> 回车，重试一遍（也许多遍）就可成功。
+安装之后重启系统
+<img src="../../images/suse/desktop-kernel.png" alt="">
+现在默认就是从 kernel-desktop 启动了。
+启动之后尝试安装 Parallels Tools，居然成功了。不过没有安装 dkms 它还是推荐安装一下，说明 dkms 不是必须的。之前的错误提示，成功的误导了我。我表示很无奈。
+<img src="../../images/suse/parallels-success.png" alt="">
+安装成功后，终于可以愉快的玩耍了。</p>
+<h2 id="总结">总结</h2>
+<ol>
+<li>安装好系统后，先不要安装 Parallels Tools。 直接安装 kernel-desktop。</li>
+<li>安装好 kernel-desktop 后再安装 Parallels Tools。</li>
+</ol>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://software.opensuse.org/package/kernel-desktop">软件包</a></li>
+<li><a href="https://github.com/yangyangwithgnu/the%5Fnew%5Fworld%5Flinux#0.3.1">美丽新世界：linux 下的惬意生活</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-09-18
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/opensuse/">openSUSE</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/reactnative%E5%85%A5%E9%97%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ReactNative 入门</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/tmux/">
+            <span class="next-text nav-default">Tmux</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2017-09-18 00:00:00 \u002b0000 UTC',
+        title: 'openSUSE 下安装 Parallels Tools',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

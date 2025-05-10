@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>文档管理的问题 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E7%9A%84%E9%97%AE%E9%A2%98/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E7%9A%84%E9%97%AE%E9%A2%98/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="文档管理的问题">
+  <meta property="og:description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-30T00:00:00+00:00">
+    <meta property="article:tag" content="职场">
+
+  <meta itemprop="name" content="文档管理的问题">
+  <meta itemprop="description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+  <meta itemprop="datePublished" content="2023-10-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="866">
+  <meta itemprop="keywords" content="职场">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="文档管理的问题">
+  <meta name="twitter:description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+ <meta property="og:url" content="http://localhost:1313/post/%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86%E7%9A%84%E9%97%AE%E9%A2%98/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="文档管理的问题">
+  <meta property="og:description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-10-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-10-30T00:00:00+00:00">
+    <meta property="article:tag" content="职场">
+
+  <meta itemprop="name" content="文档管理的问题">
+  <meta itemprop="description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+  <meta itemprop="datePublished" content="2023-10-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-10-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="866">
+  <meta itemprop="keywords" content="职场">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="文档管理的问题">
+  <meta name="twitter:description" content="前言 工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。
+怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">文档管理的问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-10-30 </span>
+        <div class="post-category">
+            <a href="../../categories/%E8%81%8C%E5%9C%BA/"> 职场 </a>
+            </div>
+          <span class="more-meta"> 约 866 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#文档管理的问题">文档管理的问题</a>
+      <ul>
+        <li><a href="#碎片化">碎片化</a></li>
+        <li><a href="#没有一个统一入口-找半天">没有一个统一入口，找半天</a></li>
+        <li><a href="#不能产生链接">不能产生链接</a></li>
+      </ul>
+    </li>
+    <li><a href="#如何解决">如何解决</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>工作中避免不了要把一些内容、工作整理成文档，最近跟别的部门合作，他丢了一个 word 文档我来，把我惊掉了下巴。</p>
+<p>怎么还会有如此落后的文档管理手段，所以我决定和他聊一聊文档管理的问题。</p>
+<h2 id="文档管理的问题">文档管理的问题</h2>
+<h3 id="碎片化">碎片化</h3>
+<p>传统的文档管理是通过一个一个文件来进行的，每当文件有内容要修改，都需要把文件发给对应的人。</p>
+<p>收文件的人就会收到一堆同一个文档的不同版本，不信你把同一个文件发给自己试试，你会发现名字变成 文档.doc、文档 1.doc、文档 2.doc、文档 3.doc。</p>
+<p>这样的文件看了头都大，文件多起来了占用空间，而且你还不知道哪个文档是对的。</p>
+<p>收文件的人还需要额外提供管理这些文件，极大的提高了心智负担。</p>
+<p>实在难以忍受。</p>
+<h3 id="没有一个统一入口-找半天">没有一个统一入口，找半天</h3>
+<p>如果问你某个开发文档在哪里，你能够在 10s 之内找到吗？</p>
+<p>传统的文档，需要每个人根据自己理解去整理文档，每个人都会本地整理一份，这些文件可能会散落在电脑的各个地方。</p>
+<p>可能我在 A 目录找到一个，在 B 目录又找到一个，按最坏的情况下要把整个硬盘找一遍，时间复杂度太高。</p>
+<p>整理的同时可能会在多个目录都放一份，这可是噩梦的开始。</p>
+<p>万一哪天文件内容要更新，你得把所有的文件都更新，问题是你自己记得住这些文件都放哪里了吗？</p>
+<h3 id="不能产生链接">不能产生链接</h3>
+<p>一个项目/一个知识可能会产生多份文档，文档与文档之间可能会存在联系，传统文档不能在文档之间产生关联。</p>
+<p>如果要找相关文档，又会碰到找半天的问题。</p>
+<h2 id="如何解决">如何解决</h2>
+<ol>
+<li>碎片化的问题，完全可以通过固定一个永久链接来解决，如果有发生修改，直接改原文件就行，其他人只要看就行了</li>
+<li>没有一个统一入口，也可以通过一个首页来解决</li>
+<li>不能产生链接，这个就更好办了，HTTP 不就来解决这个问题的吗</li>
+</ol>
+<p>市面上已经有很多产品，一次性解决这些问题，但是却还是有很多地方在使用传统的文档进行管理，老实说这落伍了。</p>
+<p>后来我了解到其实公司内部也是有一款文档管理系统，虽然没有飞书、语雀一样好用，但是完全能够解决上面的问题。</p>
+<p>我好奇的问了一下为什么不用?</p>
+<p>答：以前的文档都是这么写的，不想迁移。</p>
+<h2 id="总结">总结</h2>
+<p>今天聊了传统文档管理的 3 个问题</p>
+<ol>
+<li>碎片化</li>
+<li>没有统一入口，找起来费事</li>
+<li>文档之间相互独立，没有链接</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-10-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/%E8%81%8C%E5%9C%BA/">职场</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/tauri8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Tauri: 制作icon</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/tauri7/">
+            <span class="next-text nav-default">Tauri: 菜单</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-10-30 00:00:00 \u002b0000 UTC',
+        title: '文档管理的问题',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

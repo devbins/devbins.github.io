@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>小米路由器刷 openwrt - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content=" 我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/miwifi/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/miwifi/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="小米路由器刷 openwrt">
+  <meta property="og:description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-04-30T00:00:00+00:00">
+    <meta property="article:tag" content="路由器">
+    <meta property="article:tag" content="Openwrt">
+    <meta property="article:tag" content="WIFI">
+
+  <meta itemprop="name" content="小米路由器刷 openwrt">
+  <meta itemprop="description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+  <meta itemprop="datePublished" content="2018-04-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-04-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1468">
+  <meta itemprop="keywords" content="路由器,Openwrt,WIFI">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="小米路由器刷 openwrt">
+  <meta name="twitter:description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+ <meta property="og:url" content="http://devbins.github.io/post/miwifi/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="小米路由器刷 openwrt">
+  <meta property="og:description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2018-04-30T00:00:00+00:00">
+    <meta property="article:tag" content="路由器">
+    <meta property="article:tag" content="Openwrt">
+    <meta property="article:tag" content="WIFI">
+
+  <meta itemprop="name" content="小米路由器刷 openwrt">
+  <meta itemprop="description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+  <meta itemprop="datePublished" content="2018-04-30T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2018-04-30T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1468">
+  <meta itemprop="keywords" content="路由器,Openwrt,WIFI">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="小米路由器刷 openwrt">
+  <meta name="twitter:description" content="我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。
+开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。 今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">小米路由器刷 openwrt</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-30 </span>
+        <div class="post-category">
+            <a href="../../categories/linux/"> Linux </a>
+            </div>
+          <span class="more-meta"> 约 1468 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#开发前准备">开发前准备</a></li>
+    <li><a href="#刷开发版">刷开发版</a></li>
+    <li><a href="#开启-ssh">开启 ssh</a></li>
+    <li><a href="#刷入-openwrt">刷入 openwrt</a></li>
+    <li><a href="#opkg">opkg</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>我买过两个小米路由器，一个是小米路由器 mini、另一个是小米路由器 R2D 带硬盘的。mini 一直放在家里用，没怎么去折腾。后来买 R2D 是因为电脑的空间剩余不多，买个带硬盘的，把一部分文件放到路由器上。买来后就不断在小米论坛上逛，看看有没有什么好玩的，后来发现了 openwrt。这就开启了折腾之旅，有搭建网站的、下载的、代理的……各种，这就是一台 Linux 电脑啊，很是兴奋也想搞个自己的。</p>
+<p>开始在论坛上找各种教程，发现 R2D 的 opkg 居然不能用，试了各种办法都效果不好，最糟糕的是 R2D 居然不能装 openwrt，这就没得玩了。R2D 也就一直充当着一个硬盘的作用,偶尔也折腾一下，看看论坛有没有出能装 openwrt 的教程，等的我心都凉了，以后买路由器想折腾还是不要买小米的。
+今年过年回家发现 WiFi 连不上了，跑到放路由器的地方一看，多出了一个白色的家伙，看着也像路由器，研究了一下这家伙确实是路由器，而且还是装宽带送的，这下好了，mini 腾出来了，也就有了下文。</p></blockquote>
+<h2 id="开发前准备">开发前准备</h2>
+<ul>
+<li>U 盘一个，格式为 FAT 或 FAT32</li>
+<li>小米路由器 mini 一台</li>
+<li>电脑一台（以 Mac 为例）</li>
+<li>手机的取卡针一根，其它可以按下 reset 的尖锐物都可以，比如牙签。</li>
+</ul>
+<h2 id="刷开发版">刷开发版</h2>
+<p>先查看一下路由器系统的版本是不是开发板，如果是开发版的可以跳过这一步，到下一节。
+为什么要刷开发版？
+因为只有开发版才支持 ssh。只有开启了 ssh 才能有权限刷其它系统。
+首先下载<a href="http://www1.miwifi.com/miwifi%5Fdownload.html">开发板 ROM</a>，把下载好的 miwifi_r1cmxxx.bin 重命名为 miwifi.bin，并放到 U 盘根目录下。
+断开小米路由器的电源，把 U 盘插进 USB 接口，用取卡针按下 reset 按钮，直到指示灯变为黄色闪烁后可松开。
+等待片刻（5~10 分钟），刷机成功后会自动重启，进入正常状态，指示灯会由黄变蓝。失败指示灯变为红色，请重试。</p>
+<h2 id="开启-ssh">开启 ssh</h2>
+<p>经过上面的步骤，此时路由器的系统已经是开发版了。接下来就需要开启 ssh，所以要先下载<a href="http://d.miwifi.com/rom/ssh">开启 ssh 工具</a>。在下载页面还会包含路由器的 root 密码，记下后面要用到。下载好后，把下载的文件重命名为 miwifi_ssh.bin，并放到 U 盘的根目录。别忘了还要删除刚才的 miwifi.bin。
+此时，断开小米路由器的电源，把 U 盘插进路由器的 USB 接口，用取卡针按下 reset 按钮，直到指示灯变为黄色闪烁后松开。
+等待一会儿，指示灯变蓝后说明开启 ssh 成功。如果变成红色说明失败，可以重复上述步骤。
+操作步骤和刷开发版类似。</p>
+<h2 id="刷入-openwrt">刷入 openwrt</h2>
+<p>来到这里说明你刷入了开发版，并开启了 ssh，如果没有请重复上面的操作，不然后面没法进行下去。要想刷入 openwrt，依然是先下载<a href="http://downloads.openwrt.org.cn/PandoraBox/Xiaomi-Mini-R1CM/stable/">openwrt</a>固件。
+下载好后，我们要把下载好的上传到小米路由器上。打开终端输入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">scp PandoraBox.bin root@192.168.31.1:/tmp/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样就把固件上传到/tmp 目录下了，接下来登录路由器，准备开刷。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh root@192.168.31.1 <span class="c1">#回车之后输入密码，密码就是在上一步，开启 ssh 那里让记住的密码</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /tmp
+</span></span><span class="line"><span class="cl">mtd -r write xxx.bin OS1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意 <code>OS1</code> 是大写的，第一次试的时候写成小写的没有成功，换成大写的就好了。
+另外如果 <code>OS1</code> 不成功换成 <code>firmware</code> 试试。</p>
+<h2 id="opkg">opkg</h2>
+<p>openwrt 刷入成功之后我们还要进行配置，不然可玩性就少了。openwrt 其实就相当于一台小型 Linux，所以配置一下软件仓库还是有必要的。
+openwrt 默认用户名是 root，密码是 admin。管理的地址是 192.168.1.1，不再是 31.1 了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh root@192.168.1.1 <span class="c1">#回车后输入密码</span>
+</span></span><span class="line"><span class="cl">mv /ect/opkg.conf /etc/opkg.conf.bak
+</span></span><span class="line"><span class="cl">vi /etc/opkg.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把下面的内容拷贝进去</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dest root /
+</span></span><span class="line"><span class="cl">dest ram /tmp
+</span></span><span class="line"><span class="cl">lists_dir ext /etc/opkg-lists
+</span></span><span class="line"><span class="cl">option overlay_root /overlay
+</span></span><span class="line"><span class="cl"><span class="c1"># notice</span>
+</span></span><span class="line"><span class="cl">dest usb /mnt/sdb1/opkg
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">arch all <span class="m">100</span>
+</span></span><span class="line"><span class="cl">arch ramips_24kec <span class="m">200</span>
+</span></span><span class="line"><span class="cl">arch ramips <span class="m">300</span>
+</span></span><span class="line"><span class="cl">arch mips <span class="m">400</span>
+</span></span><span class="line"><span class="cl">arch unkown <span class="m">500</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_base http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/base
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_luci http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/luci
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_management http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/management
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_oldpackages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/oldpackages
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_packages http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/packages
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_routing http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/routing
+</span></span><span class="line"><span class="cl">src/gz barrier_breaker_telephony http://downloads.openwrt.org/barrier_breaker/14.07/ramips/mt7620a/packages/telephony
+</span></span><span class="line"><span class="cl">src/gz openwrt_dist http://openwrt-dist.thankgfw.ml/releases/ramips/packages
+</span></span><span class="line"><span class="cl">src/gz openwrt_dist_luci http://openwrt-dist.thankgfw.ml/releases/luci/packages
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置完了更新一下仓库。顺便了解一下 opkg 的使用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 更新列表</span>
+</span></span><span class="line"><span class="cl">opkg update
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装软件</span>
+</span></span><span class="line"><span class="cl">opkg install wget
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除软件</span>
+</span></span><span class="line"><span class="cl">opkg remove wget
+</span></span><span class="line"><span class="cl"><span class="c1"># 搜索</span>
+</span></span><span class="line"><span class="cl">opkg search wget
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>用于在国内，访问速度会很慢。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://my.oschina.net/u/260165/blog/1603702">小米 mini 路由器刷 openwrt</a>
+<a href="https://blog.phpgao.com/xiaomi%5Frouter%5Fopkg.html">opkg</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-04-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/%E8%B7%AF%E7%94%B1%E5%99%A8/">路由器</a>
+          <a href="../../tags/openwrt/">openwrt</a>
+          <a href="../../tags/wifi/">WIFI</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/miwifipadavan/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">小米路由器刷 Padavan</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/manjaro/">
+            <span class="next-text nav-default">Manjaro 的使用</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2018-04-30 00:00:00 \u002b0000 UTC',
+        title: '小米路由器刷 openwrt',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gemini搭建 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/gemini/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://localhost:1313/post/gemini/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Gemini搭建">
+  <meta property="og:description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-12-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-12-20T00:00:00+00:00">
+    <meta property="article:tag" content="Ai">
+
+  <meta itemprop="name" content="Gemini搭建">
+  <meta itemprop="description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+  <meta itemprop="datePublished" content="2023-12-20T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-12-20T00:00:00+00:00">
+  <meta itemprop="wordCount" content="521">
+  <meta itemprop="keywords" content="Ai">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Gemini搭建">
+  <meta name="twitter:description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+ <meta property="og:url" content="http://localhost:1313/post/gemini/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="Gemini搭建">
+  <meta property="og:description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-12-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-12-20T00:00:00+00:00">
+    <meta property="article:tag" content="Ai">
+
+  <meta itemprop="name" content="Gemini搭建">
+  <meta itemprop="description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+  <meta itemprop="datePublished" content="2023-12-20T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-12-20T00:00:00+00:00">
+  <meta itemprop="wordCount" content="521">
+  <meta itemprop="keywords" content="Ai">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Gemini搭建">
+  <meta name="twitter:description" content="前言 Google 发布了 Gemoni 模型，并且提供了 API ，这就非常有意思了，我们可以根据 Google 提供的 API 来开发自己的应用。
+就在我要准备看 API 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gemini搭建</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-12-20 </span>
+        <div class="post-category">
+            <a href="../../categories/ai/"> Ai </a>
+            </div>
+          <span class="more-meta"> 约 521 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#准备-gemini-key">准备 Gemini Key</a></li>
+    <li><a href="#搭建-chat-web-服务">搭建 chat web 服务</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>Google 发布了 <code>Gemoni</code> 模型，并且提供了 <code>API</code> ，这就非常有意思了，我们可以根据 <code>Google</code> 提供的 <code>API</code> 来开发自己的应用。</p>
+<p>就在我要准备看 <code>API</code> 的时候，转念一想估计已经有人做出来了，果不其然，一搜就搜到了。</p>
+<h2 id="准备-gemini-key">准备 Gemini Key</h2>
+<p>打开 <a href="https://makersuite.google.com/app/apikey">Google AI Studio</a> 进行申请 <code>API</code> key，这里要先登录，账号自己想办法了。</p>
+<p>打开之后，先要同意条款
+<img src="../../images/gemini/terms.png" alt=""></p>
+<p>同意之后才能创建 <code>API key</code> ，点击 <code>Create API key in new project</code> 创建 <code>key</code>
+<img src="../../images/gemini/create_key.png" alt=""></p>
+<p>创建好之后把 <code>key</code> 保存下来，稍后要用到，忘记了还可以回来看。</p>
+<h2 id="搭建-chat-web-服务">搭建 chat web 服务</h2>
+<p>这里要用到的是<a href="https://github.com/babaohuang/GeminiProChat">babaohuang/GeminiProChat: Minimal web UI for GeminiPro.</a>，我尝试过本地搭建，虽然能够成功但是，点击了没反应。</p>
+<p>所以这里会使用<a href="https://vercel.com/">Vercel: Build and deploy the best Web experiences with The Frontend Cloud – Vercel</a> 来搭建，在搭建之前你需要注册账号</p>
+<p>这里选择 <code>Hobby</code> 其它的就是填邮箱啥的，没什么好说的。
+<img src="../../images/gemini/vercel.png" alt=""></p>
+<p>注册好了，回到 <code>GitHub</code> 找到 <code>Deploy</code> 点击这个按钮
+<img src="../../images/gemini/deploy.png" alt="">
+会在 <code>Vercel</code> 中创建一个项目，填入仓库名，点击 <code>Create</code> 创建，稍等一会就会提示你进行配置
+<img src="../../images/gemini/config_api_key.png" alt="">
+在这里输入上一步创建好的 <code>API key</code> ，然后点击 <code>Deploy</code> 稍等片刻就好了。</p>
+<p>这时候你可以看到部署情况，里面就有访问的 URL，打开这个连接就可以直接访问了。
+<img src="../../images/gemini/vercel_link.png" alt=""></p>
+<p>打开连接看到如下所示，表示部署成功
+<img src="../../images/gemini/gemini_chat.png" alt=""></p>
+<p>来问一下简单的几个问题
+<img src="../../images/gemini/genimi_ask.png" alt=""></p>
+<h2 id="总结">总结</h2>
+<p>搭建 <code>Gemini Chat</code> 还是比较容易的，尽量用 <code>Vercel</code> 搭建，本地搭建我试了下能成功但是不能用。</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://github.com/babaohuang/GeminiProChat">babaohuang/GeminiProChat: Minimal web UI for GeminiPro.</a>
+<a href="https://makersuite.google.com/app/apikey">Google AI Studio</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-12-20
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/ai/">Ai</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/%E5%9F%BA%E4%BA%8E%E4%BF%A1%E6%81%AF%E8%AE%BA%E7%9A%84%E4%BA%BA%E7%94%9F%E8%A7%82/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">基于信息论的人生观</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/webui_lcm/">
+            <span class="next-text nav-default">WebUI尝鲜LCM采样器</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2023-12-20 00:00:00 \u002b0000 UTC',
+        title: 'Gemini搭建',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
