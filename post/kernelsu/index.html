@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>KernelSU - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.147.2 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/kernelsu/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/kernelsu/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="KernelSU">
+  <meta property="og:description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-05-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-12T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+
+  <meta itemprop="name" content="KernelSU">
+  <meta itemprop="description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+  <meta itemprop="datePublished" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="852">
+  <meta itemprop="keywords" content="Android">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="KernelSU">
+  <meta name="twitter:description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+ <meta property="og:url" content="http://devbins.github.io/post/kernelsu/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="KernelSU">
+  <meta property="og:description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-05-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-12T00:00:00+00:00">
+    <meta property="article:tag" content="Android">
+
+  <meta itemprop="name" content="KernelSU">
+  <meta itemprop="description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+  <meta itemprop="datePublished" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="852">
+  <meta itemprop="keywords" content="Android">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="KernelSU">
+  <meta name="twitter:description" content="前言 上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。
+以小米手机为例。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">KernelSU</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2025-05-12 </span>
+        <div class="post-category">
+            <a href="../../categories/android/"> Android </a>
+            </div>
+          <span class="more-meta"> 约 852 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#为什么使用-kernelsu-作为-root-方案">为什么使用 KernelSU 作为 root 方案</a></li>
+    <li><a href="#备份-boot-dot-img">备份 boot.img</a>
+      <ul>
+        <li><a href="#卡刷包">卡刷包</a></li>
+        <li><a href="#线刷包">线刷包</a></li>
+      </ul>
+    </li>
+    <li><a href="#刷入-kernelsu">刷入 KernelSU</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章讲了解锁 bootloader，那么解锁后的第一件事就是 root，今天就来讲下使用 KernelSU 作为 root 方案。</p>
+<p>以小米手机为例。</p>
+<h2 id="为什么使用-kernelsu-作为-root-方案">为什么使用 KernelSU 作为 root 方案</h2>
+<p>KernelSU工作在内核模式，并直接在内核空间中为用户空间应用程序授予 root 权限。</p>
+<p>不容易被检测到，可以省去不少麻烦。</p>
+<h2 id="备份-boot-dot-img">备份 boot.img</h2>
+<p>boot.img 的作用是用于救砖，当你刷机出了问题，就可以使用它来恢复。</p>
+<p>这一步不是必须的，但是非常重要，关键时刻可以救命。</p>
+<p>提取 boot.img 可以有两种方法，分别是从卡刷包和线刷包中提取。</p>
+<h3 id="卡刷包">卡刷包</h3>
+<p>卡刷包可以在升级系统的时候获取，当升级包下载完成后，立刻断网。到 <code>Download/download_rom</code> 就可以找到。</p>
+<p>找到后解压得到 <code>payload.bin</code> 留着备用。</p>
+<p>要从 <code>payload.bin</code> 中提取 <code>boot.img</code> 还需要 <code>pyload-dumper-go</code> 这个工具</p>
+<p>Mac 可以使用 <code>brew</code> 进行安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install payload-dumper-go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其它平台到<a href="https://github.com/ssut/payload-dumper-go">ssut/payload-dumper-go: an android OTA payload dumper written in Go</a> 选择合适的下载</p>
+<p>安装好之后通过如下指令获取 <code>boot.img</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">payload-dumper-go -partitions boot payload.bin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="线刷包">线刷包</h3>
+<p>线刷包就比较简单了，到<a href="https://xiaomirom.com/">XiaomiROM.com - 小米 ROM | MIUI、澎湃OS（HyperOS）线刷包, 卡刷包的最新及历史版本下载</a>下载手机对应的包（名字带有 fastboot），需要和手机版本一致。</p>
+<p>下载好解压就能看到 <code>boot.img</code> 了。</p>
+<h2 id="刷入-kernelsu">刷入 KernelSU</h2>
+<p>到<a href="https://github.com/tiann/KernelSU/releases">Releases · tiann/KernelSU</a>下载管理器，就是以 <code>.apk</code> 结尾的，下载好后安装到手机。
+<img src="../../images/kernelsu/kernel_manager.png" alt=""></p>
+<p>安装后打开，如果显示未安装表示可以使用 KernelSU，如果显示的是不支持，表示需要自己编译内核。</p>
+<p>这里只考虑未安装的情况。</p>
+<p>再次到<a href="https://github.com/tiann/KernelSU/releases">Releases · tiann/KernelSU </a>下载对应的内核，只需要保证前两个小数点一致就可以。</p>
+<p>骁龙请下载 <code>boot.img.gz</code> ，联发科请下载 <code>boot-gz.img.gz</code></p>
+<figure><img src="../../images/kernelsu/kernel_version.png">
+</figure>
+
+<p>比如： <code>5.15.123</code> 就只要 <code>5.15.xxx</code> 就行。</p>
+<p>下载好后，解压得到 <code>xxx-boot.img</code> ，然后进入到 <code>bootloader</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb reboot bootloader
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>等待重启好，使用下载的内核引导系统</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">fastboot boot xxx-boot.img
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>等待重启，如果可以正常开机，打开 KernelSU 管理器显示在工作中，那么没问题。</p>
+<p>如果不能正常开机，直接重启即可，因为没有刷入内核。</p>
+<p>如果没问题，就可以刷入内核了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb reboot bootloader
+</span></span><span class="line"><span class="cl">fastboot flash boot xxx-boot.img
+</span></span><span class="line"><span class="cl">fastboot reboot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://kernelsu.org/zh_CN/guide/installation.html#lkm-%E5%AE%89%E8%A3%85">安装 | KernelSU</a></li>
+<li><a href="https://github.com/ssut/payload-dumper-go">GitHub - ssut/payload-dumper-go: an android OTA payload dumper written in Go</a></li>
+<li><a href="https://blog.u2sb.com/2023/01200.%E5%B0%8F%E7%B1%B313%E5%AE%89%E8%A3%85KernelSU.html#%E5%88%B7%E5%85%A5-kernelsu-%E6%8F%90%E4%BE%9B%E7%9A%84%E5%86%85%E6%A0%B8">小米 13 使用 KernelSU 获取 ROOT | 叉叉白</a></li>
+<li><a href="https://www.bilibili.com/opus/858604047667560469">KernelSU刷入+LSPosed，最强root隐藏方案.小米13 ultra - 哔哩哔哩</a></li>
+<li><a href="https://github.com/ssut/payload-dumper-go">ssut/payload-dumper-go: an android OTA payload dumper written in Go</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2025-05-12
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/android/">Android</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/%E5%B0%8F%E7%B1%B3%E8%A7%A3%E9%94%81bootloader/">
+            <span class="next-text nav-default">小米手机解锁 bootloader</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2025-05-12 00:00:00 \u002b0000 UTC',
+        title: 'KernelSU',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

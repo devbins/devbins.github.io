@@ -50,8 +50,8 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-05-11T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-05-11T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-05-12T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
@@ -64,8 +64,8 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-05-11T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-05-11T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-05-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-05-12T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
@@ -143,6 +143,126 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_image/">Cocos2d加载网络图片</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-06-14 </span>
+      <div class="post-category">
+          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+          </div>
+        <span class="more-meta"> 约 468 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p><code>Cocos2d-x</code> 默认不支持加载网络图片，而加载网络图片是一个常见的需求，本文简单的实现了加载网络图片。</p>
+<h2 id="加载网路图片">加载网路图片</h2>
+<p>加载一张网络图片需要以下几个步骤</p>
+<ol>
+<li>从网络上把图片的二进制数据下载下来</li>
+<li>使用图片的二进制数据创建 <code>Image</code> 对象</li>
+<li>用创建好的 <code>Image</code> 对象初始化 <code>Texture2D</code> 对象</li>
+<li>使用 <code>Texture2D</code> 对象创建一个精灵</li>
+<li>把精灵添加到节点中</li>
+</ol>
+<!--listend-->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setResponseCallback</span><span class="p">([</span><span class="o">=</span><span class="p">](</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">*</span> <span class="n">client</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpResponse</span><span class="o">*</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">responseData</span> <span class="o">=</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">responseData</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(),</span> <span class="n">responseData</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 获取二进制数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">image</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Image</span><span class="p">();</span> <span class="c1">// 创建 Image对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">image</span><span class="o">-&gt;</span><span class="n">initWithImageData</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span> <span class="c1">// 填充图片数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">texture</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Texture2D</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">isImage</span> <span class="o">=</span> <span class="n">texture</span><span class="o">-&gt;</span><span class="n">initWithImage</span><span class="p">(</span><span class="n">image</span><span class="p">);</span> <span class="c1">// 使用 Image 初始化 Texture2D
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isImage</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">texture</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">image</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithTexture</span><span class="p">(</span><span class="n">texture</span><span class="p">);</span> <span class="c1">// 使用 Texture2D 创建精灵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sprite</span><span class="o">-&gt;</span><span class="n">setContentSize</span><span class="p">(</span><span class="n">Size</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sprite</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addChild</span><span class="p">(</span><span class="n">sprite</span><span class="p">);</span> <span class="c1">// 把精灵添加到节点中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">texture</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">sendImmediate</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>通过以上的步骤，就可以在 <code>Cocos2d</code> 中加载网络图片并显示出来。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_image/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
     <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_swallow_touch/">Cocos2d Layer 中点击事件穿透的最佳解决方案</a></h1>
@@ -630,31 +750,6 @@
     </div>
     <div class="read-more">
       <a href="../../post/emacs_flutter/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/c_mem_leak/">C/C&#43;&#43; 内存泄漏检测</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-08-07 </span>
-      <div class="post-category">
-          <a href="../../categories/c/c&#43;&#43;/"> C/C&#43;&#43; </a>
-          </div>
-        <span class="more-meta"> 约 1435 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在上一篇文章中我们讲了<a href="http://localhost:1313/post/leakcanary/">使用LeakCanary 内存泄漏检测的原理</a>，但是它只能检测 <code>Java</code> 层的泄漏，对 <code>C/C++</code> 并没有办法。</p>
-<p>所以这篇文章来聊一聊如何检测 <code>C/C++</code> 内存泄漏。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/c_mem_leak/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
