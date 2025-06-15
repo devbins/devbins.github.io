@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>JNI on devbins blog</title>
-    <link>http://devbins.github.io/tags/jni/</link>
+    <link>http://localhost:1313/tags/jni/</link>
     <description>Recent content in JNI on devbins blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Sun, 03 Sep 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://devbins.github.io/tags/jni/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/jni/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>JNI: HashMap&lt;-&gt;unordered_map</title>
-      <link>http://devbins.github.io/post/jni_map/</link>
+      <link>http://localhost:1313/post/jni_map/</link>
       <pubDate>Sun, 03 Sep 2023 00:00:00 +0000</pubDate>
-      <guid>http://devbins.github.io/post/jni_map/</guid>
+      <guid>http://localhost:1313/post/jni_map/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;&#xA;&lt;p&gt;在进行 &lt;code&gt;JNI&lt;/code&gt; 开发的时候，经常会碰到需要传递 &lt;code&gt;Map&lt;/code&gt; 的需求。&lt;/p&gt;&#xA;&lt;p&gt;它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。&lt;/p&gt;&#xA;&lt;p&gt;所以这里给一个参考，希望在用到的时候能帮你进行快速开发。&lt;/p&gt;</description>
     </item>
     <item>
       <title>性能提高之JNI 缓存</title>
-      <link>http://devbins.github.io/post/jnicache/</link>
+      <link>http://localhost:1313/post/jnicache/</link>
       <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
-      <guid>http://devbins.github.io/post/jnicache/</guid>
+      <guid>http://localhost:1313/post/jnicache/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;&#xA;&lt;p&gt;在 &lt;code&gt;JNI&lt;/code&gt; 中如果需要调用 &lt;code&gt;Java&lt;/code&gt; 的方法，首先需要使用 &lt;code&gt;FindClass&lt;/code&gt; 获取到 &lt;code&gt;jclass&lt;/code&gt; ，然后使用 &lt;code&gt;GetMethodID&lt;/code&gt; 获取到对应方法的 &lt;code&gt;ID&lt;/code&gt; ，字段也是一样的要使用 &lt;code&gt;GetFieldID&lt;/code&gt; 来获取。&lt;/p&gt;&#xA;&lt;p&gt;如果每次都要查找一遍，是比较麻烦和耗时的，今天就来研究一下怎么把它们缓存起来以提高性能。&lt;/p&gt;</description>
     </item>
     <item>
       <title>JNI 局部引用释放</title>
-      <link>http://devbins.github.io/post/jniref/</link>
+      <link>http://localhost:1313/post/jniref/</link>
       <pubDate>Sun, 03 Jul 2022 00:00:00 +0000</pubDate>
-      <guid>http://devbins.github.io/post/jniref/</guid>
+      <guid>http://localhost:1313/post/jniref/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;&#xA;&lt;p&gt;有过 &lt;code&gt;JNI&lt;/code&gt; 开发经历的都知道，在创建局部引用之后要释放。可是我们经常却直接返回 &lt;code&gt;env-&amp;gt;NewStringUTF(&amp;quot;&amp;quot;)&lt;/code&gt; 到 &lt;code&gt;Java&lt;/code&gt; 没有释放，并且不会有问题，本文就来研究一下局部引用的释放问题。&lt;/p&gt;</description>
     </item>
     <item>
       <title>JNI中的引用</title>
-      <link>http://devbins.github.io/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/</link>
+      <link>http://localhost:1313/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/</link>
       <pubDate>Sun, 28 Mar 2021 00:00:00 +0000</pubDate>
-      <guid>http://devbins.github.io/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/</guid>
+      <guid>http://localhost:1313/post/jni%E4%B8%AD%E7%9A%84%E5%BC%95%E7%94%A8/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;&#xA;&lt;p&gt;平时写 &lt;code&gt;Java&lt;/code&gt; 代码对创建的对象，我们很少会去关心怎么手动释放内存，大多数时候都有 &lt;code&gt;GC&lt;/code&gt; 去帮我们回收。&lt;/p&gt;&#xA;&lt;p&gt;然而在 &lt;code&gt;JNI&lt;/code&gt; 中，几乎都是 &lt;code&gt;C/C++&lt;/code&gt; 的代码，它们是没有 &lt;code&gt;GC&lt;/code&gt; 的，所以对内存的使用就需要格外小心了。&lt;/p&gt;&#xA;&lt;p&gt;因此在 &lt;code&gt;JNI&lt;/code&gt; 中提供了三种引用类型，分别是局部引用、全局引用、弱全局引用。下面介绍这三种引用。&lt;/p&gt;</description>
     </item>
   </channel>

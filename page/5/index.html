@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>devbins blog</title>
@@ -23,12 +23,12 @@
 
 
 
-<meta name="generator" content="Hugo 0.147.7 with theme even" />
+<meta name="generator" content="Hugo 0.147.8 with theme even" />
 
 
-<link rel="canonical" href="http://devbins.github.io/" />
-  <link href="http://devbins.github.io/index.xml" rel="alternate" type="application/rss+xml" title="devbins blog" />
-  <link href="http://devbins.github.io/index.xml" rel="feed" type="application/rss+xml" title="devbins blog" />
+<link rel="canonical" href="http://localhost:1313/" />
+  <link href="http://localhost:1313/index.xml" rel="alternate" type="application/rss+xml" title="devbins blog" />
+  <link href="http://localhost:1313/index.xml" rel="feed" type="application/rss+xml" title="devbins blog" />
 <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
@@ -41,7 +41,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:url" content="http://devbins.github.io/">
+<meta property="og:url" content="http://localhost:1313/">
   <meta property="og:site_name" content="devbins blog">
   <meta property="og:title" content="devbins blog">
   <meta property="og:description" content="devbins blog">
@@ -50,12 +50,12 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-06-05T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-06-05T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-06-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-06-13T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
- <meta property="og:url" content="http://devbins.github.io/">
+ <meta property="og:url" content="http://localhost:1313/">
   <meta property="og:site_name" content="devbins blog">
   <meta property="og:title" content="devbins blog">
   <meta property="og:description" content="devbins blog">
@@ -64,8 +64,8 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-06-05T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-06-05T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-06-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-06-13T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
@@ -145,6 +145,543 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/coredns/">简化DNS管理：使用CoreDNS打造高效基础设施</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-06-25 </span>
+      <div class="post-category">
+          <a href="../../categories/dns/"> DNS </a>
+          </div>
+        <span class="more-meta"> 约 1779 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>做网络开发的时候如果服务端没开发好，通常会在本地搭一个简单的数据服务，这时候又不想改代码里的域名，就可以通过自定义 <code>DNS</code> 服务器来把对应的域名改为本地主机。</p>
+<p>有时候有些广告非常恶心，不想看，可以通过自定义 <code>DNS</code> 把对应的域名的 IP 改为本地，由于本地没有对应的服务所以就加载不出来，也就看不到广告了。这也是广告拦截的原理。</p>
+<p>有些域名和 IP 之间相对固定，这时候自建 DNS 服务还能起到加速的作用，避免域名劫持。</p>
+<p>这些都可以通过改 <code>/etc/hosts</code> 文件来实现，但是如果你有多台设备都想做到一样的效果，每台机器都要配置一下就非常麻烦，所以，我们就希望搭建一个 <code>DNS</code> 服务来让局域网内的所的所有设备都可以享受到同样的待遇。</p>
+<p>我经过一番搜索后发现了 <code>CoreDNS</code> ，它配置简单是一个灵活、可扩展的 DNS 服务器，旨在简化 DNS 管理并提供高性能的解析服务。它不仅具备传统 DNS 服务器的功能，还支持插件机制，可以轻松地集成到各种现代化的网络环境中。于是就试着用它搭建了 <code>DNS</code> 服务。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/coredns/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_image/">Cocos2d加载网络图片</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-06-14 </span>
+      <div class="post-category">
+          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+          </div>
+        <span class="more-meta"> 约 468 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p><code>Cocos2d-x</code> 默认不支持加载网络图片，而加载网络图片是一个常见的需求，本文简单的实现了加载网络图片。</p>
+<h2 id="加载网路图片">加载网路图片</h2>
+<p>加载一张网络图片需要以下几个步骤</p>
+<ol>
+<li>从网络上把图片的二进制数据下载下来</li>
+<li>使用图片的二进制数据创建 <code>Image</code> 对象</li>
+<li>用创建好的 <code>Image</code> 对象初始化 <code>Texture2D</code> 对象</li>
+<li>使用 <code>Texture2D</code> 对象创建一个精灵</li>
+<li>把精灵添加到节点中</li>
+</ol>
+<!--listend-->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">setResponseCallback</span><span class="p">([</span><span class="o">=</span><span class="p">](</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">*</span> <span class="n">client</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpResponse</span><span class="o">*</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">responseData</span> <span class="o">=</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">responseData</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(),</span> <span class="n">responseData</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">());</span> <span class="c1">// 获取二进制数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">image</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Image</span><span class="p">();</span> <span class="c1">// 创建 Image对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">image</span><span class="o">-&gt;</span><span class="n">initWithImageData</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span> <span class="c1">// 填充图片数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">texture</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Texture2D</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">isImage</span> <span class="o">=</span> <span class="n">texture</span><span class="o">-&gt;</span><span class="n">initWithImage</span><span class="p">(</span><span class="n">image</span><span class="p">);</span> <span class="c1">// 使用 Image 初始化 Texture2D
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isImage</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">texture</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">image</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithTexture</span><span class="p">(</span><span class="n">texture</span><span class="p">);</span> <span class="c1">// 使用 Texture2D 创建精灵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sprite</span><span class="o">-&gt;</span><span class="n">setContentSize</span><span class="p">(</span><span class="n">Size</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sprite</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addChild</span><span class="p">(</span><span class="n">sprite</span><span class="p">);</span> <span class="c1">// 把精灵添加到节点中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">texture</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">sendImmediate</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">request</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>通过以上的步骤，就可以在 <code>Cocos2d</code> 中加载网络图片并显示出来。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_image/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_swallow_touch/">Cocos2d Layer 中点击事件穿透的最佳解决方案</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-06-13 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+          </div>
+        <span class="more-meta"> 约 669 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>熟悉 <code>Cocos2d</code> 开发的应该都知道，在一个场景中如果有多个 <code>Layer</code> ，这些 <code>Layer</code> 一个一个的叠在上面，当我们点击 <code>Layer</code> 上的按钮的时候可以正常的触发对应的事件。</p>
+<p>但是，当点击的位置所在的 <code>Layer</code> 没有事件要响应，这时候触摸事件就会传递到下面的 <code>Layer</code> ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_swallow_touch/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/caddy_fileserver/">高效文件共享：使用Caddy打造快速、安全的File Server</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-06-04 </span>
+      <div class="post-category">
+          <a href="../../categories/caddy/"> caddy </a>
+          </div>
+        <span class="more-meta"> 约 708 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>在<a href="https://mp.weixin.qq.com/s/EvvP_S_Oaiohb9upHY5g2w">跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共</a>中讲了如何使用 <code>caddy</code> 搭建 <code>WebDav</code> 服务，今天就来学一下如何在 <code>caddy</code> 中搭建静态文件服务器。</p>
+<h2 id="静态服务器">静态服务器</h2>
+<p>搭建一个静态服务器需要使用到 <code>file_server</code> 这个插件，这个插件是内置的，只要安装好了 <code>caddy</code> 就能够直接使用。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/caddy_fileserver/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cstring/">C语言字符串\0的截断陷阱</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-05-28 </span>
+      <div class="post-category">
+          <a href="../../categories/c/c&#43;&#43;/"> C/C&#43;&#43; </a>
+          </div>
+        <span class="more-meta"> 约 872 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>字符串在 C 语言中是一种常见的数据类型，以字符数组的形式存储。而 C 语言中的字符串以 <code>\0</code> （空字符）作为结束符。然而， <code>\0</code> 的存在可能导致一些问题，特别是在处理包含 <code>\0</code> 的字符串时，常见的字符串处理函数可能会出现截断的情况。</p>
+<p>最近就在字符串上踩了坑。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cstring/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/caddy_webdav/">跨平台文件同步利器：使用Caddy搭建WebDav实现多设备间的无缝文件共享</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-05-27 </span>
+      <div class="post-category">
+          <a href="../../categories/webdav/"> WebDav </a>
+          </div>
+        <span class="more-meta"> 约 1180 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>我在 <code>iOS</code> 上使用 <code>beorg</code> 来管理日程，所以经常需要在电脑和手机之间同步。</p>
+<p><code>beorg</code> 支持 <code>iCloud</code> 、 <code>Dropbox</code> 、 <code>WebDav</code> 等方式同步，使用 <code>iCloud</code> 是最简单的，但是我不想数据放到别人的服务器上面，所以我就不考虑了， <code>Dropbox</code> 就你懂的，所以就只剩下 <code>WebDav</code> 了。</p>
+<p>WebDav 是一种基于 HTTP 协议的文件访问和管理技术，它提供了一种标准化的方式，使我们可以在网络上进行文件操作，如上传、下载、删除和重命名等。</p>
+<p>我找了一圈看上了 <code>Caddy</code> ，它是一个功能强大且易于使用的 Web 服务器，它为搭建 WebDav 服务器提供了简洁而灵活的解决方案。所以今天就要用 <code>Caddy</code> 来搭建 <code>WebDav</code> 服务。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/caddy_webdav/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_%E7%9B%91%E5%90%AC%E8%BE%93%E5%85%A5/">Cocos2d监听TextField输入</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-05-20 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          </div>
+        <span class="more-meta"> 约 774 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>在 <code>Android</code> 开发中，要监听 <code>EditText</code> 输入内容的变化，可以通过 <code>addTextChangedListener</code> 方法来实现，非常方便。</p>
+<p>但是在 <code>Cocos2d</code> 中要监听 <code>TextField</code> 却没有那么容易，我经过实验发现有两种方法可以达到同样的目的，一种是监听文本的输入事件、另一种是在每一帧里监听文本变化。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_%E7%9B%91%E5%90%AC%E8%BE%93%E5%85%A5/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/c&#43;&#43;json/">C&#43;&#43; JSON</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-05-14 </span>
+      <div class="post-category">
+          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
+          <a href="../../categories/json/"> JSON </a>
+          </div>
+        <span class="more-meta"> 约 651 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>在 <code>C++</code> 中有许多第三方库可以解析 JSON，但是都不是很好用，不能像 <code>Java</code> 中的 <a href="https://github.com/google/gson">gson</a> 、 <a href="https://github.com/alibaba/fastjson">fastjson</a> 一样直接把 JSON 直接转成对象。</p>
+<p>找了许多库，找到了<a href="https://github.com/nlohmann/json">nlohmann/json: JSON for Modern C++</a>使用起来比较方便，也踩了坑，来了解一下。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/c&#43;&#43;json/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_loading_view/">Cocos2d-x之LoadingView</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-03-28 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          </div>
+        <span class="more-meta"> 约 413 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>在 <code>Cocos2d-x</code> 中实现加载动画可以提高用户体验和应用程序的交互性。加载动画通常会显示在网络通信或资源加载等操作期间，以告知用户当前操作正在进行中。</p>
+<p>可惜的是 <code>Cocos2d</code> 并没有提供这种操作，不像 Android 提供了 <code>ProgressDialog</code> 。</p>
+<p>所以今天就来自己实现一个。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_loading_view/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_http/">Cocos2d-x之网络请求</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-03-27 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          </div>
+        <span class="more-meta"> 约 957 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>网络编程是开发中必不可少的一环， <code>Cocos2d-x</code> 提供了一个简单易用的网络模块，包括 <code>HTTP</code> 、 <code>WebSocket</code> 和 <code>Socket</code> 三种协议的支持。</p>
+<p>它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。</p>
+<p>今天就来学习一下 <code>HTTP</code> 的使用。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_http/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d_webview/">Cocos2d 之WebView</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-03-26 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          </div>
+        <span class="more-meta"> 约 473 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>上一篇把 <code>Cocos2d</code> 环境搭好了，今天来学习一下 <code>Webview</code> 的使用。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d_webview/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/cocos2d%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">Cocos2d-x环境搭建（Mac）</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-03-25 </span>
+      <div class="post-category">
+          <a href="../../categories/cocos2d/"> Cocos2d </a>
+          </div>
+        <span class="more-meta"> 约 915 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>是的我最近在学习 <code>Cocos2d-x</code> 。你可能会有疑问，已经 2023 年了为什么还要学习 <code>Cocos2d-x</code> ?</p>
+<p><code>Cocos2d-x</code> 最新一次发布是在 2019-12-04，已经 3 年没更新了，这时候学习不是明智之举。</p>
+<p>我最初知道 <code>Cocos2d-x</code> 的时候还是上大学那会，在极客学院学了不少知识，后面没什么场景会用到，就再也没使用过了。</p>
+<p>我最近又学了是因为我们有个项目要提供 <code>Cocos2d-x</code> 的版本，这么多年过去我也没想到还会有一天要用到。</p>
+<p>我在搭建环境碰到了一些问题，记录一下。</p>
+<figure><img src="../../images/cocos/cocos2d.png">
+</figure>
+    </div>
+    <div class="read-more">
+      <a href="../../post/cocos2d%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/hugo_vaudio/">让Hugo支持音频和视频</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-02-26 </span>
+      <div class="post-category">
+          <a href="../../categories/hugo/"> Hugo </a>
+          </div>
+        <span class="more-meta"> 约 697 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>前段时间写 <code>MoviePy</code> 系列博客的时候，要把处理的视频效果展示出来，我按照图片的写法去写视频发现并不能渲染出来，然后又用 <code>HTML</code> 的方式发现还是不行，经过一番研究找到了办法。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/hugo_vaudio/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/moviepy_crop/">MoviePy: 使用MoviePy裁剪一个区域</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-02-21 </span>
+      <div class="post-category">
+          <a href="../../categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"> 音视频 </a>
+          <a href="../../categories/python/"> Python </a>
+          </div>
+        <span class="more-meta"> 约 190 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>之前的几篇文章讲了 <code>MoviePy</code> 的一些基本使用，发现没有裁剪视频中的一个区域的功能，然后去搜文档发现要使用 <code>fx</code> 函数进行变换，我经过实验发现了可以直接使用 <code>crop</code> 方法直接进行裁剪。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/moviepy_crop/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/moviepy_heart/">MoviePy: 糟糕是心动的感觉</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-02-10 </span>
+      <div class="post-category">
+          <a href="../../categories/moviepy/"> MoviePy </a>
+          <a href="../../categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"> 音视频 </a>
+          <a href="../../categories/python/"> Python </a>
+          <a href="../../categories/ffmpeg/"> FFmpeg </a>
+          </div>
+        <span class="more-meta"> 约 1696 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>过几天就是情人节了，刚好最近在研究 <code>MoviePy</code> ，所以今天就来使用 <code>MoviePy</code> 画一个爱心，会动的。</p>
+<p>废话不多说，直接看效果</p>
+<figure><img src="../../images/moviepy/moviepy_heart.gif">
+</figure>
+    </div>
+    <div class="read-more">
+      <a href="../../post/moviepy_heart/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/moviepy_blur/">MoviePy: 高斯模糊效果</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-02-09 </span>
+      
+        <span class="more-meta"> 约 498 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>今天要使用 <code>MoviePy</code> 实现高斯模糊的效果</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/moviepy_blur/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="../../post/moviepy_gif/">MoviePy: 使用Python把视频转成Gif</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2023-02-07 </span>
+      <div class="post-category">
+          <a href="../../categories/moviepy/"> MoviePy </a>
+          <a href="../../categories/ffmpeg/"> FFmpeg </a>
+          <a href="../../categories/python/"> Python </a>
+          <a href="../../categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"> 音视频 </a>
+          </div>
+        <span class="more-meta"> 约 862 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章讲了 <code>MoviePy</code> 的一些使用，今天来说一下怎么把视频转成 <code>gif</code> ，以及怎么把 <code>gif</code> 转成视频。</p>
+    </div>
+    <div class="read-more">
+      <a href="../../post/moviepy_gif/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="../../post/moviepy/">MoviePy: 用Python剪辑视频</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2023-02-05 </span>
@@ -221,464 +758,6 @@
   </div>
 </article>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/emacs_flutter/">使用 Emacs 开发 Flutter</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-08-27 </span>
-      <div class="post-category">
-          <a href="../../categories/flutter/"> Flutter </a>
-          </div>
-        <span class="more-meta"> 约 701 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>一直都想在 <code>Emacs</code> 中做 <code>flutter</code> 开发，早些年用起来非常卡，这两天试了下还挺不错的，记录一下。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/emacs_flutter/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/c_mem_leak/">C/C&#43;&#43; 内存泄漏检测</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-08-07 </span>
-      <div class="post-category">
-          <a href="../../categories/c/c&#43;&#43;/"> C/C&#43;&#43; </a>
-          </div>
-        <span class="more-meta"> 约 1435 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在上一篇文章中我们讲了<a href="http://localhost:1313/post/leakcanary/">使用LeakCanary 内存泄漏检测的原理</a>，但是它只能检测 <code>Java</code> 层的泄漏，对 <code>C/C++</code> 并没有办法。</p>
-<p>所以这篇文章来聊一聊如何检测 <code>C/C++</code> 内存泄漏。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/c_mem_leak/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/leakcanary/">LeakCanary 内存泄漏检测原理</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-08-06 </span>
-      <div class="post-category">
-          <a href="../../categories/android/"> Android </a>
-          </div>
-        <span class="more-meta"> 约 2719 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>内存泄漏是一个开发不得不面对的问题，在 Android 中有许多工具都可以用来检测内存泄漏，比如：MAT、Profile等。</p>
-<p>但是这些工具都需要手动操作，比较麻烦，所以我们需要一个能够自动检测的工具，它就是<a href="https://square.github.io/leakcanary/">LeakCanary</a>。</p>
-<p>今天就来了解一下原理，毕竟面试也是常问的问题。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/leakcanary/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/jnicache/">性能提高之JNI 缓存</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-07-05 </span>
-      <div class="post-category">
-          <a href="../../categories/jni/"> JNI </a>
-          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
-          <a href="../../categories/java/"> Java </a>
-          </div>
-        <span class="more-meta"> 约 851 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在 <code>JNI</code> 中如果需要调用 <code>Java</code> 的方法，首先需要使用 <code>FindClass</code> 获取到 <code>jclass</code> ，然后使用 <code>GetMethodID</code> 获取到对应方法的 <code>ID</code> ，字段也是一样的要使用 <code>GetFieldID</code> 来获取。</p>
-<p>如果每次都要查找一遍，是比较麻烦和耗时的，今天就来研究一下怎么把它们缓存起来以提高性能。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/jnicache/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/jniref/">JNI 局部引用释放</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-07-03 </span>
-      <div class="post-category">
-          <a href="../../categories/jni/"> JNI </a>
-          <a href="../../categories/java/"> Java </a>
-          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
-          </div>
-        <span class="more-meta"> 约 1799 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>有过 <code>JNI</code> 开发经历的都知道，在创建局部引用之后要释放。可是我们经常却直接返回 <code>env-&gt;NewStringUTF(&quot;&quot;)</code> 到 <code>Java</code> 没有释放，并且不会有问题，本文就来研究一下局部引用的释放问题。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/jniref/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/rime/">折腾RIME输入法</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-05-04 </span>
-      <div class="post-category">
-          <a href="../../categories/rime/"> rime </a>
-          </div>
-        <span class="more-meta"> 约 1764 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>市面上那么多输入法为什么还要折腾一个新的输入法？</p>
-<p>许多年前有爆出输入法泄漏隐私的问题，一些数据没有经过加密传输。</p>
-<p>这些想想都让人后怕。经过一段时间的摸索，逐步上手了 <code>RIME</code> ，因为 <code>RIME</code> 并不是那么容易上手，所以我把摸索的一些经验写成文章，希望能帮助到想使用 <code>RIME</code> 的伙伴。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/rime/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/ref/">对比Rust引用与C&#43;&#43;引用</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-04-18 </span>
-      <div class="post-category">
-          <a href="../../categories/rust/"> Rust </a>
-          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
-          </div>
-        <span class="more-meta"> 约 1065 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>最近在学习 <code>Rust</code> ， <code>Rust</code> 中也有引用，这让我有点好奇 <code>Rust</code> 的引用是不是与 <code>C++</code> 一样，于是便有了此文。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/ref/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/restclient/">Emacs中的Postman</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-01-29 </span>
-      <div class="post-category">
-          <a href="../../categories/emacs/"> Emacs </a>
-          </div>
-        <span class="more-meta"> 约 928 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在日常开发中，经常需要调试服务端返回的数据，我们常用的有 <code>Postman</code> 、 <code>PostWoman</code> 等等。</p>
-<p>但是我习惯了在 <code>Emacs</code> 中做完这一切，不想去安装其他软件，于是在 <code>Emacs</code> 中也找到了 <code>restclient</code> 这个插件，它能满足我的需求。</p>
-<p>所以今天要来分享一下 <code>restclient</code> 的使用。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/restclient/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/gin%E4%B8%8A%E4%BC%A0%E6%9C%8D%E5%8A%A1/">Gin 实现上传/下载服务</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-01-18 </span>
-      <div class="post-category">
-          <a href="../../categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 809 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在上一篇文章<a href="https://devbins.github.io/post/go%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/">go实现文件上传/下载服务</a>中讲到了自己实现一个文件上传服务，然而我发现<a href="https://github.com/gin-gonic/gin">gin-gonic/gin: Gin is a HTTP web framework written in Go (Golang).</a>也默认提供了文件上传服务。</p>
-<p>本文就来看看 <code>Gin</code> 中的文件上传服务。</p>
-<h2 id="创建项目">创建项目</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir ginupload <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ginupload
-</span></span><span class="line"><span class="cl">go mod init ginupload
-</span></span><span class="line"><span class="cl">go get -u github.com/gin-gonic/gin
-</span></span><span class="line"><span class="cl">touch main.go
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>我们创建一个 <code>ginupload</code> 的目录用来存放代码，并且使用 <code>go mod</code> 来管理依赖。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/gin%E4%B8%8A%E4%BC%A0%E6%9C%8D%E5%8A%A1/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/go%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/">go实现文件上传/下载服务</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-01-16 </span>
-      <div class="post-category">
-          <a href="../../categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 780 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在开发的过程中，难免会碰到上传/下载文件的场景。如果这个功能服务端没开发好，就没法进行测试。</p>
-<p>所以每次都要自己先实现一遍，本文使用 <code>go</code> 写了一个简单的文件上传和下载服务。</p>
-<p>以后再碰到这种场景的时候就可以快速进行开发。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/go%E5%AE%9E%E7%8E%B0%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/rust_android/">Rust For Android</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-23 </span>
-      <div class="post-category">
-          <a href="../../categories/rust/"> Rust </a>
-          <a href="../../categories/android/"> Android </a>
-          </div>
-        <span class="more-meta"> 约 1134 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>继上一篇<a href="https://devbins.github.io/post/rust%5Fios/">用 Rust 开发 iOS</a> 开发折腾之后，我又折腾起 <code>Android</code> 了。</p>
-<p>最开始我是先从 <code>Android</code> 上下手的，不过一直没成功，直到最近才成功了。</p>
-<p>本文默认你已经把 <code>Rust</code> 安装好了。注意需要使用 <code>stable</code>  <code>channel</code> ，我之前使用的是 <code>nightly</code> 所以一直失败。</p>
-<p><code>nightly channel</code> 会报 <code>dl_iterate_phdr can't find</code> 错误，这个错误一直误导了我，我一直以为是链接上的问题，所以折腾了很久。</p>
-<p>直到我换了一台电脑试了一下，居然成功了，才发现使用的 <code>channel</code> 是不一样的。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/rust_android/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/rust_ios/">用 Rust 开发 iOS</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-18 </span>
-      <div class="post-category">
-          <a href="../../categories/rust/"> Rust </a>
-          <a href="../../categories/ios/"> iOS </a>
-          </div>
-        <span class="more-meta"> 约 989 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p><code>Rust</code> 是近几年特别火的语言，之前学过几次，每次学完之后就不了了之，没有实际用到项目中。</p>
-<p>所以每次学习的时候都感觉像是最熟悉的陌生人，所以最近想要在移动端进行实战，于是开始了折腾之旅，这篇就是 <code>Rust</code> 在 <code>iOS</code> 上的探索。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/rust_ios/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/cocoapods/">CocoaPods 安装</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-05 </span>
-      <div class="post-category">
-          <a href="../../categories/ios/"> iOS </a>
-          <a href="../../categories/cronet/"> Cronet </a>
-          </div>
-        <span class="more-meta"> 约 835 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>今天来说一下 <code>CocoaPods</code> 的安装。</p>
-<p><code>CocoaPods</code> 是用来管理 <code>iOS</code> 开发中用到的第三方库，类似安卓中的 <code>Gradle</code> 、 <code>Maven</code> 的工具。</p>
-<p>在 <code>iOS</code> 的开发中会经常用到，对我这样的 <code>iOS</code> 新手，一段时间不用，不免遗忘，所以用来记录一下，以后查找起来方便。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/cocoapods/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/ocpp/">C&#43;&#43; 与 OC</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-11-20 </span>
-      <div class="post-category">
-          <a href="../../categories/ios/"> iOS </a>
-          <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
-          </div>
-        <span class="more-meta"> 约 575 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>最近在研究 <code>Cronet</code> 网络库，涉及到 <code>Android</code> 和 <code>iOS</code> ，由于对 <code>OC</code> 不怎么熟悉，所以在使用的时候碰到了 <code>C++</code> 与 <code>OC</code> 互相调用的问题，于是便有了此文。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/ocpp/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/cronet_ios/">Cronet for iOS</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-11-16 </span>
-      <div class="post-category">
-          <a href="../../categories/cronet/"> Cronet </a>
-          <a href="../../categories/ios/"> iOS </a>
-          </div>
-        <span class="more-meta"> 约 1094 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>在<a href="https://devbins.github.io/post/cronet/">Android Cronet 构建</a> 中讲了 <code>Android</code> 上 <code>Cronet</code> 的下载、编译、使用。</p>
-<p>今天来说一说 <code>iOS</code> 上如何编译与使用。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/cronet_ios/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/git_prune/">Git 清理 fetch 失败占用的磁盘空间</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-11-08 </span>
-      <div class="post-category">
-          <a href="../../categories/git/"> Git </a>
-          </div>
-        <span class="more-meta"> 约 181 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>最近在下载 <code>chromium</code> 源码，下载完之后需要切换到指定的分支，这时候使用 <code>git fetch</code> 进行切换，但是不是一次就能成功。</p>
-<p>所以需要不断执行 <code>git fetch</code> ，但是随着执行的次数增多，我发现磁盘的空间却越来越少。</p>
-<p>也就是 <code>git fetch</code> 失败后占用了磁盘空间并没有释放。</p>
-<p>在查找资料后发现使用 <code>git prune</code> 可以解决这个问题。</p>
-<p><code>git prune</code> 会删除没有使用的 <code>hash</code> 文件，由于我们这边 <code>fetch</code> 失败了，所以这些文件是没有使用的。</p>
-<p>执行之后磁盘瞬间释放70G空间。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/git_prune/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="../../post/cronet/">Android Cronet 构建</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-11-06 </span>
-      <div class="post-category">
-          <a href="../../categories/android/"> Android </a>
-          </div>
-        <span class="more-meta"> 约 1267 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p><code>Cronet</code> 是 <code>Chromium</code> 浏览器中用于网络请求的库，支持 <code>HTTP1/2</code> 、 <code>SPDY</code> 、 <code>QUIC</code> 等协议。并且还支持移动端。</p>
-<p>需要注意的是编译 <code>Android</code> 需要在 <code>Linux</code> 下进行，并且只支持 <code>Ubuntu</code> 和 <code>Debian</code> 的发行版，其它的不支持。</p>
-    </div>
-    <div class="read-more">
-      <a href="../../post/cronet/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
     </section>
   
   <nav class="pagination">
@@ -745,20 +824,6 @@
 <script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
 
 
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-PQCM0BT4H5');
-        }
-      </script>
 
 
 
