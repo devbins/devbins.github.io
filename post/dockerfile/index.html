@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.148.2 with theme even" />
+<meta name="generator" content="Hugo 0.149.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/dockerfile/" />
@@ -212,7 +212,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> ubuntu</span><span class="err">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>FROM</code> 用来指定基础镜像，我们使用 Dockerfile 定制镜像，其实就是在一个基础镜像上进行操作。在 Dockerfile 中 <code>FROM</code> 是必需的指令，且一定是第一个指令。</p>
@@ -326,7 +326,7 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">VOLUME</span><span class="s"> /data # VOLUME &lt;path&gt; 格式</span><span class="err">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">VOLUME</span><span class="w"> </span><span class="s">/data</span> <span class="c1"># VOLUME &lt;path&gt; 格式</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">VOLUME</span> <span class="p">[</span><span class="s2">&#34;/data1&#34;</span><span class="p">,</span> <span class="s2">&#34;/data2&#34;</span><span class="p">]</span> <span class="c1">#VOLUME [&#34;path1&#34;, &#34;path2&#34;] 格式</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
@@ -338,7 +338,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="s"> 8080</span><span class="err">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8080</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>EXPOSE</code> 只是声明容器使用的端口，并不会与宿主机进行端口映射。可以通过 <code>-p</code> 指令在启动容器的时候进行映射 <code>docker run -p 8080:8080 xxx</code> 。</p>
@@ -349,7 +349,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="s"> /www</span><span class="err">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/www</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>WORKDIR</code> 用来设置工作目录，相当于切换目录，也就相当于 <code>cd</code> 。在 Dockerfile 中不能使用 <code>cd</code> ，因为 <code>cd</code> 不在同一个环境中， <code>Linux</code> 中之所以能用是因为 <code>cd</code> 在同一个进程里。</p>

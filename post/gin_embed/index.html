@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.148.2 with theme even" />
+<meta name="generator" content="Hugo 0.149.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gin_embed/" />
@@ -201,14 +201,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed dist</span>
-</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f</span> <span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nx">fp</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">fs</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="s">&#34;dist&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">fp</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="cp">//go:embed dist</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">fp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;dist&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">router</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">fp</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们把网页内容绑定到了 <code>/</code> ，内容显示正常。</p>
 <p>但是这样做的后果就是所有的 <code>GET</code> 请求都会被 <code>/</code> 捕获，这时候使用 <code>GET</code> 绑定路由就会报错了。</p>
@@ -229,13 +229,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">//go:embed dist</span>
-</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f</span> <span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">router</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/public&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">NoRoute</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">WrapH</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))))</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="cp">//go:embed dist</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">r</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/public&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nx">r</span><span class="p">.</span><span class="nf">NoRoute</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">WrapH</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))))</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这样就能够解决问题了。</p>
 <h2 id="参考">参考</h2>
