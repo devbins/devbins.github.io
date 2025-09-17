@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.149.0 with theme even" />
+<meta name="generator" content="Hugo 0.150.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="./sass/main.min.7a55213d2525d355f504faa45fc0a8facd4792244eed4e42ebc5f1a55a83d427.css" rel="stylesheet">
+<link href="./sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -50,8 +50,8 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-09-02T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-09-02T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-09-16T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-09-16T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
@@ -64,8 +64,8 @@
 
   <meta itemprop="name" content="devbins blog">
   <meta itemprop="description" content="devbins blog">
-  <meta itemprop="datePublished" content="2025-09-02T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-09-02T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2025-09-16T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-09-16T00:00:00+00:00">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="devbins blog">
   <meta name="twitter:description" content="devbins blog">
@@ -143,6 +143,75 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="./post/go_sqlite/">Go SQLite交叉编译踩坑实录：从CGO到pure Go的解决方案</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2025-09-16 </span>
+      <div class="post-category">
+          <a href="./categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 约 516 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="cgo">CGO</h2>
+<p>我在 Mac 下使用交叉编译 Linux x86 架构的 go 程序，一切非常顺利。</p>
+<p>指令如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux <span class="nv">GOARCH</span><span class="o">=</span>amd64 go build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是当我在 Linux 下运行的时候却报了如下错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">failed to create user table: Binary was compiled with &#39;CGO_ENABLED=0&#39;, go-sqlite3 requires cgo to work. This is a stub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也就是需要 c 语言环境，也就意味着需要把 <code>CGO_ENABLED</code> 改为 <code>1</code> 。</p>
+    </div>
+    <div class="read-more">
+      <a href="./post/go_sqlite/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="./post/qwen-code/">qwen-code配合魔搭每天2000次调用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2025-09-03 </span>
+      <div class="post-category">
+          <a href="./categories/ai/"> AI </a>
+          </div>
+        <span class="more-meta"> 约 358 字 </span>
+        <span class="more-meta"> 预计阅读 1 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="前言">前言</h2>
+<p>阿里百炼的 100 万 token 用完了，虽然模型挺多的，但是并不是每个都能在 <code>Claude Code</code> 中使用。</p>
+<p>于是转向魔搭社区，它每天有 2000 次免费调用，足够使用了，顺便体验一下 <code>Qwen-code</code></p>
+<p>毕竟都用 AI 写代码了，乐趣就没了。</p>
+    </div>
+    <div class="read-more">
+      <a href="./post/qwen-code/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
     <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="./post/claude_code_router/">百万 token 用完了，换其它的</a></h1>
@@ -623,56 +692,6 @@
     </div>
     <div class="read-more">
       <a href="./post/gin_embed/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="./post/embed/">Golang 内嵌网页</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2025-03-27 </span>
-      <div class="post-category">
-          <a href="./categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 295 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>开发一个网站，会分为前端和后端，它们都有许多技术可选，但是都不得不面临一个问题是交付的时候需要交付两份产物。</p>
-<p>有没有办法只需要交付一个文件就行？</p>
-<p>答案是肯定的，今天来讲一下 Go 语言中嵌入网页，打包成一个文件。</p>
-    </div>
-    <div class="read-more">
-      <a href="./post/embed/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="./post/typescript_for/">TypeScript for of 与 for in 的区别</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2025-03-26 </span>
-      <div class="post-category">
-          <a href="./categories/typescript/"> TypeScript </a>
-          </div>
-        <span class="more-meta"> 约 373 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <h2 id="前言">前言</h2>
-<p>今天来了解一下 <code>TypeScript</code> 中 <code>for in</code> 与 <code>for of</code> 的区别。</p>
-    </div>
-    <div class="read-more">
-      <a href="./post/typescript_for/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
