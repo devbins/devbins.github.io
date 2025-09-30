@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>小米路由器开启 IPv6 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.150.1 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/miwifi_ipv6/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/miwifi_ipv6/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="小米路由器开启 IPv6">
+  <meta property="og:description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-09-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-24T00:00:00+00:00">
+    <meta property="article:tag" content="路由器">
+
+  <meta itemprop="name" content="小米路由器开启 IPv6">
+  <meta itemprop="description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+  <meta itemprop="datePublished" content="2025-09-24T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-09-24T00:00:00+00:00">
+  <meta itemprop="wordCount" content="787">
+  <meta itemprop="keywords" content="路由器">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="小米路由器开启 IPv6">
+  <meta name="twitter:description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+ <meta property="og:url" content="http://devbins.github.io/post/miwifi_ipv6/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="小米路由器开启 IPv6">
+  <meta property="og:description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-09-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-24T00:00:00+00:00">
+    <meta property="article:tag" content="路由器">
+
+  <meta itemprop="name" content="小米路由器开启 IPv6">
+  <meta itemprop="description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+  <meta itemprop="datePublished" content="2025-09-24T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-09-24T00:00:00+00:00">
+  <meta itemprop="wordCount" content="787">
+  <meta itemprop="keywords" content="路由器">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="小米路由器开启 IPv6">
+  <meta name="twitter:description" content="前言 本文讲述了使用小米路由器 R2D 开启 IPv6。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">小米路由器开启 IPv6</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2025-09-24 </span>
+        <div class="post-category">
+            <a href="../../categories/%E8%B7%AF%E7%94%B1%E5%99%A8/"> 路由器 </a>
+            </div>
+          <span class="more-meta"> 约 787 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#下载-rom-更新到开发版">下载 rom，更新到开发版</a></li>
+    <li><a href="#下载-ssh-工具">下载 ssh 工具</a></li>
+    <li><a href="#使用-ssh-登录">使用 ssh 登录</a></li>
+    <li><a href="#开启-ipv6">开启 IPv6</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>本文讲述了使用小米路由器 R2D 开启 IPv6。</p>
+<h2 id="下载-rom-更新到开发版">下载 rom，更新到开发版</h2>
+<p>要想开启 IPv6，需要开启 ssh，要开启 ssh，需要更新到开发版。</p>
+<p>所以先到<a href="https://www1.miwifi.com/miwifi_download.html">MiWiFi – 下载</a>中下载开发版的 ROM，已经是开发版的可以跳过，直接到下一步。</p>
+<p>下载好之后放到 U 盘中，U 盘的格式必须是 FAT32 格式的，ROM 的文件名必须是 <code>miwifi.bin</code> ，并且该目录下不能有其它 <code>bin</code> 文件。</p>
+<p>做完这些之后断开小米路由器的电源，将U盘插入路由器USB接口。</p>
+<p>接着按住reset键，接通电源，等待指示灯变为黄色闪烁状态后松开reset键。</p>
+<p>完成后会自动重启。</p>
+<h2 id="下载-ssh-工具">下载 ssh 工具</h2>
+<p>按照上面的步骤顺利的话已经更新到开发版了，接下来就要开启 ssh 了。</p>
+<p>到<a href="https://d.miwifi.com/rom/ssh">MiWiFi SSH</a> 下载开启 ssh 的工具，需要使用 Safari 下载，用 Chrome 没反应。</p>
+<p>没有 Safari 可以使用 Edge，据说也可以。</p>
+<p>下载好后放到 U 盘中，U 盘同样需要是 <code>FAT32</code> 格式的。</p>
+<p>把下载的文件重命名为 <code>miwifi_ssh.bin</code> ，如果和上面刷开发版是用的同一个 U 盘，保险起见把 <code>miwifi.bin</code> 删掉。</p>
+<p>同样的断开小米路由器的电源，将U盘插入USB接口。</p>
+<p>然后按住reset按钮之后重新接入电源，指示灯变为黄色闪烁状态即可松开reset键。</p>
+<p>等待一会就好了，完成后会自动重启。</p>
+<h2 id="使用-ssh-登录">使用 ssh 登录</h2>
+<p>开启 <code>ssh</code> 之后就可以尝试登录了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh root@192.168.31.1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>登录并不顺利，我碰到了如下错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Unable to negotiate with 192.168.31.1 port 22: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1,diffie-hellman-group14-sha1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一番搜索最后使用如下指令解决</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh -o <span class="nv">KexAlgorithms</span><span class="o">=</span>+diffie-hellman-group1-sha1 -o <span class="nv">HostKeyAlgorithms</span><span class="o">=</span>+ssh-rsa root@192.168.31.1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>回车后输入密码就能登录了。</p>
+<p>不过这个需要在 <code>iTerm2</code> 中使用，系统自带的 <code>Terminal</code> 也是可以的，但是 <code>Warp</code> 就不行了，输入密码就报下面这个错</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Connection to 192.168.31.1 closed by remote host.
+</span></span><span class="line"><span class="cl">Connection to 192.168.31.1 closed.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里我试了好久。</p>
+<h2 id="开启-ipv6">开启 IPv6</h2>
+<p>登录成功后，终于可以开启 IPv6 了。</p>
+<p>使用 vi 编辑 <code>/etc/config/ipv6</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">vi /etc/config/ipv6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把 <code>list if_off 'wan'</code> 改成 <code>list if_on 'wan'</code> ，最后内容如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cfg" data-lang="cfg"><span class="line"><span class="cl"><span class="na">config ipv6 &#39;settings&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">list if_on &#39;wan&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">option enabled &#39;1&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">list if_on &#39;ipv6&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">option enabled &#39;1&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>改完之后重启路由器。</p>
+<p>然后使用<a href="https://test-ipv6.com/">Test your IPv6.</a>进行 IPv6 测试，不出意外基本都是通的，到这里 IPv6 就开启成功了。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://web.vip.miui.com/page/info/mio/mio/detail?postId=19154125&amp;app_version=dev.20051">【路由刷机教程】适用于带USB的小米路由</a></li>
+<li><a href="https://p3terx.com/archives/r2d-enable-ipv6-support.html">小米路由器 R2D 开启 IPv6 支持 - P3TERX ZONE</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/30840210">ssh 登录旧设备的问题解决 - 知乎</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2025-09-24
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/%E8%B7%AF%E7%94%B1%E5%99%A8/">路由器</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/mbsync/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Emacs 中接收网易邮件</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="../../post/miwifi_smb/">
+            <span class="next-text nav-default">Mac连接小米路由器硬盘</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2025-09-24 00:00:00 \u002b0000 UTC',
+        title: '小米路由器开启 IPv6',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    > 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>
