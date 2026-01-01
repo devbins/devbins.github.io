@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目 - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/%E5%A6%82%E4%BD%95%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95vue%E5%92%8Cgolang%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/%E5%A6%82%E4%BD%95%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95vue%E5%92%8Cgolang%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta property="og:description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-12-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-16T00:00:00+00:00">
+    <meta property="article:tag" content="Vue">
+    <meta property="article:tag" content="Golang">
+
+  <meta itemprop="name" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta itemprop="description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+  <meta itemprop="datePublished" content="2025-12-16T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-12-16T00:00:00+00:00">
+  <meta itemprop="wordCount" content="431">
+  <meta itemprop="keywords" content="Vue,Golang">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta name="twitter:description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+ <meta property="og:url" content="http://devbins.github.io/post/%E5%A6%82%E4%BD%95%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95vue%E5%92%8Cgolang%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta property="og:description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-12-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-16T00:00:00+00:00">
+    <meta property="article:tag" content="Vue">
+    <meta property="article:tag" content="Golang">
+
+  <meta itemprop="name" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta itemprop="description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+  <meta itemprop="datePublished" content="2025-12-16T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-12-16T00:00:00+00:00">
+  <meta itemprop="wordCount" content="431">
+  <meta itemprop="keywords" content="Vue,Golang">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目">
+  <meta name="twitter:description" content="前言 当我们开发 Vue &#43; Golang 的前后端分离项目时，前端跑在 http://localhost:5173 ，后端跑在 http://localhost:8080 —— 两者存在跨域的问题。
+我的第一反应是：加个 CORS 就行了，试了之后发现不行。
+于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次
+每次改前端代码，都要 npm run build 才能验证修改
+我其实就是想要热重载 &#43; 实时接口调试？
+本文讲如何在 不搭建额外代理服务 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2025-12-16 </span>
+        <div class="post-category">
+            <a href="../../categories/vue/"> Vue </a>
+            <a href="../../categories/golang/"> Golang </a>
+            </div>
+          <span class="more-meta"> 431 words </span>
+          <span class="more-meta"> 1 min read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#本地调试">本地调试</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>当我们开发 Vue + Golang 的前后端分离项目时，前端跑在 <code>http://localhost:5173</code> ，后端跑在 <code>http://localhost:8080</code> —— 两者存在跨域的问题。</p>
+<p>我的第一反应是：加个 CORS 就行了，试了之后发现不行。</p>
+<p>于是我改成本地部署 Nginx 反向代理，虽然不好配，但是能用。但是一段时间不用就有忘记了。或者换个项目还得来一次</p>
+<p>每次改前端代码，都要 <code>npm run build</code> 才能验证修改</p>
+<p>我其实就是想要热重载 + 实时接口调试？</p>
+<p>本文讲如何在 <strong>不搭建额外代理服务</strong> 的前提下，让 Vue 的开发服务器自动帮你把 API 请求转发到 Golang 后端 —— 实现*零配置、热重载、真调试。</p>
+<h2 id="本地调试">本地调试</h2>
+<p>找到 <code>vite.config.ts</code> 增加如下代理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="nx">proxy</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="s1">&#39;/api&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;http://localhost:8080&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">       <span class="nx">changeOrigin</span>: <span class="kt">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">       <span class="nx">secure</span>: <span class="kt">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="p">},</span>
+</span></span><span class="line"><span class="cl">   <span class="p">},</span>
+</span></span><span class="line"><span class="cl"> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样请求到 <code>api</code> 的路由就会被转发到 <code>http://localhost:8080</code> ，也就是 Golang 的地址。
+不用改前端代码里的接口地址</p>
+<p>不用处理 CORS</p>
+<p>不用重启服务</p>
+<p>改完代码，Ctrl+S，页面自动刷新，接口直接通</p>
+<p>其实 Vite 在开发模式下会启动一个内置的 Node.js 服务器，它本身就能拦截请求并转发。</p>
+<p>所以你不需要 Nginx，这个代理只在开发环境生效，不影响生产构建，真正做到“开发顺手，上线无痕”。</p>
+<p>Vite 还是挺方便的，后悔没有早点知道。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2025-12-16
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/vue/">Vue</a>
+          <a href="../../tags/golang/">Golang</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/androidgradlemirror/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">AndroidGradle 国内镜像</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="../../post/mac%E5%8E%8B%E7%BC%A9%E4%B8%8D%E5%90%ABds_store/">
+            <span class="next-text nav-default">如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2025-12-16 00:00:00 \u002b0000 UTC',
+        title: '无需反向代理：用 Vite 代理直接调试 Vue \u002b Golang 前后端分离项目',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    >
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

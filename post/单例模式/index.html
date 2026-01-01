@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.150.1 with theme even" />
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -164,14 +164,14 @@
             <a href="../../categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"> 设计模式 </a>
             <a href="../../categories/java/"> Java </a>
             </div>
-          <span class="more-meta"> 约 1187 字 </span>
-          <span class="more-meta"> 预计阅读 3 分钟 </span>
+          <span class="more-meta"> 1187 words </span>
+          <span class="more-meta"> 3 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -233,7 +233,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">INSTANCE</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="懒汉式">懒汉式</h2>
@@ -271,7 +271,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">INSTANCE</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在懒汉式的 <code>getInstance</code> 上加了 <code>synchronized</code> 这个关键字，这样可以确保在多线程的情况下保证单例的唯一性。</p>
@@ -318,7 +318,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">INSTANCE</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>双重锁形式的单例和懒汉式最大的区别就是在 <code>getInstance</code> 方法上， <code>getInstance</code> 进行了两次判空，第一次判空避免了不必要的同步，第二次判断是为了在 <code>null</code> 情况下创建实例。
@@ -353,7 +353,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SingletonHoler</span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Singleton</span><span class="w"> </span><span class="n">INSTANCE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Singleton</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>第一次加载 <code>Singleton</code> 时，并不会初始化 <code>INSTANCE</code> ，只有当调用 <code>getInstance()</code> 才会初始化。调用 <code>getInstance()</code> Java 虚拟机会加载 <code>SingletonHoler</code> ，这种方式不仅能够保证线程安全，也可以保证单例的唯一性，也延迟了单例的实例化。</p>
@@ -367,7 +367,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">enum</span><span class="w"> </span><span class="n">Singleton</span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">INSTANCE</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>除了上面的几种写法，还可以通过枚举来实现单例。枚举的实例默认是线程安全的，还能保证唯一性。枚举的写法应该是所有写法中最简单的。</p>
@@ -379,11 +379,11 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
+    <span class="item-title">Author</span>
     <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
         2018-07-11
         
@@ -391,7 +391,7 @@
   </p>
   
   <p class="copyright-item">
-    <span class="item-title">许可协议</span>
+    <span class="item-title">License</span>
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
@@ -403,11 +403,11 @@
         <a class="prev" href="../../post/archlinux/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Arch Linux 安装</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="../../post/appium/">
             <span class="next-text nav-default">使用 Appium 做测试</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -448,13 +448,13 @@
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io"
+    Powered by <a class="hexo-link" href="https://gohugo.io"
       >Hugo</a
-    > 强力驱动
+    >
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    Theme -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
       >Even</a
     >
@@ -465,7 +465,7 @@
   <span class="copyright-year">
     &copy;
     2016 -
-    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -488,7 +488,7 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
       <script>
         var doNotTrack = false;
-        if ( false ) {
+        if ( true ) {
           var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
           var doNotTrack = (dnt == "1" || dnt == "yes");
         }

@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.150.1 with theme even" />
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/handler_mq/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -174,14 +174,14 @@
         <div class="post-category">
             <a href="../../categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 5228 字 </span>
-          <span class="more-meta"> 预计阅读 11 分钟 </span>
+          <span class="more-meta"> 5228 words </span>
+          <span class="more-meta"> 11 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -268,10 +268,10 @@
 </span></span><span class="line"><span class="cl">    <span class="n">NativeMessageQueue</span><span class="o">::</span><span class="n">NativeMessageQueue</span><span class="p">()</span> <span class="o">:</span>
 </span></span><span class="line"><span class="cl">        <span class="n">mPollEnv</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">mPollObj</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">mExceptionObj</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">mLooper</span> <span class="o">=</span> <span class="n">Looper</span><span class="o">::</span><span class="n">getForThread</span><span class="p">();</span> <span class="c1">// 从 ThreadLocal 中获取 Looper
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">mLooper</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">mLooper</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">mLooper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Looper</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="c1">// 创建 Looper
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">Looper</span><span class="o">::</span><span class="n">setForThread</span><span class="p">(</span><span class="n">mLooper</span><span class="p">);</span> <span class="c1">// 把 Looper 设置给 ThreadLocal
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">            <span class="n">Looper</span><span class="o">::</span><span class="n">setForThread</span><span class="p">(</span><span class="n">mLooper</span><span class="p">);</span> <span class="c1">// 把 Looper 设置给 ThreadLocal
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -311,12 +311,12 @@
 </span></span><span class="line"><span class="cl">      <span class="n">mResponseIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">      <span class="n">mNextMessageUptime</span><span class="p">(</span><span class="n">LLONG_MAX</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 创建用于唤醒的描述符，5.0以前使用的是管道
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EFD_NONBLOCK</span> <span class="o">|</span> <span class="n">EFD_CLOEXEC</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EFD_NONBLOCK</span> <span class="o">|</span> <span class="n">EFD_CLOEXEC</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not make wake event fd: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 重建 Epoll 事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">rebuildEpollLocked</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">rebuildEpollLocked</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -363,16 +363,16 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 创建 Epoll 描述符，用于监听其它描述符
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mEpollFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">mEpollFd</span><span class="p">.</span><span class="n">reset</span><span class="p">(</span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">mEpollFd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not create epoll instance: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span> <span class="n">eventItem</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">epoll_event</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 设置要监听读事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">eventItem</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">eventItem</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 将唤醒描述符添加到 Epoll 中，用于监听
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">LOG_ALWAYS_FATAL_IF</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;Could not add wake event fd to epoll instance: %s&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">                        <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">
@@ -381,7 +381,7 @@
 </span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">initEventItem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 处理自定义请求中的描述符，也一并加入到 Epoll 中进行监听。关于 Request, 我们后面再聊
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error adding epoll events for fd %d while rebuilding epoll set: %s&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">                  <span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
@@ -426,7 +426,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">mPollEnv</span> <span class="o">=</span> <span class="n">env</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mPollObj</span> <span class="o">=</span> <span class="n">pollObj</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mLooper</span><span class="o">-&gt;</span><span class="n">pollOnce</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">);</span> <span class="c1">// 调用了 Looper 的 pollOnce
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mPollObj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">mPollObj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mPollEnv</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">mExceptionObj</span><span class="p">)</span> <span class="p">{</span>
@@ -484,12 +484,12 @@
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollOnce</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">outFd</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">outEvents</span><span class="p">,</span> <span class="kt">void</span><span class="o">**</span> <span class="n">outData</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 先处理没有 Callback 的Response
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">mResponseIndex</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">const</span> <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="n">mResponseIndex</span><span class="o">++</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="c1">// ident &gt;= 0 表示没有 callback ，有 callback 的会默认被赋值为 POLL_CALLBACK = -2 所以在这里会直接返回，有关reponse 之后和 request 一起聊
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">ident</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">ident</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
@@ -507,7 +507,7 @@
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 处理内部事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">result</span> <span class="o">=</span> <span class="n">pollInner</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">pollInner</span><span class="p">(</span><span class="n">timeoutMillis</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -636,16 +636,16 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">Looper</span><span class="o">::</span><span class="n">pollInner</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeoutMillis</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_WAKE</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mResponses</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="n">mResponseIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// We are about to idle.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">mPolling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">mPolling</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">EPOLL_MAX_EVENTS</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 等待被监听的描述符中的事件发生
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">eventCount</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">eventItems</span><span class="p">,</span> <span class="n">EPOLL_MAX_EVENTS</span><span class="p">,</span> <span class="n">timeoutMillis</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">mPolling</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
@@ -655,10 +655,10 @@
 </span></span><span class="line"><span class="cl">        <span class="n">mEpollRebuildRequired</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">rebuildEpollLocked</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span> <span class="c1">// 重建 Epoll 直接跳转到 Done
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 发生错误直接跳转到 Done
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
@@ -668,20 +668,20 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 没有事件发生直接跳转到 Done
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">eventCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="n">POLL_TIMEOUT</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">goto</span> <span class="n">Done</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 逐个处理发生事件的描述符
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 判断是不是唤醒描述符
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 是读事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 唤醒并读取描述符中的内容
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">                <span class="n">awoken</span><span class="p">();</span> <span class="c1">// 唤醒并读取描述符中的内容
+</span></span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on wake event fd.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -693,7 +693,7 @@
 </span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="c1">// 对 request 进行封装成 response ，放到数组中
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl">                <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
 </span></span><span class="line"><span class="cl">                      <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
@@ -704,18 +704,18 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">mNextMessageUptime</span> <span class="o">=</span> <span class="n">LLONG_MAX</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 先处理 Native Message
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">nsecs_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">systemTime</span><span class="p">(</span><span class="n">SYSTEM_TIME_MONOTONIC</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="p">{</span> <span class="c1">// obtain handler
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">                <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">                <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="c1">// 处理消息
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">            <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
@@ -729,17 +729,17 @@
 </span></span><span class="line"><span class="cl">    <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 处理自定义描述符事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">editItemAt</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">==</span> <span class="n">POLL_CALLBACK</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 调用回调方法进行处理
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">callbackResult</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="c1">// 回调返回 0，则移除对该描述符的监听
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">                <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
@@ -777,7 +777,7 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Looper</span><span class="o">::</span><span class="n">awoken</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">counter</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 不断同 mWakeEventFd 中读取数据，直到清空
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">TEMP_FAILURE_RETRY</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">counter</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)));</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">TEMP_FAILURE_RETRY</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">counter</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)));</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -949,9 +949,9 @@
 </span></span><span class="line"><span class="cl">            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 使用 MessageEnvelope 封装了 handler 、message
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">MessageEnvelope</span> <span class="nf">messageEnvelope</span><span class="p">(</span><span class="n">uptime</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="n">MessageEnvelope</span> <span class="nf">messageEnvelope</span><span class="p">(</span><span class="n">uptime</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 放到数组的合适位置
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">insertAt</span><span class="p">(</span><span class="n">messageEnvelope</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">insertAt</span><span class="p">(</span><span class="n">messageEnvelope</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">mSendingMessage</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
@@ -999,13 +999,13 @@
 </span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">MessageEnvelope</span><span class="o">&amp;</span> <span class="n">messageEnvelope</span> <span class="o">=</span> <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">itemAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">messageEnvelope</span><span class="p">.</span><span class="n">uptime</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="c1">// obtain handler
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">            <span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageHandler</span><span class="o">&gt;</span> <span class="n">handler</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">handler</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">messageEnvelope</span><span class="p">.</span><span class="n">message</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="n">mMessageEnvelopes</span><span class="p">.</span><span class="n">removeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="n">mLock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">            <span class="n">handler</span><span class="o">-&gt;</span><span class="n">handleMessage</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="c1">// 处理消息
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="n">mLock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="n">mSendingMessage</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
@@ -1144,14 +1144,14 @@
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// callback 不为空，则把 ident 赋值为 POLL_CALLBACK
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">ident</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">        <span class="n">ident</span> <span class="o">=</span> <span class="n">POLL_CALLBACK</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">AutoMutex</span> <span class="nf">_l</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// 创建 Request 对象，并赋值
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Request</span> <span class="n">request</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">        <span class="n">Request</span> <span class="n">request</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">=</span> <span class="n">ident</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">;</span>
@@ -1159,24 +1159,24 @@
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">mNextRequestSeq</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">mNextRequestSeq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// reserve sequence number -1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="k">struct</span> <span class="nc">epoll_event</span> <span class="n">eventItem</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="n">request</span><span class="p">.</span><span class="n">initEventItem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 不存在则把描述符加入监听
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 加入 Epoll 中监听描述符事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="n">ALOGE</span><span class="p">(</span><span class="s">&#34;Error adding epoll events for fd %d: %s&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 放到数组中
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">mRequests</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">request</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">            <span class="n">mRequests</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">request</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 如果已经存在，则更新 Request
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_MOD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_MOD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">epollResult</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">ENOENT</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                    <span class="n">epollResult</span> <span class="o">=</span> <span class="n">epoll_ctl</span><span class="p">(</span><span class="n">mEpollFd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventItem</span><span class="p">);</span>
@@ -1248,13 +1248,13 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 逐个处理发生事件的描述符
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">eventCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">uint32_t</span> <span class="n">epollEvents</span> <span class="o">=</span> <span class="n">eventItems</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 判断是不是唤醒描述符
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="n">mWakeEventFd</span><span class="p">.</span><span class="n">get</span><span class="p">())</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">ssize_t</span> <span class="n">requestIndex</span> <span class="o">=</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">indexOfKey</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">requestIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -1263,7 +1263,7 @@
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLERR</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_ERROR</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">epollEvents</span> <span class="o">&amp;</span> <span class="n">EPOLLHUP</span><span class="p">)</span> <span class="n">events</span> <span class="o">|=</span> <span class="n">EVENT_HANGUP</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 对 request 进行封装成 response ，放到数组中
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
+</span></span></span><span class="line"><span class="cl">            <span class="n">pushResponse</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">mRequests</span><span class="p">.</span><span class="n">valueAt</span><span class="p">(</span><span class="n">requestIndex</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;Ignoring unexpected epoll events 0x%x on fd %d that is &#34;</span>
 </span></span><span class="line"><span class="cl">                  <span class="s">&#34;no longer registered.&#34;</span><span class="p">,</span> <span class="n">epollEvents</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
@@ -1367,17 +1367,17 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 处理自定义描述符事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Response</span><span class="o">&amp;</span> <span class="n">response</span> <span class="o">=</span> <span class="n">mResponses</span><span class="p">.</span><span class="n">editItemAt</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ident</span> <span class="o">==</span> <span class="n">POLL_CALLBACK</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">events</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">events</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">void</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// 调用回调方法进行处理
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">callbackResult</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">callbackResult</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="c1">// 回调返回 0，则移除对该描述符的监听
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">            <span class="n">removeFd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">seq</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="n">response</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">callback</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
@@ -1428,11 +1428,11 @@
 </span></span><span class="line"><span class="cl">        <span class="n">jbyteArray</span> <span class="n">savedState</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">classLoader</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">libraryPath</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 获取 MessageQueue
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span> <span class="o">=</span> <span class="n">android_os_MessageQueue_getMessageQueue</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">messageQueue</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 获取 MessageQueue
+</span></span></span><span class="line"><span class="cl">    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span> <span class="o">=</span> <span class="n">android_os_MessageQueue_getMessageQueue</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">messageQueue</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 这里使用管道通信，和我们之间讲的 Epoll 中使用的是 eventfd 不一样
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">msgpipe</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">msgpipe</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">msgpipe</span><span class="p">))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">g_error_msg</span> <span class="o">=</span> <span class="n">android</span><span class="o">::</span><span class="n">base</span><span class="o">::</span><span class="n">StringPrintf</span><span class="p">(</span><span class="s">&#34;could not create pipe: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">        <span class="n">ALOGW</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">g_error_msg</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
@@ -1443,7 +1443,7 @@
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkWrite</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 监听管道读描述符，并在有事件发生的时候使用 mainWorkCallback 进行回调，这里监听 ALOOPER_EVENT_INPUT 事件，不关心 POLLIN, 在 mainWorkCallback 中会进行判断
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">getLooper</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addFd</span><span class="p">(</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">getLooper</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addFd</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">            <span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ALOOPER_EVENT_INPUT</span><span class="p">,</span> <span class="n">mainWorkCallback</span><span class="p">,</span> <span class="n">code</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="n">jlong</span><span class="p">)</span><span class="n">code</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
@@ -1467,8 +1467,8 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">sp</span><span class="o">&lt;</span><span class="n">MessageQueue</span><span class="o">&gt;</span> <span class="n">android_os_MessageQueue_getMessageQueue</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">messageQueueObj</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">jlong</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetLongField</span><span class="p">(</span><span class="n">messageQueueObj</span><span class="p">,</span> <span class="n">gMessageQueueClassInfo</span><span class="p">.</span><span class="n">mPtr</span><span class="p">);</span> <span class="c1">// 从 Java 的 MessageQueue 获取 NativeMessageQueue 的指针
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">NativeMessageQueue</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// 类型转换
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">NativeMessageQueue</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span> <span class="c1">// 类型转换
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>从 <code>Java</code> 的 <code>MessageQueue</code> 取出 <code>mPtr</code> ，根据我们之前的讲解，这个 <code>mPtr</code> 就是 <code>NativeMessageQueue</code> 的指针。所以在这里进行了类型转换。</p>
@@ -1532,18 +1532,18 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">mainWorkCallback</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">events</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">NativeCode</span><span class="o">*</span> <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="n">NativeCode</span><span class="o">*</span><span class="p">)</span><span class="n">data</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 根据我们之前的分析 events 设置的是 ALOOPER_EVENT_INPUT = 1, 而 POLLIN = 1 所以这里直接返回了。这里并不关心 POLLIN 事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">((</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">POLLIN</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="n">ActivityWork</span> <span class="n">work</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 从管道中读取事件
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">read_work</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">work</span><span class="p">))</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">read_work</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">mainWorkRead</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">work</span><span class="p">))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 把读取到的事件传递到 Java
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">switch</span> <span class="p">(</span><span class="n">work</span><span class="p">.</span><span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="p">(</span><span class="n">work</span><span class="p">.</span><span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">CMD_FINISH</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">clazz</span><span class="p">,</span> <span class="n">gNativeActivityClassInfo</span><span class="p">.</span><span class="n">finish</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="n">code</span><span class="o">-&gt;</span><span class="n">messageQueue</span><span class="o">-&gt;</span><span class="n">raiseAndClearException</span><span class="p">(</span><span class="n">code</span><span class="o">-&gt;</span><span class="n">env</span><span class="p">,</span> <span class="s">&#34;finish&#34;</span><span class="p">);</span>
@@ -1574,7 +1574,7 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// 这里返回的是1，我们之前讨论了，返回0的话就会移除监听，所以这里不能返回 0
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1596,10 +1596,10 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">super</span><span class="p">.</span><span class="na">onResume</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">onResumeNative</span><span class="p">(</span><span class="n">mNativeHandle</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>NativeActivity</code> 中的 <code>onResume</code> 中会调用 <code>onResumeNative</code> ，这是一个 <code>JNI</code> 调用，我们跟进去看看</p>
@@ -1669,9 +1669,9 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_app_set_activity_state</span><span class="p">(</span><span class="k">struct</span> <span class="nc">android_app</span><span class="o">*</span> <span class="n">android_app</span><span class="p">,</span> <span class="kt">int8_t</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 写数据
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">android_app_write_cmd</span><span class="p">(</span><span class="n">android_app</span><span class="p">,</span> <span class="n">cmd</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">    <span class="n">android_app_write_cmd</span><span class="p">(</span><span class="n">android_app</span><span class="p">,</span> <span class="n">cmd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// 直到成功为止
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">activityState</span> <span class="o">!=</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">activityState</span> <span class="o">!=</span> <span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">cond</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">android_app</span><span class="o">-&gt;</span><span class="n">mutex</span><span class="p">);</span>
@@ -1722,11 +1722,11 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
+    <span class="item-title">Author</span>
     <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
         2021-03-21
         
@@ -1734,7 +1734,7 @@
   </p>
   
   <p class="copyright-item">
-    <span class="item-title">许可协议</span>
+    <span class="item-title">License</span>
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
@@ -1748,11 +1748,11 @@
         <a class="prev" href="../../post/zygote/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Zygote</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="../../post/handler/">
             <span class="next-text nav-default">Handler</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -1793,13 +1793,13 @@
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io"
+    Powered by <a class="hexo-link" href="https://gohugo.io"
       >Hugo</a
-    > 强力驱动
+    >
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    Theme -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
       >Even</a
     >
@@ -1810,7 +1810,7 @@
   <span class="copyright-year">
     &copy;
     2016 -
-    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -1833,7 +1833,7 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
       <script>
         var doNotTrack = false;
-        if ( false ) {
+        if ( true ) {
           var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
           var doNotTrack = (dnt == "1" || dnt == "yes");
         }

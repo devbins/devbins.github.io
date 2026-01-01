@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.150.1 with theme even" />
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
 
 
 <link rel="canonical" href="http://localhost:1313/post/activity/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -172,14 +172,14 @@
         <div class="post-category">
             <a href="../../categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 约 7457 字 </span>
-          <span class="more-meta"> 预计阅读 15 分钟 </span>
+          <span class="more-meta"> 7457 words </span>
+          <span class="more-meta"> 15 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -253,7 +253,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">startActivityForResult</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>startActivity</code> 最终调用了 <code>startActivityForResult</code> 。</p>
@@ -308,7 +308,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// ...</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>startActivityForResult</code> 中调用了 <code>Instrumentation.execStartActivity</code> ，并把 <code>ApplicationThread</code> 和 <code>IBinder</code> 传递过去。</p>
@@ -366,7 +366,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">&#34;Failure from system&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>Instrumentation</code> 的 <code>execStartActivity</code> 中通过 <code>ActivityTaskManagerService</code> 的 <code>startActivity</code> 把启动的任务交给了 <code>AMS</code> 。</p>
@@ -432,21 +432,21 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">startActivityAsUser</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">resolvedType</span><span class="p">,</span><span class="w"> </span><span class="n">resultTo</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">resultWho</span><span class="p">,</span><span class="w"> </span><span class="n">requestCode</span><span class="p">,</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w"> </span><span class="n">profilerInfo</span><span class="p">,</span><span class="w"> </span><span class="n">bOptions</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">UserHandle</span><span class="p">.</span><span class="na">getCallingUserId</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivityAsUser</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivityAsUser</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                             </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">resolvedType</span><span class="p">,</span><span class="w"> </span><span class="n">IBinder</span><span class="w"> </span><span class="n">resultTo</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">resultWho</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCode</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                             </span><span class="kt">int</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w"> </span><span class="n">ProfilerInfo</span><span class="w"> </span><span class="n">profilerInfo</span><span class="p">,</span><span class="w"> </span><span class="n">Bundle</span><span class="w"> </span><span class="n">bOptions</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">userId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">startActivityAsUser</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">resolvedType</span><span class="p">,</span><span class="w"> </span><span class="n">resultTo</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                           </span><span class="n">resultWho</span><span class="p">,</span><span class="w"> </span><span class="n">requestCode</span><span class="p">,</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w"> </span><span class="n">profilerInfo</span><span class="p">,</span><span class="w"> </span><span class="n">bOptions</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                           </span><span class="kc">true</span><span class="w"> </span><span class="cm">/*validateIncomingUser*/</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ActivityStartController</span><span class="w"> </span><span class="nf">getActivityStartController</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">ActivityStartController</span><span class="w"> </span><span class="nf">getActivityStartController</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mActivityStartController</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivityAsUser</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span><span class="w"> </span><span class="nf">startActivityAsUser</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">callingPackage</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">resolvedType</span><span class="p">,</span><span class="w"> </span><span class="n">IBinder</span><span class="w"> </span><span class="n">resultTo</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">resultWho</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCode</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="kt">int</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w"> </span><span class="n">ProfilerInfo</span><span class="w"> </span><span class="n">profilerInfo</span><span class="p">,</span><span class="w"> </span><span class="n">Bundle</span><span class="w"> </span><span class="n">bOptions</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">userId</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="kt">boolean</span><span class="w"> </span><span class="n">validateIncomingUser</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -468,7 +468,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">setMayWait</span><span class="p">(</span><span class="n">userId</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">execute</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>经过一系列的调用，最后来到 <code>startActivityAsUser</code> ，在这个方法中会先通过 <code>ActivityStartController</code> 去获取 <code>ActivityStarter</code> ，如下所示</p>
@@ -483,7 +483,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">ActivityStarter</span><span class="w"> </span><span class="nf">obtainStarter</span><span class="p">(</span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">reason</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mFactory</span><span class="p">.</span><span class="na">obtain</span><span class="p">().</span><span class="na">setIntent</span><span class="p">(</span><span class="n">intent</span><span class="p">).</span><span class="na">setReason</span><span class="p">(</span><span class="n">reason</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>获取到 <code>ActivityStarter</code> 之后一通赋值，然后调用了 <code>ActivityStarter.execute</code> 。</p>
@@ -532,7 +532,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">onExecutionComplete</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这个方法中，把任务交给了 <code>startActivityMayWait</code> 。</p>
@@ -635,7 +635,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">res</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个方法里做的事情比较多</p>
@@ -780,9 +780,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getExternalResult</span><span class="p">(</span><span class="n">mLastStartActivityResult</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivity</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">ephemeralIntent</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivity</span><span class="p">(</span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">caller</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">ephemeralIntent</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">String</span><span class="w"> </span><span class="n">resolvedType</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityInfo</span><span class="w"> </span><span class="n">aInfo</span><span class="p">,</span><span class="w"> </span><span class="n">ResolveInfo</span><span class="w"> </span><span class="n">rInfo</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">IVoiceInteractionSession</span><span class="w"> </span><span class="n">voiceSession</span><span class="p">,</span><span class="w"> </span><span class="n">IVoiceInteractor</span><span class="w"> </span><span class="n">voiceInteractor</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">IBinder</span><span class="w"> </span><span class="n">resultTo</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">resultWho</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCode</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">callingPid</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">callingUid</span><span class="p">,</span><span class="w">
@@ -806,9 +806,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">startActivity</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">sourceRecord</span><span class="p">,</span><span class="w"> </span><span class="n">voiceSession</span><span class="p">,</span><span class="w"> </span><span class="n">voiceInteractor</span><span class="p">,</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                                </span><span class="kc">true</span><span class="w"> </span><span class="cm">/* doResume */</span><span class="p">,</span><span class="w"> </span><span class="n">checkedOptions</span><span class="p">,</span><span class="w"> </span><span class="n">inTask</span><span class="p">,</span><span class="w"> </span><span class="n">outActivity</span><span class="p">,</span><span class="w"> </span><span class="n">restrictedBgActivity</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">res</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivity</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">ActivityRecord</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityRecord</span><span class="w"> </span><span class="n">sourceRecord</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">startActivity</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">ActivityRecord</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityRecord</span><span class="w"> </span><span class="n">sourceRecord</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">IVoiceInteractionSession</span><span class="w"> </span><span class="n">voiceSession</span><span class="p">,</span><span class="w"> </span><span class="n">IVoiceInteractor</span><span class="w"> </span><span class="n">voiceInteractor</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="kt">int</span><span class="w"> </span><span class="n">startFlags</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">doResume</span><span class="p">,</span><span class="w"> </span><span class="n">ActivityOptions</span><span class="w"> </span><span class="n">options</span><span class="p">,</span><span class="w"> </span><span class="n">TaskRecord</span><span class="w"> </span><span class="n">inTask</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="n">ActivityRecord</span><span class="o">[]</span><span class="w"> </span><span class="n">outActivity</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">restrictedBgActivity</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -851,7 +851,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">postStartActivityProcessing</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">startedActivityStack</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>startActivity</code> 中多次调用了重载的 <code>startActivity</code> ，其中包含了 <code>ActivityRecord</code> 的创建，它是用来记录 <code>Activity</code> 的。紧接着调用了 <code>startActivityUnchecked</code> 。</p>
@@ -980,7 +980,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">preferredWindowingMode</span><span class="p">,</span><span class="w"> </span><span class="n">mPreferredDisplayId</span><span class="p">,</span><span class="w"> </span><span class="n">mTargetStack</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">START_SUCCESS</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitystack-dot-startactivitylocked">ActivityStack.startActivityLocked</h3>
@@ -1192,7 +1192,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ActivityOptions</span><span class="p">.</span><span class="na">abort</span><span class="p">(</span><span class="n">options</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="rootactivitycontainer-dot-resumefocusedstackstopactivities">RootActivityContainer.resumeFocusedStacksTopActivities</h3>
@@ -1284,7 +1284,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitystack-dot-resumetopactivityuncheckedlocked">ActivityStack.resumeTopActivityUncheckedLocked</h3>
@@ -1334,7 +1334,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitystack-dot-resumetopactivityinnerlocked">ActivityStack.resumeTopActivityInnerLocked</h3>
@@ -2116,7 +2116,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitystacksupervisor-dot-startspecificactivitylocked">ActivityStackSupervisor.startSpecificActivityLocked</h3>
@@ -2202,7 +2202,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Trace</span><span class="p">.</span><span class="na">traceEnd</span><span class="p">(</span><span class="n">TRACE_TAG_ACTIVITY_MANAGER</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitystacksupervisor-dot-realstartactivitylocked">ActivityStackSupervisor.realStartActivityLocked</h3>
@@ -2632,7 +2632,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="clientlifecyclemanager-dot-scheduletransaction">ClientLifecycleManager.scheduleTransaction</h3>
@@ -2654,7 +2654,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">client</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">Binder</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">transaction</span><span class="p">.</span><span class="na">recycle</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="clienttransaction-dot-schedule">ClientTransaction.schedule</h3>
@@ -2670,9 +2670,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">IApplicationThread</span><span class="w"> </span><span class="n">mClient</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">schedule</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">RemoteException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">schedule</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">RemoteException</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mClient</span><span class="p">.</span><span class="na">scheduleTransaction</span><span class="p">(</span><span class="k">this</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="小结">小结</h3>
@@ -2701,7 +2701,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ActivityThread</span><span class="p">.</span><span class="na">this</span><span class="p">.</span><span class="na">scheduleTransaction</span><span class="p">(</span><span class="n">transaction</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitythread-dot-scheduletransaction">ActivityThread.scheduleTransaction</h3>
@@ -2719,9 +2719,9 @@
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">scheduleTransaction</span><span class="p">(</span><span class="n">ClientTransaction</span><span class="w"> </span><span class="n">transaction</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">transaction</span><span class="p">.</span><span class="na">preExecute</span><span class="p">(</span><span class="k">this</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sendMessage</span><span class="p">(</span><span class="n">ActivityThread</span><span class="p">.</span><span class="na">H</span><span class="p">.</span><span class="na">EXECUTE_TRANSACTION</span><span class="p">,</span><span class="w"> </span><span class="n">transaction</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">abstract</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sendMessage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">what</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">obj</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">abstract</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sendMessage</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">what</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">obj</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="activitythread">ActivityThread</h4>
@@ -2772,7 +2772,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">mH</span><span class="p">.</span><span class="na">sendMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="h-dot-handlemessage">H.handleMessage</h4>
@@ -2804,7 +2804,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// ...</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="transactionexecutor-dot-execute">TransactionExecutor.execute</h3>
@@ -2876,7 +2876,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">executeLifecycleState</span><span class="p">(</span><span class="n">transaction</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">mPendingActions</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DEBUG_RESOLVER</span><span class="p">)</span><span class="w"> </span><span class="n">Slog</span><span class="p">.</span><span class="na">d</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="w"> </span><span class="n">tId</span><span class="p">(</span><span class="n">transaction</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;End resolving transaction&#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="transactionexecutor-dot-executecallbacks">TransactionExecutor.executeCallbacks</h3>
@@ -2976,7 +2976,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">cycleToPath</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">postExecutionState</span><span class="p">,</span><span class="w"> </span><span class="n">shouldExcludeLastTransition</span><span class="p">,</span><span class="w"> </span><span class="n">transaction</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="launchactivityitem-dot-execute">LaunchActivityItem.execute</h3>
@@ -3004,7 +3004,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">mProfilerInfo</span><span class="p">,</span><span class="w"> </span><span class="n">client</span><span class="p">,</span><span class="w"> </span><span class="n">mAssistToken</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">client</span><span class="p">.</span><span class="na">handleLaunchActivity</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">pendingActions</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="cm">/* customIntent */</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Trace</span><span class="p">.</span><span class="na">traceEnd</span><span class="p">(</span><span class="n">TRACE_TAG_ACTIVITY_MANAGER</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activitythread-dot-handlelaunchactivity">ActivityThread.handleLaunchActivity</h3>
@@ -3114,7 +3114,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="performlaunchactivity">performLaunchActivity</h3>
@@ -3356,7 +3356,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">activity</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="callactivityoncreate">callActivityOnCreate</h3>
@@ -3374,7 +3374,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">prePerformCreate</span><span class="p">(</span><span class="n">activity</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">activity</span><span class="p">.</span><span class="na">performCreate</span><span class="p">(</span><span class="n">icicle</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">postPerformCreate</span><span class="p">(</span><span class="n">activity</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="activity-dot-performcreate">Activity.performCreate</h3>
@@ -3408,10 +3408,10 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">performCreate</span><span class="p">(</span><span class="n">Bundle</span><span class="w"> </span><span class="n">icicle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">performCreate</span><span class="p">(</span><span class="n">icicle</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@UnsupportedAppUsage</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">performCreate</span><span class="p">(</span><span class="n">Bundle</span><span class="w"> </span><span class="n">icicle</span><span class="p">,</span><span class="w"> </span><span class="n">PersistableBundle</span><span class="w"> </span><span class="n">persistentState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nd">@UnsupportedAppUsage</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">performCreate</span><span class="p">(</span><span class="n">Bundle</span><span class="w"> </span><span class="n">icicle</span><span class="p">,</span><span class="w"> </span><span class="n">PersistableBundle</span><span class="w"> </span><span class="n">persistentState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dispatchActivityPreCreated</span><span class="p">(</span><span class="n">icicle</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mCanEnterPictureInPicture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">restoreHasCurrentPermissionRequest</span><span class="p">(</span><span class="n">icicle</span><span class="p">);</span><span class="w">
@@ -3428,7 +3428,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mFragments</span><span class="p">.</span><span class="na">dispatchActivityCreated</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mActivityTransitionState</span><span class="p">.</span><span class="na">setEnterActivityOptions</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">getActivityOptions</span><span class="p">());</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dispatchActivityPostCreated</span><span class="p">(</span><span class="n">icicle</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="小结">小结</h3>
@@ -3449,11 +3449,11 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
+    <span class="item-title">Author</span>
     <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
         2021-05-04
         
@@ -3461,7 +3461,7 @@
   </p>
   
   <p class="copyright-item">
-    <span class="item-title">许可协议</span>
+    <span class="item-title">License</span>
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
@@ -3474,11 +3474,11 @@
         <a class="prev" href="../../post/cppvariable/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">对比C&#43;&#43;与Java变量初始化</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="../../post/application/">
             <span class="next-text nav-default">Application 启动流程</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -3519,13 +3519,13 @@
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io"
+    Powered by <a class="hexo-link" href="https://gohugo.io"
       >Hugo</a
-    > 强力驱动
+    >
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    Theme -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
       >Even</a
     >
@@ -3536,7 +3536,7 @@
   <span class="copyright-year">
     &copy;
     2016 -
-    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 

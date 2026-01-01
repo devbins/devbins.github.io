@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？ - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/mac%E5%8E%8B%E7%BC%A9%E4%B8%8D%E5%90%ABds_store/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/mac%E5%8E%8B%E7%BC%A9%E4%B8%8D%E5%90%ABds_store/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta property="og:description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-11-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-11-12T00:00:00+00:00">
+    <meta property="article:tag" content="Mac">
+
+  <meta itemprop="name" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta itemprop="description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+  <meta itemprop="datePublished" content="2025-11-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-11-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="521">
+  <meta itemprop="keywords" content="Mac">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta name="twitter:description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+ <meta property="og:url" content="http://devbins.github.io/post/mac%E5%8E%8B%E7%BC%A9%E4%B8%8D%E5%90%ABds_store/">
+  <meta property="og:site_name" content="devbins blog">
+  <meta property="og:title" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta property="og:description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-11-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-11-12T00:00:00+00:00">
+    <meta property="article:tag" content="Mac">
+
+  <meta itemprop="name" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta itemprop="description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+  <meta itemprop="datePublished" content="2025-11-12T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-11-12T00:00:00+00:00">
+  <meta itemprop="wordCount" content="521">
+  <meta itemprop="keywords" content="Mac">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？">
+  <meta name="twitter:description" content="前言 在 Mac 使用 finder 进行压缩，别人解压一看怎么有 .DS_Store 、 __MACOSX 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。
+其实 .DS_Store 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。
+而 __MACOSX 是备份用的，这些给其它操作系统都是没用的。
+所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2025-11-12 </span>
+        <div class="post-category">
+            <a href="../../categories/mac/"> Mac </a>
+            </div>
+          <span class="more-meta"> 521 words </span>
+          <span class="more-meta"> 2 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#方法一">方法一</a></li>
+    <li><a href="#方法二">方法二</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>在 Mac 使用 finder 进行压缩，别人解压一看怎么有 <code>.DS_Store</code> 、 <code>__MACOSX</code> 这些垃圾文件，有些杀毒软件还会报病毒，这怎么说理去。</p>
+<p>其实 <code>.DS_Store</code> 是 Mac 用来记录文件夹图标的位置、窗口、排序偏好的。</p>
+<p>而 <code>__MACOSX</code> 是备份用的，这些给其它操作系统都是没用的。</p>
+<p>所以我们在压缩的时候需要把这些文件给排除掉，我试了下有两种方法可以做的</p>
+<h2 id="方法一">方法一</h2>
+<p>使用 <code>zip</code> ，把这些不需要的文件过滤掉</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">zip -r xxx.zip xxx -x <span class="s2">&#34;*/.DS_Store&#34;</span> <span class="s2">&#34;__MACOSX/*&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>-r：意思是“递归”，也就是连文件夹里的子文件夹、子文件一起打包，不然包含压顶层文件。</li>
+<li>xxx.zip 输出的压缩包名字</li>
+<li>xxx 要压缩的文件夹</li>
+<li>-x：表示“排除”，后面跟的文件或目录都不会被打进压缩包。</li>
+<li><code>&quot;*/.DS_Store&quot;</code> ：匹配所有层级下的 <code>.DS_Store</code> 文件，(*表示任意路径）</li>
+<li><code>&quot;__MACOSX/*&quot;</code> ：排除整个 <code>__MACOSX</code> 文件夹及其内容。</li>
+</ul>
+<h2 id="方法二">方法二</h2>
+<p>使用 <code>ditto</code> ，这个命令是系统自带的，所以不需要安装。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ditto -c -k --keepParent xxx xxx.zip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>-c：表示“创建归档”（create archive）。</li>
+<li>-k：指定输出格式为 zip（不然默认是另一种 Mac 专用格式，别人打不开）。</li>
+<li>&ndash;keepParent：保留最外层的文件夹结构。比如你压缩的是 project/，解压后还是有个 project 文件夹；如果不加这个，里面的内容会直接“散”出来。</li>
+<li>xxx 要压缩的源文件夹</li>
+<li>xxx.zip 输出的压缩包名字</li>
+</ul>
+<p>这个命令的好处是：不用手动排除任何东西， <code>.DS_Store</code> 和 <code>__MACOSX</code> 默认就不会被打包进去，省心又干净。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2025-11-12
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/mac/">Mac</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="../../post/%E5%A6%82%E4%BD%95%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95vue%E5%92%8Cgolang%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">无需反向代理：用 Vite 代理直接调试 Vue &#43; Golang 前后端分离项目</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="../../post/mail_org/">
+            <span class="next-text nav-default">使用 Org Mode 发送邮件</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2025-11-12 00:00:00 \u002b0000 UTC',
+        title: '如何在 Mac 上压缩文件时不包含 .DS_Store 和 __MACOSX？',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    >
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>

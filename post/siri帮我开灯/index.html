@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.150.1 with theme even" />
+<meta name="generator" content="Hugo 0.154.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/siri%E5%B8%AE%E6%88%91%E5%BC%80%E7%81%AF/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -165,14 +165,14 @@
         <div class="post-category">
             <a href="../../categories/iot/"> IOT </a>
             </div>
-          <span class="more-meta"> 约 2308 字 </span>
-          <span class="more-meta"> 预计阅读 5 分钟 </span>
+          <span class="more-meta"> 2308 words </span>
+          <span class="more-meta"> 5 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -202,7 +202,8 @@
 </div>
     <div class="post-content">
       <blockquote>
-<p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p></blockquote>
+<p>苹果自从发布了 HomeKit，可以方便的把家里的智能设备连接在一起，结合 Siri 可以说说话就让家里的设备运转起来。但是只有苹果认证的设备才能用，没有认证的还是没有办法使用的。好在有<a href="https://github.com/nfarina">nfarina</a>逆向了苹果的协议，做出了<a href="https://github.com/nfarina/homebridge">homebridge</a>才使得众多智能设备接入 HomeKit 成为现实。</p>
+</blockquote>
 <h2 id="材料准备">材料准备</h2>
 <ol>
 <li>树莓派（我手上的是树莓派 3B）</li>
@@ -211,7 +212,8 @@
 </ol>
 <h2 id="yeelight-设置局域网控制-极客模式">Yeelight 设置局域网控制（极客模式）</h2>
 <blockquote>
-<p>先说一下 Yeelight 的极客模式，这里极客模式和局域网控制是一个东西，我刚买的时候还是极客模式，几个月之后极客模式变成了局域网控制。我特地去问了客服，这两个是一个东西，客服截图上显示的还是极客模式，而我这里显示的却是局域网控制。如果你手上也是显示的是局域网控制，不要奇怪，当成一样的就好了，不影响使用。</p></blockquote>
+<p>先说一下 Yeelight 的极客模式，这里极客模式和局域网控制是一个东西，我刚买的时候还是极客模式，几个月之后极客模式变成了局域网控制。我特地去问了客服，这两个是一个东西，客服截图上显示的还是极客模式，而我这里显示的却是局域网控制。如果你手上也是显示的是局域网控制，不要奇怪，当成一样的就好了，不影响使用。</p>
+</blockquote>
 <p>我们先从灯的设置开始。先用手机下载一个 Yeelight 的 APP（应用商店里搜一下就有了），输入账号密码登录。登录之后需点击右上角的加号添加一台设备，选择你手上所使用的设备，我这里是台灯。下图是添加好的样子，添加过程中需要输入 WiFi 密码。
 <img src="../../images/siri/yeelightdeviece.png" width="300px" /></p>
 <p>连接好之后，点击刚刚添加的台灯，进入控制页，选择右下角的三角形。
@@ -223,7 +225,8 @@
 Yeelight 台灯的设置就这些，没有了。</p>
 <h2 id="树莓派的配置">树莓派的配置</h2>
 <blockquote>
-<p>这里默认已经在树莓派上装好了系统，并且接上电源，连接了网络并且要和 Yeelight 灯在同一个局域网。没有的话参考<a href="https://binsheng.github.io/2017/05/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/#more">树莓派入门</a>。不用树莓派用其它的也是可以的，需要根据自己的系统进行相应的调整。</p></blockquote>
+<p>这里默认已经在树莓派上装好了系统，并且接上电源，连接了网络并且要和 Yeelight 灯在同一个局域网。没有的话参考<a href="https://binsheng.github.io/2017/05/22/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%85%A5%E9%97%A8/#more">树莓派入门</a>。不用树莓派用其它的也是可以的，需要根据自己的系统进行相应的调整。</p>
+</blockquote>
 <h3 id="安装-node-dot-js">安装 Node.js</h3>
 <p>首先打开终端，通过 <code>ssh</code> 连接上树莓派，我们的操作都是在命令行下进行。Windows 可以使用 Xshell、PuTTY 等工具。</p>
 <div class="highlight"><div class="chroma">
@@ -493,7 +496,7 @@ Yeelight 台灯的设置就这些，没有了。</p>
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">### BEGIN INIT INFO</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1">### BEGIN INIT INFO</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># Provides: homebridge</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># Required-Start:    $network $remote_fs $syslog</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># Required-Stop:     $remote_fs $syslog</span>
@@ -619,11 +622,11 @@ Yeelight 台灯的设置就这些，没有了。</p>
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
+    <span class="item-title">Author</span>
     <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
         2018-01-07
         
@@ -631,7 +634,7 @@ Yeelight 台灯的设置就这些，没有了。</p>
   </p>
   
   <p class="copyright-item">
-    <span class="item-title">许可协议</span>
+    <span class="item-title">License</span>
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
@@ -644,11 +647,11 @@ Yeelight 台灯的设置就这些，没有了。</p>
         <a class="prev" href="../../post/ssh/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">使用 SSH 登录服务器</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="../../post/2017%E7%9A%84%E6%88%91/">
             <span class="next-text nav-default">2017 的我</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -689,13 +692,13 @@ Yeelight 台灯的设置就这些，没有了。</p>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io"
+    Powered by <a class="hexo-link" href="https://gohugo.io"
       >Hugo</a
-    > 强力驱动
+    >
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    Theme -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
       >Even</a
     >
@@ -706,7 +709,7 @@ Yeelight 台灯的设置就这些，没有了。</p>
   <span class="copyright-year">
     &copy;
     2016 -
-    2025<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -729,7 +732,7 @@ Yeelight 台灯的设置就这些，没有了。</p>
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
       <script>
         var doNotTrack = false;
-        if ( false ) {
+        if ( true ) {
           var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
           var doNotTrack = (dnt == "1" || dnt == "yes");
         }
