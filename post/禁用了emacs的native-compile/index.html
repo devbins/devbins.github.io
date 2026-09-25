@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>禁用 Emacs native-compile - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/%E7%A6%81%E7%94%A8%E4%BA%86emacs%E7%9A%84native-compile/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/%E7%A6%81%E7%94%A8%E4%BA%86emacs%E7%9A%84native-compile/">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="禁用 Emacs native-compile">
+	<meta property="og:description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2026-09-25T00:00:00+00:00">
+		<meta property="article:modified_time" content="2026-09-25T00:00:00+00:00">
+		<meta property="article:tag" content="Emacs">
+
+	<meta itemprop="name" content="禁用 Emacs native-compile">
+	<meta itemprop="description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+	<meta itemprop="datePublished" content="2026-09-25T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2026-09-25T00:00:00+00:00">
+	<meta itemprop="wordCount" content="239">
+	<meta itemprop="keywords" content="Emacs">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="禁用 Emacs native-compile">
+	<meta name="twitter:description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+ <meta property="og:url" content="http://devbins.github.io/post/%E7%A6%81%E7%94%A8%E4%BA%86emacs%E7%9A%84native-compile/">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="禁用 Emacs native-compile">
+	<meta property="og:description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2026-09-25T00:00:00+00:00">
+		<meta property="article:modified_time" content="2026-09-25T00:00:00+00:00">
+		<meta property="article:tag" content="Emacs">
+
+	<meta itemprop="name" content="禁用 Emacs native-compile">
+	<meta itemprop="description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+	<meta itemprop="datePublished" content="2026-09-25T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2026-09-25T00:00:00+00:00">
+	<meta itemprop="wordCount" content="239">
+	<meta itemprop="keywords" content="Emacs">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="禁用 Emacs native-compile">
+	<meta name="twitter:description" content="前言 升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">禁用 Emacs native-compile</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-09-25 </span>
+        <div class="post-category">
+            <a href="../../categories/emacs/"> Emacs </a>
+            </div>
+          <span class="more-meta"> 239 words </span>
+          <span class="more-meta"> 1 min read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>升级 Mac 到最新版本后，也顺便了升级了 Xcode、gcc、libgccgit，然后还升级了 Emacs。</p>
+<p>升级之后发现 native-compile 老是报错，最常见的错误就是</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(duplicate LC_RPATH <span style="color:#e6db74">&#39;/opt/homebrew/Cellar/gcc/16.2.0/lib/gcc/current/gcc/aarch64-apple-darwin25/16</span><span style="color:#f92672">&#39;</span>)<span style="color:#f92672">,</span>
+</span></span></code></pre></div><p>和</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(native-lisp-load-failed <span style="color:#e6db74">&#34;.emacs.d/eln-cache/31.1-e2c98f52/text-property-search-db1383f6-5b330230.eln&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;dlopen(.emacs.d/eln-cache/31.1-e2c98f52/text-property-search-db1383f6-5b330230.eln, 0x0001):
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tried: &#39;.emacs.d/eln-cache/31.1-e2c98f52/text-property-search-db1383f6-5b330230.eln&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">(mis-aligned LINKEDIT string pool, fileOffset=0x00010794), &#39;.emacs.d/eln-cache/31.1-e2c98f52/text-property-search-db1383f6-5b330230.eln&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">(no such file), &#39;.emacs.d/eln-cache/31.1-e2c98f52/text-property-search-db1383f6-5b330230.eln&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">(mis-aligned LINKEDIT string pool, fileOffset=0x00010794)&#34;</span>)
+</span></span></code></pre></div><p>调了好几天也没搞好，我感觉提升也不大，而且每次升级都需要重新编译一次实在影响体验，而且没什么收益。</p>
+<p>在 Emacs-plus@31 上发现禁用也不行，与是干脆切换到 Emacs-Plus@32 版本了，目前也没什么问题。</p>
+<p>我使用如下代码来禁用 native-compile</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span style="display:flex;"><span>(setq native-comp-jit-compilation <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>      native-comp-deferred-compilation <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>      native-comp-enable-subr-trampolines <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>      comp-enable-subr-trampolines <span style="color:#66d9ef">nil</span>)
+</span></span></code></pre></div><p>这段代码在 Emacs-Plus@32 上可用，Emacs-Plus@31 还是有部分代码会编译，一启动就会报错。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-09-25
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/emacs/">Emacs</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/omarchy/">
+            <span class="next-text nav-default">Mac 上体验 Omarchy 发行版</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2026-09-25 00:00:00 \u002b0000 UTC',
+        title: '禁用 Emacs native-compile',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    >
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>
