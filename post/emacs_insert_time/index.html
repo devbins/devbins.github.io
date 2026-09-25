@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/emacs_insert_time/" />
@@ -37,55 +37,55 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/emacs_insert_time/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="在 Emacs 任意 buffer 插入时间">
-  <meta property="og:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="在 Emacs 任意 buffer 插入时间">
+	<meta property="og:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-12T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-12T00:00:00+00:00">
-    <meta property="article:tag" content="Emacs">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-12T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-12T00:00:00+00:00">
+		<meta property="article:tag" content="Emacs">
 
-  <meta itemprop="name" content="在 Emacs 任意 buffer 插入时间">
-  <meta itemprop="description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta itemprop="name" content="在 Emacs 任意 buffer 插入时间">
+	<meta itemprop="description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
-  <meta itemprop="datePublished" content="2024-11-12T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-12T00:00:00+00:00">
-  <meta itemprop="wordCount" content="209">
-  <meta itemprop="keywords" content="Emacs">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="在 Emacs 任意 buffer 插入时间">
-  <meta name="twitter:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta itemprop="datePublished" content="2024-11-12T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-12T00:00:00+00:00">
+	<meta itemprop="wordCount" content="205">
+	<meta itemprop="keywords" content="Emacs">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="在 Emacs 任意 buffer 插入时间">
+	<meta name="twitter:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
  <meta property="og:url" content="http://devbins.github.io/post/emacs_insert_time/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="在 Emacs 任意 buffer 插入时间">
-  <meta property="og:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="在 Emacs 任意 buffer 插入时间">
+	<meta property="og:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-12T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-12T00:00:00+00:00">
-    <meta property="article:tag" content="Emacs">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-12T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-12T00:00:00+00:00">
+		<meta property="article:tag" content="Emacs">
 
-  <meta itemprop="name" content="在 Emacs 任意 buffer 插入时间">
-  <meta itemprop="description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta itemprop="name" content="在 Emacs 任意 buffer 插入时间">
+	<meta itemprop="description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
-  <meta itemprop="datePublished" content="2024-11-12T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-12T00:00:00+00:00">
-  <meta itemprop="wordCount" content="209">
-  <meta itemprop="keywords" content="Emacs">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="在 Emacs 任意 buffer 插入时间">
-  <meta name="twitter:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
+	<meta itemprop="datePublished" content="2024-11-12T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-12T00:00:00+00:00">
+	<meta itemprop="wordCount" content="205">
+	<meta itemprop="keywords" content="Emacs">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="在 Emacs 任意 buffer 插入时间">
+	<meta name="twitter:description" content="前言 有时候我们常常会需要把当前时间插入到当前文件中，找了半天发现没有现成的，我印象中是有的。
 既然没有就只能自己想办法了。">
 
 <!--[if lte IE 9]>
@@ -170,7 +170,7 @@
         <div class="post-category">
             <a href="../../categories/emacs/"> Emacs </a>
             </div>
-          <span class="more-meta"> 209 words </span>
+          <span class="more-meta"> 205 words </span>
           <span class="more-meta"> 1 min read </span>
         
       </div>
@@ -195,21 +195,11 @@
 <p>这件事情在 <code>Emacs</code> 中简直太方便了，对于其他编辑器就……</p>
 <h2 id="emacs-插入时间">Emacs 插入时间</h2>
 <p>下面是我让大模型帮我写的一段代码，时间的格式自己调了一下。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-lisp" data-lang="lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">insert-now-timestamp</span> <span class="p">()</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#34;Insert current timestamp in format %Y-%m-%d %H:%M&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nv">insert</span> <span class="p">(</span><span class="nv">format-time-string</span> <span class="s">&#34;%Y-%m-%d %H:%M&#34;</span> <span class="p">(</span><span class="nv">current-time</span><span class="p">))))</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>快捷键的绑定就按自己的来好了，我就不提供了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(defun insert-now-timestamp ()
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;Insert current timestamp in format %Y-%m-%d %H:%M&#34;</span>
+</span></span><span style="display:flex;"><span>  (interactive)
+</span></span><span style="display:flex;"><span>  (insert (format-time-string <span style="color:#e6db74">&#34;%Y-%m-%d %H:%M&#34;</span> (current-time))))
+</span></span></code></pre></div><p>快捷键的绑定就按自己的来好了，我就不提供了。</p>
     </div>
 
     <div class="post-copyright">
@@ -230,6 +220,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/emacs/">Emacs</a>
@@ -310,7 +302,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

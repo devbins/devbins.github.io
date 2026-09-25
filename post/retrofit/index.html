@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/retrofit/" />
@@ -37,57 +37,57 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/retrofit/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Retrofit 源码解析">
-  <meta property="og:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Retrofit 源码解析">
+	<meta property="og:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2018-12-02T00:00:00+00:00">
-    <meta property="article:modified_time" content="2018-12-02T00:00:00+00:00">
-    <meta property="article:tag" content="Retrofit">
-    <meta property="article:tag" content="RESTful">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2018-12-02T00:00:00+00:00">
+		<meta property="article:modified_time" content="2018-12-02T00:00:00+00:00">
+		<meta property="article:tag" content="Retrofit">
+		<meta property="article:tag" content="RESTful">
 
-  <meta itemprop="name" content="Retrofit 源码解析">
-  <meta itemprop="description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta itemprop="name" content="Retrofit 源码解析">
+	<meta itemprop="description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
-  <meta itemprop="datePublished" content="2018-12-02T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2018-12-02T00:00:00+00:00">
-  <meta itemprop="wordCount" content="2895">
-  <meta itemprop="keywords" content="Retrofit,RESTful">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Retrofit 源码解析">
-  <meta name="twitter:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta itemprop="datePublished" content="2018-12-02T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2018-12-02T00:00:00+00:00">
+	<meta itemprop="wordCount" content="2582">
+	<meta itemprop="keywords" content="Retrofit,RESTful">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Retrofit 源码解析">
+	<meta name="twitter:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
  <meta property="og:url" content="http://devbins.github.io/post/retrofit/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Retrofit 源码解析">
-  <meta property="og:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Retrofit 源码解析">
+	<meta property="og:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2018-12-02T00:00:00+00:00">
-    <meta property="article:modified_time" content="2018-12-02T00:00:00+00:00">
-    <meta property="article:tag" content="Retrofit">
-    <meta property="article:tag" content="RESTful">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2018-12-02T00:00:00+00:00">
+		<meta property="article:modified_time" content="2018-12-02T00:00:00+00:00">
+		<meta property="article:tag" content="Retrofit">
+		<meta property="article:tag" content="RESTful">
 
-  <meta itemprop="name" content="Retrofit 源码解析">
-  <meta itemprop="description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta itemprop="name" content="Retrofit 源码解析">
+	<meta itemprop="description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
-  <meta itemprop="datePublished" content="2018-12-02T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2018-12-02T00:00:00+00:00">
-  <meta itemprop="wordCount" content="2895">
-  <meta itemprop="keywords" content="Retrofit,RESTful">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Retrofit 源码解析">
-  <meta name="twitter:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
+	<meta itemprop="datePublished" content="2018-12-02T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2018-12-02T00:00:00+00:00">
+	<meta itemprop="wordCount" content="2582">
+	<meta itemprop="keywords" content="Retrofit,RESTful">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Retrofit 源码解析">
+	<meta name="twitter:description" content="Retrofit 是 square 推出用来请求 RESTful 风格 API 的网络库，可以让开发人员快速开发 RESTful 风格的应用。
 本文基于 retrofit2.5.0 进行分析。">
 
 <!--[if lte IE 9]>
@@ -173,7 +173,7 @@
             <a href="../../categories/android/"> Android </a>
             <a href="../../categories/http/"> HTTP </a>
             </div>
-          <span class="more-meta"> 2895 words </span>
+          <span class="more-meta"> 2582 words </span>
           <span class="more-meta"> 6 mins read </span>
         
       </div>
@@ -215,153 +215,74 @@
 </blockquote>
 <h2 id="简单使用">简单使用</h2>
 <p>我们先从官方的例子中了解一下怎么使用，相信对于 Android 开发者来说，使用已经非常熟练了。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">GitHubService</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@GET</span><span class="p">(</span><span class="s">&#34;users/{user}/repos&#34;</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Call</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Repo</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nf">listRepos</span><span class="p">(</span><span class="nd">@Path</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">user</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Retrofit</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">baseUrl</span><span class="p">(</span><span class="s">&#34;https://api.github.com/&#34;</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">GitHubService</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">retrofit</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">GitHubService</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">Call</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Repo</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">repos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">service</span><span class="p">.</span><span class="na">listRepos</span><span class="p">(</span><span class="s">&#34;octocat&#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">repos</span><span class="p">.</span><span class="na">execute</span><span class="p">();</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>例子中先创建了 API 接口，然后创建了 Retrofit 实例，接着调用 <code>retrofit.create</code> 创建了接口实现类，最后就是我们调用网络请求获取数据了。 <code>retrofit</code> 基本的用法就是这样。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">GitHubService</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@GET</span>(<span style="color:#e6db74">&#34;users/{user}/repos&#34;</span>)
+</span></span><span style="display:flex;"><span>  Call<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Repo<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">listRepos</span>(<span style="color:#a6e22e">@Path</span>(<span style="color:#e6db74">&#34;user&#34;</span>) String user);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Retrofit retrofit <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Retrofit.<span style="color:#a6e22e">Builder</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">baseUrl</span>(<span style="color:#e6db74">&#34;https://api.github.com/&#34;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GitHubService service <span style="color:#f92672">=</span> retrofit.<span style="color:#a6e22e">create</span>(GitHubService.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>Call<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Repo<span style="color:#f92672">&gt;&gt;</span> repos <span style="color:#f92672">=</span> service.<span style="color:#a6e22e">listRepos</span>(<span style="color:#e6db74">&#34;octocat&#34;</span>);
+</span></span><span style="display:flex;"><span>repos.<span style="color:#a6e22e">execute</span>();
+</span></span></code></pre></div><p>例子中先创建了 API 接口，然后创建了 Retrofit 实例，接着调用 <code>retrofit.create</code> 创建了接口实现类，最后就是我们调用网络请求获取数据了。 <code>retrofit</code> 基本的用法就是这样。</p>
 <p>下面我们就来一步一步分析</p>
 <h2 id="retrofit-dot-build">Retrofit.build</h2>
 <p><code>Retrofit</code> 使用建造者模式创建 API，我们从 <code>Retrofit.build</code> 开始分析</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">Retrofit</span><span class="w"> </span><span class="nf">build</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">baseUrl</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="s">&#34;Base URL required.&#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="p">.</span><span class="na">Factory</span><span class="w"> </span><span class="n">callFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">callFactory</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">callFactory</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 设置 OkHttp</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">callFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OkHttpClient</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Executor</span><span class="w"> </span><span class="n">callbackExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">callbackExecutor</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">callbackExecutor</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 设置回调</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">callbackExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">platform</span><span class="p">.</span><span class="na">defaultCallbackExecutor</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">List</span><span class="o">&lt;</span><span class="n">CallAdapter</span><span class="p">.</span><span class="na">Factory</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callAdapterFactories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">callAdapterFactories</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 添加适配器</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">callAdapterFactories</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">platform</span><span class="p">.</span><span class="na">defaultCallAdapterFactories</span><span class="p">(</span><span class="n">callbackExecutor</span><span class="p">));</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 添加数据转换器</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Converter</span><span class="p">.</span><span class="na">Factory</span><span class="o">&gt;</span><span class="w"> </span><span class="n">converterFactories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">converterFactories</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">platform</span><span class="p">.</span><span class="na">defaultConverterFactoriesSize</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">BuiltInConverters</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">converterFactories</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">platform</span><span class="p">.</span><span class="na">defaultConverterFactories</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Retrofit</span><span class="p">(</span><span class="n">callFactory</span><span class="p">,</span><span class="w"> </span><span class="n">baseUrl</span><span class="p">,</span><span class="w"> </span><span class="n">unmodifiableList</span><span class="p">(</span><span class="n">converterFactories</span><span class="p">),</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                      </span><span class="n">unmodifiableList</span><span class="p">(</span><span class="n">callAdapterFactories</span><span class="p">),</span><span class="w"> </span><span class="n">callbackExecutor</span><span class="p">,</span><span class="w"> </span><span class="n">validateEagerly</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Retrofit <span style="color:#a6e22e">build</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (baseUrl <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException(<span style="color:#e6db74">&#34;Base URL required.&#34;</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  okhttp3.<span style="color:#a6e22e">Call</span>.<span style="color:#a6e22e">Factory</span> callFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">callFactory</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (callFactory <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置 OkHttp</span>
+</span></span><span style="display:flex;"><span>    callFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> OkHttpClient();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Executor callbackExecutor <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">callbackExecutor</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (callbackExecutor <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置回调</span>
+</span></span><span style="display:flex;"><span>    callbackExecutor <span style="color:#f92672">=</span> platform.<span style="color:#a6e22e">defaultCallbackExecutor</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  List<span style="color:#f92672">&lt;</span>CallAdapter.<span style="color:#a6e22e">Factory</span><span style="color:#f92672">&gt;</span> callAdapterFactories <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">callAdapterFactories</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 添加适配器</span>
+</span></span><span style="display:flex;"><span>  callAdapterFactories.<span style="color:#a6e22e">addAll</span>(platform.<span style="color:#a6e22e">defaultCallAdapterFactories</span>(callbackExecutor));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 添加数据转换器</span>
+</span></span><span style="display:flex;"><span>  List<span style="color:#f92672">&lt;</span>Converter.<span style="color:#a6e22e">Factory</span><span style="color:#f92672">&gt;</span> converterFactories <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;</span>(
+</span></span><span style="display:flex;"><span>      1 <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">converterFactories</span>.<span style="color:#a6e22e">size</span>() <span style="color:#f92672">+</span> platform.<span style="color:#a6e22e">defaultConverterFactoriesSize</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  converterFactories.<span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">new</span> BuiltInConverters());
+</span></span><span style="display:flex;"><span>  converterFactories.<span style="color:#a6e22e">addAll</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">converterFactories</span>);
+</span></span><span style="display:flex;"><span>  converterFactories.<span style="color:#a6e22e">addAll</span>(platform.<span style="color:#a6e22e">defaultConverterFactories</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Retrofit(callFactory, baseUrl, unmodifiableList(converterFactories),
+</span></span><span style="display:flex;"><span>                      unmodifiableList(callAdapterFactories), callbackExecutor, validateEagerly);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在创建 <code>Retrofit</code> 时，先设置了 <code>callFactory</code> ，如果没有手动设置，那么 <code>Retrofit</code> 默认会帮你设置为 <code>OkHttpClient</code> 。</p>
 <p>接下来设置 <code>callbackExecutor</code> ，如果没有设置则会调用 <code>platform</code> 的 <code>defaultCallbackExecutor</code> ， <code>platform</code> 会根据不同的平台返回不同的 <code>Executor</code> , <code>Android</code> 中返回的是 <code>MainThreadExecutor</code> 。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Android</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Platform</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="nf">defaultCallbackExecutor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MainThreadExecutor</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w"> </span><span class="n">CallAdapter</span><span class="p">.</span><span class="na">Factory</span><span class="w"> </span><span class="nf">defaultCallAdapterFactory</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="n">callbackExecutor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">callbackExecutor</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AssertionError</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ExecutorCallAdapterFactory</span><span class="p">(</span><span class="n">callbackExecutor</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MainThreadExecutor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Handler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Handler</span><span class="p">(</span><span class="n">Looper</span><span class="p">.</span><span class="na">getMainLooper</span><span class="p">());</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="n">Runnable</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">handler</span><span class="p">.</span><span class="na">post</span><span class="p">(</span><span class="n">r</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Android</span> <span style="color:#66d9ef">extends</span> Platform {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> Executor <span style="color:#a6e22e">defaultCallbackExecutor</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MainThreadExecutor();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">@Override</span> CallAdapter.<span style="color:#a6e22e">Factory</span> <span style="color:#a6e22e">defaultCallAdapterFactory</span>(<span style="color:#a6e22e">@Nullable</span> Executor callbackExecutor) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (callbackExecutor <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> AssertionError();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ExecutorCallAdapterFactory(callbackExecutor);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainThreadExecutor</span> <span style="color:#66d9ef">implements</span> Executor {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Handler handler <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Handler(Looper.<span style="color:#a6e22e">getMainLooper</span>());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">execute</span>(Runnable r) {
+</span></span><span style="display:flex;"><span>      handler.<span style="color:#a6e22e">post</span>(r);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 <code>MainThreadExecutor</code> 中看到 <code>Callback</code> 默认是在主线程的。顺便提一下 <code>platform</code> 是在 <code>Builder</code> 的构造方法中设置的，属于太细节，这里就不去分析了。</p>
 <p>可以看到接下来设置的 <code>defaultCallAdapterFactory</code> 返回的是 <code>ExecutorCallAdapterFactory</code> 。</p>
 <p>最后设置 <code>converterFactories</code> ，这是用来把服务器结果转换成我们期望的格式，通常我们会转换成 <code>JSON</code> 。 <code>Retrofit</code> 也内置了 <code>BuiltInConverters</code> ，它只能转换 <code>Void</code> 、 <code>Buffer</code> 、 <code>Stream</code> 类型。</p>
 <p>总结一下 <code>Retrofit#build</code> 干了什么</p>
@@ -373,388 +294,179 @@
 </ol>
 <h2 id="retrofit-dot-create">Retrofit.create</h2>
 <p><code>Retrofit</code> 的实例创建好了，需要调用 <code>create</code> 来创建接口的实现类。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">service</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="n">Proxy</span><span class="p">.</span><span class="na">newProxyInstance</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="na">getClassLoader</span><span class="p">(),</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="p">},</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">new</span><span class="w"> </span><span class="n">InvocationHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Platform</span><span class="w"> </span><span class="n">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Platform</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">emptyArgs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Object</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">invoke</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">proxy</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="kd">throws</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">method</span><span class="p">.</span><span class="na">getDeclaringClass</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Object</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">platform</span><span class="p">.</span><span class="na">isDefaultMethod</span><span class="p">(</span><span class="n">method</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">platform</span><span class="p">.</span><span class="na">invokeDefaultMethod</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">service</span><span class="p">,</span><span class="w"> </span><span class="n">proxy</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="k">return</span><span class="w"> </span><span class="n">loadServiceMethod</span><span class="p">(</span><span class="n">method</span><span class="p">).</span><span class="na">invoke</span><span class="p">(</span><span class="n">args</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">args</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">emptyArgs</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，当我们调用接口中的方法会执行 <code>invoke</code> ，第一参数就是调用的对象，第二个参数就是调用对象的某个方法，第三个参数就是方法需要的参数。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">create</span>(<span style="color:#66d9ef">final</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> service) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (T) Proxy.<span style="color:#a6e22e">newProxyInstance</span>(service.<span style="color:#a6e22e">getClassLoader</span>(), <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">&lt;?&gt;[]</span> { service },
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">new</span> InvocationHandler() {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Platform platform <span style="color:#f92672">=</span> Platform.<span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Object<span style="color:#f92672">[]</span> emptyArgs <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Object<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">invoke</span>(Object proxy, Method method, <span style="color:#a6e22e">@Nullable</span> Object<span style="color:#f92672">[]</span> args)
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">if</span> (method.<span style="color:#a6e22e">getDeclaringClass</span>() <span style="color:#f92672">==</span> Object.<span style="color:#a6e22e">class</span>) {
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">return</span> method.<span style="color:#a6e22e">invoke</span>(<span style="color:#66d9ef">this</span>, args);
+</span></span><span style="display:flex;"><span>         }
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">if</span> (platform.<span style="color:#a6e22e">isDefaultMethod</span>(method)) {
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">return</span> platform.<span style="color:#a6e22e">invokeDefaultMethod</span>(method, service, proxy, args);
+</span></span><span style="display:flex;"><span>         }
+</span></span><span style="display:flex;"><span>         <span style="color:#66d9ef">return</span> loadServiceMethod(method).<span style="color:#a6e22e">invoke</span>(args <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> args : emptyArgs);
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>     });
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 <code>create</code> 方法中使用了动态代理创建接口的实现类，当我们调用接口中的方法会执行 <code>invoke</code> ，第一参数就是调用的对象，第二个参数就是调用对象的某个方法，第三个参数就是方法需要的参数。如果调用的类是 <code>Object</code> 和 <code>Java8</code> 的方法，则直接调用。最后返回 <code>loadServiceMethod(method).invoke(args != null ? args : emptyArgs)</code> 。</p>
 <h3 id="loadservicemethod">loadServiceMethod</h3>
 <p>接下来我们来看最有料的 <code>loadServiceMethod</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">loadServiceMethod</span><span class="p">(</span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">ServiceMethod</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serviceMethodCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">method</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">serviceMethodCache</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serviceMethodCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">method</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServiceMethod</span><span class="p">.</span><span class="na">parseAnnotations</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">serviceMethodCache</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。这样看来重点在 <code>parseAnnotations</code> 中，跟进去看看。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>ServiceMethod<span style="color:#f92672">&lt;?&gt;</span> <span style="color:#a6e22e">loadServiceMethod</span>(Method method) {
+</span></span><span style="display:flex;"><span>  ServiceMethod<span style="color:#f92672">&lt;?&gt;</span> result <span style="color:#f92672">=</span> serviceMethodCache.<span style="color:#a6e22e">get</span>(method);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">synchronized</span> (serviceMethodCache) {
+</span></span><span style="display:flex;"><span>    result <span style="color:#f92672">=</span> serviceMethodCache.<span style="color:#a6e22e">get</span>(method);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (result <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      result <span style="color:#f92672">=</span> ServiceMethod.<span style="color:#a6e22e">parseAnnotations</span>(<span style="color:#66d9ef">this</span>, method);
+</span></span><span style="display:flex;"><span>      serviceMethodCache.<span style="color:#a6e22e">put</span>(method, result);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>loadServiceMethod</code> 为了提高性能做了缓存，不然每次都要查找多费时间。最后调用 <code>ServiceMethod.parseAnnotations</code> 生成 <code>ServiceMethod</code> 并返回了。这样看来重点在 <code>parseAnnotations</code> 中，跟进去看看。</p>
 <h3 id="parseannotations">parseAnnotations</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ServiceMethod</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">parseAnnotations</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">RequestFactory</span><span class="w"> </span><span class="n">requestFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RequestFactory</span><span class="p">.</span><span class="na">parseAnnotations</span><span class="p">(</span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 省略一些检查判断...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">HttpServiceMethod</span><span class="p">.</span><span class="na">parseAnnotations</span><span class="p">(</span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">requestFactory</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="n">RequestFactory</span><span class="w"> </span><span class="nf">parseAnnotations</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Builder</span><span class="p">(</span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">).</span><span class="na">build</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">Builder</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">retrofit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">retrofit</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 获取方法上的注解</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">methodAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getAnnotations</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 获取参数类型</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">parameterTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getGenericParameterTypes</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 获取参数上的注解，一个参数可能有多个注解，所以是个二维数组</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">parameterAnnotationsArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getParameterAnnotations</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="n">RequestFactory</span><span class="p">(</span><span class="n">Builder</span><span class="w"> </span><span class="n">builder</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">method</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">baseUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">retrofit</span><span class="p">.</span><span class="na">baseUrl</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">httpMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">httpMethod</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">relativeUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">relativeUrl</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">headers</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">contentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">contentType</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">hasBody</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">hasBody</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">isFormEncoded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">isFormEncoded</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">isMultipart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">isMultipart</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">parameterHandlers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="na">parameterHandlers</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="w"> </span><span class="n">HttpServiceMethod</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">parseAnnotations</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">RequestFactory</span><span class="w"> </span><span class="n">requestFactory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callAdapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createCallAdapter</span><span class="p">(</span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="n">responseType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callAdapter</span><span class="p">.</span><span class="na">responseType</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="n">ResponseT</span><span class="o">&gt;</span><span class="w"> </span><span class="n">responseConverter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createResponseConverter</span><span class="p">(</span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">responseType</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="p">.</span><span class="na">Factory</span><span class="w"> </span><span class="n">callFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">retrofit</span><span class="p">.</span><span class="na">callFactory</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpServiceMethod</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">requestFactory</span><span class="p">,</span><span class="w"> </span><span class="n">callFactory</span><span class="p">,</span><span class="w"> </span><span class="n">callAdapter</span><span class="p">,</span><span class="w"> </span><span class="n">responseConverter</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>HttpServiceMethod.parseAnnotations</code> 先调用了 <code>createCallAdapter</code> 找到对应的 <code>callAdapter</code> 并取出返回值的类型，然后调用 <code>createResponseConverter</code> 把返回值类型传递进去，找到对应的 <code>responseConverter</code> 、最后把它们和 <code>callFactory</code> 、 <code>requestFactory</code> 封装成 <code>serviceMethod</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> ServiceMethod<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">parseAnnotations</span>(Retrofit retrofit, Method method) {
+</span></span><span style="display:flex;"><span>  RequestFactory requestFactory <span style="color:#f92672">=</span> RequestFactory.<span style="color:#a6e22e">parseAnnotations</span>(retrofit, method);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 省略一些检查判断...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> HttpServiceMethod.<span style="color:#a6e22e">parseAnnotations</span>(retrofit, method, requestFactory);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>首先调用了 <code>RequestFactory.parseAnnotations</code> 生成 <code>RequestFactory</code> ,在 <code>RequestFactory.parseAnnotations</code> 中会根据注解解析出请求方法，请求 <code>URL</code> ，请求头，请求体，表单等信息，代码如下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> RequestFactory <span style="color:#a6e22e">parseAnnotations</span>(Retrofit retrofit, Method method) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Builder(retrofit, method).<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Builder(Retrofit retrofit, Method method) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">retrofit</span> <span style="color:#f92672">=</span> retrofit;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">method</span> <span style="color:#f92672">=</span> method;
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取方法上的注解</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">methodAnnotations</span> <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getAnnotations</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取参数类型</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">parameterTypes</span> <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getGenericParameterTypes</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取参数上的注解，一个参数可能有多个注解，所以是个二维数组</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">parameterAnnotationsArray</span> <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getParameterAnnotations</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>RequestFactory(Builder builder) {
+</span></span><span style="display:flex;"><span>  method <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">method</span>;
+</span></span><span style="display:flex;"><span>  baseUrl <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">retrofit</span>.<span style="color:#a6e22e">baseUrl</span>;
+</span></span><span style="display:flex;"><span>  httpMethod <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">httpMethod</span>;
+</span></span><span style="display:flex;"><span>  relativeUrl <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">relativeUrl</span>;
+</span></span><span style="display:flex;"><span>  headers <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">headers</span>;
+</span></span><span style="display:flex;"><span>  contentType <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">contentType</span>;
+</span></span><span style="display:flex;"><span>  hasBody <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">hasBody</span>;
+</span></span><span style="display:flex;"><span>  isFormEncoded <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">isFormEncoded</span>;
+</span></span><span style="display:flex;"><span>  isMultipart <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">isMultipart</span>;
+</span></span><span style="display:flex;"><span>  parameterHandlers <span style="color:#f92672">=</span> builder.<span style="color:#a6e22e">parameterHandlers</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然后调用了 <code>HttpServiceMethod.parseAnnotations</code> ，生成 <code>ServiceMethod</code> ,接下来看一下 <code>HttpServiceMethod.parseAnnotations</code> 是怎么构建 <code>ServiceMethod</code> 的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span> HttpServiceMethod<span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">parseAnnotations</span>(Retrofit retrofit, Method method, RequestFactory requestFactory) {
+</span></span><span style="display:flex;"><span>  CallAdapter<span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span> callAdapter <span style="color:#f92672">=</span> createCallAdapter(retrofit, method);
+</span></span><span style="display:flex;"><span>  Type responseType <span style="color:#f92672">=</span> callAdapter.<span style="color:#a6e22e">responseType</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Converter<span style="color:#f92672">&lt;</span>ResponseBody, ResponseT<span style="color:#f92672">&gt;</span> responseConverter <span style="color:#f92672">=</span> createResponseConverter(retrofit, method, responseType);
+</span></span><span style="display:flex;"><span>  okhttp3.<span style="color:#a6e22e">Call</span>.<span style="color:#a6e22e">Factory</span> callFactory <span style="color:#f92672">=</span> retrofit.<span style="color:#a6e22e">callFactory</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> HttpServiceMethod<span style="color:#f92672">&lt;&gt;</span>(requestFactory, callFactory, callAdapter, responseConverter);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>HttpServiceMethod.parseAnnotations</code> 先调用了 <code>createCallAdapter</code> 找到对应的 <code>callAdapter</code> 并取出返回值的类型，然后调用 <code>createResponseConverter</code> 把返回值类型传递进去，找到对应的 <code>responseConverter</code> 、最后把它们和 <code>callFactory</code> 、 <code>requestFactory</code> 封装成 <code>serviceMethod</code> 。</p>
 <p>接下来看看 <code>CallAdapter</code> 和 <code>responseConverter</code> 是怎么被创建的</p>
 <h3 id="createcalladapter">createCallAdapter</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">createCallAdapter</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="n">returnType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getGenericReturnType</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getAnnotations</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 省略部分代码</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="p">,</span><span class="w"> </span><span class="n">ReturnT</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">retrofit</span><span class="p">.</span><span class="na">callAdapter</span><span class="p">(</span><span class="n">returnType</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Retrofit#callAdapter</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">CallAdapter</span><span class="o">&lt;?</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">callAdapter</span><span class="p">(</span><span class="n">Type</span><span class="w"> </span><span class="n">returnType</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">nextCallAdapter</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">returnType</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Retrofit#nextCallAdapter</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">CallAdapter</span><span class="o">&lt;?</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">nextCallAdapter</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">CallAdapter</span><span class="p">.</span><span class="na">Factory</span><span class="w"> </span><span class="n">skipPast</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">returnType</span><span class="p">,</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                                         </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 省略部分代码</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callAdapterFactories</span><span class="p">.</span><span class="na">indexOf</span><span class="p">(</span><span class="n">skipPast</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callAdapterFactories</span><span class="p">.</span><span class="na">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">CallAdapter</span><span class="o">&lt;?</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callAdapterFactories</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="na">get</span><span class="p">(</span><span class="n">returnType</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">adapter</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">adapter</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>createCallAdapter</code> 方法调最后调用的是 <code>nextCallAdapter</code> ，它会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的适配器。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span> CallAdapter<span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">createCallAdapter</span>(Retrofit retrofit, Method method) {
+</span></span><span style="display:flex;"><span>  Type returnType <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getGenericReturnType</span>();
+</span></span><span style="display:flex;"><span>  Annotation<span style="color:#f92672">[]</span> annotations <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getAnnotations</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 省略部分代码</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> (CallAdapter<span style="color:#f92672">&lt;</span>ResponseT, ReturnT<span style="color:#f92672">&gt;</span>) retrofit.<span style="color:#a6e22e">callAdapter</span>(returnType, annotations);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Retrofit#callAdapter</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> CallAdapter<span style="color:#f92672">&lt;?</span>, <span style="color:#f92672">?&gt;</span> callAdapter(Type returnType, Annotation<span style="color:#f92672">[]</span> annotations) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> nextCallAdapter(<span style="color:#66d9ef">null</span>, returnType, annotations);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Retrofit#nextCallAdapter</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> CallAdapter<span style="color:#f92672">&lt;?</span>, <span style="color:#f92672">?&gt;</span> nextCallAdapter(<span style="color:#a6e22e">@Nullable</span> CallAdapter.<span style="color:#a6e22e">Factory</span> skipPast, Type returnType,
+</span></span><span style="display:flex;"><span>                                         Annotation<span style="color:#f92672">[]</span> annotations) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 省略部分代码</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> start <span style="color:#f92672">=</span> callAdapterFactories.<span style="color:#a6e22e">indexOf</span>(skipPast) <span style="color:#f92672">+</span> 1;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start, count <span style="color:#f92672">=</span> callAdapterFactories.<span style="color:#a6e22e">size</span>(); i <span style="color:#f92672">&lt;</span> count; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>    CallAdapter<span style="color:#f92672">&lt;?</span>, <span style="color:#f92672">?&gt;</span> adapter <span style="color:#f92672">=</span> callAdapterFactories.<span style="color:#a6e22e">get</span>(i).<span style="color:#a6e22e">get</span>(returnType, annotations, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (adapter <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> adapter;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>createCallAdapter</code> 方法调最后调用的是 <code>nextCallAdapter</code> ，它会遍历 <code>callAdapterFactories</code> 根据注解和返回值类型查找合适的 <code>CallAdapter</code> 。在构造 <code>Retrofit</code> 时，我们可以通过 <code>addCallAdapterFactory</code> 往 <code>callAdapterFactories</code> 添加需要的适配器。</p>
 <h3 id="createresponseconverter">createResponseConverter</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ResponseT</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="n">ResponseT</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">createResponseConverter</span><span class="p">(</span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="w"> </span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">responseType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">.</span><span class="na">getAnnotations</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">retrofit</span><span class="p">.</span><span class="na">responseBodyConverter</span><span class="p">(</span><span class="n">responseType</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">RuntimeException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Wide exception range because factories are user code.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">methodError</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;Unable to create converter for %s&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">responseType</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Retrofit#responseBodyConverter</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">responseBodyConverter</span><span class="p">(</span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">nextResponseBodyConverter</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Retrofit#nextResponseBodyConverter</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">nextResponseBodyConverter</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Converter</span><span class="p">.</span><span class="na">Factory</span><span class="w"> </span><span class="n">skipPast</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">indexOf</span><span class="p">(</span><span class="n">skipPast</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">converter</span><span class="w"> </span><span class="o">=</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">converterFactories</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="na">responseBodyConverter</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">converter</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">//noinspection unchecked</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Converter</span><span class="o">&lt;</span><span class="n">ResponseBody</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">converter</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// ....</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>ResponseT<span style="color:#f92672">&gt;</span> Converter<span style="color:#f92672">&lt;</span>ResponseBody, ResponseT<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">createResponseConverter</span>(Retrofit retrofit, Method method, Type responseType) {
+</span></span><span style="display:flex;"><span>  Annotation<span style="color:#f92672">[]</span> annotations <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">getAnnotations</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> retrofit.<span style="color:#a6e22e">responseBodyConverter</span>(responseType, annotations);
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (RuntimeException e) { <span style="color:#75715e">// Wide exception range because factories are user code.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> methodError(method, e, <span style="color:#e6db74">&#34;Unable to create converter for %s&#34;</span>, responseType);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Retrofit#responseBodyConverter</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Converter<span style="color:#f92672">&lt;</span>ResponseBody, T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">responseBodyConverter</span>(Type type, Annotation<span style="color:#f92672">[]</span> annotations) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> nextResponseBodyConverter(<span style="color:#66d9ef">null</span>, type, annotations);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Retrofit#nextResponseBodyConverter</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Converter<span style="color:#f92672">&lt;</span>ResponseBody, T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">nextResponseBodyConverter</span>(<span style="color:#a6e22e">@Nullable</span> Converter.<span style="color:#a6e22e">Factory</span> skipPast, Type type, Annotation<span style="color:#f92672">[]</span> annotations) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> start <span style="color:#f92672">=</span> converterFactories.<span style="color:#a6e22e">indexOf</span>(skipPast) <span style="color:#f92672">+</span> 1;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start, count <span style="color:#f92672">=</span> converterFactories.<span style="color:#a6e22e">size</span>(); i <span style="color:#f92672">&lt;</span> count; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>    Converter<span style="color:#f92672">&lt;</span>ResponseBody, <span style="color:#f92672">?&gt;</span> converter <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>        converterFactories.<span style="color:#a6e22e">get</span>(i).<span style="color:#a6e22e">responseBodyConverter</span>(type, annotations, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (converter <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//noinspection unchecked</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> (Converter<span style="color:#f92672">&lt;</span>ResponseBody, T<span style="color:#f92672">&gt;</span>) converter;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ....</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>和 <code>createCallAdapter</code> 一样的套路，遍历 <code>converterFactories</code> 根据注解和返回值类型查找合适的 <code>Converter</code> 。
 <code>loadServiceMethod</code> 做的就是通过返回值和注解生成 <code>CallAdapter</code> 和 <code>ResponseConverter</code> ，最后构造 <code>HttpServiceMethod</code> 。</p>
 <h3 id="invoke">invoke</h3>
 <p><code>loadServiceMethod</code> 最后返回的是 <code>HttpServiceMethod</code> ，所以最后调用的 <code>invoke</code> ，是 <code>HttpServiceMethod</code> 的 <code>invoke</code> 。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// HttpServiceMethod</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w"> </span><span class="n">ReturnT</span><span class="w"> </span><span class="nf">invoke</span><span class="p">(</span><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">callAdapter</span><span class="p">.</span><span class="na">adapt</span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">new</span><span class="w"> </span><span class="n">OkHttpCall</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">requestFactory</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">callFactory</span><span class="p">,</span><span class="w"> </span><span class="n">responseConverter</span><span class="p">));</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">CallAdapter</span><span class="o">&lt;?</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Type</span><span class="w"> </span><span class="n">returnType</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="o">[]</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="n">Retrofit</span><span class="w"> </span><span class="n">retrofit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">getRawType</span><span class="p">(</span><span class="n">returnType</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">Call</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">final</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">responseType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Utils</span><span class="p">.</span><span class="na">getCallResponseType</span><span class="p">(</span><span class="n">returnType</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CallAdapter</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="o">&lt;?&gt;&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="nf">responseType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">responseType</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">Call</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">adapt</span><span class="p">(</span><span class="n">Call</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">call</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ExecutorCallbackCall</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">callbackExecutor</span><span class="p">,</span><span class="w"> </span><span class="n">call</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">};</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>adapt</code> 方法中返回了 <code>ExecutorCallbackCall</code> 所以调用接口的方法最后返回的是 <code>ExecutorCallbackCall</code> ，也就是我们调用 <code>Retrofit.create</code> 创建的服务，调用其中的方法，最后面其实调用 <code>ExecutorCallbackCall</code> 。 关于 <code>ExecutorCallbackCall</code> 我们后面还会碰到。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// HttpServiceMethod</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span> ReturnT <span style="color:#a6e22e">invoke</span>(Object<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> callAdapter.<span style="color:#a6e22e">adapt</span>(
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">new</span> OkHttpCall<span style="color:#f92672">&lt;&gt;</span>(requestFactory, args, callFactory, responseConverter));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>invoke</code> 调用了 <code>callAdapter.adapt</code> ，根据之前的分析知道默认的 <code>callAdapterFactories</code> 是 <code>ExecutorCallAdapterFactory</code> , 所以这里的 <code>callAdapter</code> 是 <code>ExecutorCallAdapterFactory</code> 中返回的匿名的 <code>CallAdapter</code> 。代码如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@Nullable</span> CallAdapter<span style="color:#f92672">&lt;?</span>, <span style="color:#f92672">?&gt;</span> get(
+</span></span><span style="display:flex;"><span>    Type returnType, Annotation<span style="color:#f92672">[]</span> annotations, Retrofit retrofit) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (getRawType(returnType) <span style="color:#f92672">!=</span> Call.<span style="color:#a6e22e">class</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">final</span> Type responseType <span style="color:#f92672">=</span> Utils.<span style="color:#a6e22e">getCallResponseType</span>(returnType);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> CallAdapter<span style="color:#f92672">&lt;</span>Object, Call<span style="color:#f92672">&lt;?&gt;&gt;</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> Type <span style="color:#a6e22e">responseType</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> responseType;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> Call<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">adapt</span>(Call<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> call) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ExecutorCallbackCall<span style="color:#f92672">&lt;&gt;</span>(callbackExecutor, call);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 <code>adapt</code> 方法中返回了 <code>ExecutorCallbackCall</code> 所以调用接口的方法最后返回的是 <code>ExecutorCallbackCall</code> ，也就是我们调用 <code>Retrofit.create</code> 创建的服务，调用其中的方法，最后面其实调用 <code>ExecutorCallbackCall</code> 。 关于 <code>ExecutorCallbackCall</code> 我们后面还会碰到。</p>
 <h3 id="小节一下-retrofit-create-里做了这么几件事">小节一下 <code>Retrofit#create</code> 里做了这么几件事</h3>
 <ol>
 <li>根据动态代理为每个接口方法创建 <code>ServiceMethod</code></li>
@@ -763,225 +475,110 @@
 <li>在 <code>HttpServiceMethod#invoke</code> 中调用 <code>callAdapter.adapt</code> 把 <code>Retrofit.Call</code> 适配成 <code>callFactory</code> 能调用的请求，也就是 <code>OkHttpCall</code> 。</li>
 </ol>
 <h2 id="执行请求">执行请求</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">ExecutorCallbackCall</span><span class="p">(</span><span class="n">Executor</span><span class="w"> </span><span class="n">callbackExecutor</span><span class="p">,</span><span class="w"> </span><span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">delegate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">callbackExecutor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callbackExecutor</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="na">delegate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">delegate</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">enqueue</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">checkNotNull</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;callback == null&#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">delegate</span><span class="p">.</span><span class="na">enqueue</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResponse</span><span class="p">(</span><span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">call</span><span class="p">,</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">callbackExecutor</span><span class="p">.</span><span class="na">execute</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Runnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">delegate</span><span class="p">.</span><span class="na">isCanceled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="c1">// Emulate OkHttp&#39;s behavior of throwing/delivering an IOException on cancellation.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">callback</span><span class="p">.</span><span class="na">onFailure</span><span class="p">(</span><span class="n">ExecutorCallbackCall</span><span class="p">.</span><span class="na">this</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IOException</span><span class="p">(</span><span class="s">&#34;Canceled&#34;</span><span class="p">));</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">callback</span><span class="p">.</span><span class="na">onResponse</span><span class="p">(</span><span class="n">ExecutorCallbackCall</span><span class="p">.</span><span class="na">this</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onFailure</span><span class="p">(</span><span class="n">Call</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">call</span><span class="p">,</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">callbackExecutor</span><span class="p">.</span><span class="na">execute</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Runnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="n">callback</span><span class="p">.</span><span class="na">onFailure</span><span class="p">(</span><span class="n">ExecutorCallbackCall</span><span class="p">.</span><span class="na">this</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">execute</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">delegate</span><span class="p">.</span><span class="na">execute</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>ExecutorCallbackCall</code> ，其中 <code>delegate</code> 是个 <code>OkHttpCall</code> 我们调用 <code>enqueue</code> 其实调用的是 <code>OkHttpCall</code> 的 <code>enqueue</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>ExecutorCallbackCall(Executor callbackExecutor, Call<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> delegate) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">callbackExecutor</span> <span style="color:#f92672">=</span> callbackExecutor;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">delegate</span> <span style="color:#f92672">=</span> delegate;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">enqueue</span>(<span style="color:#66d9ef">final</span> Callback<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> callback) {
+</span></span><span style="display:flex;"><span>  checkNotNull(callback, <span style="color:#e6db74">&#34;callback == null&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  delegate.<span style="color:#a6e22e">enqueue</span>(<span style="color:#66d9ef">new</span> Callback<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResponse</span>(Call<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> call, <span style="color:#66d9ef">final</span> Response<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> response) {
+</span></span><span style="display:flex;"><span>        callbackExecutor.<span style="color:#a6e22e">execute</span>(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">if</span> (delegate.<span style="color:#a6e22e">isCanceled</span>()) {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// Emulate OkHttp&#39;s behavior of throwing/delivering an IOException on cancellation.</span>
+</span></span><span style="display:flex;"><span>                callback.<span style="color:#a6e22e">onFailure</span>(ExecutorCallbackCall.<span style="color:#a6e22e">this</span>, <span style="color:#66d9ef">new</span> IOException(<span style="color:#e6db74">&#34;Canceled&#34;</span>));
+</span></span><span style="display:flex;"><span>              } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                callback.<span style="color:#a6e22e">onResponse</span>(ExecutorCallbackCall.<span style="color:#a6e22e">this</span>, response);
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          });
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onFailure</span>(Call<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> call, <span style="color:#66d9ef">final</span> Throwable t) {
+</span></span><span style="display:flex;"><span>        callbackExecutor.<span style="color:#a6e22e">execute</span>(<span style="color:#66d9ef">new</span> Runnable() {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>              callback.<span style="color:#a6e22e">onFailure</span>(ExecutorCallbackCall.<span style="color:#a6e22e">this</span>, t);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          });
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> Response<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">execute</span>() <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> delegate.<span style="color:#a6e22e">execute</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在上小节中，调用 <code>invoke</code> 最后得到的是一个 <code>ExecutorCallbackCall</code> ，其中 <code>delegate</code> 是个 <code>OkHttpCall</code> 我们调用 <code>enqueue</code> 其实调用的是 <code>OkHttpCall</code> 的 <code>enqueue</code> ， <code>execute</code> 直接调用了 <code>delegate.execute()</code> ，就不说了。</p>
 <p>来看 <code>enqueue</code> 的 <code>onResponse</code> 中，最后的的结果会调用 <code>callbackExecutor.execute</code> ，之前我们分析在 <code>Android</code> 中 这个 <code>callbackExecutor</code> 是 <code>MainThreadExecutor</code> ，所以最后的结果是在主线程中被回调的。</p>
 <h3 id="okhttpcall">OkHttpCall</h3>
 <p>接下来我们来看看 <code>OkHttpCall</code> 代码如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">enqueue</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">Callback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// ...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rawCall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createRawCall</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">throwIfFatal</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">failure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">creationFailure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">call</span><span class="p">.</span><span class="na">enqueue</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Callback</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onResponse</span><span class="p">(</span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="w"> </span><span class="n">call</span><span class="p">,</span><span class="w"> </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Response</span><span class="w"> </span><span class="n">rawResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseResponse</span><span class="p">(</span><span class="n">rawResponse</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">throwIfFatal</span><span class="p">(</span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">callFailure</span><span class="p">(</span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="k">return</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">callback</span><span class="p">.</span><span class="na">onResponse</span><span class="p">(</span><span class="n">OkHttpCall</span><span class="p">.</span><span class="na">this</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">t</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nd">@Override</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onFailure</span><span class="p">(</span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="w"> </span><span class="n">call</span><span class="p">,</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">callFailure</span><span class="p">(</span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">callFailure</span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">callback</span><span class="p">.</span><span class="na">onFailure</span><span class="p">(</span><span class="n">OkHttpCall</span><span class="p">.</span><span class="na">this</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">t</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="w"> </span><span class="nf">createRawCall</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Call</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">callFactory</span><span class="p">.</span><span class="na">newCall</span><span class="p">(</span><span class="n">requestFactory</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">args</span><span class="p">));</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">call</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NullPointerException</span><span class="p">(</span><span class="s">&#34;Call.Factory returned null.&#34;</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">call</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>enqueue</code> 中先调用了 <code>createRawCall</code> ，而 <code>createRawCall</code> 中调用了 <code>callFactory.newCall</code> ，所以最后是调用了 <code>OkHttpClient</code> 的 <code>newCall</code> 来创建 <code>OkHttp</code> 的 <code>Call</code> 。 而 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 。这样就把网络请求交给了 <code>OkHttp</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">enqueue</span>(<span style="color:#66d9ef">final</span> Callback<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> callback) {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    call <span style="color:#f92672">=</span> rawCall <span style="color:#f92672">=</span> createRawCall();
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (Throwable t) {
+</span></span><span style="display:flex;"><span>    throwIfFatal(t);
+</span></span><span style="display:flex;"><span>    failure <span style="color:#f92672">=</span> creationFailure <span style="color:#f92672">=</span> t;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  call.<span style="color:#a6e22e">enqueue</span>(<span style="color:#66d9ef">new</span> okhttp3.<span style="color:#a6e22e">Callback</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResponse</span>(okhttp3.<span style="color:#a6e22e">Call</span> call, okhttp3.<span style="color:#a6e22e">Response</span> rawResponse) {
+</span></span><span style="display:flex;"><span>        Response<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> response;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>          response <span style="color:#f92672">=</span> parseResponse(rawResponse);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Throwable e) {
+</span></span><span style="display:flex;"><span>          throwIfFatal(e);
+</span></span><span style="display:flex;"><span>          callFailure(e);
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>          callback.<span style="color:#a6e22e">onResponse</span>(OkHttpCall.<span style="color:#a6e22e">this</span>, response);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Throwable t) {
+</span></span><span style="display:flex;"><span>          t.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">@Override</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onFailure</span>(okhttp3.<span style="color:#a6e22e">Call</span> call, IOException e) {
+</span></span><span style="display:flex;"><span>        callFailure(e);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">callFailure</span>(Throwable e) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>          callback.<span style="color:#a6e22e">onFailure</span>(OkHttpCall.<span style="color:#a6e22e">this</span>, e);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Throwable t) {
+</span></span><span style="display:flex;"><span>          t.<span style="color:#a6e22e">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> okhttp3.<span style="color:#a6e22e">Call</span> <span style="color:#a6e22e">createRawCall</span>() <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>  okhttp3.<span style="color:#a6e22e">Call</span> call <span style="color:#f92672">=</span> callFactory.<span style="color:#a6e22e">newCall</span>(requestFactory.<span style="color:#a6e22e">create</span>(args));
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (call <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException(<span style="color:#e6db74">&#34;Call.Factory returned null.&#34;</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> call;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>enqueue</code> 中先调用了 <code>createRawCall</code> ，而 <code>createRawCall</code> 中调用了 <code>callFactory.newCall</code> ，所以最后是调用了 <code>OkHttpClient</code> 的 <code>newCall</code> 来创建 <code>OkHttp</code> 的 <code>Call</code> 。 而 <code>requestFactory.create</code> 来创建 <code>okhttp</code> 的 <code>Request</code> 。这样就把网络请求交给了 <code>OkHttp</code> 。</p>
 <h2 id="解析请求结果">解析请求结果</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Response</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">parseResponse</span><span class="p">(</span><span class="n">okhttp3</span><span class="p">.</span><span class="na">Response</span><span class="w"> </span><span class="n">rawResponse</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// ...</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">responseConverter</span><span class="p">.</span><span class="na">convert</span><span class="p">(</span><span class="n">catchingBody</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Response</span><span class="p">.</span><span class="na">success</span><span class="p">(</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">rawResponse</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">RuntimeException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// If the underlying source threw an exception, propagate that rather than indicating it was</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// a runtime exception.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">catchingBody</span><span class="p">.</span><span class="na">throwIfCaught</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">e</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>OkHttpCall</code> 中请求成功后，会调用 <code>parseResponse</code> 来把服务返回的数据转换成对应的 <code>JavaBean</code> 。 而实际进行转换的是 <code>responseBodyConverter.convert</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Response<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">parseResponse</span>(okhttp3.<span style="color:#a6e22e">Response</span> rawResponse) <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    T body <span style="color:#f92672">=</span> responseConverter.<span style="color:#a6e22e">convert</span>(catchingBody);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Response.<span style="color:#a6e22e">success</span>(body, rawResponse);
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (RuntimeException e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// If the underlying source threw an exception, propagate that rather than indicating it was</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// a runtime exception.</span>
+</span></span><span style="display:flex;"><span>    catchingBody.<span style="color:#a6e22e">throwIfCaught</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throw</span> e;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 <code>OkHttpCall</code> 中请求成功后，会调用 <code>parseResponse</code> 来把服务返回的数据转换成对应的 <code>JavaBean</code> 。 而实际进行转换的是 <code>responseBodyConverter.convert</code> 。</p>
 <h2 id="总结">总结</h2>
 <ol>
 <li><code>Retrofit</code> 通过动态代理创建 API 的实现类。</li>
@@ -1016,6 +613,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/retrofit/">Retrofit</a>
@@ -1097,7 +696,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

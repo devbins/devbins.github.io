@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/qrcode_pair/" />
@@ -37,59 +37,59 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/qrcode_pair/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta property="og:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta property="og:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2022-10-30T00:00:00+00:00">
-    <meta property="article:modified_time" content="2022-10-30T00:00:00+00:00">
-    <meta property="article:tag" content="Android">
-    <meta property="article:tag" content="Adb">
-    <meta property="article:tag" content="Rust">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2022-10-30T00:00:00+00:00">
+		<meta property="article:modified_time" content="2022-10-30T00:00:00+00:00">
+		<meta property="article:tag" content="Android">
+		<meta property="article:tag" content="Adb">
+		<meta property="article:tag" content="Rust">
 
-  <meta itemprop="name" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta itemprop="description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta itemprop="name" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta itemprop="description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
-  <meta itemprop="datePublished" content="2022-10-30T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2022-10-30T00:00:00+00:00">
-  <meta itemprop="wordCount" content="3389">
-  <meta itemprop="keywords" content="Android,Adb,Rust">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta name="twitter:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta itemprop="datePublished" content="2022-10-30T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2022-10-30T00:00:00+00:00">
+	<meta itemprop="wordCount" content="3190">
+	<meta itemprop="keywords" content="Android,Adb,Rust">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta name="twitter:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
  <meta property="og:url" content="http://devbins.github.io/post/qrcode_pair/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta property="og:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta property="og:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2022-10-30T00:00:00+00:00">
-    <meta property="article:modified_time" content="2022-10-30T00:00:00+00:00">
-    <meta property="article:tag" content="Android">
-    <meta property="article:tag" content="Adb">
-    <meta property="article:tag" content="Rust">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2022-10-30T00:00:00+00:00">
+		<meta property="article:modified_time" content="2022-10-30T00:00:00+00:00">
+		<meta property="article:tag" content="Android">
+		<meta property="article:tag" content="Adb">
+		<meta property="article:tag" content="Rust">
 
-  <meta itemprop="name" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta itemprop="description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta itemprop="name" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta itemprop="description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
-  <meta itemprop="datePublished" content="2022-10-30T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2022-10-30T00:00:00+00:00">
-  <meta itemprop="wordCount" content="3389">
-  <meta itemprop="keywords" content="Android,Adb,Rust">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
-  <meta name="twitter:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
+	<meta itemprop="datePublished" content="2022-10-30T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2022-10-30T00:00:00+00:00">
+	<meta itemprop="wordCount" content="3190">
+	<meta itemprop="keywords" content="Android,Adb,Rust">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Android Studio 通过二维码使用WIFI连接手机原理分析">
+	<meta name="twitter:description" content="前言 由于开发需要，下了最新版的 Android Studio(Dolphin) ，发现在选择 Android 设备的时候多了一个 Pair Devices Using WI-FI ，然后这里可以使用二维码和配对码，我使用了二维码进行配对，发现挺方便的，可以不用数据线了。
 本文会分析一下实现的过程。">
 
 <!--[if lte IE 9]>
@@ -175,7 +175,7 @@
             <a href="../../categories/rust/"> Rust </a>
             <a href="../../categories/adb/"> adb </a>
             </div>
-          <span class="more-meta"> 3389 words </span>
+          <span class="more-meta"> 3190 words </span>
           <span class="more-meta"> 7 mins read </span>
         
       </div>
@@ -223,117 +223,53 @@
 <p>我把二维码放到下方，感兴趣可以扫一下
 <img src="../../images/adb_qrcode.png" alt=""></p>
 <p>扫出来的结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">WIFI:T:ADB;S:studio-R*RsW2zVC@;P:y8G^#OcZg*z0;;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>虽然看不懂这些字符表达的是什么意思，但是还是能发现一些规律的。为了找出规律，我把二维码的页面关掉，重新生成一个二维码，扫描得出的结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">WIFI:T:ADB;S:studio-0d6^I(ncs1;P:*pj3cLQLzt&lt;V;;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这下有一些不同了，我们大概能猜到哪些不同，哪些一样了，放到一起对比一下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">WIFI:T:ADB;S:studio-R*RsW2zVC@;P:y8G^#OcZg*z0;;
-</span></span><span class="line"><span class="cl">WIFI:T:ADB;S:studio-0d6^I(ncs1;P:*pj3cLQLzt&lt;V;;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以发现不变的是 <code>WIFI:T:ADB;S:studio-</code> 看来是有固定的前缀，到这里就不太好猜接下来的字符表达的是什么意思，不过像这种没有意义的字符，很可能是随机生成的字符串，没多大的意义，主要是不能重复且随机。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>WIFI:T:ADB;S:studio-R*RsW2zVC@;P:y8G^#OcZg*z0;;
+</span></span></code></pre></div><p>虽然看不懂这些字符表达的是什么意思，但是还是能发现一些规律的。为了找出规律，我把二维码的页面关掉，重新生成一个二维码，扫描得出的结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>WIFI:T:ADB;S:studio-0d6^I(ncs1;P:*pj3cLQLzt&lt;V;;
+</span></span></code></pre></div><p>这下有一些不同了，我们大概能猜到哪些不同，哪些一样了，放到一起对比一下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>WIFI:T:ADB;S:studio-R*RsW2zVC@;P:y8G^#OcZg*z0;;
+</span></span><span style="display:flex;"><span>WIFI:T:ADB;S:studio-0d6^I(ncs1;P:*pj3cLQLzt&lt;V;;
+</span></span></code></pre></div><p>可以发现不变的是 <code>WIFI:T:ADB;S:studio-</code> 看来是有固定的前缀，到这里就不太好猜接下来的字符表达的是什么意思，不过像这种没有意义的字符，很可能是随机生成的字符串，没多大的意义，主要是不能重复且随机。</p>
 <h3 id="从代码入手">从代码入手</h3>
 <p>经过二维码的分析，我们知道了二维码里面的字符是有一个固定的前缀，但是我们并不知道后面的规律是什么，所以我们还是需要从源码中看下能不能找出规律，代码主要在 <a href="https://cs.android.com/android-studio/platform/tools/adt/idea/+/mirror-goog-studio-master-dev:android-adb/src/com/android/tools/idea/adb/wireless/WiFiPairingServiceImpl.kt">WiFiPairingServiceImpl.kt - Android Code Search</a></p>
 <p>我们直接看生成二维码的代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="nd">@UiThread</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">WiFiPairingServiceImpl</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">randomProvider</span><span class="p">:</span> <span class="n">RandomProvider</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">adbService</span><span class="p">:</span> <span class="n">AdbServiceWrapper</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">taskExecutor</span><span class="p">:</span> <span class="n">Executor</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">:</span> <span class="n">WiFiPairingService</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">studioServiceNamePrefix</span> <span class="p">=</span> <span class="s2">&#34;studio-&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">override</span> <span class="k">fun</span> <span class="nf">generateQrCode</span><span class="p">(</span><span class="n">backgroundColor</span><span class="p">:</span> <span class="n">Color</span><span class="p">,</span> <span class="n">foregroundColor</span><span class="p">:</span> <span class="n">Color</span><span class="p">):</span> <span class="n">ListenableFuture</span><span class="p">&lt;</span><span class="n">QrCodeImage</span><span class="p">&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">taskExecutor</span><span class="p">.</span><span class="n">executeAsync</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">serviceName</span> <span class="p">=</span> <span class="n">studioServiceNamePrefix</span> <span class="p">+</span> <span class="n">createRandomString</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">password</span> <span class="p">=</span> <span class="n">createRandomString</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">pairingString</span> <span class="p">=</span> <span class="n">createPairingString</span><span class="p">(</span><span class="n">serviceName</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">image</span> <span class="p">=</span> <span class="nc">QrCodeGenerator</span><span class="p">.</span><span class="n">encodeQrCodeToImage</span><span class="p">(</span><span class="n">pairingString</span><span class="p">,</span> <span class="n">backgroundColor</span><span class="p">,</span> <span class="n">foregroundColor</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">QrCodeImage</span><span class="p">(</span><span class="n">serviceName</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">pairingString</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * Format is &#34;WIFI:T:ADB;S:service;P:password;;&#34; (without the quotes)
-</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">createPairingString</span><span class="p">(</span><span class="n">service</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">String</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;WIFI:T:ADB;S:</span><span class="si">$service</span><span class="s2">;P:</span><span class="si">$password</span><span class="s2">;;&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">fun</span> <span class="nf">createRandomString</span><span class="p">(</span><span class="n">charCount</span><span class="p">:</span> <span class="n">Int</span><span class="p">):</span> <span class="n">String</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="nd">@Suppress</span><span class="p">(</span><span class="s2">&#34;SpellCheckingInspection&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">charSet</span> <span class="p">=</span> <span class="s2">&#34;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&amp;*()-+*/&lt;&gt;{}&#34;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">sb</span> <span class="p">=</span> <span class="n">StringBuilder</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="mi">1</span><span class="o">..</span><span class="n">charCount</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">char</span> <span class="p">=</span> <span class="n">charSet</span><span class="p">[</span><span class="n">randomProvider</span><span class="p">.</span><span class="n">nextInt</span><span class="p">(</span><span class="n">charSet</span><span class="p">.</span><span class="n">length</span><span class="p">)]</span>
-</span></span><span class="line"><span class="cl">            <span class="n">sb</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">sb</span><span class="p">.</span><span class="n">toString</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>代码不多，生成二维码的函数是 <code>generateQrCode</code> 这里使用 <code>studioServiceNamePrefix</code> 和一串10位数的随机字符串组成 <code>serviceName</code> ，然后随机生成12位的字符串用作 <code>password</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#a6e22e">@UiThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WiFiPairingServiceImpl</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> randomProvider: RandomProvider,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> adbService: AdbServiceWrapper,
+</span></span><span style="display:flex;"><span>    taskExecutor: Executor
+</span></span><span style="display:flex;"><span>) : WiFiPairingService {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> studioServiceNamePrefix = <span style="color:#e6db74">&#34;studio-&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">generateQrCode</span>(backgroundColor: Color, foregroundColor: Color): ListenableFuture&lt;QrCodeImage&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> taskExecutor.executeAsync {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> serviceName = studioServiceNamePrefix + createRandomString(<span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> password = createRandomString(<span style="color:#ae81ff">12</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> pairingString = createPairingString(serviceName, password)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> image = <span style="color:#a6e22e">QrCodeGenerator</span>.encodeQrCodeToImage(pairingString, backgroundColor, foregroundColor)
+</span></span><span style="display:flex;"><span>            QrCodeImage(serviceName, password, pairingString, image)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * Format is &#34;WIFI:T:ADB;S:service;P:password;;&#34; (without the quotes)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">createPairingString</span>(service: String, password: String): String {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;WIFI:T:ADB;S:</span><span style="color:#e6db74">$service</span><span style="color:#e6db74">;P:</span><span style="color:#e6db74">$password</span><span style="color:#e6db74">;;&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">createRandomString</span>(charCount: Int): String {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Suppress</span>(<span style="color:#e6db74">&#34;SpellCheckingInspection&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> charSet = <span style="color:#e6db74">&#34;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&amp;*()-+*/&lt;&gt;{}&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> sb = StringBuilder()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (i <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">..</span>charCount) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> char = charSet[randomProvider.nextInt(charSet.length)]
+</span></span><span style="display:flex;"><span>            sb.append(char)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> sb.toString()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>代码不多，生成二维码的函数是 <code>generateQrCode</code> 这里使用 <code>studioServiceNamePrefix</code> 和一串10位数的随机字符串组成 <code>serviceName</code> ，然后随机生成12位的字符串用作 <code>password</code> 。</p>
 <p>最后面调用 <code>createPairingString</code> 生成二维码的内容。</p>
 <p>到这里我们就可以知道 <code>WIFI:T:ADB;S:${service};P:${password};;</code> 这里除了 <code>service</code> 和 <code>password</code> 之外其它都是固定的。</p>
 <p>而 <code>service</code> 又是以 <code>studio-</code> 开头的，所以其实二维码里的内容除了固定的之外， <code>service</code> 和 <code>password</code> 是可以随便设置的。</p>
@@ -348,406 +284,187 @@
 <p>从上面的分析，我们知道了二维码生成的规则，但是怎么手机扫一下码就连上了呢？</p>
 <p>所以我们猜测 <code>Android Studio</code> 在生成二维码的同时应该还做了其它事情，于是我们查看一下 <code>generateQrCode</code> 是在哪里调用的，看看这行代码附近有没有什么线索。</p>
 <p>通过搜索发现调用的地方在 <a href="https://cs.android.com/android-studio/platform/tools/adt/idea/+/mirror-goog-studio-main:android-adb/src/com/android/tools/idea/adb/wireless/QrCodeScanningController.kt;l=64?q=generateQrCode&amp;sq=&amp;ss=android-studio%2Fplatform%2Ftools%2Fadt%2Fidea">QrCodeScanningController.kt - Android Code Search</a> ，我提取了关键部分如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="nd">@UiThread</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">QrCodeScanningController</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">service</span><span class="p">:</span> <span class="n">WiFiPairingService</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">view</span><span class="p">:</span> <span class="n">WiFiPairingView</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">parentDisposable</span><span class="p">:</span> <span class="n">Disposable</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">:</span> <span class="n">Disposable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">startPairingProcess</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">view</span><span class="p">.</span><span class="n">showQrCodePairingStarted</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="n">generateQrCode</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="n">state</span> <span class="p">=</span> <span class="nc">State</span><span class="p">.</span><span class="n">Polling</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pollMdnsServices</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">generateQrCode</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">WiFiPairingModel</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// 这里的 service 是一个接口，它的实现类就是上一小结提到的WiFiPairingServiceImpl
-</span></span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">qrCode</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="n">generateQrCode</span><span class="p">(</span><span class="nc">UIColors</span><span class="p">.</span><span class="n">QR_CODE_BACKGROUND</span><span class="p">,</span> <span class="nc">UIColors</span><span class="p">.</span><span class="n">QR_CODE_FOREGROUND</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="p">.</span><span class="n">qrCodeImage</span> <span class="p">=</span> <span class="n">qrCode</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>从 <code>startPairingProcess</code> 中可以发现，除了调用 <code>generateQrCode</code> 生成二维码之外，还调用了 <code>pollMdnsServices</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#a6e22e">@UiThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QrCodeScanningController</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> service: WiFiPairingService,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> view: WiFiPairingView,
+</span></span><span style="display:flex;"><span>    parentDisposable: Disposable
+</span></span><span style="display:flex;"><span>) : Disposable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">suspend</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">startPairingProcess</span>() {
+</span></span><span style="display:flex;"><span>        view.showQrCodePairingStarted()
+</span></span><span style="display:flex;"><span>        generateQrCode(view.model)
+</span></span><span style="display:flex;"><span>        state = <span style="color:#a6e22e">State</span>.Polling
+</span></span><span style="display:flex;"><span>        pollMdnsServices()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">suspend</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">generateQrCode</span>(model: WiFiPairingModel) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这里的 service 是一个接口，它的实现类就是上一小结提到的WiFiPairingServiceImpl
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> qrCode = service.generateQrCode(<span style="color:#a6e22e">UIColors</span>.QR_CODE_BACKGROUND, <span style="color:#a6e22e">UIColors</span>.QR_CODE_FOREGROUND)
+</span></span><span style="display:flex;"><span>        model.qrCodeImage = qrCode
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>从 <code>startPairingProcess</code> 中可以发现，除了调用 <code>generateQrCode</code> 生成二维码之外，还调用了 <code>pollMdnsServices</code> 。</p>
 <p><code>service</code> 的实现类是 <code>WiFiPairingServiceImpl</code> 。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">fun</span> <span class="nf">pollMdnsServices</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">scope</span><span class="p">.</span><span class="n">launch</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Don&#39;t start a new polling request if we are not in &#34;polling&#34; mode
-</span></span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="nc">State</span><span class="p">.</span><span class="n">Polling</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">try</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">val</span> <span class="py">services</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="n">scanMdnsServices</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                <span class="n">withContext</span><span class="p">(</span><span class="n">uiThread</span><span class="p">(</span><span class="nc">ModalityState</span><span class="p">.</span><span class="n">any</span><span class="p">()))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">pairingCodeServices</span> <span class="p">=</span> <span class="n">services</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">serviceType</span> <span class="o">==</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">PairingCode</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">qrCodeServices</span> <span class="p">=</span> <span class="n">services</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">serviceType</span> <span class="o">==</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">QrCode</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">Throwable</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="c1">// TODO: Should we show an error to the user?
-</span></span></span><span class="line"><span class="cl">                <span class="nc">LOG</span><span class="p">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&#34;Error scanning mDNS services&#34;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="c1">// Run again in 1 second, unless we are disposed
-</span></span></span><span class="line"><span class="cl">            <span class="n">delay</span><span class="p">(</span><span class="nc">Duration</span><span class="p">.</span><span class="n">ofSeconds</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>pollMdnsServices</code> 中有一个延迟1s的循环，只要状态是 <code>Polling</code> 就会一直调用 <code>service.scanMdnsServices</code> ，所以关键还是在 <code>WiFiPairingServiceImpl.scanMdnsServices</code> 上</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="nd">@Throws</span><span class="p">(</span><span class="n">AdbCommandException</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="k">override</span> <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">scanMdnsServices</span><span class="p">():</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">adbService</span><span class="p">.</span><span class="n">executeCommand</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s2">&#34;mdns&#34;</span><span class="p">,</span> <span class="s2">&#34;services&#34;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Output example:
-</span></span></span><span class="line"><span class="cl">    <span class="c1">//  List of discovered mdns services
-</span></span></span><span class="line"><span class="cl">    <span class="c1">//  adb-939AX05XBZ-vWgJpq	_adb-tls-connect._tcp.	192.168.1.86:39149
-</span></span></span><span class="line"><span class="cl">    <span class="c1">//  adb-939AX05XBZ-vWgJpq	_adb-tls-pairing._tcp.	192.168.1.86:37313
-</span></span></span><span class="line"><span class="cl">    <span class="c1">// Regular expression
-</span></span></span><span class="line"><span class="cl">    <span class="c1">//  adb-&lt;everything-until-space&gt;&lt;spaces&gt;__adb-tls-pairing._tcp.&lt;spaces&gt;&lt;everything-until-colon&gt;:&lt;port&gt;
-</span></span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">lineRegex</span> <span class="p">=</span> <span class="n">Regex</span><span class="p">(</span><span class="s2">&#34;([^</span><span class="se">\\</span><span class="s2">t]+)</span><span class="se">\\</span><span class="s2">t*_adb-tls-pairing._tcp.</span><span class="se">\\</span><span class="s2">t*([^:]+):([0-9]+)&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">stdout</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">mapNotNull</span> <span class="p">{</span> <span class="n">line</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">val</span> <span class="py">matchResult</span> <span class="p">=</span> <span class="n">lineRegex</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">matchResult</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">try</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">val</span> <span class="py">serviceName</span> <span class="p">=</span> <span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">val</span> <span class="py">ipAddress</span> <span class="p">=</span> <span class="n">withContext</span><span class="p">(</span><span class="nc">Dispatchers</span><span class="p">.</span><span class="n">IO</span><span class="p">)</span> <span class="p">{</span> <span class="nc">InetAddress</span><span class="p">.</span><span class="n">getByName</span><span class="p">(</span><span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">val</span> <span class="py">port</span> <span class="p">=</span> <span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">toInt</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">val</span> <span class="py">serviceType</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">serviceName</span><span class="p">.</span><span class="n">startsWith</span><span class="p">(</span><span class="n">studioServiceNamePrefix</span><span class="p">))</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">QrCode</span> <span class="k">else</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">PairingCode</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">MdnsService</span><span class="p">(</span><span class="n">serviceName</span><span class="p">,</span> <span class="n">serviceType</span><span class="p">,</span> <span class="n">ipAddress</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ignored</span><span class="p">:</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                    <span class="nc">LOG</span><span class="p">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&#34;mDNS service entry ignored due do invalid characters: </span><span class="si">$line</span><span class="s2">&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">null</span>
-</span></span><span class="line"><span class="cl">                <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>分析上面的代码可以知道这里会调用 <code>adb mdns services</code> 获得输出的结果，然后通过正则表达式去匹配 <code>_adb-tls-pairing._tcp.xxx</code> 的服务，如果能找到就获取它的服务名字、IP、端口号还有服务的类型，然后返回给上一层函数调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">pollMdnsServices</span>() {
+</span></span><span style="display:flex;"><span>    scope.launch {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Don&#39;t start a new polling request if we are not in &#34;polling&#34; mode
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (state <span style="color:#f92672">==</span> <span style="color:#a6e22e">State</span>.Polling) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">val</span> services = service.scanMdnsServices()
+</span></span><span style="display:flex;"><span>                withContext(uiThread(<span style="color:#a6e22e">ModalityState</span>.any())) {
+</span></span><span style="display:flex;"><span>                    view.model.pairingCodeServices = services.filter { <span style="color:#66d9ef">it</span>.serviceType <span style="color:#f92672">==</span> <span style="color:#a6e22e">ServiceType</span>.PairingCode }
+</span></span><span style="display:flex;"><span>                    view.model.qrCodeServices = services.filter { <span style="color:#66d9ef">it</span>.serviceType <span style="color:#f92672">==</span> <span style="color:#a6e22e">ServiceType</span>.QrCode }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (e: Throwable) {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// TODO: Should we show an error to the user?
+</span></span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">LOG</span>.warn(<span style="color:#e6db74">&#34;Error scanning mDNS services&#34;</span>, e)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Run again in 1 second, unless we are disposed
+</span></span></span><span style="display:flex;"><span>            delay(<span style="color:#a6e22e">Duration</span>.ofSeconds(<span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 <code>pollMdnsServices</code> 中有一个延迟1s的循环，只要状态是 <code>Polling</code> 就会一直调用 <code>service.scanMdnsServices</code> ，所以关键还是在 <code>WiFiPairingServiceImpl.scanMdnsServices</code> 上</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#a6e22e">@Throws</span>(AdbCommandException<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">override</span> <span style="color:#66d9ef">suspend</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">scanMdnsServices</span>(): List&lt;MdnsService&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> result = adbService.executeCommand(listOf(<span style="color:#e6db74">&#34;mdns&#34;</span>, <span style="color:#e6db74">&#34;services&#34;</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Output example:
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  List of discovered mdns services
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  adb-939AX05XBZ-vWgJpq	_adb-tls-connect._tcp.	192.168.1.86:39149
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  adb-939AX05XBZ-vWgJpq	_adb-tls-pairing._tcp.	192.168.1.86:37313
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Regular expression
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">//  adb-&lt;everything-until-space&gt;&lt;spaces&gt;__adb-tls-pairing._tcp.&lt;spaces&gt;&lt;everything-until-colon&gt;:&lt;port&gt;
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> lineRegex = Regex(<span style="color:#e6db74">&#34;([^</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">t]+)</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">t*_adb-tls-pairing._tcp.</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">t*([^:]+):([0-9]+)&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result.stdout
+</span></span><span style="display:flex;"><span>        .drop(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        .mapNotNull { line <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">val</span> matchResult = lineRegex.find(line)
+</span></span><span style="display:flex;"><span>            matchResult<span style="color:#f92672">?.</span>let {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">val</span> serviceName = <span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">val</span> ipAddress = withContext(<span style="color:#a6e22e">Dispatchers</span>.IO) { <span style="color:#a6e22e">InetAddress</span>.getByName(<span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">2</span>]) }
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">val</span> port = <span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">3</span>].toInt()
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">val</span> serviceType = <span style="color:#66d9ef">if</span> (serviceName.startsWith(studioServiceNamePrefix)) <span style="color:#a6e22e">ServiceType</span>.QrCode <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">ServiceType</span>.PairingCode
+</span></span><span style="display:flex;"><span>                    MdnsService(serviceName, serviceType, ipAddress, port)
+</span></span><span style="display:flex;"><span>                } <span style="color:#66d9ef">catch</span> (ignored: Exception) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">LOG</span>.warn(<span style="color:#e6db74">&#34;mDNS service entry ignored due do invalid characters: </span><span style="color:#e6db74">$line</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>分析上面的代码可以知道这里会调用 <code>adb mdns services</code> 获得输出的结果，然后通过正则表达式去匹配 <code>_adb-tls-pairing._tcp.xxx</code> 的服务，如果能找到就获取它的服务名字、IP、端口号还有服务的类型，然后返回给上一层函数调用。</p>
 <p>这里的服务类型有两种一种是 <code>WIFI</code> 配对，另一中是配对码配对。这里判断是否是 <code>WIFI</code> 配对也很简单，就是判断是不是以 <code>studio-</code> 开头的，是就是 <code>WIFI</code> 配对，不是就是用配对码配对。</p>
 <p>这里的 <code>adbService</code> 是对 <code>adb</code> 这个命令做了封装，所以 <code>executeCommand</code> 就是执行 <code>adb</code> 的命令，带上参数。这里我就不带大家看了，感兴趣的可以自己查看。</p>
 <p>分析了这么多发现关键在 <code>adb mdns services</code> 上，我们尝试在命令行里执行这条指令，看看会输出什么</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">List of discovered mdns services
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>啥也没有，这时候你打开手机，在设置里找到 <strong>开发者选项</strong> ，然后找到 <strong>无线调试</strong> ，点击使用二维码配对设备，然后再次执行这条指令，得到结果如下。注意这里要快点执行，不然连接完成是看不到的</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">adb-ba46f2ef-1ZThbU	_adb-tls-connect._tcp.	192.168.1.15:41583
-</span></span><span class="line"><span class="cl">studio-R*RsW2zVC@	_adb-tls-pairing._tcp.	192.168.1.15:39757
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>有输出了，可以看到第二行 <code>studio-R*RsW2zVC@	_adb-tls-pairing._tcp.	192.168.1.15:39757</code> 就是我们要的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>List of discovered mdns services
+</span></span></code></pre></div><p>啥也没有，这时候你打开手机，在设置里找到 <strong>开发者选项</strong> ，然后找到 <strong>无线调试</strong> ，点击使用二维码配对设备，然后再次执行这条指令，得到结果如下。注意这里要快点执行，不然连接完成是看不到的</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>adb-ba46f2ef-1ZThbU	_adb-tls-connect._tcp.	192.168.1.15:41583
+</span></span><span style="display:flex;"><span>studio-R*RsW2zVC@	_adb-tls-pairing._tcp.	192.168.1.15:39757
+</span></span></code></pre></div><p>有输出了，可以看到第二行 <code>studio-R*RsW2zVC@	_adb-tls-pairing._tcp.	192.168.1.15:39757</code> 就是我们要的。</p>
 <p>你会发现第一列不就是我们使用字符串随机生成的吗，这时候就派上用场了。至于第一行的有其它用处，这里暂时先不说。</p>
 <p>通过这些分析，我们可以知道，手机使用二维码扫描之后会生成一个 <code>_adb-tls-pairing._tcp.</code> 的服务，然后他的名字就是在 <code>Android Studio</code> 里随机生成的，这里还包含了它的 <code>IP</code> 和端口号。</p>
 <p>有了 <code>IP</code> 和端口号接来下就需要连接了，我们来看看怎么连接的。</p>
 <h3 id="怎么连接的">怎么连接的？</h3>
 <p>在上一步我们知道了手机对于的 <code>IP</code> 和端口号，所以接下来就需要在电脑上进行连接了，我们并没有手动去连接，所以这里也是 <code>Android Studio</code> 做的。</p>
 <p>我们接着从 <code>pollMdnsServices</code> 看起，我把一些代码精简了</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">fun</span> <span class="nf">pollMdnsServices</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">services</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="n">scanMdnsServices</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">pairingCodeServices</span> <span class="p">=</span> <span class="n">services</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">serviceType</span> <span class="o">==</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">PairingCode</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">qrCodeServices</span> <span class="p">=</span> <span class="n">services</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">serviceType</span> <span class="o">==</span> <span class="nc">ServiceType</span><span class="p">.</span><span class="n">QrCode</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>从上面的代码可以发现，调用 <code>adb mdns services</code> 之后会把 <code>pairingCodeServices</code> 和 <code>qrCodeServices</code> 给保存到 <code>model</code> 里。我们到 <code>model</code> 里一探究竟。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="cm">/**
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * Model used for pairing devices
-</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
-</span></span><span class="line"><span class="cl"><span class="nd">@UiThread</span>
-</span></span><span class="line"><span class="cl"><span class="k">open</span> <span class="k">class</span> <span class="nc">WiFiPairingModel</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="cm">/** The list of listeners */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">listeners</span><span class="p">:</span> <span class="n">ArrayList</span><span class="p">&lt;</span><span class="n">AdbDevicePairingModelListener</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">ArrayList</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">open</span> <span class="k">var</span> <span class="py">qrCodeServices</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">emptyList</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">set</span><span class="p">(</span><span class="k">value</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">field</span> <span class="p">=</span> <span class="k">value</span>
-</span></span><span class="line"><span class="cl">            <span class="n">listeners</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">qrCodeServicesDiscovered</span><span class="p">(</span><span class="k">value</span><span class="p">)</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">open</span> <span class="k">var</span> <span class="py">pairingCodeServices</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">emptyList</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">set</span><span class="p">(</span><span class="k">value</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">field</span> <span class="p">=</span> <span class="k">value</span>
-</span></span><span class="line"><span class="cl">            <span class="n">listeners</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">pairingCodeServicesDiscovered</span><span class="p">(</span><span class="k">value</span><span class="p">)</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以发现这里会分别调用 <code>MdnsService</code> 中的 <code>pairingCodeServicesDiscovered</code> 和 <code>qrCodeServicesDiscovered</code> 所以这里的关键是找到 <code>AdbDevicePairingModelListener</code> 。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="nd">@UiThread</span>
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">QrCodeScanningController</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">service</span><span class="p">:</span> <span class="n">WiFiPairingService</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">view</span><span class="p">:</span> <span class="n">WiFiPairingView</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">parentDisposable</span><span class="p">:</span> <span class="n">Disposable</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">:</span> <span class="n">Disposable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">val</span> <span class="py">modelListener</span> <span class="p">=</span> <span class="n">MyModelListener</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">init</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl">        <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">modelListener</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nd">@UiThread</span>
-</span></span><span class="line"><span class="cl">    <span class="k">inner</span> <span class="k">class</span> <span class="nc">MyModelListener</span> <span class="p">:</span> <span class="n">AdbDevicePairingModelListener</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">qrCodeServicesDiscovered</span><span class="p">(</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="nc">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">${services.size}</span><span class="s2"> QR code connect services discovered&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">services</span><span class="p">.</span><span class="n">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="k">it</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">                <span class="nc">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;  QR code connect service #</span><span class="si">${index + 1}</span><span class="s2">: name=</span><span class="si">${it.serviceName}</span><span class="s2"> - ip=</span><span class="si">${it.ipAddress}</span><span class="s2"> - port=</span><span class="si">${it.port}</span><span class="s2">&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="c1">// If there is a QR Code displayed, look for a mDNS service with the same service name
-</span></span></span><span class="line"><span class="cl">            <span class="n">view</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">qrCodeImage</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">qrCodeImage</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">services</span><span class="p">.</span><span class="n">firstOrNull</span> <span class="p">{</span> <span class="k">it</span><span class="p">.</span><span class="n">serviceName</span> <span class="o">==</span> <span class="n">qrCodeImage</span><span class="p">.</span><span class="n">serviceName</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">                    <span class="o">?.</span><span class="n">let</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                        <span class="c1">// We found the service we created, meaning the phone is in &#34;pairing&#34; mode
-</span></span></span><span class="line"><span class="cl">                        <span class="n">startPairingDevice</span><span class="p">(</span><span class="k">it</span><span class="p">,</span> <span class="n">qrCodeImage</span><span class="p">.</span><span class="n">password</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">override</span> <span class="k">fun</span> <span class="nf">pairingCodeServicesDiscovered</span><span class="p">(</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MdnsService</span><span class="p">&gt;)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="nc">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">${services.size}</span><span class="s2"> pairing code pairing services discovered&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">services</span><span class="p">.</span><span class="n">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="k">it</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">                <span class="nc">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;  Pairing code pairing service #</span><span class="si">${index + 1}</span><span class="s2">: name=</span><span class="si">${it.serviceName}</span><span class="s2"> - ip=</span><span class="si">${it.ipAddress}</span><span class="s2"> - port=</span><span class="si">${it.port}</span><span class="s2">&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>view.model</code> 的 <code>listener</code> 是在构造函数里赋值的，它的类型是 <code>MyModelListener</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">pollMdnsServices</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> services = service.scanMdnsServices()
+</span></span><span style="display:flex;"><span>    view.model.pairingCodeServices = services.filter { <span style="color:#66d9ef">it</span>.serviceType <span style="color:#f92672">==</span> <span style="color:#a6e22e">ServiceType</span>.PairingCode }
+</span></span><span style="display:flex;"><span>    view.model.qrCodeServices = services.filter { <span style="color:#66d9ef">it</span>.serviceType <span style="color:#f92672">==</span> <span style="color:#a6e22e">ServiceType</span>.QrCode }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>从上面的代码可以发现，调用 <code>adb mdns services</code> 之后会把 <code>pairingCodeServices</code> 和 <code>qrCodeServices</code> 给保存到 <code>model</code> 里。我们到 <code>model</code> 里一探究竟。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Model used for pairing devices
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@UiThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">open</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WiFiPairingModel</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/** The list of listeners */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> listeners: ArrayList&lt;AdbDevicePairingModelListener&gt; = ArrayList()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">open</span> <span style="color:#66d9ef">var</span> qrCodeServices: List&lt;MdnsService&gt; = emptyList()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">set</span>(<span style="color:#66d9ef">value</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">field</span> = <span style="color:#66d9ef">value</span>
+</span></span><span style="display:flex;"><span>            listeners.forEach { <span style="color:#66d9ef">it</span>.qrCodeServicesDiscovered(<span style="color:#66d9ef">value</span>) }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">open</span> <span style="color:#66d9ef">var</span> pairingCodeServices: List&lt;MdnsService&gt; = emptyList()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">set</span>(<span style="color:#66d9ef">value</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">field</span> = <span style="color:#66d9ef">value</span>
+</span></span><span style="display:flex;"><span>            listeners.forEach { <span style="color:#66d9ef">it</span>.pairingCodeServicesDiscovered(<span style="color:#66d9ef">value</span>) }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可以发现这里会分别调用 <code>MdnsService</code> 中的 <code>pairingCodeServicesDiscovered</code> 和 <code>qrCodeServicesDiscovered</code> 所以这里的关键是找到 <code>AdbDevicePairingModelListener</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#a6e22e">@UiThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QrCodeScanningController</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> service: WiFiPairingService,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> view: WiFiPairingView,
+</span></span><span style="display:flex;"><span>    parentDisposable: Disposable
+</span></span><span style="display:flex;"><span>) : Disposable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> modelListener = MyModelListener()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">init</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span>        view.model.addListener(modelListener)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@UiThread</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyModelListener</span> : AdbDevicePairingModelListener {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">qrCodeServicesDiscovered</span>(services: List&lt;MdnsService&gt;) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">LOG</span>.info(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${services.size}</span><span style="color:#e6db74"> QR code connect services discovered&#34;</span>)
+</span></span><span style="display:flex;"><span>            services.forEachIndexed { index, <span style="color:#66d9ef">it</span> <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">LOG</span>.info(<span style="color:#e6db74">&#34;  QR code connect service #</span><span style="color:#e6db74">${index + 1}</span><span style="color:#e6db74">: name=</span><span style="color:#e6db74">${it.serviceName}</span><span style="color:#e6db74"> - ip=</span><span style="color:#e6db74">${it.ipAddress}</span><span style="color:#e6db74"> - port=</span><span style="color:#e6db74">${it.port}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// If there is a QR Code displayed, look for a mDNS service with the same service name
+</span></span></span><span style="display:flex;"><span>            view.model.qrCodeImage<span style="color:#f92672">?.</span>let { qrCodeImage <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>                services.firstOrNull { <span style="color:#66d9ef">it</span>.serviceName <span style="color:#f92672">==</span> qrCodeImage.serviceName }
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">?.</span>let {
+</span></span><span style="display:flex;"><span>                        <span style="color:#75715e">// We found the service we created, meaning the phone is in &#34;pairing&#34; mode
+</span></span></span><span style="display:flex;"><span>                        startPairingDevice(<span style="color:#66d9ef">it</span>, qrCodeImage.password)
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">pairingCodeServicesDiscovered</span>(services: List&lt;MdnsService&gt;) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">LOG</span>.info(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${services.size}</span><span style="color:#e6db74"> pairing code pairing services discovered&#34;</span>)
+</span></span><span style="display:flex;"><span>            services.forEachIndexed { index, <span style="color:#66d9ef">it</span> <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">LOG</span>.info(<span style="color:#e6db74">&#34;  Pairing code pairing service #</span><span style="color:#e6db74">${index + 1}</span><span style="color:#e6db74">: name=</span><span style="color:#e6db74">${it.serviceName}</span><span style="color:#e6db74"> - ip=</span><span style="color:#e6db74">${it.ipAddress}</span><span style="color:#e6db74"> - port=</span><span style="color:#e6db74">${it.port}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>view.model</code> 的 <code>listener</code> 是在构造函数里赋值的，它的类型是 <code>MyModelListener</code> 。</p>
 <p>这个对象的 <code>pairingCodeServicesDiscovered</code> 没做什么事情，我们重点看 <code>qrCodeServicesDiscovered</code> 。</p>
 <p>在 <code>qrCodeServicesDiscovered</code> 中最重要的就是调用了 <code>startPairingDevice</code> 然后把之前生成的密码传进去了。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">fun</span> <span class="nf">startPairingDevice</span><span class="p">(</span><span class="n">mdnsService</span><span class="p">:</span> <span class="n">MdnsService</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl">    <span class="n">state</span> <span class="p">=</span> <span class="nc">State</span><span class="p">.</span><span class="n">Pairing</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">pairingResult</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="n">pairMdnsService</span><span class="p">(</span><span class="n">mdnsService</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">view</span><span class="p">.</span><span class="n">showQrCodePairingWaitForDevice</span><span class="p">(</span><span class="n">pairingResult</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">device</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="n">waitForDevice</span><span class="p">(</span><span class="n">pairingResult</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">state</span> <span class="p">=</span> <span class="nc">State</span><span class="p">.</span><span class="n">PairingSuccess</span>
-</span></span><span class="line"><span class="cl">    <span class="n">view</span><span class="p">.</span><span class="n">showQrCodePairingSuccess</span><span class="p">(</span><span class="n">mdnsService</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>省略部分代码，发现最关键的在 <code>service.pairMdnsService</code> 中，接着就是调用 <code>service.waitForDevice</code> ，我把代码精简后如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="cl"><span class="k">override</span> <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">pairMdnsService</span><span class="p">(</span><span class="n">mdnsService</span><span class="p">:</span> <span class="n">MdnsService</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">PairingResult</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">deviceAddress</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="si">${mdnsService.ipAddress.hostAddress}</span><span class="s2">:</span><span class="si">${mdnsService.port}</span><span class="s2">&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">passwordInput</span> <span class="p">=</span> <span class="n">password</span> <span class="p">+</span> <span class="nc">LineSeparator</span><span class="p">.</span><span class="n">getSystemLineSeparator</span><span class="p">().</span><span class="n">separatorString</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">adbService</span><span class="p">.</span><span class="n">executeCommand</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s2">&#34;pair&#34;</span><span class="p">,</span> <span class="n">deviceAddress</span><span class="p">),</span> <span class="n">passwordInput</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">lineRegex</span> <span class="p">=</span> <span class="n">Regex</span><span class="p">(</span><span class="s2">&#34;Successfully paired to ([^:]*):([0-9]*) </span><span class="se">\\</span><span class="s2">[guid=([^</span><span class="se">\\</span><span class="s2">]]*)</span><span class="se">\\</span><span class="s2">]&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">val</span> <span class="py">matchResult</span> <span class="p">=</span> <span class="n">lineRegex</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">stdout</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">matchResult</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">ipAddress</span> <span class="p">=</span> <span class="n">withContext</span><span class="p">(</span><span class="nc">Dispatchers</span><span class="p">.</span><span class="n">IO</span><span class="p">)</span> <span class="p">{</span> <span class="nc">InetAddress</span><span class="p">.</span><span class="n">getByName</span><span class="p">(</span><span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">port</span> <span class="p">=</span> <span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">toInt</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">val</span> <span class="py">serviceGuid</span> <span class="p">=</span> <span class="k">it</span><span class="p">.</span><span class="n">groupValues</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">        <span class="n">PairingResult</span><span class="p">(</span><span class="n">ipAddress</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">serviceGuid</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">override</span> <span class="k">suspend</span> <span class="k">fun</span> <span class="nf">waitForDevice</span><span class="p">(</span><span class="n">pairingResult</span><span class="p">:</span> <span class="n">PairingResult</span><span class="p">):</span> <span class="n">AdbOnlineDevice</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">adbService</span><span class="p">.</span><span class="n">waitForOnlineDevice</span><span class="p">(</span><span class="n">pairingResult</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到这里最关键的还是调用 <code>adb</code> 去执行命令，也就是调用 <code>adb pair ip:port password</code> 。其中 <code>IP</code> 和端口号就是我们之前获取到的，密码就是我们自己生成的随机字符串。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">startPairingDevice</span>(mdnsService: MdnsService, password: String) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span>    state = <span style="color:#a6e22e">State</span>.Pairing
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> pairingResult = service.pairMdnsService(mdnsService, password)
+</span></span><span style="display:flex;"><span>    view.showQrCodePairingWaitForDevice(pairingResult)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> device = service.waitForDevice(pairingResult)
+</span></span><span style="display:flex;"><span>    state = <span style="color:#a6e22e">State</span>.PairingSuccess
+</span></span><span style="display:flex;"><span>    view.showQrCodePairingSuccess(mdnsService, device)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>省略部分代码，发现最关键的在 <code>service.pairMdnsService</code> 中，接着就是调用 <code>service.waitForDevice</code> ，我把代码精简后如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">override</span> <span style="color:#66d9ef">suspend</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">pairMdnsService</span>(mdnsService: MdnsService, password: String): PairingResult {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> deviceAddress = <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${mdnsService.ipAddress.hostAddress}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">${mdnsService.port}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> passwordInput = password + <span style="color:#a6e22e">LineSeparator</span>.getSystemLineSeparator().separatorString
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> result = adbService.executeCommand(listOf(<span style="color:#e6db74">&#34;pair&#34;</span>, deviceAddress), passwordInput)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> lineRegex = Regex(<span style="color:#e6db74">&#34;Successfully paired to ([^:]*):([0-9]*) </span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">[guid=([^</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">]]*)</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">]&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">val</span> matchResult = lineRegex.find(result.stdout[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> matchResult<span style="color:#f92672">?.</span>let {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> ipAddress = withContext(<span style="color:#a6e22e">Dispatchers</span>.IO) { <span style="color:#a6e22e">InetAddress</span>.getByName(<span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">1</span>]) }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> port = <span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">2</span>].toInt()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">val</span> serviceGuid = <span style="color:#66d9ef">it</span>.groupValues[<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>        PairingResult(ipAddress, port, serviceGuid)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">suspend</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">waitForDevice</span>(pairingResult: PairingResult): AdbOnlineDevice {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> adbService.waitForOnlineDevice(pairingResult)
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>可以看到这里最关键的还是调用 <code>adb</code> 去执行命令，也就是调用 <code>adb pair ip:port password</code> 。其中 <code>IP</code> 和端口号就是我们之前获取到的，密码就是我们自己生成的随机字符串。</p>
 <p>接下来就是获取执行这条命令的结果，接着就是调用 <code>waitForDevice</code> 等待设备的连接。</p>
 <h2 id="总结">总结</h2>
 <p>分析完了，我们来总结一下</p>
@@ -784,6 +501,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/android/">Android</a>
@@ -866,7 +585,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

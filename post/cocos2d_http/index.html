@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/cocos2d_http/" />
@@ -38,60 +38,60 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/cocos2d_http/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Cocos2d-x之网络请求">
-  <meta property="og:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Cocos2d-x之网络请求">
+	<meta property="og:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-03-27T00:00:00+00:00">
-    <meta property="article:tag" content="Cocos2d">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-03-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-03-27T00:00:00+00:00">
+		<meta property="article:tag" content="Cocos2d">
 
-  <meta itemprop="name" content="Cocos2d-x之网络请求">
-  <meta itemprop="description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta itemprop="name" content="Cocos2d-x之网络请求">
+	<meta itemprop="description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
-  <meta itemprop="datePublished" content="2023-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="957">
-  <meta itemprop="keywords" content="Cocos2d">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cocos2d-x之网络请求">
-  <meta name="twitter:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta itemprop="datePublished" content="2023-03-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-03-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="891">
+	<meta itemprop="keywords" content="Cocos2d">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Cocos2d-x之网络请求">
+	<meta name="twitter:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
  <meta property="og:url" content="http://devbins.github.io/post/cocos2d_http/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Cocos2d-x之网络请求">
-  <meta property="og:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Cocos2d-x之网络请求">
+	<meta property="og:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-03-27T00:00:00+00:00">
-    <meta property="article:tag" content="Cocos2d">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-03-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-03-27T00:00:00+00:00">
+		<meta property="article:tag" content="Cocos2d">
 
-  <meta itemprop="name" content="Cocos2d-x之网络请求">
-  <meta itemprop="description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta itemprop="name" content="Cocos2d-x之网络请求">
+	<meta itemprop="description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
-  <meta itemprop="datePublished" content="2023-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="957">
-  <meta itemprop="keywords" content="Cocos2d">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cocos2d-x之网络请求">
-  <meta name="twitter:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
+	<meta itemprop="datePublished" content="2023-03-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-03-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="891">
+	<meta itemprop="keywords" content="Cocos2d">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Cocos2d-x之网络请求">
+	<meta name="twitter:description" content="前言 网络编程是开发中必不可少的一环， Cocos2d-x 提供了一个简单易用的网络模块，包括 HTTP 、 WebSocket 和 Socket 三种协议的支持。
 它们都是基于标准的网络协议和 API 实现的，因此可以很容易地与其他网络库或服务端进行通信。
 今天就来学习一下 HTTP 的使用。">
 
@@ -177,7 +177,7 @@
         <div class="post-category">
             <a href="../../categories/cocos2d/"> Cocos2d </a>
             </div>
-          <span class="more-meta"> 957 words </span>
+          <span class="more-meta"> 891 words </span>
           <span class="more-meta"> 2 mins read </span>
         
       </div>
@@ -206,25 +206,13 @@
 <p>今天就来学习一下 <code>HTTP</code> 的使用。</p>
 <h2 id="httpclient">HttpClient</h2>
 <p>在 <code>Cocos2d-x</code> 中，我们可以使用 <code>network::HttpClient</code> 类进行 <code>HTTP</code> 请求。它提供了以下方法：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="n">HttpClient</span><span class="o">*</span> <span class="nf">getInstance</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">send</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">*</span> <span class="n">request</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">sendImmediate</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">*</span> <span class="n">request</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setTimeoutForConnect</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setTimeoutForRead</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setSSLVerification</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">caFile</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> HttpClient<span style="color:#f92672">*</span> <span style="color:#a6e22e">getInstance</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(HttpRequest<span style="color:#f92672">*</span> request);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sendImmediate</span>(HttpRequest<span style="color:#f92672">*</span> request);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setTimeoutForConnect</span>(<span style="color:#66d9ef">int</span> timeout);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setTimeoutForRead</span>(<span style="color:#66d9ef">int</span> timeout);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setSSLVerification</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> caFile);
+</span></span></code></pre></div><ul>
 <li><code>getInstance()</code> 方法用于获取 <code>HttpClient</code> 的单例对象</li>
 <li><code>send()</code> 方法用于发送 <code>HTTP</code> 请求，需要传入一个 <code>HttpRequest</code> 对象</li>
 <li><code>sendImmediate()</code> 方法与 <code>send()</code> 方法类似，但会立即发送请求，而不是添加到队列中等待发送</li>
@@ -232,31 +220,16 @@
 <li><code>setSSLVerification()</code> 方法用于设置 <code>SSL</code> 证书验证</li>
 </ul>
 <p><code>HttpRequest</code> 类定义了 <code>HTTP</code> 请求的参数和回调函数：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">HttpRequest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Ref</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">setRequestType</span><span class="p">(</span><span class="n">RequestType</span> <span class="n">type</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">setUrl</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">url</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">setRequestData</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">len</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">setResponseCallback</span><span class="p">(</span><span class="k">const</span> <span class="n">ccHttpRequestCallback</span><span class="o">&amp;</span> <span class="n">callback</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">setTag</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">tag</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HttpRequest</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> cocos2d<span style="color:#f92672">::</span>Ref
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> setRequestType(RequestType type);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setUrl</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> url);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setRequestData</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> data, size_t len);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setResponseCallback</span>(<span style="color:#66d9ef">const</span> ccHttpRequestCallback<span style="color:#f92672">&amp;</span> callback);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setTag</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> tag);
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><ul>
 <li><code>setRequestType()</code> 方法用于设置 HTTP 请求的类型，包括 GET、POST、PUT、DELETE 等</li>
 <li><code>setUrl()</code> 方法用于设置请求的 <code>URL</code></li>
 <li><code>setRequestData()</code> 方法用于设置请求的数据，例如 <code>POST</code> 请求中的表单数据</li>
@@ -264,141 +237,66 @@
 <li><code>setTag()</code> 方法用于设置请求的标签</li>
 </ul>
 <p>在请求完成后，我们可以在回调函数中获取到服务器返回的数据，例如：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">onHttpRequestCompleted</span><span class="p">(</span><span class="n">HttpClient</span><span class="o">*</span> <span class="n">client</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="o">*</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">buffer</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">    <span class="n">log</span><span class="p">(</span><span class="s">&#34;Response: %s&#34;</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>接下来看两个例子，一个 <code>GET</code> 请求，另一个 <code>POST</code> 请求。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onHttpRequestCompleted</span>(HttpClient<span style="color:#f92672">*</span> client, HttpResponse<span style="color:#f92672">*</span> response) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>response) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">char</span><span style="color:#f92672">&gt;</span> buffer <span style="color:#f92672">=</span> response<span style="color:#f92672">-&gt;</span>getResponseData();
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>string str(buffer.begin(), buffer.end());
+</span></span><span style="display:flex;"><span>    log(<span style="color:#e6db74">&#34;Response: %s&#34;</span>, str.c_str());
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接下来看两个例子，一个 <code>GET</code> 请求，另一个 <code>POST</code> 请求。</p>
 <h2 id="get">GET</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;network/HttpClient.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="n">USING_NS_CC</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">HelloWord</span><span class="o">::</span><span class="n">request</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">req</span> <span class="o">=</span> <span class="k">new</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="p">();</span> <span class="c1">// 创建http请求
-</span></span></span><span class="line"><span class="cl">    <span class="n">req</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="s">&#34;127.0.0.1:8080/get&#34;</span><span class="p">);</span> <span class="c1">// 设置url
-</span></span></span><span class="line"><span class="cl">    <span class="n">req</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span> <span class="c1">// 设置为 GET 请求
-</span></span></span><span class="line"><span class="cl">    <span class="n">req</span><span class="o">-&gt;</span><span class="n">setResponseCallback</span><span class="p">(</span><span class="n">CC_CALLBACK_2</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">requestComplete</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span> <span class="c1">// 设置回调
-</span></span></span><span class="line"><span class="cl">    <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">sendImmediate</span><span class="p">(</span><span class="n">req</span><span class="p">);</span> <span class="c1">// 发送请求
-</span></span></span><span class="line"><span class="cl">    <span class="n">req</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">requestComplete</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span> <span class="o">*</span><span class="n">sender</span><span class="p">,</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">response</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">())</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">log</span><span class="p">(</span><span class="s">&#34;%s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">());</span> <span class="c1">// 请求成功打印服务端返回数据
-</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>服务端会返回 <code>Hello Cocos</code> ，执行之后就可以看到控制台输出的 <code>Hello Cocos</code> 。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;network/HttpClient.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>USING_NS_CC;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> HelloWord<span style="color:#f92672">::</span>request() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">auto</span> req <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpRequest(); <span style="color:#75715e">// 创建http请求
+</span></span></span><span style="display:flex;"><span>    req<span style="color:#f92672">-&gt;</span>setUrl(<span style="color:#e6db74">&#34;127.0.0.1:8080/get&#34;</span>); <span style="color:#75715e">// 设置url
+</span></span></span><span style="display:flex;"><span>    req<span style="color:#f92672">-&gt;</span>setRequestType(cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpRequest<span style="color:#f92672">::</span>Type<span style="color:#f92672">::</span>GET); <span style="color:#75715e">// 设置为 GET 请求
+</span></span></span><span style="display:flex;"><span>    req<span style="color:#f92672">-&gt;</span>setResponseCallback(CC_CALLBACK_2(HelloWorld<span style="color:#f92672">::</span>requestComplete, <span style="color:#66d9ef">this</span>)); <span style="color:#75715e">// 设置回调
+</span></span></span><span style="display:flex;"><span>    cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpClient<span style="color:#f92672">::</span>getInstance()<span style="color:#f92672">-&gt;</span>sendImmediate(req); <span style="color:#75715e">// 发送请求
+</span></span></span><span style="display:flex;"><span>    req<span style="color:#f92672">-&gt;</span>release();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> HelloWorld<span style="color:#f92672">::</span>requestComplete(cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpClient <span style="color:#f92672">*</span>sender, cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpResponse <span style="color:#f92672">*</span>response) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (response <span style="color:#f92672">&amp;&amp;</span> response<span style="color:#f92672">-&gt;</span>isSucceed()) {
+</span></span><span style="display:flex;"><span>        log(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, response<span style="color:#f92672">-&gt;</span>getResponseData()<span style="color:#f92672">-&gt;</span>data()); <span style="color:#75715e">// 请求成功打印服务端返回数据
+</span></span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>服务端会返回 <code>Hello Cocos</code> ，执行之后就可以看到控制台输出的 <code>Hello Cocos</code> 。</p>
 <p>服务端代码在文末。</p>
 <h2 id="post">POST</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;network/HttpClient.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="n">USING_NS_CC</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">HelloWord</span><span class="o">::</span><span class="n">request</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">auto</span> <span class="n">req</span> <span class="o">=</span> <span class="k">new</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">  <span class="n">req</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="s">&#34;127.0.0.1:8080/post&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">req</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">POST</span><span class="p">);</span> <span class="c1">// 设置为 POST请求
-</span></span></span><span class="line"><span class="cl">  <span class="n">req</span><span class="o">-&gt;</span><span class="n">setRequestData</span><span class="p">(</span><span class="s">&#34;username=cocos&#34;</span><span class="p">,</span> <span class="mi">14</span><span class="p">);</span> <span class="c1">// 设置请求的数据和长度
-</span></span></span><span class="line"><span class="cl">  <span class="n">req</span><span class="o">-&gt;</span><span class="n">setResponseCallback</span><span class="p">(</span><span class="n">CC_CALLBACK_2</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">requestComplete</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">  <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">sendImmediate</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">req</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">requestComplete</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpClient</span> <span class="o">*</span><span class="n">sender</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                                 <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="o">::</span><span class="n">HttpResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">response</span> <span class="o">&amp;&amp;</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">())</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">log</span><span class="p">(</span><span class="s">&#34;%s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>服务端会返回用户名，也就是 <code>cocos</code> ，控制台也会输出。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;network/HttpClient.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>USING_NS_CC;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> HelloWord<span style="color:#f92672">::</span>request() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">auto</span> req <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpRequest();
+</span></span><span style="display:flex;"><span>  req<span style="color:#f92672">-&gt;</span>setUrl(<span style="color:#e6db74">&#34;127.0.0.1:8080/post&#34;</span>);
+</span></span><span style="display:flex;"><span>  req<span style="color:#f92672">-&gt;</span>setRequestType(cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpRequest<span style="color:#f92672">::</span>Type<span style="color:#f92672">::</span>POST); <span style="color:#75715e">// 设置为 POST请求
+</span></span></span><span style="display:flex;"><span>  req<span style="color:#f92672">-&gt;</span>setRequestData(<span style="color:#e6db74">&#34;username=cocos&#34;</span>, <span style="color:#ae81ff">14</span>); <span style="color:#75715e">// 设置请求的数据和长度
+</span></span></span><span style="display:flex;"><span>  req<span style="color:#f92672">-&gt;</span>setResponseCallback(CC_CALLBACK_2(HelloWorld<span style="color:#f92672">::</span>requestComplete, <span style="color:#66d9ef">this</span>));
+</span></span><span style="display:flex;"><span>  cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpClient<span style="color:#f92672">::</span>getInstance()<span style="color:#f92672">-&gt;</span>sendImmediate(req);
+</span></span><span style="display:flex;"><span>  req<span style="color:#f92672">-&gt;</span>release();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> HelloWorld<span style="color:#f92672">::</span>requestComplete(cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpClient <span style="color:#f92672">*</span>sender,
+</span></span><span style="display:flex;"><span>                                 cocos2d<span style="color:#f92672">::</span>network<span style="color:#f92672">::</span>HttpResponse <span style="color:#f92672">*</span>response) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (response <span style="color:#f92672">&amp;&amp;</span> response<span style="color:#f92672">-&gt;</span>isSucceed()) {
+</span></span><span style="display:flex;"><span>    log(<span style="color:#e6db74">&#34;%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, response<span style="color:#f92672">-&gt;</span>getResponseData()<span style="color:#f92672">-&gt;</span>data());
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>服务端会返回用户名，也就是 <code>cocos</code> ，控制台也会输出。</p>
 <h2 id="服务端代码">服务端代码</h2>
 <p>服务端采用 <code>golang</code> 开发，简单的实现了 <code>get/post</code> 路由。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/get&#34;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;Hello Cocos&#34;</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">})</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/post&#34;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">){</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Form</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;username&#34;</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">user</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">})</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>把这些代码放到 <code>main.go</code> 中，通过 <code>go run main.go</code> 运行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/get&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;Hello Cocos&#34;</span>))
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/post&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>,<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">ParseForm</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">user</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Form</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;username&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#a6e22e">user</span>))
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>, <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>把这些代码放到 <code>main.go</code> 中，通过 <code>go run main.go</code> 运行。</p>
 <h2 id="总结">总结</h2>
 <p><code>Cocos2d</code> 为我们封装了一套简单的网络请求，使得我们可以快速的进行网络开发。</p>
 <p>在实际应用中，网络通信往往涉及到复杂的业务逻辑和数据处理，我们需要根据具体情况进行合理的封装和抽象，以便代码的重用和维护。</p>
@@ -428,6 +326,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/cocos2d/">Cocos2d</a>
@@ -508,7 +408,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

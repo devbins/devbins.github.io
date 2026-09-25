@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/jni_map/" />
@@ -38,64 +38,64 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/jni_map/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta property="og:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta property="og:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-09-03T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-09-03T00:00:00+00:00">
-    <meta property="article:tag" content="JNI">
-    <meta property="article:tag" content="Java">
-    <meta property="article:tag" content="C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-09-03T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-09-03T00:00:00+00:00">
+		<meta property="article:tag" content="JNI">
+		<meta property="article:tag" content="Java">
+		<meta property="article:tag" content="C&#43;&#43;">
 
-  <meta itemprop="name" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta itemprop="description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta itemprop="name" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta itemprop="description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
-  <meta itemprop="datePublished" content="2023-09-03T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-09-03T00:00:00+00:00">
-  <meta itemprop="wordCount" content="376">
-  <meta itemprop="keywords" content="JNI,Java,C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta name="twitter:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta itemprop="datePublished" content="2023-09-03T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-09-03T00:00:00+00:00">
+	<meta itemprop="wordCount" content="299">
+	<meta itemprop="keywords" content="JNI,Java,C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta name="twitter:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
  <meta property="og:url" content="http://devbins.github.io/post/jni_map/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta property="og:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta property="og:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-09-03T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-09-03T00:00:00+00:00">
-    <meta property="article:tag" content="JNI">
-    <meta property="article:tag" content="Java">
-    <meta property="article:tag" content="C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-09-03T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-09-03T00:00:00+00:00">
+		<meta property="article:tag" content="JNI">
+		<meta property="article:tag" content="Java">
+		<meta property="article:tag" content="C&#43;&#43;">
 
-  <meta itemprop="name" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta itemprop="description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta itemprop="name" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta itemprop="description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
-  <meta itemprop="datePublished" content="2023-09-03T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-09-03T00:00:00+00:00">
-  <meta itemprop="wordCount" content="376">
-  <meta itemprop="keywords" content="JNI,Java,C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="JNI: HashMap&lt;-&gt;unordered_map">
-  <meta name="twitter:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
+	<meta itemprop="datePublished" content="2023-09-03T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-09-03T00:00:00+00:00">
+	<meta itemprop="wordCount" content="299">
+	<meta itemprop="keywords" content="JNI,Java,C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="JNI: HashMap&lt;-&gt;unordered_map">
+	<meta name="twitter:description" content="前言 在进行 JNI 开发的时候，经常会碰到需要传递 Map 的需求。
 它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。
 所以这里给一个参考，希望在用到的时候能帮你进行快速开发。">
 
@@ -181,7 +181,7 @@
         <div class="post-category">
             <a href="../../categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 376 words </span>
+          <span class="more-meta"> 299 words </span>
           <span class="more-meta"> 1 min read </span>
         
       </div>
@@ -205,174 +205,85 @@
 <p>它们实现起来不难，但是写起来还是比较麻烦的，每次要写的时候都要老半天。</p>
 <p>所以这里给一个参考，希望在用到的时候能帮你进行快速开发。</p>
 <h2 id="hashmap-unordered-map">HashMap -&gt; unordered_map</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="n">hashMap2unordered_map</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;java/util/Map&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">entrySetMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">mapClass</span><span class="p">,</span> <span class="s">&#34;entrySet&#34;</span><span class="p">,</span> <span class="s">&#34;()Ljava/util/Set;&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jobject</span> <span class="n">entries</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">entrySetMethod</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">setClass</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;java/util/Set&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">iteratorMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">setClass</span><span class="p">,</span> <span class="s">&#34;iterator&#34;</span><span class="p">,</span> <span class="s">&#34;()Ljava/util/Iterator;&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">iterClass</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;java/util/Iterator&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">hasNextMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">iterClass</span><span class="p">,</span> <span class="s">&#34;hasNext&#34;</span><span class="p">,</span> <span class="s">&#34;()Z&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">nextMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">iterClass</span><span class="p">,</span> <span class="s">&#34;next&#34;</span><span class="p">,</span> <span class="s">&#34;()Ljava/lang/Object;&#34;</span><span class="p">);;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">entryClass</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;java/util/Map$Entry&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">getKeyMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">entryClass</span><span class="p">,</span> <span class="s">&#34;getKey&#34;</span><span class="p">,</span> <span class="s">&#34;()Ljava/lang/Object;&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">getValueMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">entryClass</span><span class="p">,</span> <span class="s">&#34;getValue&#34;</span><span class="p">,</span> <span class="s">&#34;()Ljava/lang/Object;&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">jobject</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="n">iteratorMethod</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallBooleanMethod</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">hasNextMethod</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">jobject</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">nextMethod</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">jstring</span> <span class="n">jKey</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">jstring</span><span class="o">&gt;</span><span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                                                                      <span class="n">getKeyMethod</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">key</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">jKey</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">keyStr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetStringUTFChars</span><span class="p">(</span><span class="n">jKey</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">key</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">keyStr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">env</span><span class="o">-&gt;</span><span class="n">ReleaseStringUTFChars</span><span class="p">(</span><span class="n">jKey</span><span class="p">,</span> <span class="n">keyStr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="n">jstring</span> <span class="n">jValue</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">jstring</span><span class="o">&gt;</span><span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                                                                        <span class="n">getValueMethod</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">value</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">IsSameObject</span><span class="p">(</span><span class="n">jValue</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">valueStr</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetStringUTFChars</span><span class="p">(</span><span class="n">jValue</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">value</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">valueStr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">env</span><span class="o">-&gt;</span><span class="n">ReleaseStringUTFChars</span><span class="p">(</span><span class="n">jValue</span><span class="p">,</span> <span class="n">valueStr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">            <span class="n">map</span><span class="o">-&gt;</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">jValue</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">jKey</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">entry</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">iterator</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">entryClass</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">iterClass</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">setClass</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">mapClass</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">map</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="unordered-map-hashmap">unordered_map -&gt; HashMap</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">jobject</span> <span class="nf">unordered_map2HashMap</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                              <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">params</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">jobject</span> <span class="n">map</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">mapClass</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;java/util/HashMap&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">initMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">mapClass</span><span class="p">,</span> <span class="s">&#34;&lt;init&gt;&#34;</span><span class="p">,</span> <span class="s">&#34;()V&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">putMethod</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">mapClass</span><span class="p">,</span> <span class="s">&#34;put&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                                               <span class="s">&#34;(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">map</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewObject</span><span class="p">(</span><span class="n">mapClass</span><span class="p">,</span> <span class="n">initMethod</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="nl">item</span><span class="p">:</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">jstring</span> <span class="n">key</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">            <span class="n">jstring</span> <span class="n">value</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallObjectMethod</span><span class="p">(</span><span class="n">map</span><span class="p">,</span> <span class="n">putMethod</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteLocalRef</span><span class="p">(</span><span class="n">mapClass</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">map</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>unique_ptr<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>unordered_map<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string, std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>hashMap2unordered_map(JNIEnv <span style="color:#f92672">*</span>env, jobject data) {
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>unique_ptr<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>unordered_map<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string, std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;&gt;</span> map <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>make_unique<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>unordered_map<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string, std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>env<span style="color:#f92672">-&gt;</span>IsSameObject(data, <span style="color:#66d9ef">nullptr</span>)) {
+</span></span><span style="display:flex;"><span>        jclass mapClass <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>FindClass(<span style="color:#e6db74">&#34;java/util/Map&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID entrySetMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(mapClass, <span style="color:#e6db74">&#34;entrySet&#34;</span>, <span style="color:#e6db74">&#34;()Ljava/util/Set;&#34;</span>);
+</span></span><span style="display:flex;"><span>        jobject entries <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>CallObjectMethod(data, entrySetMethod);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jclass setClass <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>FindClass(<span style="color:#e6db74">&#34;java/util/Set&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID iteratorMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(setClass, <span style="color:#e6db74">&#34;iterator&#34;</span>, <span style="color:#e6db74">&#34;()Ljava/util/Iterator;&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jclass iterClass <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>FindClass(<span style="color:#e6db74">&#34;java/util/Iterator&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID hasNextMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(iterClass, <span style="color:#e6db74">&#34;hasNext&#34;</span>, <span style="color:#e6db74">&#34;()Z&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jmethodID nextMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(iterClass, <span style="color:#e6db74">&#34;next&#34;</span>, <span style="color:#e6db74">&#34;()Ljava/lang/Object;&#34;</span>);;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jclass entryClass <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>FindClass(<span style="color:#e6db74">&#34;java/util/Map$Entry&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID getKeyMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(entryClass, <span style="color:#e6db74">&#34;getKey&#34;</span>, <span style="color:#e6db74">&#34;()Ljava/lang/Object;&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jmethodID getValueMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(entryClass, <span style="color:#e6db74">&#34;getValue&#34;</span>, <span style="color:#e6db74">&#34;()Ljava/lang/Object;&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        jobject iterator <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>CallObjectMethod(entries, iteratorMethod);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (env<span style="color:#f92672">-&gt;</span>CallBooleanMethod(iterator, hasNextMethod)) {
+</span></span><span style="display:flex;"><span>            jobject entry <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>CallObjectMethod(iterator, nextMethod);
+</span></span><span style="display:flex;"><span>            jstring jKey <span style="color:#f92672">=</span> <span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>jstring<span style="color:#f92672">&gt;</span>(env<span style="color:#f92672">-&gt;</span>CallObjectMethod(entry,
+</span></span><span style="display:flex;"><span>                                                                      getKeyMethod));
+</span></span><span style="display:flex;"><span>            std<span style="color:#f92672">::</span>string key;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>env<span style="color:#f92672">-&gt;</span>IsSameObject(jKey, <span style="color:#66d9ef">nullptr</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>keyStr <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetStringUTFChars(jKey, <span style="color:#66d9ef">nullptr</span>);
+</span></span><span style="display:flex;"><span>                key.append(keyStr);
+</span></span><span style="display:flex;"><span>                env<span style="color:#f92672">-&gt;</span>ReleaseStringUTFChars(jKey, keyStr);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            jstring jValue <span style="color:#f92672">=</span> <span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>jstring<span style="color:#f92672">&gt;</span>(env<span style="color:#f92672">-&gt;</span>CallObjectMethod(entry,
+</span></span><span style="display:flex;"><span>                                                                        getValueMethod));
+</span></span><span style="display:flex;"><span>            std<span style="color:#f92672">::</span>string value;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>env<span style="color:#f92672">-&gt;</span>IsSameObject(jValue, <span style="color:#66d9ef">nullptr</span>)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>valueStr <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetStringUTFChars(jValue, <span style="color:#66d9ef">nullptr</span>);
+</span></span><span style="display:flex;"><span>                value.append(valueStr);
+</span></span><span style="display:flex;"><span>                env<span style="color:#f92672">-&gt;</span>ReleaseStringUTFChars(jValue, valueStr);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            map<span style="color:#f92672">-&gt;</span>emplace(std<span style="color:#f92672">::</span>move(key), std<span style="color:#f92672">::</span>move(value));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(jValue);
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(jKey);
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(entry);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(iterator);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(entryClass);
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(iterClass);
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(setClass);
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(mapClass);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> map;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="unordered-map-hashmap">unordered_map -&gt; HashMap</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>jobject <span style="color:#a6e22e">unordered_map2HashMap</span>(JNIEnv <span style="color:#f92672">*</span>env,
+</span></span><span style="display:flex;"><span>                              std<span style="color:#f92672">::</span>unique_ptr<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>unordered_map<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string, std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;&gt;</span> params) {
+</span></span><span style="display:flex;"><span>    jobject map <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (params) {
+</span></span><span style="display:flex;"><span>        jclass mapClass <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>FindClass(<span style="color:#e6db74">&#34;java/util/HashMap&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID initMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(mapClass, <span style="color:#e6db74">&#34;&lt;init&gt;&#34;</span>, <span style="color:#e6db74">&#34;()V&#34;</span>);
+</span></span><span style="display:flex;"><span>        jmethodID putMethod <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>GetMethodID(mapClass, <span style="color:#e6db74">&#34;put&#34;</span>,
+</span></span><span style="display:flex;"><span>                                               <span style="color:#e6db74">&#34;(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;&#34;</span>);
+</span></span><span style="display:flex;"><span>        map <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>NewObject(mapClass, initMethod);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;</span>item: <span style="color:#f92672">*</span>params) {
+</span></span><span style="display:flex;"><span>            jstring key <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>NewStringUTF(item.first.c_str());
+</span></span><span style="display:flex;"><span>            jstring value <span style="color:#f92672">=</span> env<span style="color:#f92672">-&gt;</span>NewStringUTF(item.second.c_str());
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>CallObjectMethod(map, putMethod, key, value);
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(value);
+</span></span><span style="display:flex;"><span>            env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(key);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        env<span style="color:#f92672">-&gt;</span>DeleteLocalRef(mapClass);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> map;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
     </div>
 
     <div class="post-copyright">
@@ -393,6 +304,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/jni/">JNI</a>
@@ -475,7 +388,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

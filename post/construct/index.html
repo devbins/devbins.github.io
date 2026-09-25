@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/construct/" />
@@ -38,60 +38,60 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/construct/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="C&#43;&#43;5大构造函数">
-  <meta property="og:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="C&#43;&#43;5大构造函数">
+	<meta property="og:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2021-02-15T00:00:00+00:00">
-    <meta property="article:modified_time" content="2021-02-15T00:00:00+00:00">
-    <meta property="article:tag" content="C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2021-02-15T00:00:00+00:00">
+		<meta property="article:modified_time" content="2021-02-15T00:00:00+00:00">
+		<meta property="article:tag" content="C&#43;&#43;">
 
-  <meta itemprop="name" content="C&#43;&#43;5大构造函数">
-  <meta itemprop="description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta itemprop="name" content="C&#43;&#43;5大构造函数">
+	<meta itemprop="description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
-  <meta itemprop="datePublished" content="2021-02-15T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2021-02-15T00:00:00+00:00">
-  <meta itemprop="wordCount" content="1526">
-  <meta itemprop="keywords" content="C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C&#43;&#43;5大构造函数">
-  <meta name="twitter:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta itemprop="datePublished" content="2021-02-15T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2021-02-15T00:00:00+00:00">
+	<meta itemprop="wordCount" content="1399">
+	<meta itemprop="keywords" content="C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="C&#43;&#43;5大构造函数">
+	<meta name="twitter:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
  <meta property="og:url" content="http://devbins.github.io/post/construct/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="C&#43;&#43;5大构造函数">
-  <meta property="og:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="C&#43;&#43;5大构造函数">
+	<meta property="og:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2021-02-15T00:00:00+00:00">
-    <meta property="article:modified_time" content="2021-02-15T00:00:00+00:00">
-    <meta property="article:tag" content="C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2021-02-15T00:00:00+00:00">
+		<meta property="article:modified_time" content="2021-02-15T00:00:00+00:00">
+		<meta property="article:tag" content="C&#43;&#43;">
 
-  <meta itemprop="name" content="C&#43;&#43;5大构造函数">
-  <meta itemprop="description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta itemprop="name" content="C&#43;&#43;5大构造函数">
+	<meta itemprop="description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
-  <meta itemprop="datePublished" content="2021-02-15T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2021-02-15T00:00:00+00:00">
-  <meta itemprop="wordCount" content="1526">
-  <meta itemprop="keywords" content="C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C&#43;&#43;5大构造函数">
-  <meta name="twitter:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
+	<meta itemprop="datePublished" content="2021-02-15T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2021-02-15T00:00:00+00:00">
+	<meta itemprop="wordCount" content="1399">
+	<meta itemprop="keywords" content="C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="C&#43;&#43;5大构造函数">
+	<meta name="twitter:description" content="前言 自 C&#43;&#43;11 以来，引入了移动构造函数和移动赋值函数，使得在构造对象的时候可以减少调用次数，以提高性能。
 所以 C&#43;&#43;的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。
 它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。">
 
@@ -177,8 +177,8 @@
         <div class="post-category">
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             </div>
-          <span class="more-meta"> 1526 words </span>
-          <span class="more-meta"> 4 mins read </span>
+          <span class="more-meta"> 1399 words </span>
+          <span class="more-meta"> 3 mins read </span>
         
       </div>
     </header>
@@ -209,404 +209,259 @@
 <p>所以 C++的构造函数从 3 个变成了 5 个，分别是构造函数、拷贝构造函数、拷贝赋值函数、移动构造函数、移动赋值函数。</p>
 <p>它们非常相似，放在一起容易搞混，于是总结一下，便有了此文，希望能够对大家有所帮助。</p>
 <h2 id="先来看下面的这个例子">先来看下面的这个例子</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;iostream&gt;
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;construct&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="p">(</span><span class="k">const</span> <span class="n">Test</span><span class="o">&amp;</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Copy Construct&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Test</span><span class="o">&amp;</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Copy Assignment Operator&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="p">(</span><span class="n">Test</span><span class="o">&amp;&amp;</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Move construct&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Test</span><span class="o">&amp;&amp;</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Move Assignment Operator&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">Test</span> <span class="nf">GenerateTest</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">Test</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">PassByValue</span><span class="p">(</span><span class="n">Test</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">Test</span><span class="o">&amp;&amp;</span> <span class="n">MoveTest</span><span class="p">(</span><span class="n">Test</span><span class="o">&amp;</span> <span class="n">test</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">move</span><span class="p">(</span><span class="n">test</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------1------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------2------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t2</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------3------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t3</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------4------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t4</span> <span class="o">=</span> <span class="n">Test</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------5------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t5</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------6------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">t5</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------7------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t7</span> <span class="o">=</span> <span class="n">move</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------8------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">t7</span> <span class="o">=</span> <span class="n">move</span><span class="p">(</span><span class="n">t2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------9------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t8</span> <span class="o">=</span> <span class="n">GenerateTest</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------10------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span> <span class="n">t9</span> <span class="o">=</span> <span class="n">MoveTest</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------11------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">Test</span><span class="o">&amp;&amp;</span> <span class="n">t10</span> <span class="o">=</span> <span class="n">MoveTest</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------12------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">t9</span> <span class="o">=</span> <span class="n">Test</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------------13------------------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PassByValue</span><span class="p">(</span><span class="n">t9</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以猜猜看，会输出什么？</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Test() {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;construct&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Test(<span style="color:#66d9ef">const</span> Test<span style="color:#f92672">&amp;</span> test) {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Copy Construct&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Test<span style="color:#f92672">&amp;</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(<span style="color:#66d9ef">const</span> Test<span style="color:#f92672">&amp;</span> test) {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Copy Assignment Operator&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Test(Test<span style="color:#f92672">&amp;&amp;</span> test) {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Move construct&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Test<span style="color:#f92672">&amp;</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(Test<span style="color:#f92672">&amp;&amp;</span> test) {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Move Assignment Operator&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Test <span style="color:#a6e22e">GenerateTest</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Test();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">PassByValue</span>(Test test) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Test<span style="color:#f92672">&amp;&amp;</span> MoveTest(Test<span style="color:#f92672">&amp;</span> test) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">move</span>(test);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------1------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t1;
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------2------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t2(t1);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------3------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t3 <span style="color:#f92672">=</span> t1;
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------4------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t4 <span style="color:#f92672">=</span> Test();
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------5------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t5 <span style="color:#f92672">=</span> Test(t1);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------6------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    t5 <span style="color:#f92672">=</span> t2;
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------7------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t7 <span style="color:#f92672">=</span> move(t1);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------8------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    t7 <span style="color:#f92672">=</span> move(t2);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------9------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t8 <span style="color:#f92672">=</span> GenerateTest();
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------10------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test t9 <span style="color:#f92672">=</span> MoveTest(t1);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------11------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    Test<span style="color:#f92672">&amp;&amp;</span> t10 <span style="color:#f92672">=</span> MoveTest(t1);
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------12------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    t9 <span style="color:#f92672">=</span> Test();
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;----------------13------------------&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    PassByValue(t9);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>可以猜猜看，会输出什么？</p>
 <h2 id="输出">输出</h2>
 <h3 id="以下结果是开启了编译优化后的输出">以下结果是开启了编译优化后的输出</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">1</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">2</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">3</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">4</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">5</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">6</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">7</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">8</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">9</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">10</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">11</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">12</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">13</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="以下结果是关闭了编译器优化后的输出">以下结果是关闭了编译器优化后的输出</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">1</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">2</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">3</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">4</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">5</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">6</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">7</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">8</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">9</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">10</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">11</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">12</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span>Move Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">13</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span></code></pre></div><h3 id="以下结果是关闭了编译器优化后的输出">以下结果是关闭了编译器优化后的输出</h3>
 <p>在编译的时候加上 <code>-fno-elide-constructors</code> 来关闭优化</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">1</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">2</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">3</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">4</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">5</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">6</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">7</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">8</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">9</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">10</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">11</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">12</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">construct</span>
-</span></span><span class="line"><span class="cl"><span class="n">Move</span> <span class="n">Assignment</span> <span class="n">Operator</span>
-</span></span><span class="line"><span class="cl"><span class="o">----------------</span><span class="mi">13</span><span class="o">------------------</span>
-</span></span><span class="line"><span class="cl"><span class="n">Copy</span> <span class="n">Construct</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="分析">分析</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">1</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">2</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">3</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">4</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">5</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">6</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">7</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">8</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">9</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">10</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Move construct
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">11</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">12</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>construct
+</span></span><span style="display:flex;"><span>Move Assignment Operator
+</span></span><span style="display:flex;"><span><span style="color:#f92672">----------------</span><span style="color:#ae81ff">13</span><span style="color:#f92672">------------------</span>
+</span></span><span style="display:flex;"><span>Copy Construct
+</span></span></code></pre></div><h2 id="分析">分析</h2>
 <p>我们把开启优化和关闭优化放一起对比看</p>
 <table>
-  <thead>
-      <tr>
-          <th>序号</th>
-          <th>开启优化</th>
-          <th>关闭优化</th>
-          <th>分析</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>construct</td>
-          <td>construct</td>
-          <td>调用构造方法，没什么好说的</td>
-      </tr>
-      <tr>
-          <td>2</td>
-          <td>Copy Construct</td>
-          <td>Copy Construct</td>
-          <td>使用 t1 初始化 t2，创建新对象，调用拷贝构造函数</td>
-      </tr>
-      <tr>
-          <td>3</td>
-          <td>Copy Construct</td>
-          <td>Copy Construct</td>
-          <td>这里就有点迷惑了，t3 是个新对象，所以也是调用拷贝构造函数，而不是拷贝赋值函数</td>
-      </tr>
-      <tr>
-          <td>4</td>
-          <td>construct</td>
-          <td>construct</td>
-          <td>开启优化后只需要一次构造</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td>Move construct</td>
-          <td>关闭优化还需要一次移动构造函数，因为 Test() 是个右值</td>
-      </tr>
-      <tr>
-          <td>5</td>
-          <td>Copy Construct</td>
-          <td>Copy Construct</td>
-          <td>开启优化后只需要一次拷贝构造</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td>Move construct</td>
-          <td>关闭优化和上一个一样，由于是右值还需要调用一次移动构造</td>
-      </tr>
-      <tr>
-          <td>6</td>
-          <td>Copy Assignment Operator</td>
-          <td>Copy Assignment Operator</td>
-          <td>由于 t5 已经存在了，所以调用拷贝赋值函数</td>
-      </tr>
-      <tr>
-          <td>7</td>
-          <td>Move construct</td>
-          <td>Move construct</td>
-          <td>把 t1 转换成右值，调用移动构造函数</td>
-      </tr>
-      <tr>
-          <td>8</td>
-          <td>Move Assignment Operator</td>
-          <td>Move Assignment Operator</td>
-          <td>由于 t7 已经存在，所以调用移动赋值函数</td>
-      </tr>
-      <tr>
-          <td>9</td>
-          <td>construct</td>
-          <td>construct</td>
-          <td>开启优化只需要一次构造</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td>Move construct</td>
-          <td>关闭优化，需要调用两次移动构造，一次是 return 返回给一个临时对象</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td>Move construct</td>
-          <td>另一次是把临时对象赋值给 t8，临时对象是右值，所以都调用移动构造函数</td>
-      </tr>
-      <tr>
-          <td>10</td>
-          <td>Move construct</td>
-          <td>Move construct</td>
-          <td>使用 move 把 test 转为右值，调用移动构造函数</td>
-      </tr>
-      <tr>
-          <td>11</td>
-          <td></td>
-          <td></td>
-          <td>只是进行右值绑定，没有创建对象或更新对象，不会调用构造函数</td>
-      </tr>
-      <tr>
-          <td>12</td>
-          <td>construct</td>
-          <td>construct</td>
-          <td>t9 是个已经存在的对象，而 Test()是个右值，所以先调用构造函数</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>Move Assignment Operator</td>
-          <td>Move Assignment Operator</td>
-          <td>然后调用移动构造函数</td>
-      </tr>
-      <tr>
-          <td>13</td>
-          <td>Copy Construct</td>
-          <td>Copy Construct</td>
-          <td>以传值的方式给形参，调用拷贝构造函数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>序号</th>
+					<th>开启优化</th>
+					<th>关闭优化</th>
+					<th>分析</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>construct</td>
+					<td>construct</td>
+					<td>调用构造方法，没什么好说的</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>Copy Construct</td>
+					<td>Copy Construct</td>
+					<td>使用 t1 初始化 t2，创建新对象，调用拷贝构造函数</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>Copy Construct</td>
+					<td>Copy Construct</td>
+					<td>这里就有点迷惑了，t3 是个新对象，所以也是调用拷贝构造函数，而不是拷贝赋值函数</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>construct</td>
+					<td>construct</td>
+					<td>开启优化后只需要一次构造</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td></td>
+					<td>Move construct</td>
+					<td>关闭优化还需要一次移动构造函数，因为 Test() 是个右值</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>Copy Construct</td>
+					<td>Copy Construct</td>
+					<td>开启优化后只需要一次拷贝构造</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td></td>
+					<td>Move construct</td>
+					<td>关闭优化和上一个一样，由于是右值还需要调用一次移动构造</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td>Copy Assignment Operator</td>
+					<td>Copy Assignment Operator</td>
+					<td>由于 t5 已经存在了，所以调用拷贝赋值函数</td>
+			</tr>
+			<tr>
+					<td>7</td>
+					<td>Move construct</td>
+					<td>Move construct</td>
+					<td>把 t1 转换成右值，调用移动构造函数</td>
+			</tr>
+			<tr>
+					<td>8</td>
+					<td>Move Assignment Operator</td>
+					<td>Move Assignment Operator</td>
+					<td>由于 t7 已经存在，所以调用移动赋值函数</td>
+			</tr>
+			<tr>
+					<td>9</td>
+					<td>construct</td>
+					<td>construct</td>
+					<td>开启优化只需要一次构造</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td></td>
+					<td>Move construct</td>
+					<td>关闭优化，需要调用两次移动构造，一次是 return 返回给一个临时对象</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td></td>
+					<td>Move construct</td>
+					<td>另一次是把临时对象赋值给 t8，临时对象是右值，所以都调用移动构造函数</td>
+			</tr>
+			<tr>
+					<td>10</td>
+					<td>Move construct</td>
+					<td>Move construct</td>
+					<td>使用 move 把 test 转为右值，调用移动构造函数</td>
+			</tr>
+			<tr>
+					<td>11</td>
+					<td></td>
+					<td></td>
+					<td>只是进行右值绑定，没有创建对象或更新对象，不会调用构造函数</td>
+			</tr>
+			<tr>
+					<td>12</td>
+					<td>construct</td>
+					<td>construct</td>
+					<td>t9 是个已经存在的对象，而 Test()是个右值，所以先调用构造函数</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>Move Assignment Operator</td>
+					<td>Move Assignment Operator</td>
+					<td>然后调用移动构造函数</td>
+			</tr>
+			<tr>
+					<td>13</td>
+					<td>Copy Construct</td>
+					<td>Copy Construct</td>
+					<td>以传值的方式给形参，调用拷贝构造函数</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="总结">总结</h2>
 <p>这些构造函数老是把人搞得晕头转向，过几天不看就会忘记搞混，我的记忆方法是抓住两个关键，一个是等号左边的对象，另一个是等号右边的对象。</p>
@@ -615,25 +470,25 @@
 <p>还有一种情况是没有 <code>=</code> 的，这个就很好判断了。无非也就构造和拷贝构造，如果只有一个对象，那就不存在拷贝不拷贝的，肯定是构造，对应上文中的 <code>1</code> 。如果有两个对象，那肯定是拷贝构造，不存在赋值的情况，对应上文中的 <code>2</code> 。</p>
 <p>用一个表格来展示它们之间的关系</p>
 <table>
-  <thead>
-      <tr>
-          <th></th>
-          <th>对象不存在</th>
-          <th>对象存在</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>左值</td>
-          <td>拷贝构造</td>
-          <td>拷贝赋值</td>
-      </tr>
-      <tr>
-          <td>右值</td>
-          <td>移动构造</td>
-          <td>移动赋值</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th></th>
+					<th>对象不存在</th>
+					<th>对象存在</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>左值</td>
+					<td>拷贝构造</td>
+					<td>拷贝赋值</td>
+			</tr>
+			<tr>
+					<td>右值</td>
+					<td>移动构造</td>
+					<td>移动赋值</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="参考">参考</h2>
 <ul>
@@ -659,6 +514,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/c&#43;&#43;/">C&#43;&#43;</a>
@@ -739,7 +596,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

@@ -28,7 +28,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/%E5%8E%8B%E7%BC%A9git%E4%BB%93%E5%BA%93%E6%96%87%E4%BB%B6/" />
@@ -40,70 +40,70 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/%E5%8E%8B%E7%BC%A9git%E4%BB%93%E5%BA%93%E6%96%87%E4%BB%B6/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="压缩 Git 仓库">
-  <meta property="og:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="压缩 Git 仓库">
+	<meta property="og:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
 虽然添加过滤可以解决这些问题，但是都挺麻烦的，我经过一番实验发现了一个极为简单的方法。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-17T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-17T00:00:00+00:00">
-    <meta property="article:tag" content="Git">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-17T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-17T00:00:00+00:00">
+		<meta property="article:tag" content="Git">
 
-  <meta itemprop="name" content="压缩 Git 仓库">
-  <meta itemprop="description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta itemprop="name" content="压缩 Git 仓库">
+	<meta itemprop="description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
 虽然添加过滤可以解决这些问题，但是都挺麻烦的，我经过一番实验发现了一个极为简单的方法。">
-  <meta itemprop="datePublished" content="2024-11-17T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-17T00:00:00+00:00">
-  <meta itemprop="wordCount" content="360">
-  <meta itemprop="keywords" content="Git">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="压缩 Git 仓库">
-  <meta name="twitter:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta itemprop="datePublished" content="2024-11-17T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-17T00:00:00+00:00">
+	<meta itemprop="wordCount" content="359">
+	<meta itemprop="keywords" content="Git">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="压缩 Git 仓库">
+	<meta name="twitter:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
 虽然添加过滤可以解决这些问题，但是都挺麻烦的，我经过一番实验发现了一个极为简单的方法。">
  <meta property="og:url" content="http://devbins.github.io/post/%E5%8E%8B%E7%BC%A9git%E4%BB%93%E5%BA%93%E6%96%87%E4%BB%B6/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="压缩 Git 仓库">
-  <meta property="og:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="压缩 Git 仓库">
+	<meta property="og:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
 虽然添加过滤可以解决这些问题，但是都挺麻烦的，我经过一番实验发现了一个极为简单的方法。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-17T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-17T00:00:00+00:00">
-    <meta property="article:tag" content="Git">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-17T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-17T00:00:00+00:00">
+		<meta property="article:tag" content="Git">
 
-  <meta itemprop="name" content="压缩 Git 仓库">
-  <meta itemprop="description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta itemprop="name" content="压缩 Git 仓库">
+	<meta itemprop="description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
 虽然添加过滤可以解决这些问题，但是都挺麻烦的，我经过一番实验发现了一个极为简单的方法。">
-  <meta itemprop="datePublished" content="2024-11-17T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-17T00:00:00+00:00">
-  <meta itemprop="wordCount" content="360">
-  <meta itemprop="keywords" content="Git">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="压缩 Git 仓库">
-  <meta name="twitter:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
+	<meta itemprop="datePublished" content="2024-11-17T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-17T00:00:00+00:00">
+	<meta itemprop="wordCount" content="359">
+	<meta itemprop="keywords" content="Git">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="压缩 Git 仓库">
+	<meta name="twitter:description" content="前言 有时候我们需要把项目的源代码发给别人，但是直接压缩会把一些编译产生的中间文件，缓存等等都压缩进去。
 这就会导致压缩包很大，并且这些文件其实也没有必要。
 还有一种情况是有些文件比较敏感不应该压缩进去，就需要过滤掉。
 如果每次都这么干，那么流程就会很漫长。
@@ -191,7 +191,7 @@
         <div class="post-category">
             <a href="../../categories/git/"> Git </a>
             </div>
-          <span class="more-meta"> 360 words </span>
+          <span class="more-meta"> 359 words </span>
           <span class="more-meta"> 1 min read </span>
         
       </div>
@@ -219,15 +219,8 @@
 <h2 id="git-压缩">git 压缩</h2>
 <p>这个简单的方法就是使用 <code>git</code> 自带的压缩，不调查一下都不知道 <code>git</code> 居然有这个功能。</p>
 <p>来直接看一下如何使用</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git archive --format<span class="o">=</span>zip -o xxx.zip HEAD
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>其中 <code>archive</code> 表示要对 <code>git</code> 仓库进行归档</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git archive --format<span style="color:#f92672">=</span>zip -o xxx.zip HEAD
+</span></span></code></pre></div><p>其中 <code>archive</code> 表示要对 <code>git</code> 仓库进行归档</p>
 <p><code>--format</code> 指定了格式，可以是 <code>tar</code> 、 <code>zip</code> ，默认是 <code>tar</code></p>
 <p><code>-o</code> 表示压缩后的文件名</p>
 <p>最后的 <code>HEAD</code> 表示要压缩哪个记录，可以是分支、标签、commit hash</p>
@@ -254,6 +247,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/git/">Git</a>
@@ -334,7 +329,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

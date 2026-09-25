@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/cocos2d_swallow_touch/" />
@@ -37,55 +37,55 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/cocos2d_swallow_touch/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta property="og:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta property="og:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-06-13T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-06-13T00:00:00+00:00">
-    <meta property="article:tag" content="Cocos2d">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-06-13T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-06-13T00:00:00+00:00">
+		<meta property="article:tag" content="Cocos2d">
 
-  <meta itemprop="name" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta itemprop="description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta itemprop="name" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta itemprop="description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
-  <meta itemprop="datePublished" content="2023-06-13T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-06-13T00:00:00+00:00">
-  <meta itemprop="wordCount" content="669">
-  <meta itemprop="keywords" content="Cocos2d">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta name="twitter:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta itemprop="datePublished" content="2023-06-13T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-06-13T00:00:00+00:00">
+	<meta itemprop="wordCount" content="662">
+	<meta itemprop="keywords" content="Cocos2d">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta name="twitter:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
  <meta property="og:url" content="http://devbins.github.io/post/cocos2d_swallow_touch/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta property="og:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta property="og:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2023-06-13T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-06-13T00:00:00+00:00">
-    <meta property="article:tag" content="Cocos2d">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2023-06-13T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-06-13T00:00:00+00:00">
+		<meta property="article:tag" content="Cocos2d">
 
-  <meta itemprop="name" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta itemprop="description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta itemprop="name" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta itemprop="description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
-  <meta itemprop="datePublished" content="2023-06-13T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2023-06-13T00:00:00+00:00">
-  <meta itemprop="wordCount" content="669">
-  <meta itemprop="keywords" content="Cocos2d">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
-  <meta name="twitter:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
+	<meta itemprop="datePublished" content="2023-06-13T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2023-06-13T00:00:00+00:00">
+	<meta itemprop="wordCount" content="662">
+	<meta itemprop="keywords" content="Cocos2d">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Cocos2d Layer 中点击事件穿透的最佳解决方案">
+	<meta name="twitter:description" content="前言 熟悉 Cocos2d 开发的应该都知道，在一个场景中如果有多个 Layer ，这些 Layer 一个一个的叠在上面，当我们点击 Layer 上的按钮的时候可以正常的触发对应的事件。
 但是，当点击的位置所在的 Layer 没有事件要响应，这时候触摸事件就会传递到下面的 Layer ，这是我们所不希望的，在经过一番搜索之后，找到了一个不错的方案，分享一下。">
 
 <!--[if lte IE 9]>
@@ -171,7 +171,7 @@
             <a href="../../categories/cocos2d/"> Cocos2d </a>
             <a href="../../categories/c&#43;&#43;/"> C&#43;&#43; </a>
             </div>
-          <span class="more-meta"> 669 words </span>
+          <span class="more-meta"> 662 words </span>
           <span class="more-meta"> 2 mins read </span>
         
       </div>
@@ -206,27 +206,14 @@
 <p>所以根据事件传递机制就会往下传，导致下面的 <code>Layer</code> 接收到事件，并且刚好这个位置有需要响应触摸事件的需求，所以就响应，最后导致莫名其妙的事情发生了。</p>
 <p>既然知道了问题的原因就好办了，我们只需要在 <code>Layer</code> 中把没有消费的事件给消费掉，这样就不会传递到下层了。</p>
 <p>我们在 <code>Layer.init</code> 中处理这个问题，代码如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">dispatcher</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getEventDispatcher</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">listener</span> <span class="o">=</span> <span class="n">EventListenerTouchOneByOne</span><span class="o">::</span><span class="n">create</span><span class="p">();</span> <span class="c1">// 穿件事件监听器
-</span></span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchBegan</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">bool</span> <span class="p">{</span><span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="p">};</span> <span class="c1">// 需要返回true，消费掉事件，这样才不会往下传递
-</span></span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchMoved</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="p">{};</span>
-</span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">onTouchEnded</span> <span class="o">=</span> <span class="p">[](</span><span class="n">Touch</span><span class="o">*</span> <span class="n">touch</span><span class="p">,</span> <span class="n">Event</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span> <span class="p">{};</span>
-</span></span><span class="line"><span class="cl"><span class="n">listener</span><span class="o">-&gt;</span><span class="n">setSwallowTouches</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="c1">// 设置消费事件
-</span></span></span><span class="line"><span class="cl"><span class="n">dispatcher</span><span class="o">-&gt;</span><span class="n">addEventListenerWithSceneGraphPriority</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span> <span class="c1">// 添加监听器
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>这时候运行再点击就不会穿透到下层了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">auto</span> dispatcher <span style="color:#f92672">=</span> Director<span style="color:#f92672">::</span>getInstance()<span style="color:#f92672">-&gt;</span>getEventDispatcher();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">auto</span> listener <span style="color:#f92672">=</span> EventListenerTouchOneByOne<span style="color:#f92672">::</span>create(); <span style="color:#75715e">// 穿件事件监听器
+</span></span></span><span style="display:flex;"><span>listener<span style="color:#f92672">-&gt;</span>onTouchBegan <span style="color:#f92672">=</span> [](Touch<span style="color:#f92672">*</span> touch, Event<span style="color:#f92672">*</span> event) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">bool</span> {<span style="color:#66d9ef">return</span> true; }; <span style="color:#75715e">// 需要返回true，消费掉事件，这样才不会往下传递
+</span></span></span><span style="display:flex;"><span>listener<span style="color:#f92672">-&gt;</span>onTouchMoved <span style="color:#f92672">=</span> [](Touch<span style="color:#f92672">*</span> touch, Event<span style="color:#f92672">*</span> event) {};
+</span></span><span style="display:flex;"><span>listener<span style="color:#f92672">-&gt;</span>onTouchEnded <span style="color:#f92672">=</span> [](Touch<span style="color:#f92672">*</span> touch, Event<span style="color:#f92672">*</span> event) {};
+</span></span><span style="display:flex;"><span>listener<span style="color:#f92672">-&gt;</span>setSwallowTouches(true); <span style="color:#75715e">// 设置消费事件
+</span></span></span><span style="display:flex;"><span>dispatcher<span style="color:#f92672">-&gt;</span>addEventListenerWithSceneGraphPriority(listener, <span style="color:#66d9ef">this</span>); <span style="color:#75715e">// 添加监听器
+</span></span></span></code></pre></div><p>这时候运行再点击就不会穿透到下层了。</p>
 <h2 id="总结">总结</h2>
 <p><code>Layer</code> 中的点击事件默认会传递到下层，我们可以通过在 <code>Layer</code> 中设置监听器的方式，把没有响应的事件给消费掉，从而达到不传递事件到下层的目的。</p>
 <h2 id="参考">参考</h2>
@@ -251,6 +238,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/cocos2d/">Cocos2d</a>
@@ -331,7 +320,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

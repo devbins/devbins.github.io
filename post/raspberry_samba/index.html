@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/raspberry_samba/" />
@@ -36,52 +36,52 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/raspberry_samba/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="树莓派上 Samba 进行文件共享">
-  <meta property="og:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-20T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-20T00:00:00+00:00">
-    <meta property="article:tag" content="树莓派">
-    <meta property="article:tag" content="Samba">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="树莓派上 Samba 进行文件共享">
+	<meta property="og:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-20T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-20T00:00:00+00:00">
+		<meta property="article:tag" content="树莓派">
+		<meta property="article:tag" content="Samba">
 
-  <meta itemprop="name" content="树莓派上 Samba 进行文件共享">
-  <meta itemprop="description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
-  <meta itemprop="datePublished" content="2024-11-20T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-20T00:00:00+00:00">
-  <meta itemprop="wordCount" content="587">
-  <meta itemprop="keywords" content="树莓派,Samba">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="树莓派上 Samba 进行文件共享">
-  <meta name="twitter:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta itemprop="name" content="树莓派上 Samba 进行文件共享">
+	<meta itemprop="description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta itemprop="datePublished" content="2024-11-20T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-20T00:00:00+00:00">
+	<meta itemprop="wordCount" content="568">
+	<meta itemprop="keywords" content="树莓派,Samba">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="树莓派上 Samba 进行文件共享">
+	<meta name="twitter:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
  <meta property="og:url" content="http://devbins.github.io/post/raspberry_samba/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="树莓派上 Samba 进行文件共享">
-  <meta property="og:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-11-20T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-11-20T00:00:00+00:00">
-    <meta property="article:tag" content="树莓派">
-    <meta property="article:tag" content="Samba">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="树莓派上 Samba 进行文件共享">
+	<meta property="og:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-11-20T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-11-20T00:00:00+00:00">
+		<meta property="article:tag" content="树莓派">
+		<meta property="article:tag" content="Samba">
 
-  <meta itemprop="name" content="树莓派上 Samba 进行文件共享">
-  <meta itemprop="description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
-  <meta itemprop="datePublished" content="2024-11-20T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-11-20T00:00:00+00:00">
-  <meta itemprop="wordCount" content="587">
-  <meta itemprop="keywords" content="树莓派,Samba">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="树莓派上 Samba 进行文件共享">
-  <meta name="twitter:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta itemprop="name" content="树莓派上 Samba 进行文件共享">
+	<meta itemprop="description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
+	<meta itemprop="datePublished" content="2024-11-20T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-11-20T00:00:00+00:00">
+	<meta itemprop="wordCount" content="568">
+	<meta itemprop="keywords" content="树莓派,Samba">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="树莓派上 Samba 进行文件共享">
+	<meta name="twitter:description" content="前言 今天讲一下如何在树莓派上搭建 Samba 进行文件共享。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -166,7 +166,7 @@
             <a href="../../categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"> 树莓派 </a>
             <a href="../../categories/samba/"> Samba </a>
             </div>
-          <span class="more-meta"> 587 words </span>
+          <span class="more-meta"> 568 words </span>
           <span class="more-meta"> 2 mins read </span>
         
       </div>
@@ -196,99 +196,38 @@
       <h2 id="前言">前言</h2>
 <p>今天讲一下如何在树莓派上搭建 <code>Samba</code> 进行文件共享。</p>
 <h2 id="安装">安装</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S samba
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>配置文件在 <code>/etc/samba/smb.conf</code> ，但是你到这个路径一看，发现没有</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo pacman -S samba
+</span></span></code></pre></div><p>配置文件在 <code>/etc/samba/smb.conf</code> ，但是你到这个路径一看，发现没有</p>
 <p>查了半天资料终于在<a href="https://www.jianshu.com/p/b0fcf29a857a">Manjaro使用Samba实现局域网内跨系统文件共享 - 简书</a>中找到了办法，需要安装 <code>manjaro=settings-samba</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S manjaro-settings-samba
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>安装好了这下就有了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo pacman -S manjaro-settings-samba
+</span></span></code></pre></div><p>安装好了这下就有了。</p>
 <h2 id="添加用户">添加用户</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo smbpasswd -a xxx <span class="c1"># 创建一个用户</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这里要注意，如果用户不存在你的电脑上，这样是不能添加成功的，以 <code>test</code> 为例，会报如下错误</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo smbpasswd -a <span class="nb">test</span>
-</span></span><span class="line"><span class="cl">New SMB password:
-</span></span><span class="line"><span class="cl">Retype new SMB password:
-</span></span><span class="line"><span class="cl">Failed to add entry <span class="k">for</span> user test.
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果你不确定系统中有哪些用户可以使用如下命令查看</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/passwd
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="添加新用户">添加新用户</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo smbpasswd -a xxx <span style="color:#75715e"># 创建一个用户</span>
+</span></span></code></pre></div><p>这里要注意，如果用户不存在你的电脑上，这样是不能添加成功的，以 <code>test</code> 为例，会报如下错误</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo smbpasswd -a test
+</span></span><span style="display:flex;"><span>New SMB password:
+</span></span><span style="display:flex;"><span>Retype new SMB password:
+</span></span><span style="display:flex;"><span>Failed to add entry <span style="color:#66d9ef">for</span> user test.
+</span></span></code></pre></div><p>如果你不确定系统中有哪些用户可以使用如下命令查看</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/passwd
+</span></span></code></pre></div><h3 id="添加新用户">添加新用户</h3>
 <p>如果你要添加新用户可以创建一个新组，然后添加新用户</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo groupadd test1 -g <span class="m">6000</span> <span class="c1"># 创建 test1 用户组</span>
-</span></span><span class="line"><span class="cl">sudo useradd test1 -u <span class="m">6000</span> -g <span class="m">6000</span> -s /sbin/nologin -d /dev/null <span class="c1"># 把 test1 加入到 test1 用户组，并且设置不允许登录</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这时候再使用 <code>smbpasswd -a test1</code> 就能成功添加用户了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo groupadd test1 -g <span style="color:#ae81ff">6000</span> <span style="color:#75715e"># 创建 test1 用户组</span>
+</span></span><span style="display:flex;"><span>sudo useradd test1 -u <span style="color:#ae81ff">6000</span> -g <span style="color:#ae81ff">6000</span> -s /sbin/nologin -d /dev/null <span style="color:#75715e"># 把 test1 加入到 test1 用户组，并且设置不允许登录</span>
+</span></span></code></pre></div><p>这时候再使用 <code>smbpasswd -a test1</code> 就能成功添加用户了</p>
 <h2 id="配置">配置</h2>
 <p>在 <code>home</code> 下创建一个 <code>share</code> 的文件夹用来共享文件</p>
 <p>打开 <code>/etc/samba/smb.conf</code> 把下面内容添加到末尾，路径需要根据自己的情况进行修改。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cfg" data-lang="cfg"><span class="line"><span class="cl"><span class="k">[shared]</span>
-</span></span><span class="line"><span class="cl">    <span class="na">comment</span> <span class="o">=</span> <span class="s">Samba Shared
-</span></span></span><span class="line"><span class="cl"><span class="s">    path = /home/test/share
-</span></span></span><span class="line"><span class="cl"><span class="s">    public = no
-</span></span></span><span class="line"><span class="cl"><span class="s">    valid users = test
-</span></span></span><span class="line"><span class="cl"><span class="s">    browseable = yes
-</span></span></span><span class="line"><span class="cl"><span class="s">    writable = yes
-</span></span></span><span class="line"><span class="cl"><span class="s">    create mask = 0777
-</span></span></span><span class="line"><span class="cl"><span class="s">    directory mask = 0777</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="连接">连接</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cfg" data-lang="cfg"><span style="display:flex;"><span><span style="color:#66d9ef">[shared]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">comment</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">Samba Shared
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    path = /home/test/share
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    public = no
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    valid users = test
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    browseable = yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    writable = yes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    create mask = 0777
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    directory mask = 0777</span>
+</span></span></code></pre></div><h2 id="连接">连接</h2>
 <p>配置好了就可以开始连接了。</p>
 <p>打开 <code>Finder</code> 使用快捷键 <code>cmd k</code> 打开连接服务器界面</p>
 <p>在输入框中输入 <code>smb://ip</code> 然后选择连接，接着输入账号密码，就能看到 <code>Samba</code> 中配置的目录
@@ -321,6 +260,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a>
@@ -402,7 +343,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/groovy/" />
@@ -38,60 +38,60 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/groovy/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Groovy 入门">
-  <meta property="og:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Groovy 入门">
+	<meta property="og:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2020-05-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2020-05-10T00:00:00+00:00">
-    <meta property="article:tag" content="Groovy">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2020-05-10T00:00:00+00:00">
+		<meta property="article:modified_time" content="2020-05-10T00:00:00+00:00">
+		<meta property="article:tag" content="Groovy">
 
-  <meta itemprop="name" content="Groovy 入门">
-  <meta itemprop="description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta itemprop="name" content="Groovy 入门">
+	<meta itemprop="description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
-  <meta itemprop="datePublished" content="2020-05-10T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2020-05-10T00:00:00+00:00">
-  <meta itemprop="wordCount" content="2532">
-  <meta itemprop="keywords" content="Groovy">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Groovy 入门">
-  <meta name="twitter:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta itemprop="datePublished" content="2020-05-10T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2020-05-10T00:00:00+00:00">
+	<meta itemprop="wordCount" content="2288">
+	<meta itemprop="keywords" content="Groovy">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Groovy 入门">
+	<meta name="twitter:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
  <meta property="og:url" content="http://devbins.github.io/post/groovy/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Groovy 入门">
-  <meta property="og:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Groovy 入门">
+	<meta property="og:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2020-05-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2020-05-10T00:00:00+00:00">
-    <meta property="article:tag" content="Groovy">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2020-05-10T00:00:00+00:00">
+		<meta property="article:modified_time" content="2020-05-10T00:00:00+00:00">
+		<meta property="article:tag" content="Groovy">
 
-  <meta itemprop="name" content="Groovy 入门">
-  <meta itemprop="description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta itemprop="name" content="Groovy 入门">
+	<meta itemprop="description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
-  <meta itemprop="datePublished" content="2020-05-10T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2020-05-10T00:00:00+00:00">
-  <meta itemprop="wordCount" content="2532">
-  <meta itemprop="keywords" content="Groovy">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Groovy 入门">
-  <meta name="twitter:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
+	<meta itemprop="datePublished" content="2020-05-10T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2020-05-10T00:00:00+00:00">
+	<meta itemprop="wordCount" content="2288">
+	<meta itemprop="keywords" content="Groovy">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Groovy 入门">
+	<meta name="twitter:description" content="前言 在 Android 中现在默认的构建工具是 Gradle ，而 Gradle 构建工具是使用 Groovy 语言编写的，这就使得了解 Groovy 语言变得非常重要了。
 如果你不了解 Groovy 会以为 build.gralde 文件中写的就只是一些配置，其实并没有这么简单。之所以看起来项配置文件，是因为 Groovy 的闭包特性，让我们写起来简单，看起来像配置文件，这就降低了编写的门槛。使得我们可以专注于 Android 层面的业务逻辑。
 随着 Android 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 Groovy 这们语言。">
 
@@ -177,8 +177,8 @@
         <div class="post-category">
             <a href="../../categories/android/"> Android </a>
             </div>
-          <span class="more-meta"> 2532 words </span>
-          <span class="more-meta"> 6 mins read </span>
+          <span class="more-meta"> 2288 words </span>
+          <span class="more-meta"> 5 mins read </span>
         
       </div>
     </header>
@@ -216,289 +216,118 @@
 <p>随着 <code>Android</code> 的发展，我们不能局限于应用层，在构建的过程我们也可以进行一些优化。今天就来学习一下 <code>Groovy</code> 这们语言。</p>
 <h2 id="安装">安装</h2>
 <p>安装很简单，我们可以从<a href="https://groovy.apache.org/download.html">Groovy官网</a>下载安装包，也可以通过包管理器来安装， <code>macOS</code> 下可以通过如下命令安装</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install groovy
-</span></span><span class="line"><span class="cl"><span class="c1"># 下面这条指令也可以，根据自己的系统选择一个常用的就行</span>
-</span></span><span class="line"><span class="cl">curl -s get.sdkman.io <span class="p">|</span> bash
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>安装好之后我们可以通过如下指令验证是否安装成功</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">groovy --version
-</span></span><span class="line"><span class="cl">Groovy Version: 3.0.3 JVM: 1.8.0_45 Vendor: Oracle Corporation OS: Mac OS X
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到输出了 <code>groovy</code> 的版本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>brew install groovy
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下面这条指令也可以，根据自己的系统选择一个常用的就行</span>
+</span></span><span style="display:flex;"><span>curl -s get.sdkman.io | bash
+</span></span></code></pre></div><p>安装好之后我们可以通过如下指令验证是否安装成功</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>groovy --version
+</span></span><span style="display:flex;"><span>Groovy Version: 3.0.3 JVM: 1.8.0_45 Vendor: Oracle Corporation OS: Mac OS X
+</span></span></code></pre></div><p>可以看到输出了 <code>groovy</code> 的版本。</p>
 <h2 id="基础语法">基础语法</h2>
 <h3 id="变量">变量</h3>
 <p>在 <code>groovy</code> 中声明变量有两种，一种是自动推导。编译器会根据你写的字面量去推导出合适的类型，自动推导的都是对象类型，不是基本数据类型。</p>
 <p>如果你要使用基本数据类型，就只能直接指定变量的类型。如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 自动推导
-</span></span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;groovy&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 指定变量类型
-</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">3</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">name</span><span class="o">.</span><span class="na">class</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">age</span><span class="o">.</span><span class="na">class</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">class java.lang.String
-</span></span><span class="line"><span class="cl">class java.lang.Integer
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到即便我们指定了变量的类型，最后还是会被装换成对象类型。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#75715e">// 自动推导
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;groovy&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 指定变量类型
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println name<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println age<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>class java.lang.String
+</span></span><span style="display:flex;"><span>class java.lang.Integer
+</span></span></code></pre></div><p>可以看到即便我们指定了变量的类型，最后还是会被装换成对象类型。</p>
 <p>这里还要一个地方要注意的就是，浮点数会被推导为 <code>BigDecimal</code> 而不是 <code>Double</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">pi</span><span class="o">.</span><span class="na">class</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">class java.math.BigDecimal
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="字符串">字符串</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> pi <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.14</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println pi<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span>
+</span></span></code></pre></div><p>输出如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>class java.math.BigDecimal
+</span></span></code></pre></div><h3 id="字符串">字符串</h3>
 <p><code>groovy</code> 中的字符串与 <code>Java</code> 中的不同，更像是 <code>Python</code> 中的字符串，支持单引号，双引号，三引号的写法。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">str1</span> <span class="o">=</span> <span class="s1">&#39;str1&#39;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">str2</span> <span class="o">=</span> <span class="s2">&#34;str2&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">str3</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;str3 line1
-</span></span></span><span class="line"><span class="cl"><span class="s1">str3 line2
-</span></span></span><span class="line"><span class="cl"><span class="s1">str3 line3&#39;&#39;&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">str4</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
-</span></span></span><span class="line"><span class="cl"><span class="s2">str4 line2
-</span></span></span><span class="line"><span class="cl"><span class="s2">str4 line3
-</span></span></span><span class="line"><span class="cl"><span class="s2">str4 line4
-</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">str1
-</span></span><span class="line"><span class="cl">str2
-</span></span><span class="line"><span class="cl">str3 line1
-</span></span><span class="line"><span class="cl">str3 line2
-</span></span><span class="line"><span class="cl">str3 line3
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">str4 line2
-</span></span><span class="line"><span class="cl">str4 line3
-</span></span><span class="line"><span class="cl">str4 line4
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>其中双引号可以支持在字符串中引用其他变量，这时候的类型为 <code>GStringImpl</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;groovy&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">3</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">info</span> <span class="o">=</span> <span class="s2">&#34;the ${name} age is: ${age}&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">info</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">info</span><span class="o">.</span><span class="na">class</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the groovy age is: <span class="m">3</span>
-</span></span><span class="line"><span class="cl">class org.codehaus.groovy.runtime.GStringImpl
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到通过 <code>$</code> 可以引用别的变量，这时候字符串的类型为 <code>org.codehaus.groovy.runtime.GStringImpl</code> 而不再是 <code>String</code> 了。它们之间可以相互赋值使用，不需要强制类型转换。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> str1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;str1&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> str2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;str2&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> str3 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;&#39;str3 line1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">str3 line2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">str3 line3&#39;&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> str4 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">str4 line2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">str4 line3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">str4 line4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span></code></pre></div><p>输出如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>str1
+</span></span><span style="display:flex;"><span>str2
+</span></span><span style="display:flex;"><span>str3 line1
+</span></span><span style="display:flex;"><span>str3 line2
+</span></span><span style="display:flex;"><span>str3 line3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>str4 line2
+</span></span><span style="display:flex;"><span>str4 line3
+</span></span><span style="display:flex;"><span>str4 line4
+</span></span></code></pre></div><p>其中双引号可以支持在字符串中引用其他变量，这时候的类型为 <code>GStringImpl</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;groovy&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> age <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> info <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;the ${name} age is: ${age}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println info
+</span></span><span style="display:flex;"><span>println info<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span>
+</span></span></code></pre></div><p>输出如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>the groovy age is: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>class org.codehaus.groovy.runtime.GStringImpl
+</span></span></code></pre></div><p>可以看到通过 <code>$</code> 可以引用别的变量，这时候字符串的类型为 <code>org.codehaus.groovy.runtime.GStringImpl</code> 而不再是 <code>String</code> 了。它们之间可以相互赋值使用，不需要强制类型转换。</p>
 <p>使用这种方式拼接字符串就很方便，非常直观，不用写一堆的 <code>+</code> 。这中方式也叫模板字符串。在 <code>${}</code> 中还可以进行求值计算。</p>
 <h3 id="闭包">闭包</h3>
 <h4 id="简单使用">简单使用</h4>
 <p>闭包和 <code>Java</code> 中的 <code>lambda</code> 表达式类似</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">closure</span> <span class="o">=</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;Hello Groovy Closure&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">closure</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">closure</span><span class="o">.</span><span class="na">call</span><span class="o">()</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="n">Hello</span> <span class="n">Groovy</span> <span class="n">Closure</span>
-</span></span><span class="line"><span class="cl"><span class="n">Hello</span> <span class="n">Groovy</span> <span class="n">Closure</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到闭包就像一个函数一样，可以通过函数调用也可以通过 <code>call()</code> 来调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> closure <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;Hello Groovy Closure&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>closure<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>closure<span style="color:#f92672">.</span><span style="color:#a6e22e">call</span><span style="color:#f92672">()</span>
+</span></span></code></pre></div><p>输出如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>Hello Groovy Closure
+</span></span><span style="display:flex;"><span>Hello Groovy Closure
+</span></span></code></pre></div><p>可以看到闭包就像一个函数一样，可以通过函数调用也可以通过 <code>call()</code> 来调用。</p>
 <h4 id="带有参数的闭包">带有参数的闭包</h4>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="c1">// 1 带有参数的闭包
-</span></span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">add</span> <span class="o">=</span> <span class="o">{</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="nf">add</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 参数有类型
-</span></span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">add1</span> <span class="o">=</span> <span class="o">{</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="nf">add</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 参数有返回值
-</span></span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">add2</span> <span class="o">=</span> <span class="o">{</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="nf">add2</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">increment</span> <span class="o">=</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">it</span> <span class="o">+</span> <span class="mi">1</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="nf">increment</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the add<span class="o">(</span>1,2<span class="o">)</span> result is: <span class="m">3</span>
-</span></span><span class="line"><span class="cl">the add1<span class="o">(</span>1,2<span class="o">)</span> result is: <span class="m">3</span>
-</span></span><span class="line"><span class="cl">the add2<span class="o">(</span>1,2<span class="o">)</span> result is: <span class="m">3</span>
-</span></span><span class="line"><span class="cl">the increment<span class="o">(</span>1<span class="o">)</span> result is: <span class="m">2</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>闭包的参数类型可以不指定，闭包的最后一行代码的执行结果默认会作为返回值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#75715e">// 1 带有参数的闭包
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> add <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> x<span style="color:#f92672">,</span> y <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">+</span> y
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println <span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 参数有类型
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> add1 <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#66d9ef">int</span> x<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> y <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">+</span> y
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println <span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 参数有返回值
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> add2 <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#66d9ef">int</span> x<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> y <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">+</span> y
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println <span style="color:#a6e22e">add2</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> increment <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    it <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println <span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span><span style="color:#ae81ff">1</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>the add<span style="color:#f92672">(</span>1,2<span style="color:#f92672">)</span> result is: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>the add1<span style="color:#f92672">(</span>1,2<span style="color:#f92672">)</span> result is: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>the add2<span style="color:#f92672">(</span>1,2<span style="color:#f92672">)</span> result is: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>the increment<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span> result is: <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>闭包的参数类型可以不指定，闭包的最后一行代码的执行结果默认会作为返回值。</p>
 <p>如果闭包只有一个参数，我们可以不指定参数名，闭包会提供一个 <code>it</code> 来代替。</p>
 <h4 id="闭包委托策略">闭包委托策略</h4>
 <p>闭包在 <code>groovy</code> 中也是一个对象，其类名是 <code>groovy.lang.Closure</code> 。闭包的委托策略是其独有的，再了解委托策略之前我们先来了解一下闭包中的 <code>this</code> 、 <code>owner</code> 、 <code>delegate</code></p>
@@ -508,222 +337,95 @@
 <li>delegate: 用来确定方法的调用者或者属性是哪个对象的，默认和 <code>owner</code> 一致。代表的是第三方对象，在这个第三方对象中你可以找到闭包中未定义的方法调用或者属性。</li>
 </ul>
 <p>先来看个例子</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">closure</span> <span class="o">=</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;this is:&#34;</span> <span class="o">+</span> <span class="k">this</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;owner is:&#34;</span> <span class="o">+</span> <span class="n">owner</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;delegate is:&#34;</span> <span class="o">+</span> <span class="n">delegate</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="kt">def</span> <span class="n">innerClosure</span> <span class="o">=</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s2">&#34;innerClosure this is:&#34;</span> <span class="o">+</span> <span class="k">this</span>
-</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s2">&#34;innerClosure owner is:&#34;</span> <span class="o">+</span> <span class="n">owner</span>
-</span></span><span class="line"><span class="cl">        <span class="n">println</span> <span class="s2">&#34;innerClosure delegate is:&#34;</span> <span class="o">+</span> <span class="n">delegate</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">innerClosure</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">closure</span><span class="o">()</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">this is:Main@7fcbe147
-</span></span><span class="line"><span class="cl">owner is:Main@7fcbe147
-</span></span><span class="line"><span class="cl">delegate is:Main@7fcbe147
-</span></span><span class="line"><span class="cl">innerClosure this is:Main@7fcbe147
-</span></span><span class="line"><span class="cl">innerClosure owner is:Main<span class="nv">$_run_closure1</span>@36b0fcd5
-</span></span><span class="line"><span class="cl">innerClosure delegate is:Main<span class="nv">$_run_closure1</span>@36b0fcd5
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到默认它们都指向同一个对象。当闭包嵌套的时候 <code>this</code> 与 <code>owner</code> 、 <code>delegate</code> 不同。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> closure <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;this is:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;owner is:&#34;</span> <span style="color:#f92672">+</span> owner
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;delegate is:&#34;</span> <span style="color:#f92672">+</span> delegate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> innerClosure <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        println <span style="color:#e6db74">&#34;innerClosure this is:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>
+</span></span><span style="display:flex;"><span>        println <span style="color:#e6db74">&#34;innerClosure owner is:&#34;</span> <span style="color:#f92672">+</span> owner
+</span></span><span style="display:flex;"><span>        println <span style="color:#e6db74">&#34;innerClosure delegate is:&#34;</span> <span style="color:#f92672">+</span> delegate
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    innerClosure<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>closure<span style="color:#f92672">()</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>this is:Main@7fcbe147
+</span></span><span style="display:flex;"><span>owner is:Main@7fcbe147
+</span></span><span style="display:flex;"><span>delegate is:Main@7fcbe147
+</span></span><span style="display:flex;"><span>innerClosure this is:Main@7fcbe147
+</span></span><span style="display:flex;"><span>innerClosure owner is:Main$_run_closure1@36b0fcd5
+</span></span><span style="display:flex;"><span>innerClosure delegate is:Main$_run_closure1@36b0fcd5
+</span></span></code></pre></div><p>可以看到默认它们都指向同一个对象。当闭包嵌套的时候 <code>this</code> 与 <code>owner</code> 、 <code>delegate</code> 不同。</p>
 <p>既然在嵌套的时候 <code>this</code> 与 <code>owner</code> 不同，那什么时候 <code>owner</code> 与 <code>delegate</code> 不同？</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">closure</span> <span class="o">=</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;this is:&#34;</span> <span class="o">+</span> <span class="k">this</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;owner is:&#34;</span> <span class="o">+</span> <span class="n">owner</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;delegate is:&#34;</span> <span class="o">+</span> <span class="n">delegate</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">closure</span><span class="o">.</span><span class="na">delegate</span> <span class="o">=</span> <span class="n">p</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">closure</span><span class="o">()</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">this is:Main@410ae9a3
-</span></span><span class="line"><span class="cl">owner is:Main@410ae9a3
-</span></span><span class="line"><span class="cl">delegate is:Person@25ddbbbb
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>delegate</code> 指向了 <code>Person</code> 对象并且 <code>delegate</code> 是可以被修改的，而 <code>this</code> 和 <code>owner</code> 则不可以被修改。那 <code>delegate</code> 有什么用呢？来看下面的例子</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">name</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">def</span> <span class="n">pretty</span> <span class="o">=</span> <span class="o">{</span> <span class="s2">&#34;My name is $name&#34;</span> <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pretty</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Thing</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">name</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;Groovy&#39;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thing</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;Java&#39;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">p</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="o">.</span><span class="na">pretty</span><span class="o">.</span><span class="na">delegate</span> <span class="o">=</span> <span class="n">t</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">p</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">My name is Groovy
-</span></span><span class="line"><span class="cl">My name is Groovy
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到我们改了 <code>pretty</code> 闭包的 <code>delegate</code> 但是并没有任何效果。这是因为 <code>delegate</code> 的默认策略是 <code>Closure.OWNER_FIRST</code> ，所以没有生效。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> closure <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;this is:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#66d9ef">this</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;owner is:&#34;</span> <span style="color:#f92672">+</span> owner
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;delegate is:&#34;</span> <span style="color:#f92672">+</span> delegate
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> p <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Person<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>closure<span style="color:#f92672">.</span><span style="color:#a6e22e">delegate</span> <span style="color:#f92672">=</span> p
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>closure<span style="color:#f92672">()</span>
+</span></span></code></pre></div><p>输出如下所示</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>this is:Main@410ae9a3
+</span></span><span style="display:flex;"><span>owner is:Main@410ae9a3
+</span></span><span style="display:flex;"><span>delegate is:Person@25ddbbbb
+</span></span></code></pre></div><p><code>delegate</code> 指向了 <code>Person</code> 对象并且 <code>delegate</code> 是可以被修改的，而 <code>this</code> 和 <code>owner</code> 则不可以被修改。那 <code>delegate</code> 有什么用呢？来看下面的例子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    String name
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> pretty <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;My name is $name&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    String <span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        pretty<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Thing</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    String name
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> p <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>name: <span style="color:#e6db74">&#39;Groovy&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> t <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Thing<span style="color:#f92672">(</span>name: <span style="color:#e6db74">&#39;Java&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println p<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span><span style="color:#a6e22e">pretty</span><span style="color:#f92672">.</span><span style="color:#a6e22e">delegate</span> <span style="color:#f92672">=</span> t
+</span></span><span style="display:flex;"><span>println p<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>My name is Groovy
+</span></span><span style="display:flex;"><span>My name is Groovy
+</span></span></code></pre></div><p>可以看到我们改了 <code>pretty</code> 闭包的 <code>delegate</code> 但是并没有任何效果。这是因为 <code>delegate</code> 的默认策略是 <code>Closure.OWNER_FIRST</code> ，所以没有生效。</p>
 <p>我们可以通过更改 <code>delegate</code> 的 <code>resolveStrategy</code> 为 <code>Closure.DELEGATE_FIRST</code> 来使其生效</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">name</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">def</span> <span class="n">pretty</span> <span class="o">=</span> <span class="o">{</span> <span class="s2">&#34;My name is $name&#34;</span> <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">pretty</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Thing</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">name</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;Groovy&#39;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thing</span><span class="o">(</span><span class="nl">name:</span> <span class="s1">&#39;Java&#39;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">p</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="o">.</span><span class="na">pretty</span><span class="o">.</span><span class="na">delegate</span> <span class="o">=</span> <span class="n">t</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 修改 delegate 策略
-</span></span></span><span class="line"><span class="cl"><span class="n">p</span><span class="o">.</span><span class="na">pretty</span><span class="o">.</span><span class="na">resolveStrategy</span> <span class="o">=</span> <span class="n">Closure</span><span class="o">.</span><span class="na">DELEGATE_FIRST</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">p</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">My name is Groovy
-</span></span><span class="line"><span class="cl">My name is Java
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这次更改就生效了。
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    String name
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> pretty <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;My name is $name&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    String <span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        pretty<span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Thing</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    String name
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> p <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>name: <span style="color:#e6db74">&#39;Groovy&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> t <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Thing<span style="color:#f92672">(</span>name: <span style="color:#e6db74">&#39;Java&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println p<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span><span style="color:#a6e22e">pretty</span><span style="color:#f92672">.</span><span style="color:#a6e22e">delegate</span> <span style="color:#f92672">=</span> t
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 修改 delegate 策略
+</span></span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span><span style="color:#a6e22e">pretty</span><span style="color:#f92672">.</span><span style="color:#a6e22e">resolveStrategy</span> <span style="color:#f92672">=</span> Closure<span style="color:#f92672">.</span><span style="color:#a6e22e">DELEGATE_FIRST</span>
+</span></span><span style="display:flex;"><span>println p<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>My name is Groovy
+</span></span><span style="display:flex;"><span>My name is Java
+</span></span></code></pre></div><p>这次更改就生效了。
 <code>resolveStrategy</code> 可以有如下几种策略</p>
 <ul>
 <li><code>Closure.OWNER_FIRST</code> 默认为这个策略，先从 <code>owner</code> 中找属性或方法，找不到再从 <code>delegete</code> 中寻找。</li>
@@ -735,207 +437,93 @@
 <h2 id="集合">集合</h2>
 <p>在 <code>groovy</code> 中对 <code>Java</code> 的集合做了不少的加强，使得使用起来更加方便。</p>
 <h3 id="list">List</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">list</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">list1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="s2">&#34;a&#34;</span><span class="o">,</span> <span class="kc">true</span><span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the list is: ${list}&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;ths list1 is: ${list1}&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 默认是 ArrayList
-</span></span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the list class is: ${list.class}&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 往 list 中添加元素
-</span></span></span><span class="line"><span class="cl"><span class="n">list</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the list after add is: ${list}&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取 list 中某个区间
-</span></span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the list[0,2] is: ${list[0..2]}&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取 list 中指定位置的值
-</span></span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the list[0,2] is: ${list[0,2]}&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the list is: <span class="o">[</span>1, 2, 3, 4, 5, 6<span class="o">]</span>
-</span></span><span class="line"><span class="cl">ths list1 is: <span class="o">[</span>1, a, true<span class="o">]</span>
-</span></span><span class="line"><span class="cl">the list class is: class java.util.ArrayList
-</span></span><span class="line"><span class="cl">the list after add is: <span class="o">[</span>1, 2, 3, 4, 5, 6, 7<span class="o">]</span>
-</span></span><span class="line"><span class="cl">the list<span class="o">[</span>0,2<span class="o">]</span> is: <span class="o">[</span>1, 2, 3<span class="o">]</span>
-</span></span><span class="line"><span class="cl">the list<span class="o">[</span>0,2<span class="o">]</span> is: <span class="o">[</span>1, 3<span class="o">]</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>其中 <code>&lt;&lt;</code> 是添加元素的语法糖，重载了左移操作符。其他和 <code>ArrayList</code> 的操作类似。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> list <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">4</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">5</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">6</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> list1 <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the list is: ${list}&#34;</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;ths list1 is: ${list1}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 默认是 ArrayList
+</span></span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the list class is: ${list.class}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 往 list 中添加元素
+</span></span></span><span style="display:flex;"><span>list <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the list after add is: ${list}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取 list 中某个区间
+</span></span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the list[0,2] is: ${list[0..2]}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取 list 中指定位置的值
+</span></span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the list[0,2] is: ${list[0,2]}&#34;</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>the list is: <span style="color:#f92672">[</span>1, 2, 3, 4, 5, 6<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>ths list1 is: <span style="color:#f92672">[</span>1, a, true<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>the list class is: class java.util.ArrayList
+</span></span><span style="display:flex;"><span>the list after add is: <span style="color:#f92672">[</span>1, 2, 3, 4, 5, 6, 7<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>the list<span style="color:#f92672">[</span>0,2<span style="color:#f92672">]</span> is: <span style="color:#f92672">[</span>1, 2, 3<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>the list<span style="color:#f92672">[</span>0,2<span style="color:#f92672">]</span> is: <span style="color:#f92672">[</span>1, 3<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>其中 <code>&lt;&lt;</code> 是添加元素的语法糖，重载了左移操作符。其他和 <code>ArrayList</code> 的操作类似。</p>
 <p>还要一个要注意的是，在 <code>List</code> 中可以添加任意类型的元素。</p>
 <h3 id="map">Map</h3>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">map</span> <span class="o">=</span> <span class="o">[</span><span class="nl">a:</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">b:</span> <span class="mi">2</span><span class="o">,</span> <span class="nl">c:</span> <span class="mi">3</span><span class="o">]</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the a in map is: ${map[&#39;a&#39;]}&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;the a in map is: ${map.a}&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 添加元素
-</span></span></span><span class="line"><span class="cl"><span class="n">map</span><span class="o">[</span><span class="s1">&#39;d&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="mi">4</span>
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="s2">&#34;after add map is: ${map}&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 遍历
-</span></span></span><span class="line"><span class="cl"><span class="n">map</span><span class="o">.</span><span class="na">each</span> <span class="o">{</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;${key}:${value}&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="o">.</span><span class="na">eachWithIndex</span> <span class="o">{</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">index</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="s2">&#34;the $index is $key : $value&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">the a in map is: <span class="m">1</span>
-</span></span><span class="line"><span class="cl">the a in map is: <span class="m">1</span>
-</span></span><span class="line"><span class="cl">after add map is: <span class="o">[</span>a:1, b:2, c:3, d:4<span class="o">]</span>
-</span></span><span class="line"><span class="cl">a:1
-</span></span><span class="line"><span class="cl">b:2
-</span></span><span class="line"><span class="cl">c:3
-</span></span><span class="line"><span class="cl">d:4
-</span></span><span class="line"><span class="cl">the <span class="m">0</span> is a : <span class="m">1</span>
-</span></span><span class="line"><span class="cl">the <span class="m">1</span> is b : <span class="m">2</span>
-</span></span><span class="line"><span class="cl">the <span class="m">2</span> is c : <span class="m">3</span>
-</span></span><span class="line"><span class="cl">the <span class="m">3</span> is d : <span class="m">4</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>Map</code> 中主要的变化就是使用 <code>:</code> 来区分键值对。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> map <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>a: <span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> b: <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> c: <span style="color:#ae81ff">3</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the a in map is: ${map[&#39;a&#39;]}&#34;</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;the a in map is: ${map.a}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 添加元素
+</span></span></span><span style="display:flex;"><span>map<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;d&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#34;after add map is: ${map}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 遍历
+</span></span></span><span style="display:flex;"><span>map<span style="color:#f92672">.</span><span style="color:#a6e22e">each</span> <span style="color:#f92672">{</span> key<span style="color:#f92672">,</span> value <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;${key}:${value}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>map<span style="color:#f92672">.</span><span style="color:#a6e22e">eachWithIndex</span> <span style="color:#f92672">{</span> key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span> index <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    println <span style="color:#e6db74">&#34;the $index is $key : $value&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>the a in map is: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>the a in map is: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>after add map is: <span style="color:#f92672">[</span>a:1, b:2, c:3, d:4<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>a:1
+</span></span><span style="display:flex;"><span>b:2
+</span></span><span style="display:flex;"><span>c:3
+</span></span><span style="display:flex;"><span>d:4
+</span></span><span style="display:flex;"><span>the <span style="color:#ae81ff">0</span> is a : <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>the <span style="color:#ae81ff">1</span> is b : <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>the <span style="color:#ae81ff">2</span> is c : <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>the <span style="color:#ae81ff">3</span> is d : <span style="color:#ae81ff">4</span>
+</span></span></code></pre></div><p><code>Map</code> 中主要的变化就是使用 <code>:</code> 来区分键值对。</p>
 <h2 id="文件操作">文件操作</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-groovy" data-lang="groovy"><span class="line"><span class="cl"><span class="kt">def</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="s1">&#39;./test.groovy&#39;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 写文件
-</span></span></span><span class="line"><span class="cl"><span class="n">file</span><span class="o">.</span><span class="na">createNewFile</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">file</span><span class="o">.</span><span class="na">withWriter</span> <span class="o">{</span> <span class="n">writer</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">writer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s2">&#34;println &#39;Hello Groovy&#39;&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 读文件
-</span></span></span><span class="line"><span class="cl"><span class="n">file</span><span class="o">.</span><span class="na">eachLine</span> <span class="o">{</span> <span class="n">line</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">println</span> <span class="n">line</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">file</span><span class="o">.</span><span class="na">getText</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取每一行，返回是个数组
-</span></span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">file</span><span class="o">.</span><span class="na">readLines</span><span class="o">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">println</span> <span class="n">file</span><span class="o">.</span><span class="na">withReader</span> <span class="o">{</span> <span class="n">reader</span> <span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="mi">100</span><span class="o">]</span>
-</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">buffer</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">println <span class="s1">&#39;Hello Groovy&#39;</span>
-</span></span><span class="line"><span class="cl">println <span class="s1">&#39;Hello Groovy&#39;</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span>println <span class="s1">&#39;Hello Groovy&#39;</span><span class="o">]</span>
-</span></span><span class="line"><span class="cl">println <span class="s1">&#39;Hello Groovy&#39;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>在 <code>groovy</code> 中操作文件比在 <code>Java</code> 中方便许多。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> file <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;./test.groovy&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 写文件
+</span></span></span><span style="display:flex;"><span>file<span style="color:#f92672">.</span><span style="color:#a6e22e">createNewFile</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>file<span style="color:#f92672">.</span><span style="color:#a6e22e">withWriter</span> <span style="color:#f92672">{</span> writer <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    writer<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;println &#39;Hello Groovy&#39;&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 读文件
+</span></span></span><span style="display:flex;"><span>file<span style="color:#f92672">.</span><span style="color:#a6e22e">eachLine</span> <span style="color:#f92672">{</span> line <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    println line
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println file<span style="color:#f92672">.</span><span style="color:#a6e22e">getText</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取每一行，返回是个数组
+</span></span></span><span style="display:flex;"><span>println file<span style="color:#f92672">.</span><span style="color:#a6e22e">readLines</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>println file<span style="color:#f92672">.</span><span style="color:#a6e22e">withReader</span> <span style="color:#f92672">{</span> reader <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span><span style="color:#f92672">[]</span> buffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">[</span><span style="color:#ae81ff">100</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    reader<span style="color:#f92672">.</span><span style="color:#a6e22e">read</span><span style="color:#f92672">(</span>buffer<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> buffer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>输出结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>println <span style="color:#e6db74">&#39;Hello Groovy&#39;</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#39;Hello Groovy&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>println <span style="color:#e6db74">&#39;Hello Groovy&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>println <span style="color:#e6db74">&#39;Hello Groovy&#39;</span>
+</span></span></code></pre></div><p>在 <code>groovy</code> 中操作文件比在 <code>Java</code> 中方便许多。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="http://groovy-lang.org/closures.html">The Apache Groovy programming language - Closures</a></li>
@@ -962,6 +550,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/groovy/">Groovy</a>
@@ -1042,7 +632,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

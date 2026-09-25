@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/openssl/" />
@@ -38,62 +38,62 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/openssl/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="CMake OpenSSL 环境搭建">
-  <meta property="og:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="CMake OpenSSL 环境搭建">
+	<meta property="og:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-12-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-12-10T00:00:00+00:00">
-    <meta property="article:tag" content="OpenSSL">
-    <meta property="article:tag" content="CMake">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-12-10T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-12-10T00:00:00+00:00">
+		<meta property="article:tag" content="OpenSSL">
+		<meta property="article:tag" content="CMake">
 
-  <meta itemprop="name" content="CMake OpenSSL 环境搭建">
-  <meta itemprop="description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta itemprop="name" content="CMake OpenSSL 环境搭建">
+	<meta itemprop="description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
-  <meta itemprop="datePublished" content="2024-12-10T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-12-10T00:00:00+00:00">
-  <meta itemprop="wordCount" content="530">
-  <meta itemprop="keywords" content="OpenSSL,CMake">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="CMake OpenSSL 环境搭建">
-  <meta name="twitter:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta itemprop="datePublished" content="2024-12-10T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-12-10T00:00:00+00:00">
+	<meta itemprop="wordCount" content="477">
+	<meta itemprop="keywords" content="OpenSSL,CMake">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="CMake OpenSSL 环境搭建">
+	<meta name="twitter:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
  <meta property="og:url" content="http://devbins.github.io/post/openssl/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="CMake OpenSSL 环境搭建">
-  <meta property="og:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="CMake OpenSSL 环境搭建">
+	<meta property="og:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2024-12-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2024-12-10T00:00:00+00:00">
-    <meta property="article:tag" content="OpenSSL">
-    <meta property="article:tag" content="CMake">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2024-12-10T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-12-10T00:00:00+00:00">
+		<meta property="article:tag" content="OpenSSL">
+		<meta property="article:tag" content="CMake">
 
-  <meta itemprop="name" content="CMake OpenSSL 环境搭建">
-  <meta itemprop="description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta itemprop="name" content="CMake OpenSSL 环境搭建">
+	<meta itemprop="description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
-  <meta itemprop="datePublished" content="2024-12-10T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2024-12-10T00:00:00+00:00">
-  <meta itemprop="wordCount" content="530">
-  <meta itemprop="keywords" content="OpenSSL,CMake">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="CMake OpenSSL 环境搭建">
-  <meta name="twitter:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
+	<meta itemprop="datePublished" content="2024-12-10T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2024-12-10T00:00:00+00:00">
+	<meta itemprop="wordCount" content="477">
+	<meta itemprop="keywords" content="OpenSSL,CMake">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="CMake OpenSSL 环境搭建">
+	<meta name="twitter:description" content="前言 加密在开发中是必不可少的，然而加密的三方库中 OpenSSL 是不可忽视的存在，基本上哪里都有它。
 它是一个开源的加密工具，实现了各种算法，比如：消息摘要，对称加密、非对称加密等等。
 接下来就来了解一下使用 CMake 配合 OpenSSL 进行各种加密。">
 
@@ -180,8 +180,8 @@
             <a href="../../categories/openssl/"> OpenSSL </a>
             <a href="../../categories/cmake/"> CMake </a>
             </div>
-          <span class="more-meta"> 530 words </span>
-          <span class="more-meta"> 2 mins read </span>
+          <span class="more-meta"> 477 words </span>
+          <span class="more-meta"> 1 min read </span>
         
       </div>
     </header>
@@ -208,172 +208,71 @@
 <p>接下来就来了解一下使用 <code>CMake</code> 配合 <code>OpenSSL</code> 进行各种加密。</p>
 <h2 id="安装">安装</h2>
 <p>我使用的是 <code>Mac</code> ，所以安装比较容易，使用 <code>HomeBrew</code> 就可以了</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">brew install openssl
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="配置项目">配置项目</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>brew install openssl
+</span></span></code></pre></div><h2 id="配置项目">配置项目</h2>
 <p>创建一个 <code>CMake</code> 项目</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir demo <span class="o">&amp;&amp;</span> <span class="nb">cd</span> demo
-</span></span><span class="line"><span class="cl">touch CMakeLists.txt
-</span></span><span class="line"><span class="cl">touch main.cpp
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>CMakeLists.txt</code> 内容如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.10.2</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">APP_NAME</span> <span class="s">openssl_demo</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="o">${</span><span class="nv">APP_NAME</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c"># 查找 OpenSSL 包
-</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenSSL</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">if</span> <span class="p">(</span><span class="s">OPENSSL_FOUND</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;Found OpenSSL: ${OPENSSL_VERSION}&#34;</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">else</span><span class="p">()</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="nb">message</span><span class="p">(</span><span class="s">FATAL_ERROR</span> <span class="s2">&#34;Could not find OpenSSL&#34;</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c"># Add sources
-</span></span></span><span class="line"><span class="cl"><span class="nb">file</span><span class="p">(</span><span class="s">GLOB</span> <span class="s">SOURCES</span> <span class="s">CONFIGURE_DEPENDS</span>
-</span></span><span class="line"><span class="cl">  <span class="s2">&#34;${PROJECT_SOURCE_DIR}/main.cpp&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">APP_NAME</span><span class="o">}</span> <span class="o">${</span><span class="nv">SOURCES</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c"># 包含 OpenSSL 头文件路径
-</span></span></span><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">APP_NAME</span><span class="o">}</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">OPENSSL_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c"># 链接 OpenSSL 库
-</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">APP_NAME</span><span class="o">}</span> <span class="s">PRIVATE</span> <span class="s">OpenSSL::Crypto</span> <span class="s">OpenSSL::SSL</span><span class="p">)</span><span class="err">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>内容还是比较简单的，简单的配置了一下，然后把 <code>OpenSSL</code> 链接到程序里。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>mkdir demo <span style="color:#f92672">&amp;&amp;</span> cd demo
+</span></span><span style="display:flex;"><span>touch CMakeLists.txt
+</span></span><span style="display:flex;"><span>touch main.cpp
+</span></span></code></pre></div><p><code>CMakeLists.txt</code> 内容如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cmake" data-lang="cmake"><span style="display:flex;"><span>cmake_minimum_required(<span style="color:#e6db74">VERSION</span> <span style="color:#e6db74">3.10.2</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>set(<span style="color:#e6db74">APP_NAME</span> <span style="color:#e6db74">openssl_demo</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>project(<span style="color:#f92672">${</span>APP_NAME<span style="color:#f92672">}</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>set(<span style="color:#e6db74">CMAKE_CXX_STANDARD</span> <span style="color:#e6db74">11</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># 查找 OpenSSL 包
+</span></span></span><span style="display:flex;"><span>find_package(<span style="color:#e6db74">OpenSSL</span> <span style="color:#e6db74">REQUIRED</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>if (<span style="color:#e6db74">OPENSSL_FOUND</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>    message(<span style="color:#e6db74">STATUS</span> <span style="color:#e6db74">&#34;Found OpenSSL: ${OPENSSL_VERSION}&#34;</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>else()<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>    message(<span style="color:#e6db74">FATAL_ERROR</span> <span style="color:#e6db74">&#34;Could not find OpenSSL&#34;</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>endif()<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Add sources
+</span></span></span><span style="display:flex;"><span>file(<span style="color:#e6db74">GLOB</span> <span style="color:#e6db74">SOURCES</span> <span style="color:#e6db74">CONFIGURE_DEPENDS</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;${PROJECT_SOURCE_DIR}/main.cpp&#34;</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span>add_executable(<span style="color:#f92672">${</span>APP_NAME<span style="color:#f92672">}</span> <span style="color:#f92672">${</span>SOURCES<span style="color:#f92672">}</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># 包含 OpenSSL 头文件路径
+</span></span></span><span style="display:flex;"><span>target_include_directories(<span style="color:#f92672">${</span>APP_NAME<span style="color:#f92672">}</span> <span style="color:#e6db74">PRIVATE</span> <span style="color:#f92672">${</span>OPENSSL_INCLUDE_DIRS<span style="color:#f92672">}</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># 链接 OpenSSL 库
+</span></span></span><span style="display:flex;"><span>target_link_libraries(<span style="color:#f92672">${</span>APP_NAME<span style="color:#f92672">}</span> <span style="color:#e6db74">PRIVATE</span> <span style="color:#e6db74">OpenSSL::Crypto</span> <span style="color:#e6db74">OpenSSL::SSL</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>内容还是比较简单的，简单的配置了一下，然后把 <code>OpenSSL</code> 链接到程序里。</p>
 <h2 id="查看-openssl-版本">查看 <code>OpenSSL</code> 版本</h2>
 <p>我们的代码在 <code>main.cpp</code> 里，内容如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;openssl/crypto.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">SSLeay_version</span><span class="p">(</span><span class="n">SSLEAY_VERSION</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>编译执行</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
-</span></span><span class="line"><span class="cl">cmake ..
-</span></span><span class="line"><span class="cl">make
-</span></span><span class="line"><span class="cl">./openssl_demo
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>最后输出如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">OpenSSL 3.4.0 <span class="m">22</span> Oct <span class="m">2024</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="顺便说一下不使用-cmake-的方式">顺便说一下不使用 <code>CMake</code> 的方式</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;openssl/crypto.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[]) {
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> SSLeay_version(SSLEAY_VERSION) <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>编译执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>mkdir build <span style="color:#f92672">&amp;&amp;</span> cd build
+</span></span><span style="display:flex;"><span>cmake ..
+</span></span><span style="display:flex;"><span>make
+</span></span><span style="display:flex;"><span>./openssl_demo
+</span></span></code></pre></div><p>最后输出如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>OpenSSL 3.4.0 <span style="color:#ae81ff">22</span> Oct <span style="color:#ae81ff">2024</span>
+</span></span></code></pre></div><h2 id="顺便说一下不使用-cmake-的方式">顺便说一下不使用 <code>CMake</code> 的方式</h2>
 <p><code>main.cpp</code> 的内容如下，稍微和上面的有点不一样</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;openssl/opensslv.h&gt;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">OPENSSL_VERSION_TEXT</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>编译执行</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">g++ main.cpp -lssl -lcrypto -I/opt/homebrew/opt/openssl/include -L/opt/homebrew/opt/openssl/lib
-</span></span><span class="line"><span class="cl">./a.out <span class="c1"># 没有指定名字默认是 a.out</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>结果和上面的一样，就不贴了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;openssl/opensslv.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[]) {
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> OPENSSL_VERSION_TEXT <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>编译执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>g++ main.cpp -lssl -lcrypto -I/opt/homebrew/opt/openssl/include -L/opt/homebrew/opt/openssl/lib
+</span></span><span style="display:flex;"><span>./a.out <span style="color:#75715e"># 没有指定名字默认是 a.out</span>
+</span></span></code></pre></div><p>结果和上面的一样，就不贴了。</p>
 <p>这里直接指定了 <code>OpenSSL</code> 的头文件的库的地址，不然会找不到，每个人的路径可能不一样要注意改成自己的。</p>
 <h2 id="总结">总结</h2>
 <p><code>OpenSSL</code> 还是非常重要的，不要求你会实现加解密的算法，但是使用还是要会的。</p>
@@ -397,6 +296,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/openssl/">OpenSSL</a>
@@ -478,7 +379,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

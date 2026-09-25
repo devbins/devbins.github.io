@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/c_mem_leak/" />
@@ -37,55 +37,55 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/c_mem_leak/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta property="og:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta property="og:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2022-08-07T00:00:00+00:00">
-    <meta property="article:modified_time" content="2022-08-07T00:00:00+00:00">
-    <meta property="article:tag" content="C/C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2022-08-07T00:00:00+00:00">
+		<meta property="article:modified_time" content="2022-08-07T00:00:00+00:00">
+		<meta property="article:tag" content="C/C&#43;&#43;">
 
-  <meta itemprop="name" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta itemprop="description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta itemprop="name" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta itemprop="description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
-  <meta itemprop="datePublished" content="2022-08-07T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2022-08-07T00:00:00+00:00">
-  <meta itemprop="wordCount" content="1435">
-  <meta itemprop="keywords" content="C/C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta name="twitter:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta itemprop="datePublished" content="2022-08-07T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2022-08-07T00:00:00+00:00">
+	<meta itemprop="wordCount" content="1322">
+	<meta itemprop="keywords" content="C/C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta name="twitter:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
  <meta property="og:url" content="http://devbins.github.io/post/c_mem_leak/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta property="og:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta property="og:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2022-08-07T00:00:00+00:00">
-    <meta property="article:modified_time" content="2022-08-07T00:00:00+00:00">
-    <meta property="article:tag" content="C/C&#43;&#43;">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2022-08-07T00:00:00+00:00">
+		<meta property="article:modified_time" content="2022-08-07T00:00:00+00:00">
+		<meta property="article:tag" content="C/C&#43;&#43;">
 
-  <meta itemprop="name" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta itemprop="description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta itemprop="name" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta itemprop="description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
-  <meta itemprop="datePublished" content="2022-08-07T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2022-08-07T00:00:00+00:00">
-  <meta itemprop="wordCount" content="1435">
-  <meta itemprop="keywords" content="C/C&#43;&#43;">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C/C&#43;&#43; 内存泄漏检测">
-  <meta name="twitter:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
+	<meta itemprop="datePublished" content="2022-08-07T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2022-08-07T00:00:00+00:00">
+	<meta itemprop="wordCount" content="1322">
+	<meta itemprop="keywords" content="C/C&#43;&#43;">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="C/C&#43;&#43; 内存泄漏检测">
+	<meta name="twitter:description" content="前言 在上一篇文章中我们讲了使用LeakCanary 内存泄漏检测的原理，但是它只能检测 Java 层的泄漏，对 C/C&#43;&#43; 并没有办法。
 所以这篇文章来聊一聊如何检测 C/C&#43;&#43; 内存泄漏。">
 
 <!--[if lte IE 9]>
@@ -170,7 +170,7 @@
         <div class="post-category">
             <a href="../../categories/c/c&#43;&#43;/"> C/C&#43;&#43; </a>
             </div>
-          <span class="more-meta"> 1435 words </span>
+          <span class="more-meta"> 1322 words </span>
           <span class="more-meta"> 3 mins read </span>
         
       </div>
@@ -215,287 +215,132 @@
 <h3 id="数据结构">数据结构</h3>
 <p>在 <code>hook</code> 之前我们需要定义一下要保存的数据结构，用来在程序最后去检测还有哪些内存没有被释放。</p>
 <p>我们需要记录分配的地址、分配的大小(用于提示泄漏了多大)，发生泄漏代码所在文件和函数，结构如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span> <span class="c1">// 记录内存分配的地址，如果为 NULL 表示已经释放了，不为 NULL 就发生了泄漏
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">size</span><span class="p">;</span> <span class="c1">// 分配了多大空间
-</span></span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">;</span> <span class="c1">// 内存分配所在的文件
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">line</span><span class="p">;</span> <span class="c1">// 内存分配所在的行数
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">Mem</span><span class="p">;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>然后我们还要创建一个数组来保存这些记录</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#define SIZE 100
-</span></span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">Mem</span> <span class="n">memorys</span><span class="p">[</span><span class="n">SIZE</span><span class="p">];</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="hook-malloc">hook malloc</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>p; <span style="color:#75715e">// 记录内存分配的地址，如果为 NULL 表示已经释放了，不为 NULL 就发生了泄漏
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> size; <span style="color:#75715e">// 分配了多大空间
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>file; <span style="color:#75715e">// 内存分配所在的文件
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> line; <span style="color:#75715e">// 内存分配所在的行数
+</span></span></span><span style="display:flex;"><span>} Mem;
+</span></span></code></pre></div><p>然后我们还要创建一个数组来保存这些记录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#define SIZE 100
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> Mem memorys[SIZE];
+</span></span></code></pre></div><h3 id="hook-malloc">hook malloc</h3>
 <p>接下来我们要对 <code>malloc</code> 进行 <code>hook</code> ，我们通过一个 <code>MALLOC</code> 宏函数来实现，它会记录到上面的数据结构中</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#define MALLOC(n) mallocHook(n, __FILE__, __LINE__)
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="nf">mallocHook</span><span class="p">(</span><span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">file</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">line</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="o">*</span><span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">=</span> <span class="n">ret</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这里实现比较简单，我们使用 <code>MALLOC</code> 替换成 <code>mallocHook</code> ，里面主要调用了 <code>malloc</code> 进行内存分配，然后把地址、大小、文件和函数给记录下来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#define MALLOC(n) mallocHook(n, __FILE__, __LINE__)
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">mallocHook</span>(size_t size, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>file, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> line) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>ret <span style="color:#f92672">=</span> malloc(size);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (ret <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">==</span> NULL) {
+</span></span><span style="display:flex;"><span>        memorys[i].p <span style="color:#f92672">=</span> ret;
+</span></span><span style="display:flex;"><span>        memorys[i].size <span style="color:#f92672">=</span> size;
+</span></span><span style="display:flex;"><span>        memorys[i].file <span style="color:#f92672">=</span> file;
+</span></span><span style="display:flex;"><span>        memorys[i].line <span style="color:#f92672">=</span> line;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> ret;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里实现比较简单，我们使用 <code>MALLOC</code> 替换成 <code>mallocHook</code> ，里面主要调用了 <code>malloc</code> 进行内存分配，然后把地址、大小、文件和函数给记录下来。</p>
 <h3 id="hook-free">hook free</h3>
 <p>讲完了内存分配，来聊一聊内存的释放，释放也是通过 <code>FREE</code> 这个宏来实现的。</p>
 <p>在释放的代码中，我们从记录的数组中找出地址相同的一个，然后把内容清空掉，表示这个被释放了，然后调用 <code>free</code> 来释放内存。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#define FREE(p) freeHook(p)
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">freeHook</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="打印内存泄漏">打印内存泄漏</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#define FREE(p) freeHook(p)
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">freeHook</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>p) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (p <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">==</span> p) {
+</span></span><span style="display:flex;"><span>        memorys[i].p <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>        memorys[i].size <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        memorys[i].file <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>        memorys[i].line <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        free(p);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="打印内存泄漏">打印内存泄漏</h3>
 <p>在程序结束后，我们需要检测我们记录的数组中还有哪些没有释放的，这些就是发生泄漏的，我们需要把它打印出来，这样就可以知道哪里发生了泄漏</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printLeak</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;addr: %p, size: %d, Location: %s:%d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">             <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>实现比较简单，就是遍历数组，找到地址不为 <code>NULL</code> 的，然后打印出来。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printLeak</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>      printf(<span style="color:#e6db74">&#34;addr: %p, size: %d, Location: %s:%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, memorys[i].p,
+</span></span><span style="display:flex;"><span>             memorys[i].size, memorys[i].file, memorys[i].line);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>实现比较简单，就是遍历数组，找到地址不为 <code>NULL</code> 的，然后打印出来。</p>
 <h2 id="完整代码">完整代码</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;stdio.h&gt;
-</span></span></span><span class="line"><span class="cl"><span class="cp">#include&lt;stdlib.h&gt;
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="cp">#define SIZE 100
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define MALLOC(n) mallocHook(n, __FILE__, __LINE__)
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define FREE(p) freeHook(p)
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span><span class="o">*</span> <span class="n">p</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">line</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">Mem</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">Mem</span> <span class="n">memorys</span><span class="p">[</span><span class="n">SIZE</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="nf">mallocHook</span><span class="p">(</span><span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span><span class="k">const</span> <span class="kt">int</span> <span class="n">line</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">=</span> <span class="n">ret</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">freeHook</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">                <span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">printLeak</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">printf</span><span class="p">(</span><span class="s">&#34;addr: %p, size: %d, Location: %s:%d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">file</span><span class="p">,</span> <span class="n">memorys</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">line</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span><span class="o">*</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">MALLOC</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span><span class="o">*</span> <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">MALLOC</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">    <span class="n">FREE</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printLeak</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>执行结果如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">addr: 0x6000006e4050, size: 4, Location: main.c:59
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看到我们调用 <code>MALLOC</code> 分配了两个内存，然后用 <code>FREE</code> 释放了 <code>p1</code> ， <code>p2</code> 没有释放，所以最后打印出了 <code>p2</code> 没有被释放。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include&lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include&lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define SIZE 100
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define MALLOC(n) mallocHook(n, __FILE__, __LINE__)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define FREE(p) freeHook(p)
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> p;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> size;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> file;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> line;
+</span></span><span style="display:flex;"><span>} Mem;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> Mem memorys[SIZE];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">mallocHook</span>(size_t size, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> file,<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> line) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> ret <span style="color:#f92672">=</span> malloc(size);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (ret <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">==</span> NULL) {
+</span></span><span style="display:flex;"><span>                memorys[i].p <span style="color:#f92672">=</span> ret;
+</span></span><span style="display:flex;"><span>                memorys[i].size <span style="color:#f92672">=</span> size;
+</span></span><span style="display:flex;"><span>                memorys[i].file <span style="color:#f92672">=</span> file;
+</span></span><span style="display:flex;"><span>                memorys[i].line <span style="color:#f92672">=</span> line;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ret;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">freeHook</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> p) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (p <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">==</span> p) {
+</span></span><span style="display:flex;"><span>                memorys[i].p <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>                memorys[i].size <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>                memorys[i].file <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>                memorys[i].line <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>                free(p);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printLeak</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> SIZE; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (memorys[i].p <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#e6db74">&#34;addr: %p, size: %d, Location: %s:%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, memorys[i].p, memorys[i].size, memorys[i].file, memorys[i].line);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>argv[])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> p1 <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)MALLOC(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> p2 <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)MALLOC(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">int</span>));
+</span></span><span style="display:flex;"><span>    FREE(p1);
+</span></span><span style="display:flex;"><span>    printLeak();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行结果如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>addr: 0x6000006e4050, size: 4, Location: main.c:59
+</span></span></code></pre></div><p>可以看到我们调用 <code>MALLOC</code> 分配了两个内存，然后用 <code>FREE</code> 释放了 <code>p1</code> ， <code>p2</code> 没有释放，所以最后打印出了 <code>p2</code> 没有被释放。</p>
 <h2 id="总结">总结</h2>
 <p><code>C/C++</code> 内存泄漏的检测主要是通过 <code>hook</code> 内存的分配和释放，也就是一系列 <code>malloc</code> 函数和 <code>free</code> 。</p>
 <p>在内存分配的时候进行记录，然后在释放的时候清除记录，最后把没有清除掉的打印出来，就是发生了内存泄漏的。</p>
@@ -519,6 +364,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/c/c&#43;&#43;/">C/C&#43;&#43;</a>
@@ -599,7 +446,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.154.0 with theme even" />
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
 
 
 <link rel="canonical" href="http://devbins.github.io/post/gin_embed/" />
@@ -36,52 +36,52 @@
 
 
 
-<link href="../../sass/main.min.d97d1cfbcf69d3b0ef05584c067741a5ed8f13c6065f6374535c8ce9aab37245.css" rel="stylesheet">
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:tag" content="Go">
-    <meta property="article:tag" content="Gin">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
+	<meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
+		<meta property="article:tag" content="Go">
+		<meta property="article:tag" content="Gin">
 
-  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
-  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="387">
-  <meta itemprop="keywords" content="Go,Gin">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
+	<meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="374">
+	<meta itemprop="keywords" content="Go,Gin">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
+	<meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
  <meta property="og:url" content="http://devbins.github.io/post/gin_embed/">
-  <meta property="og:site_name" content="devbins blog">
-  <meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
-    <meta property="article:tag" content="Go">
-    <meta property="article:tag" content="Gin">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="Gin 嵌入静态资源与路由冲突">
+	<meta property="og:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2025-03-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2025-03-27T00:00:00+00:00">
+		<meta property="article:tag" content="Go">
+		<meta property="article:tag" content="Gin">
 
-  <meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
-  <meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
-  <meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
-  <meta itemprop="wordCount" content="387">
-  <meta itemprop="keywords" content="Go,Gin">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
-  <meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta itemprop="name" content="Gin 嵌入静态资源与路由冲突">
+	<meta itemprop="description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
+	<meta itemprop="datePublished" content="2025-03-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2025-03-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="374">
+	<meta itemprop="keywords" content="Go,Gin">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Gin 嵌入静态资源与路由冲突">
+	<meta name="twitter:description" content="前言 上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -166,7 +166,7 @@
             <a href="../../categories/go/"> Go </a>
             <a href="../../categories/gin/"> Gin </a>
             </div>
-          <span class="more-meta"> 387 words </span>
+          <span class="more-meta"> 374 words </span>
           <span class="more-meta"> 1 min read </span>
         
       </div>
@@ -190,27 +190,14 @@
 <p>上一篇文章讲了如何嵌入网页，但是在使用的时候碰到了路由冲突。</p>
 <h2 id="冲突">冲突</h2>
 <p>先来看下代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="cp">//go:embed dist</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">fp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;dist&#34;</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">fp</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>我们把网页内容绑定到了 <code>/</code> ，内容显示正常。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//go:embed dist</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Default</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fp</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">Sub</span>(<span style="color:#a6e22e">f</span>, <span style="color:#e6db74">&#34;dist&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">StaticFS</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">fp</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>)
+</span></span></code></pre></div><p>我们把网页内容绑定到了 <code>/</code> ，内容显示正常。</p>
 <p>但是这样做的后果就是所有的 <code>GET</code> 请求都会被 <code>/</code> 捕获，这时候使用 <code>GET</code> 绑定路由就会报错了。</p>
 <p>一种解法是不使用 <code>GET</code> ，虽然能解决问题，但是很别扭也很不优雅。</p>
 <p>另一种是把嵌入的网页内容绑定到一个特殊的路由，比如 <code>public</code> 或者 <code>static</code> 等等。这样就不会污染 <code>GET</code> 路由了。</p>
@@ -219,25 +206,13 @@
 <h2 id="解决冲突">解决冲突</h2>
 <p>找了一圈在<a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a>中找到一个不错办法，就是通过把 <code>404</code> 错误重新定位到内嵌文件中</p>
 <p>如下所示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="cp">//go:embed dist</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="nx">embed</span><span class="p">.</span><span class="nx">FS</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">router</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">StaticFS</span><span class="p">(</span><span class="s">&#34;/public&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">NoRoute</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">WrapH</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">FS</span><span class="p">(</span><span class="nx">dist</span><span class="p">))))</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>这样就能够解决问题了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//go:embed dist</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">router</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Default</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">StaticFS</span>(<span style="color:#e6db74">&#34;/public&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">dist</span>))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">NoRoute</span>(<span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">WrapH</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">dist</span>))))
+</span></span></code></pre></div><p>这样就能够解决问题了。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://www.dbkuaizi.com/archives/377.html">Gin + go:embed 实现静态资源嵌入 - 两双筷子</a></li>
@@ -262,6 +237,8 @@
     <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
   </p>
 </div>
+
+
 <footer class="post-footer">
       <div class="post-tags">
           <a href="../../tags/go/">Go</a>
@@ -343,7 +320,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
