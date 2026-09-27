@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>彻底禁用 Emacs Plus Native Compile - devbins blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。
+" /><meta name="keywords" content="devbins, Emacs, ArchLinux" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.166.0 with theme even" />
+
+
+<link rel="canonical" href="http://devbins.github.io/post/disableemacsplusnativecompile/" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+<link rel="manifest" href="../../manifest.json">
+<link rel="mask-icon" href="../../safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="../../sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="http://devbins.github.io/post/disableemacsplusnativecompile/">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="彻底禁用 Emacs Plus Native Compile">
+	<meta property="og:description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2026-09-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2026-09-27T00:00:00+00:00">
+		<meta property="article:tag" content="Native-Compile">
+
+	<meta itemprop="name" content="彻底禁用 Emacs Plus Native Compile">
+	<meta itemprop="description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+	<meta itemprop="datePublished" content="2026-09-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2026-09-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="296">
+	<meta itemprop="keywords" content="Native-Compile">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="彻底禁用 Emacs Plus Native Compile">
+	<meta name="twitter:description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+ <meta property="og:url" content="http://devbins.github.io/post/disableemacsplusnativecompile/">
+	<meta property="og:site_name" content="devbins blog">
+	<meta property="og:title" content="彻底禁用 Emacs Plus Native Compile">
+	<meta property="og:description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2026-09-27T00:00:00+00:00">
+		<meta property="article:modified_time" content="2026-09-27T00:00:00+00:00">
+		<meta property="article:tag" content="Native-Compile">
+
+	<meta itemprop="name" content="彻底禁用 Emacs Plus Native Compile">
+	<meta itemprop="description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+	<meta itemprop="datePublished" content="2026-09-27T00:00:00+00:00">
+	<meta itemprop="dateModified" content="2026-09-27T00:00:00+00:00">
+	<meta itemprop="wordCount" content="296">
+	<meta itemprop="keywords" content="Native-Compile">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="彻底禁用 Emacs Plus Native Compile">
+	<meta name="twitter:description" content="前言 上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="../../" class="logo">devbins</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="../../">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="../../post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="../../tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="../../categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="../../about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="../../" class="logo">devbins</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="../../">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="../../about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">彻底禁用 Emacs Plus Native Compile</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-09-27 </span>
+        <div class="post-category">
+            <a href="../../categories/emacs/"> Emacs </a>
+            </div>
+          <span class="more-meta"> 296 words </span>
+          <span class="more-meta"> 1 min read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#禁用编译">禁用编译</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="前言">前言</h2>
+<p>上一篇文章写了通过设置参数来禁用 Emacs-plus native compile，但是 Emacs-Plus 是默认支持的。</p>
+<p>换句话说也就是在编译 Emacs Plus 的时候就已经有部分代码已经编译成 eln 了。</p>
+<p>所以即便使用上一篇的方法还是不能彻底的禁止。</p>
+<p>所以要想彻底的禁止就需要把编译选项都去掉。</p>
+<h2 id="禁用编译">禁用编译</h2>
+<p>经过我一番摸索终于彻底的把 native compile 给去掉了</p>
+<p>改动文件如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -42,8 +42,6 @@ class EmacsPlusAT32 &lt; EmacsBase
+</span></span></span><span style="display:flex;"><span>   depends_on &#34;dbus&#34; =&gt; :optional
+</span></span><span style="display:flex;"><span>   depends_on &#34;mailutils&#34; =&gt; :optional
+</span></span><span style="display:flex;"><span>   # `libgccjit` and `gcc` are required when Emacs compiles `*.elc` files asynchronously (JIT)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-  depends_on &#34;libgccjit&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-  depends_on &#34;gcc&#34;
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   depends_on &#34;gmp&#34; =&gt; :build
+</span></span><span style="display:flex;"><span>   depends_on &#34;libjpeg&#34; =&gt; :build
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -89,7 +87,6 @@ class EmacsPlusAT32 &lt; EmacsBase
+</span></span></span><span style="display:flex;"><span>       --enable-locallisppath=#{HOMEBREW_PREFIX}/share/emacs/site-lisp
+</span></span><span style="display:flex;"><span>       --infodir=#{info}/emacs
+</span></span><span style="display:flex;"><span>       --prefix=#{prefix}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-      --with-native-compilation=aot
+</span></span></span><span style="display:flex;"><span>     ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     args &lt;&lt; &#34;--with-xml2&#34;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -111,13 +108,9 @@ class EmacsPlusAT32 &lt; EmacsBase
+</span></span></span><span style="display:flex;"><span>     cflags &lt;&lt; &#34;-DFD_SETSIZE=10000&#34;
+</span></span><span style="display:flex;"><span>     cflags &lt;&lt; &#34;-DDARWIN_UNLIMITED_SELECT&#34;
+</span></span><span style="display:flex;"><span>     cflags &lt;&lt; &#34;-I#{Formula[&#34;sqlite&#34;].include}&#34;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-    cflags &lt;&lt; &#34;-I#{Formula[&#34;gcc&#34;].include}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-    cflags &lt;&lt; &#34;-I#{Formula[&#34;libgccjit&#34;].include}&#34;
+</span></span></span><span style="display:flex;"><span>     args &lt;&lt; &#34;CFLAGS=#{cflags.join(&#34; &#34;)}&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     ENV.append &#34;LDFLAGS&#34;, &#34;-L#{Utils::Path.formula_opt_lib(&#34;sqlite&#34;)}&#34;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-    ENV.append &#34;LDFLAGS&#34;, &#34;-L#{gcc_lib}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-    ENV.append &#34;LDFLAGS&#34;, &#34;-Wl,-rpath,#{gcc_lib}&#34;
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     args &lt;&lt;
+</span></span><span style="display:flex;"><span>       if build.with? &#34;dbus&#34;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -173,7 +166,6 @@ class EmacsPlusAT32 &lt; EmacsBase
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       # (prefix/&#34;share/emacs/#{version}&#34;).install &#34;lisp&#34;
+</span></span><span style="display:flex;"><span>       prefix.install &#34;nextstep/Emacs.app&#34;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-      (prefix/&#34;Emacs.app/Contents&#34;).install &#34;native-lisp&#34;
+</span></span></span><span style="display:flex;"><span>       prefix.install &#34;nextstep/Emacs Client.app&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       # inject Emacs Plus site-lisp with ns-emacs-plus-version
+</span></span></code></pre></div><p>你可以使用 <code>brew edit emacs-plus@32</code> 来打开对应的文件，对照 <code>diff</code> 进行修改</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-09-27
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="../../tags/native-compile/">native-compile</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="../../post/%E7%A6%81%E7%94%A8%E4%BA%86emacs%E7%9A%84native-compile/">
+            <span class="next-text nav-default">禁用 Emacs native-compile</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2026-09-27 00:00:00 \u002b0000 UTC',
+        title: '彻底禁用 Emacs Plus Native Compile',
+        clientID: '1234e4dd9e0ad49470be',
+        clientSecret: '9acb7351fca3dcca6d3cc50be8a1d2cf329f4163',
+        repo: 'devbins.github.io',
+        owner: 'devbins',
+        admin: ['devbins'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="binshengh@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/devbins" class="iconfont icon-github" title="github"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io"
+      >Hugo</a
+    >
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even"
+      >Even</a
+    >
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy;
+    2016 -
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="../../lib/highlight/highlight.pack.js?v=20171001"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="../../js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQCM0BT4H5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-PQCM0BT4H5');
+        }
+      </script>
+
+
+
+
+
+
+</body>
+</html>
